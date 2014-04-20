@@ -130,7 +130,7 @@ public class CustomSkinLoader {
 				String[] re= str_replace("\r", "\n",
 						str_replace("\r\n", "\n", new String(b))).split("\n");
 				for(int i=0;i<re.length;i++){
-					if(re[i].startWith("#"))
+					if(re[i].startsWith("#"))
 						re[i]=null;
 					else{
 						for(int g=0;g<re.length;g++){
