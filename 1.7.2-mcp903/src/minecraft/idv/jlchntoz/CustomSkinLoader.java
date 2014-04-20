@@ -9,7 +9,7 @@ import java.util.regex.*;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 9th Revision 2nd Subversion 2014.4.20
+ * @version 10th Revision 1st Subversion 2014.4.20
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014
  */
 public class CustomSkinLoader {
