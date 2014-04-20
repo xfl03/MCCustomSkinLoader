@@ -133,6 +133,7 @@ public class CustomSkinLoader {
 					if(re[i].startWith('#'))
 						re[i]=null;
 				}
+				return re;
 			}
 		} catch (Exception ex) {
 			logger.log(Level.WARNING, ex.getMessage());
