@@ -9,7 +9,7 @@ import java.util.regex.*;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 9th Revision 2014.4.15
+ * @version 9th Revision 2nd Subversion 2014.4.20
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014
  */
 public class CustomSkinLoader {
@@ -46,6 +46,8 @@ public class CustomSkinLoader {
 			refreshSkinURL(); // If the list is blank or null, try to load
 								// again.
 		for (String l : isCloak ? cloakURLs : skinURLs) {
+			if(l==null)
+				continue;
 			String loc = str_replace("*", playerName, l);
 			logger.log(Level.INFO, "Try to load " + (isCloak ? "cloak" : "skin") + " in " + loc);
 			InputStream S = getStream(loc, true);
@@ -125,8 +127,12 @@ public class CustomSkinLoader {
 				S.read(b);
 				S.close();
 				logger.log(Level.INFO, "Config file loaded.");
-				return str_replace("\r", "\n",
+				String[] re= str_replace("\r", "\n",
 						str_replace("\r\n", "\n", new String(b))).split("\n");
+				for(int i=0;i<re.length();i++){
+					if(re[i].startWith('#'))
+						re[i]=null;
+				}
 			}
 		} catch (Exception ex) {
 			logger.log(Level.WARNING, ex.getMessage());
