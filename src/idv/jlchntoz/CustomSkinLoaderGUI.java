@@ -6,7 +6,8 @@ public class CustomSkinLoaderGUI {
 	public static final Logger log=Logger.getLogger("CustomSkinLoader-GUI");
 
 	public static void main(String[] args) {
-		log.info("loading");
+		log.info("Thanks for using CustomSkinLoader!");
+		log.info("Version 1.0.0!");
 		MainFrame.main(args);
 
 	}
