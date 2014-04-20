@@ -1,3 +1,3 @@
-MCCustomSkinLoader
-==================
+MCCustomSkinLoaderGUI
+=====================
 
