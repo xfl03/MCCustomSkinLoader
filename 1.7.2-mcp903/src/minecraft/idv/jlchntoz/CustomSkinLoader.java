@@ -46,7 +46,7 @@ public class CustomSkinLoader {
 			refreshSkinURL(); // If the list is blank or null, try to load
 								// again.
 		for (String l : isCloak ? cloakURLs : skinURLs) {
-			if(l==null)
+			if(l==null||l.equalsIgnoreCase(""))
 				continue;
 			String loc = str_replace("*", playerName, l);
 			logger.log(Level.INFO, "Try to load " + (isCloak ? "cloak" : "skin") + " in " + loc);
