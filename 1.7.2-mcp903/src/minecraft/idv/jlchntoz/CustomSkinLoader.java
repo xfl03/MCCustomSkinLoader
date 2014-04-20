@@ -132,6 +132,15 @@ public class CustomSkinLoader {
 				for(int i=0;i<re.length();i++){
 					if(re[i].startWith('#'))
 						re[i]=null;
+					else{
+						for(int g=0;g<re.length();g++){
+							if(i==g)
+								continue;
+							if(re[i].equalsIgnoreCase(re[g])){
+								re[i]=null;
+								break;
+							}
+						}
 				}
 				return re;
 			}
