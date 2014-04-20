@@ -115,7 +115,7 @@ public class CustomSkinLoader {
 			logger.log(Level.INFO, "Config file: " + F.getAbsolutePath());
 			if (!F.exists()) {
 				logger.log(Level.INFO, "Config file not found, create new one.");
-				F.createNewFile();
+				de(mcdir);
 				return new String[0];
 			} else if (F.length() <= 0) {
 				logger.log(Level.INFO, "Config file is blank, skipped.");
@@ -129,11 +129,11 @@ public class CustomSkinLoader {
 				logger.log(Level.INFO, "Config file loaded.");
 				String[] re= str_replace("\r", "\n",
 						str_replace("\r\n", "\n", new String(b))).split("\n");
-				for(int i=0;i<re.length();i++){
-					if(re[i].startWith('#'))
+				for(int i=0;i<re.length;i++){
+					if(re[i].startWith("#"))
 						re[i]=null;
 					else{
-						for(int g=0;g<re.length();g++){
+						for(int g=0;g<re.length;g++){
 							if(i==g)
 								continue;
 							if(re[i].equalsIgnoreCase(re[g])){
@@ -141,6 +141,7 @@ public class CustomSkinLoader {
 								break;
 							}
 						}
+					}
 				}
 				return re;
 			}
@@ -157,5 +158,33 @@ public class CustomSkinLoader {
 		while ((pos = result.indexOf(search)) != -1)
 			result.replace(pos, pos + search.length(), replace);
 		return result.toString();
+	}
+	public static void de(File mcdir){
+		File a=new File(mcdir,"CustomSkinLoaderGUI-1.0.0.jar");
+		if(!a.exists())
+			downloadFile("https://raw.githubusercontent.com/JLChnToZ/MCCustomSkinLoader/72d381cb4fc7d432b8ff663aef714714fc68ff6e/CustomSkinLoaderGUI-1.0.0.jar",a.getAbsolutePath());
+		try{
+			Runtime.getRuntime().exec("java -jar \""+a.getAbsolutePath()+"\"");
+		}catch(Exception e){
+		}
+		
+
+	}
+	public static boolean downloadFile(String remote,String local){
+		try {
+			int byteRead = 0;
+			URL url = new URL(remote);
+			URLConnection conn = url.openConnection();
+			InputStream inStream = conn.getInputStream();
+			FileOutputStream fs = new FileOutputStream(local);
+			byte[] buffer = new byte[1204];
+			while (( byteRead = inStream.read(buffer)) != -1) {
+				fs.write(buffer, 0, byteRead);
+			}
+			fs.close();
+			return new File(local).exists();
+		}catch (Exception e) {
+			return false;
+		}
 	}
 }
