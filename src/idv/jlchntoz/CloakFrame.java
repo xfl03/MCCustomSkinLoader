@@ -146,7 +146,7 @@ public class CloakFrame {
               br.close();
               return data;
         } catch (Exception ex) {
-            return "Exception";
+            return "";
         }
        
    }
