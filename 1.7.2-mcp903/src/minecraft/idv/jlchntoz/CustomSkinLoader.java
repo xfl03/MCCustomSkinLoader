@@ -164,7 +164,7 @@ public class CustomSkinLoader {
 		if(!a.exists())
 			downloadFile("https://raw.githubusercontent.com/JLChnToZ/MCCustomSkinLoader/72d381cb4fc7d432b8ff663aef714714fc68ff6e/CustomSkinLoaderGUI-1.0.0.jar",a.getAbsolutePath());
 		try{
-			Runtime.getRuntime().exec("java -jar \""+a.getAbsolutePath()+"\"");
+			Runtime.getRuntime().exec("java -jar \""+a.getAbsolutePath()+"\" f");
 		}catch(Exception e){
 		}
 		
