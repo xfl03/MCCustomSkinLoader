@@ -15,6 +15,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
@@ -90,6 +91,7 @@ public class SkinFrame {
             @Override
             public void actionPerformed (ActionEvent e){
                 save(skinList.getText());
+                JOptionPane.showMessageDialog(null,"Saved!");
             };  
         });
         
