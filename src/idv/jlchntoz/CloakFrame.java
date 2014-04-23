@@ -20,9 +20,10 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 public class CloakFrame {
+	private static LangParent lang=Lang.refresh();
 	public static boolean mod=false;
 	public static final String[] urls={
-		"#Minecraft Offical",
+		"#"+lang.minecraftOffical(),
 		"http://s3.amazonaws.com/MinecraftCloaks/*.png",
 		"http://skins.minecraft.net/MinecraftCloaks/*.png",
 		"#MineCrack",
@@ -35,7 +36,7 @@ public class CloakFrame {
 	};
 
 	public static void main(String[] args) {
-		final JFrame jf = new JFrame ("Cloak Load List");  
+		final JFrame jf = new JFrame (lang.title()+" - "+lang.cloak()+lang.loadList());  
 		Container con = jf.getContentPane();
 		con.setLayout(null);
 		//setBounds(x,y,width,height)
@@ -44,7 +45,7 @@ public class CloakFrame {
         Font boldCourier=new Font("Courier", Font.BOLD, 30);
         
         JLabel title=new JLabel();
-        title.setText("Cloak Load List");
+        title.setText(lang.cloak()+lang.loadList());
         title.setFont(boldCourier);
         title.setBounds(130, 5, 370, 30);
         con.add(title);
@@ -55,7 +56,7 @@ public class CloakFrame {
         cloakList.setText(read("cloakurls.txt"));
         
         JButton defaultBtn=new JButton();
-        defaultBtn.setText("Use Default(Offical)");
+        defaultBtn.setText(lang.useDefault());
 		defaultBtn.setBounds(15, 310, 235, 30);
         con.add(defaultBtn);
         defaultBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
@@ -68,7 +69,7 @@ public class CloakFrame {
             };  
         });
         JButton urlBtn=new JButton();
-        urlBtn.setText("Use Recommended");
+        urlBtn.setText(lang.useRecommended());
 		urlBtn.setBounds(250, 310, 235, 30);
         con.add(urlBtn);
         urlBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
@@ -84,19 +85,19 @@ public class CloakFrame {
         
         
         JButton skinBtn=new JButton();
-        skinBtn.setText("Save");
+        skinBtn.setText(lang.save());
         skinBtn.setBounds(15, 350, 235, 30);
         con.add(skinBtn);
         skinBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
             @Override
             public void actionPerformed (ActionEvent e){
                 save(cloakList.getText());
-                JOptionPane.showMessageDialog(null,"Saved!");
+                JOptionPane.showMessageDialog(null,lang.saved());
             };  
         });
         
         JButton clokeBtn=new JButton();
-        clokeBtn.setText("Close");
+        clokeBtn.setText(lang.close());
         clokeBtn.setBounds(250, 350, 235, 30);
         con.add(clokeBtn);
         clokeBtn.addActionListener(new ActionListener(){                                                                 //单击事件 

@@ -11,9 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 public class MainFrame {
+	private static LangParent lang=Lang.refresh();
 
 	public static void main(String[] args) {
-		JFrame jf = new JFrame ("CustomSkinLoader-GUI");  
+		
+		JFrame jf = new JFrame (lang.title()+lang.gui());  
 		Container con = jf.getContentPane();
 		con.setLayout(null);
 		//setBounds(x,y,width,height)
@@ -22,25 +24,25 @@ public class MainFrame {
         Font boldCourier=new Font("Courier", Font.BOLD, 30);
         
         JLabel title=new JLabel();
-        title.setText("CustomSkinLoader Index");
+        title.setText(lang.title()+lang.index());
         title.setFont(boldCourier);
         title.setBounds(15, 5, 370, 30);
         con.add(title);
         
         if(args.length>0 && args[0].equalsIgnoreCase("f")){
         JLabel tip1=new JLabel();
-        tip1.setText("It's your first time use CustomSkinLoader!");
+        tip1.setText(lang.first1());
         tip1.setBounds(30, 55, 370, 15);
         con.add(tip1);
         
         JLabel tip2=new JLabel();
-        tip2.setText("Please click buttons below to modify config!");
+        tip2.setText(lang.first2());
         tip2.setBounds(30, 70, 370, 15);
         con.add(tip2);
         }
         
         JButton skinBtn=new JButton();
-        skinBtn.setText("Skin Load List");
+        skinBtn.setText(lang.skin()+lang.loadList());
         skinBtn.setBounds(15, 180, 370, 30);
         con.add(skinBtn);
         skinBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
@@ -52,7 +54,7 @@ public class MainFrame {
         });
         
         JButton clokeBtn=new JButton();
-        clokeBtn.setText("Cloak Load List");
+        clokeBtn.setText(lang.cloak()+lang.loadList());
         clokeBtn.setBounds(15, 215, 370, 30);
         con.add(clokeBtn);
         clokeBtn.addActionListener(new ActionListener(){                                                                 //单击事件 

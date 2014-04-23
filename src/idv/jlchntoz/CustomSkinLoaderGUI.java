@@ -7,8 +7,9 @@ public class CustomSkinLoaderGUI {
 
 	public static void main(String[] args) {
 		log.info("Thanks for using CustomSkinLoader!");
-		log.info("Version 1.0.0!");
+		log.info("Version 1.0.1!");
 		MainFrame.main(args);
+		
 
 	}
 
