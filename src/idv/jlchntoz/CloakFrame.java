@@ -53,7 +53,7 @@ public class CloakFrame {
         final JTextArea cloakList=new JTextArea();
         cloakList.setBounds(15, 40, 470, 266);
         con.add(cloakList);
-        cloakList.setText(read("cloakurls.txt"));
+        cloakList.setText(read("capeurls.txt"));
         
         JButton defaultBtn=new JButton();
         defaultBtn.setText(lang.useDefault());
@@ -115,7 +115,7 @@ public class CloakFrame {
 	}
 	
 	public static void save(String data){
-		File a=new File("cloakurls.txt");
+		File a=new File("capeurls.txt");
 		try {
 			a.createNewFile();
 		} catch (IOException e) {
