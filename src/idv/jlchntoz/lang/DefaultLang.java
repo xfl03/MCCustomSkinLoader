@@ -1,6 +1,6 @@
-package idv.jlchntoz;
+package idv.jlchntoz.lang;
 
-public class LangParent {
+public class DefaultLang {
 	public String title(){
 		return "CustomSkinLoader";
 	}

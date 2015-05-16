@@ -1,6 +1,7 @@
-package idv.jlchntoz;
+package idv.jlchntoz.lang;
 
-public class LangChineseTran extends LangParent {
+
+public class ChineseTranLang extends DefaultLang {
 	@Override
 	public String title(){
 		return "ÈfÓÃÆ¤ÄwÄ£½M";

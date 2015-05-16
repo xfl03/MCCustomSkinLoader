@@ -1,11 +1,12 @@
-package idv.jlchntoz;
+package idv.jlchntoz.gui;
+
+import idv.jlchntoz.lang.Language;
+import idv.jlchntoz.lang.DefaultLang;
 
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 public class CloakFrame {
-	private static LangParent lang=Lang.refresh();
+	private static DefaultLang lang=Language.getLanguage();
 	public static boolean mod=false;
 	public static final String[] urls={
 		"#"+lang.minecraftOffical(),
@@ -28,8 +29,11 @@ public class CloakFrame {
 		"http://skins.minecraft.net/MinecraftCloaks/*.png",
 		"#MineCrack",
 		"http://minecrack.fr.nf/mc/cloaksminecrackd/*.png",
+		/*
+		 * XFL03's Skin Website Closed
 		"#OpenSkin",
 		"http://skin.axdt.net/MinecraftCloaks/*.png",
+		*/
 		"#SkinMe",
 		"http://www.skinme.cc:88/MinecraftCloaks/*.png"
 		

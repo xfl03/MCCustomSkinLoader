@@ -1,11 +1,12 @@
-package idv.jlchntoz;
+package idv.jlchntoz.gui;
+
+import idv.jlchntoz.lang.Language;
+import idv.jlchntoz.lang.DefaultLang;
 
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 public class SkinFrame {
-	private static LangParent lang=Lang.refresh();
+	private static DefaultLang lang=Language.getLanguage();
 	public static boolean mod=false;
 	public static final String[] urls={
 		"#"+lang.minecraftOffical(),
@@ -28,8 +29,11 @@ public class SkinFrame {
 		"http://skins.minecraft.net/MinecraftSkins/*.png",
 		"#MineCrack",
 		"http://minecrack.fr.nf/mc/skinsminecrackd/*.png",
+		/*
+		 * XFL03's Skin Website Closed
 		"#OpenSkin",
 		"http://skin.axdt.net/MinecraftSkins/*.png",
+		*/
 		"#SkinMe",
 		"http://www.skinme.cc:88/MinecraftSkins/*.png"
 		
@@ -64,7 +68,7 @@ public class SkinFrame {
             public void actionPerformed (ActionEvent e){
             	String temp="";
             	for(int i=0;i<=2;i++)
-            		temp+=urls[i]+"\n";
+            		temp+=urls[i]+"\r\n";
                 skinList.setText(temp);
             };  
         });
@@ -75,9 +79,9 @@ public class SkinFrame {
         urlBtn.addActionListener(new ActionListener(){                                                                 //µ¥»÷ÊÂ¼þ 
             @Override
             public void actionPerformed (ActionEvent e){
-            	String temp=skinList.getText()+"\n";
+            	String temp=skinList.getText()+"\r\n";
             	for(int i=0;i<urls.length;i++)
-            		temp+=urls[i]+"\n";
+            		temp+=urls[i]+"\r\n";
                 skinList.setText(temp);
                 
             };  

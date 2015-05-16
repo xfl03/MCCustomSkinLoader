@@ -1,4 +1,7 @@
-package idv.jlchntoz;
+package idv.jlchntoz.gui;
+
+import idv.jlchntoz.lang.Language;
+import idv.jlchntoz.lang.DefaultLang;
 
 import java.awt.Container;
 import java.awt.Font;
@@ -11,9 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 public class MainFrame {
-	private static LangParent lang=Lang.refresh();
+	private static DefaultLang lang=Language.getLanguage();
 
-	public static void main(String[] args) {
+	public void init(String[] args) {
 		
 		JFrame jf = new JFrame (lang.title()+lang.gui());  
 		Container con = jf.getContentPane();
@@ -30,15 +33,15 @@ public class MainFrame {
         con.add(title);
         
         if(args.length>0 && args[0].equalsIgnoreCase("f")){
-        JLabel tip1=new JLabel();
-        tip1.setText(lang.first1());
-        tip1.setBounds(30, 55, 370, 15);
-        con.add(tip1);
+			JLabel tip1=new JLabel();
+			tip1.setText(lang.first1());
+			tip1.setBounds(30, 55, 370, 15);
+			con.add(tip1);
         
-        JLabel tip2=new JLabel();
-        tip2.setText(lang.first2());
-        tip2.setBounds(30, 70, 370, 15);
-        con.add(tip2);
+			JLabel tip2=new JLabel();
+			tip2.setText(lang.first2());
+			tip2.setBounds(30, 70, 370, 15);
+			con.add(tip2);
         }
         
         JButton skinBtn=new JButton();

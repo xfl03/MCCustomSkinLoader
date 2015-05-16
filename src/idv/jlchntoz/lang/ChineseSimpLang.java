@@ -1,6 +1,7 @@
-package idv.jlchntoz;
+package idv.jlchntoz.lang;
 
-public class LangChineseSimp extends LangParent {
+
+public class ChineseSimpLang extends DefaultLang {
 	@Override
 	public String title(){
 		return "自定义皮肤加载器";
