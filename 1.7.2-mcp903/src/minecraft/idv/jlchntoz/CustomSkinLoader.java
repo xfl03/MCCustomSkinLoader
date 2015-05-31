@@ -9,8 +9,8 @@ import java.util.regex.*;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 10th Revision 1st Subversion 2014.4.20
- * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014
+ * @version 11th Revision 1st Subversion 2015.5.30
+ * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
@@ -43,19 +43,46 @@ public class CustomSkinLoader {
 	public InputStream getPlayerSkinStream(Boolean isCloak, String playerName) {
 		if (skinURLs == null || cloakURLs == null || skinURLs.length <= 0
 				|| cloakURLs.length <= 0)
-			refreshSkinURL(); // If the list is blank or null, try to load
-								// again.
+			refreshSkinURL(); // If the list is blank or null, try to load again.
 		for (String l : isCloak ? cloakURLs : skinURLs) {
 			if(l==null||l.equalsIgnoreCase(""))
 				continue;
 			String loc = str_replace("*", playerName, l);
 			logger.log(Level.INFO, "Try to load " + (isCloak ? "cloak" : "skin") + " in " + loc);
 			InputStream S = getStream(loc, true);
-			if (S == null)
+			if (S == null){
 				logger.log(Level.INFO, "No " + (isCloak ? "cloak" : "skin")
 						+ " found in " + loc);
-			else
+				try{
+					File mcdir = Minecraft.getMinecraft().mcDataDir;
+					String fileName=mcdir.getAbsolutePath()+"/skins/"+playerName+".png";
+					InputStream in = new FileInputStream(fileName);
+					return new BufferedInputStream(in);
+				}catch(Exception e){
+					logger.log(Level.WARNING, e.getMessage());
+				}
+			}
+			else{
+				try{
+					File mcdir = Minecraft.getMinecraft().mcDataDir;
+					String fileName=mcdir.getAbsolutePath()+"/skins/"+playerName+".png";
+					File temp=new File(fileName);
+					if(!temp.getParentFile().exists())
+						temp.getParentFile().mkdir();
+					FileOutputStream fs = new FileOutputStream(fileName);
+					int byteRead = 0;
+					byte[] buffer = new byte[1024];
+					while (( byteRead = S.read(buffer)) != -1) {
+						fs.write(buffer, 0, byteRead);
+					}
+					fs.close();
+					S.reset();
+				}catch(Exception e){
+					logger.log(Level.WARNING, e.getMessage());
+				}
+				
 				return S;
+			}
 		}
 		logger.log(Level.INFO, "Try to load skin in default URL instead.");
 		return getStream(str_replace("*", playerName, isCloak ? DefaultCloakURL : DefaultSkinURL), true);
@@ -172,12 +199,12 @@ public class CustomSkinLoader {
 	}
 	public static boolean downloadFile(String remote,String local){
 		try {
-			int byteRead = 0;
 			URL url = new URL(remote);
 			URLConnection conn = url.openConnection();
 			InputStream inStream = conn.getInputStream();
 			FileOutputStream fs = new FileOutputStream(local);
-			byte[] buffer = new byte[1204];
+			int byteRead = 0;
+			byte[] buffer = new byte[1024];
 			while (( byteRead = inStream.read(buffer)) != -1) {
 				fs.write(buffer, 0, byteRead);
 			}
