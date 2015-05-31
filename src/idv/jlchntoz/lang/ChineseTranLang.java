@@ -58,4 +58,8 @@ public class ChineseTranLang extends DefaultLang {
 	public String close(){
 		return "êPé]";
 	}
+	@Override
+	public String yourVersion(){
+		return "ÄúµÄÆ¤ÄwÄ£½M°æ±¾:";
+	}
 }

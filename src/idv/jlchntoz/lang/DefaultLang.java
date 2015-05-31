@@ -43,4 +43,7 @@ public class DefaultLang {
 	public String close(){
 		return "Close";
 	}
+	public String yourVersion(){
+		return "Your CustomSkinLoader Version:";
+	}
 }

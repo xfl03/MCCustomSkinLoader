@@ -43,6 +43,12 @@ public class MainFrame {
 			tip2.setBounds(30, 70, 370, 15);
 			con.add(tip2);
         }
+        if(args.length>1){
+			JLabel tip3=new JLabel();
+			tip3.setText(lang.yourVersion()+" "+args[1]);
+			tip3.setBounds(30, 90, 370, 15);
+			con.add(tip3);
+        }
         
         JButton skinBtn=new JButton();
         skinBtn.setText(lang.skin()+lang.loadList());

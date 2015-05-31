@@ -58,4 +58,8 @@ public class ChineseSimpLang extends DefaultLang {
 	public String close(){
 		return "关闭";
 	}
+	@Override
+	public String yourVersion(){
+		return "您的皮肤模组版本:";
+	}
 }
