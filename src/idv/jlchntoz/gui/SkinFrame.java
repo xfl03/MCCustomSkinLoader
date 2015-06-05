@@ -80,6 +80,9 @@ public class SkinFrame {
             @Override
             public void actionPerformed (ActionEvent e){
             	String temp=skinList.getText()+"\r\n";
+            	if(temp.equalsIgnoreCase("\r\n")){
+            		temp="";
+            	}
             	for(int i=0;i<urls.length;i++)
             		temp+=urls[i]+"\r\n";
                 skinList.setText(temp);
@@ -120,27 +123,32 @@ public class SkinFrame {
 	
 	public static void save(String data){
 		File a=new File("skinurls.txt");
+		File b=new File("CustomSkinLoader/skinurls.txt");
+		System.out.println(b.getAbsolutePath());
 		try {
 			a.createNewFile();
+			b.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		write(a.getAbsolutePath(),data);
+		write(a,data);
+		if(b.exists())
+			write(b,data);
 	}
 	
-	public static boolean write(String FileName,String Data){
-   	 FileWriter fw=null;
-        try{
-            fw = new FileWriter(FileName);
-            fw.write(Data,0,Data.length()); 
-            fw.flush();
-            fw.close();
-        }catch(Exception ex){
-            //ex.printStackTrace();
-       	 return false;
-        }
-        return true;
-   }
+	public static boolean write(File file,String Data){
+	   	 FileWriter fw=null;
+	        try{
+	            fw = new FileWriter(file);
+	            fw.write(Data,0,Data.length()); 
+	            fw.flush();
+	            fw.close();
+	        }catch(Exception ex){
+	            ex.printStackTrace();
+	            return false;
+	        }
+	        return true;
+	   }
 	public static String read(String FileName){
    	 BufferedReader br = null;
         String data="";
@@ -148,10 +156,10 @@ public class SkinFrame {
             br = new BufferedReader(new FileReader(FileName));
             data = br.readLine();
             while( br.ready()){   
-                  data += "\n"+br.readLine(); 
+            	data += "\r\n"+br.readLine(); 
             }
-              br.close();
-              return data;
+            br.close();
+            return data;
         } catch (Exception ex) {
             return "";
         }

@@ -120,24 +120,28 @@ public class CloakFrame {
 	
 	public static void save(String data){
 		File a=new File("capeurls.txt");
+		File b=new File("CustomSkinLoader/capeurls.txt");
 		try {
 			a.createNewFile();
+			b.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		write(a.getAbsolutePath(),data);
+		write(a,data);
+		if(b.exists())
+			write(b,data);
 	}
 	
-	public static boolean write(String FileName,String Data){
+	public static boolean write(File file,String Data){
    	 FileWriter fw=null;
         try{
-            fw = new FileWriter(FileName);
+            fw = new FileWriter(file);
             fw.write(Data,0,Data.length()); 
             fw.flush();
             fw.close();
         }catch(Exception ex){
-            //ex.printStackTrace();
-       	 return false;
+            ex.printStackTrace();
+            return false;
         }
         return true;
    }
@@ -148,10 +152,10 @@ public class CloakFrame {
             br = new BufferedReader(new FileReader(FileName));
             data = br.readLine();
             while( br.ready()){   
-                  data += "\n"+br.readLine(); 
+            	data += "\r\n"+br.readLine(); 
             }
-              br.close();
-              return data;
+            br.close();
+            return data;
         } catch (Exception ex) {
             return "";
         }
