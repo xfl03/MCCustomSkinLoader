@@ -1,7 +1,7 @@
 package idv.jlchntoz.gui;
 
 import idv.jlchntoz.lang.Language;
-import idv.jlchntoz.lang.DefaultLang;
+import idv.jlchntoz.lang.LanguageManager;
 
 import java.awt.Container;
 import java.awt.Font;
@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 public class MainFrame {
-	private static DefaultLang lang=Language.getLanguage();
+	private static Language lang=LanguageManager.getLanguage();
 
 	public void init(String[] args) {
 		
