@@ -26,6 +26,7 @@ public class ThreadDownloadImageData extends SimpleTexture
     private Thread imageThread;
     private boolean textureUploaded;
     private static final String __OBFID = "CL_00001049";
+	public CustomSkinLoader customSkinLoader=new CustomSkinLoader();
 
     public ThreadDownloadImageData(String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
     {
@@ -76,28 +77,22 @@ public class ThreadDownloadImageData extends SimpleTexture
                 private static final String __OBFID = "CL_00001050";
                 public void run()
                 {
+					try
+					{
+						BufferedImage var2 = ImageIO.read(
+							ThreadDownloadImageData.this.customSkinLoader.getPlayerSkinStream(
+									ThreadDownloadImageData.this.imageUrl));
+						if (ThreadDownloadImageData.this.imageBuffer != null){
+							var2 = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(var2);
+						}
+						ThreadDownloadImageData.this.func_147641_a(var2);
+					}catch (Exception var6){
+						ThreadDownloadImageData.logger.error("Couldn\'t download http texture", var6);
+						return;
+					}
 
-        CustomSkinLoader Loader = new CustomSkinLoader();
-
-        try
-        {
-            BufferedImage var2 = ImageIO.read(Loader.getPlayerSkinStream(ThreadDownloadImageData.this.imageUrl));
-
-                            if (ThreadDownloadImageData.this.imageBuffer != null)
-                            {
-                                var2 = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(var2);
-                            }
-
-                            ThreadDownloadImageData.this.func_147641_a(var2);
-        }
-        catch (Exception var6)
-        {
-                        ThreadDownloadImageData.logger.error("Couldn\'t download http texture", var6);
-                        return;
-        }
-
-                }
-            };
+				}
+			};
             this.imageThread.setDaemon(true);
             this.imageThread.setName("Skin downloader: " + this.imageUrl);
             this.imageThread.start();
