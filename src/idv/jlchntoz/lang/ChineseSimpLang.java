@@ -1,7 +1,7 @@
 package idv.jlchntoz.lang;
 
 
-public class ChineseSimpLang implements Language  {
+public class ChineseSimpLang implements ILanguage  {
 	public String title(){
 		return "自定义皮肤加载器";
 	}

@@ -1,6 +1,6 @@
 package idv.jlchntoz.lang;
 
-public class EnglishLang implements Language{
+public class EnglishLang implements ILanguage{
 	public String title(){
 		return "CustomSkinLoader";
 	}

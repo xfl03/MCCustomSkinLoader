@@ -1,7 +1,7 @@
 package idv.jlchntoz.gui;
 
-import idv.jlchntoz.lang.Language;
-import idv.jlchntoz.lang.LanguageManager;
+import idv.jlchntoz.lang.ILanguage;
+import idv.jlchntoz.lang.LangManager;
 
 import java.awt.Container;
 import java.awt.Font;
@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 public class MainFrame {
-	private static Language lang=LanguageManager.getLanguage();
+	private static ILanguage lang=LangManager.getLanguage();
 
 	public void init(String[] args) {
 		
@@ -78,14 +78,12 @@ public class MainFrame {
         
         
         jf.setVisible(true);
-        jf.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        jf.setResizable(false); 
-        jf.addWindowListener(new WindowAdapter(){
-        	public void windowClosing(WindowEvent we){
-        		System.out.println("Closing");
-        		System.exit(0);
-        	}
-        });
+        if(args.length>=3&&args[2].equalsIgnoreCase("ingame")){
+            jf.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        }else{
+            jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        }
+        jf.setResizable(false);
 	}
 
 }

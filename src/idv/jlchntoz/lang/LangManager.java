@@ -2,9 +2,9 @@ package idv.jlchntoz.lang;
 
 import java.util.Locale;
 
-public class LanguageManager {
+public class LangManager {
 	
-	public static Language getLanguage(){
+	public static ILanguage getLanguage(){
 		Locale locale = Locale.getDefault();  
 		String l=locale.getLanguage().toLowerCase();  
 		String c=locale.getCountry().toLowerCase();  

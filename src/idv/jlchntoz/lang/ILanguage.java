@@ -1,6 +1,6 @@
 package idv.jlchntoz.lang;
 
-public interface Language {
+public interface ILanguage {
 	public String title();
 	public String gui();
 	public String index();

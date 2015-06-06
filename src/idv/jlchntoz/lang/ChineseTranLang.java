@@ -1,7 +1,7 @@
 package idv.jlchntoz.lang;
 
 
-public class ChineseTranLang implements Language {
+public class ChineseTranLang implements ILanguage {
 	public String title(){
 		return "ÈfÓÃÆ¤ÄwÄ£½M";
 	}

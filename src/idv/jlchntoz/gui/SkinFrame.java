@@ -1,7 +1,7 @@
 package idv.jlchntoz.gui;
 
-import idv.jlchntoz.lang.Language;
-import idv.jlchntoz.lang.LanguageManager;
+import idv.jlchntoz.lang.ILanguage;
+import idv.jlchntoz.lang.LangManager;
 
 import java.awt.Container;
 import java.awt.Font;
@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 public class SkinFrame {
-	private static Language lang=LanguageManager.getLanguage();
+	private static ILanguage lang=LangManager.getLanguage();
 	public static boolean mod=false;
 	public static final String[] urls={
 		"#"+lang.minecraftOffical(),
