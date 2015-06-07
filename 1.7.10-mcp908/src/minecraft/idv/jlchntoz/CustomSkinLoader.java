@@ -7,16 +7,14 @@ import java.net.*;
 import java.util.logging.*;
 import java.util.regex.*;
 
-import org.apache.http.HttpConnection;
-
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 1st Subversion 2015.6.6
+ * @version 12th Revision 2nd Subversion 2015.6.7
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.1";
+	public final static String VERSION="12.2";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
@@ -31,6 +29,7 @@ public class CustomSkinLoader {
 	
 	private static String[] cloakURLs = null, skinURLs = null;
 	private HttpURLConnection C = null;
+	private boolean loadFromCache=false;
 
 	public InputStream getPlayerSkinStream(String path) {
 		if(!DATA_DIR.exists())
@@ -79,11 +78,14 @@ public class CustomSkinLoader {
 				last=temp.lastModified();
 			}
 			S = getStream(loc, true,last);
+			if(loadFromCache){
+				logger.info("" + (isCloak ? "Cloak" : "Skin") + " in " + loc + "will be load from cache.");
+				break;
+			}
 			if (S == null){
 				logger.log(Level.INFO, "No " + (isCloak ? "cloak" : "skin")
 						+ " found in " + loc);
-			}
-			else{
+			}else{
 				logger.info("Succeessfully load " + (isCloak ? "cloak" : "skin") + " in " + loc);
 				break;
 			}
@@ -149,7 +151,7 @@ public class CustomSkinLoader {
 						if(fs!=null)
 							fs.close();
 						S.reset();
-						logger.info(""+S.available());
+						logger.info((isCloak ? "Cloak" : "Skin")+" size : "+S.available());
 					} catch (IOException e) {
 						logger.warning(e);
 					}
@@ -181,6 +183,7 @@ public class CustomSkinLoader {
 				//logger.info(last+" "+C.getLastModified());
 				if(C.getResponseCode()==HttpURLConnection.HTTP_NOT_MODIFIED){//304
 					logger.info("Not Modified!");
+					loadFromCache=true;
 					return null;
 				}
 				if(C.getContentLength()<=0){

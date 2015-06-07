@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 public class MainLogger {
 	private static final int LOWEST_DISPLAY_LEVEL=Level.INFO.intValue();
-	SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("syyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private BufferedWriter writer;
 	public MainLogger(File logFile){
 		try {
@@ -43,6 +43,8 @@ public class MainLogger {
 			writer.write("[");
 			writer.write(DATE_FORMAT.format(new Date()));
 			writer.write(" ");
+			writer.write(Thread.currentThread().getName());
+			writer.write(" ");
 			writer.write(level.getName());
 			writer.write("] ");
 			writer.write(msg);
@@ -58,7 +60,7 @@ public class MainLogger {
 	public void warning(String msg){
 		log(Level.WARNING,msg);
 	}
-	public void waring(Exception e){
+	public void warning(Exception e){
 		log(Level.WARNING,"Exception occurs while running: "+e.getMessage());
 		StackTraceElement[] stes=e.getStackTrace();
 		for(StackTraceElement ste : stes){

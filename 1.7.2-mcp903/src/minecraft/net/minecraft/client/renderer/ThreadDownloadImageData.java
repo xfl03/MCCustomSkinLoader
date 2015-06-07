@@ -86,6 +86,7 @@ public class ThreadDownloadImageData extends SimpleTexture
 							var2 = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(var2);
 						}
 						ThreadDownloadImageData.this.func_147641_a(var2);
+						customSkinLoader.disconnect();
 					}catch (Exception var6){
 						ThreadDownloadImageData.logger.error("Couldn\'t download http texture", var6);
 						return;
@@ -94,7 +95,7 @@ public class ThreadDownloadImageData extends SimpleTexture
 				}
 			};
             this.imageThread.setDaemon(true);
-            this.imageThread.setName("Skin downloader: " + this.imageUrl);
+            //this.imageThread.setName("Skin downloader: " + this.imageUrl);
             this.imageThread.start();
         }
     }

@@ -1,6 +1,7 @@
 package idv.jlchntoz;
 
 import net.minecraft.client.Minecraft;
+
 import java.io.*;
 import java.net.*;
 import java.util.logging.*;
@@ -9,16 +10,17 @@ import java.util.regex.*;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 11th Revision 2nd Subversion 2015.6.5
+ * @version 12th Revision 2nd Subversion 2015.6.7
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
-	public final static String VERSION="11.2";
+	public final static String VERSION="12.2";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
-	private final static Pattern newURLPattern = Pattern.compile("^http://skins.minecraft.net/Minecraft(Skin|Cloak)s/(.*?).png$"),
-                                 oldURLPattern = Pattern.compile("^http://s3.amazonaws.com/Minecraft(Skin|Cloak)s/(.*?).png$");
+	private final static Pattern newResPattern = Pattern.compile("^http://textures.minecraft.net/texture/(.*?)?(Skin|Cloak)=(.*?)$"),
+								 newURLPattern = Pattern.compile("^http://skins.minecraft.net/Minecraft(Skin|Cloak)s/(.*?).png$"),
+								 oldURLPattern = Pattern.compile("^http://s3.amazonaws.com/Minecraft(Skin|Cloak)s/(.*?).png$");
 	
 	private final static File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader");
 	private final static File SKIN_DIR=new File(DATA_DIR,"skins");
@@ -27,6 +29,7 @@ public class CustomSkinLoader {
 	
 	private static String[] cloakURLs = null, skinURLs = null;
 	private HttpURLConnection C = null;
+	private boolean loadFromCache=false;
 
 	public InputStream getPlayerSkinStream(String path) {
 		if(!DATA_DIR.exists())
@@ -42,6 +45,15 @@ public class CustomSkinLoader {
 				return getPlayerSkinStream(false, m.group(2));
 			else if (m.group(1).contains("Cloak")) // Cloak
 				return getPlayerSkinStream(true, m.group(2));
+		}else{
+			m = newResPattern.matcher(path);
+			if(m.matches()){
+				logger.info("Matches");
+				if (m.group(2).contains("Skin")) // Skin
+					return getPlayerSkinStream(false, m.group(3));
+				else if (m.group(2).contains("Cloak")) // Cloak
+					return getPlayerSkinStream(true, m.group(3));
+			}
 		}
 		return getStream(path, false); // Neither skin nor cloak...
 	}
@@ -51,27 +63,34 @@ public class CustomSkinLoader {
 				|| cloakURLs.length <= 0)
 			refreshSkinURL(); // If the list is blank or null, try to load again.
 		InputStream S=null;
+		File temp=null;
+		if(isCloak)
+			temp=new File(CLOAK_DIR,playerName+".png");
+		else
+			temp=new File(SKIN_DIR,playerName+".png");
 		for (String l : isCloak ? cloakURLs : skinURLs) {
 			if(l==null||l.equalsIgnoreCase(""))
 				continue;
 			String loc = str_replace("*", playerName, l);
 			logger.log(Level.INFO, "Try to load " + (isCloak ? "cloak" : "skin") + " in " + loc);
-			S = getStream(loc, true);
+			long last=0;
+			if(temp.exists()&&temp.length()>0){
+				last=temp.lastModified();
+			}
+			S = getStream(loc, true,last);
+			if(loadFromCache){
+				logger.info("" + (isCloak ? "Cloak" : "Skin") + " in " + loc + "will be load from cache.");
+				break;
+			}
 			if (S == null){
 				logger.log(Level.INFO, "No " + (isCloak ? "cloak" : "skin")
 						+ " found in " + loc);
-			}
-			else{
+			}else{
 				logger.info("Succeessfully load " + (isCloak ? "cloak" : "skin") + " in " + loc);
 				break;
 			}
 		}
 		if(S==null){
-			File temp=null;
-			if(isCloak)
-				temp=new File(CLOAK_DIR,playerName+".png");
-			else
-				temp=new File(SKIN_DIR,playerName+".png");
 			try{//Read Local Skin File
 				if(temp.exists() && temp.length()>1){
 					logger.info("Try load local " + (isCloak ? "cloak" : "skin") + " in " + temp.getAbsolutePath());
@@ -92,28 +111,31 @@ public class CustomSkinLoader {
 		}else{
 			String user= Minecraft.getMinecraft().getSession().getUsername();
 			if(user.equalsIgnoreCase(playerName)){//Only save user's skin
-				File temp=null;
-				if(isCloak)
-					temp=new File(CLOAK_DIR,playerName+".png");
-				else
-					temp=new File(SKIN_DIR,playerName+".png");
 				logger.info("Try save local " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
+				FileOutputStream fs=null;
+				int times=0;
 				try{//Save to Local Skin File
-					logger.info(user);
+					//logger.info(user);
 					if(!temp.getParentFile().exists())
 						temp.getParentFile().mkdir();
 					else if(temp.exists()){
 						temp.delete();
 					}
-					temp.createNewFile();
-					FileOutputStream fs = new FileOutputStream(temp);
+					//temp.createNewFile();
+					fs = new FileOutputStream(temp);
 					int byteRead = 0;
 					byte[] buffer = new byte[1024];
+					//S.reset();
 					while (( byteRead = S.read(buffer)) != -1) {
+						times+=byteRead;
+						//logger.info(""+S.available());
 						fs.write(buffer, 0, byteRead);
+						if(times>=C.getContentLength()){
+							logger.info(times+" "+C.getContentLength());
+							break;
+						}
 					}
-					fs.close();
-					S.reset();
+					
 					if(temp.length()>1){
 						logger.info("Successfully save " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
 					}else{
@@ -121,42 +143,74 @@ public class CustomSkinLoader {
 						logger.info("Cannot save local " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
 					}
 				}catch(Exception e){
-					logger.log(Level.WARNING, e.getMessage());
+					e.printStackTrace();
+					logger.info(times+"");
+					logger.warning(e);
+				}finally{
+					try {
+						if(fs!=null)
+							fs.close();
+						S.reset();
+						logger.info((isCloak ? "Cloak" : "Skin")+" size : "+S.available());
+					} catch (IOException e) {
+						logger.warning(e);
+					}
 				}
 			}
+			
 			return S;
 		}
 		
 		logger.log(Level.INFO, "Try to load skin in default URL instead.");
 		return getStream(str_replace("*", playerName, isCloak ? DefaultCloakURL : DefaultSkinURL), true);
 	}
-
 	private InputStream getStream(String URL, Boolean CheckPNG) {
+		return getStream(URL,CheckPNG,0);
+	}
+	private InputStream getStream(String URL, Boolean CheckPNG,long last) {
+		boolean success=false;
 		try {
 			URL U = new URL(URL);
 			C = (HttpURLConnection) U.openConnection();
 			C.setDoInput(true);
 			C.setDoOutput(false);
+			if(last>0)
+				C.setIfModifiedSince(last);
 			C.connect();
+			logger.info("RC: "+C.getResponseCode());
 			int respcode = C.getResponseCode() / 100;
 			if (respcode != 4 && respcode != 5) { // Successful (?) to get skin.
-				BufferedInputStream IS = new BufferedInputStream(
-						C.getInputStream());
-				if (!CheckPNG) // If no need to check PNG header, just skip it.
+				//logger.info(last+" "+C.getLastModified());
+				if(C.getResponseCode()==HttpURLConnection.HTTP_NOT_MODIFIED){//304
+					logger.info("Not Modified!");
+					loadFromCache=true;
+					return null;
+				}
+				if(C.getContentLength()<=0){
+					return null;
+				}
+				InputStream IS=new BufferedInputStream(C.getInputStream());
+				if (!CheckPNG){ // If no need to check PNG header, just skip it.
+					success=true;
 					return IS;
-				IS.mark(0);
+				}
+				//logger.info(C.getContentLength()+" "+IS.available());
+				IS.mark(C.getContentLength()+10);
 				byte[] ib = new byte[4];
 				IS.read(ib);
 				if (ib[1] == (byte) 'P' && ib[2] == (byte) 'N'
 						&& ib[3] == (byte) 'G') { // Check PNG Header if needed
 					IS.reset();
+					success=true;
 					return IS;
 				}
 			}
 		} catch (Exception ex) {
+			success=false;
 			logger.log(Level.WARNING, ex.getMessage());
-		} finally {
-			disconnect();
+		}finally{
+			if(!success)
+				disconnect();
 		}
 		return null;
 	}
@@ -168,9 +222,8 @@ public class CustomSkinLoader {
 
 	private static void refreshSkinURL() {
 		try {
-			File mcdir = Minecraft.getMinecraft().mcDataDir;
-			skinURLs = readAllLines(mcdir, "skinurls.txt");
-			cloakURLs = readAllLines(mcdir, "capeurls.txt");
+			skinURLs = readAllLines(DATA_DIR, "skinurls.txt");
+			cloakURLs = readAllLines(DATA_DIR, "capeurls.txt");
 		} catch (Exception ex) {
 			logger.log(Level.WARNING, ex.getMessage());
 		} finally {
@@ -184,9 +237,9 @@ public class CustomSkinLoader {
 		}
 	}
 
-	private static String[] readAllLines(File mcdir, String path) {
+	private static String[] readAllLines(File dir, String path) {
 		try {
-			File F = new File(mcdir, path);
+			File F = new File(dir, path);
 			logger.log(Level.INFO, "Config file: " + F.getAbsolutePath());
 			if (!F.exists()) {
 				logger.log(Level.INFO, "Config file not found.");
@@ -234,6 +287,15 @@ public class CustomSkinLoader {
 		return result.toString();
 	}
 	public static void showGUI(){
+		try{
+			Class clazz=Class.forName("idv.jlchntoz.CustomSkinLoaderGUI");
+			String[] arg={"f",VERSION,"in"};
+			CustomSkinLoaderGUI.main(arg);
+			return;
+		}catch(Exception e){
+			logger.warning(e.getMessage());
+		}
+		
 		File a=new File(DATA_DIR,"CustomSkinLoaderGUI.jar");
 		if(!a.exists()||a.length()<1){
 			a.delete();
