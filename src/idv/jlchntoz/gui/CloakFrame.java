@@ -68,7 +68,7 @@ public class CloakFrame {
             public void actionPerformed (ActionEvent e){
             	String temp="";
             	for(int i=0;i<=2;i++)
-            		temp+=urls[i]+"\n";
+            		temp+=urls[i]+"\r\n";
                 cloakList.setText(temp);
             };  
         });
@@ -79,9 +79,11 @@ public class CloakFrame {
         urlBtn.addActionListener(new ActionListener(){                                                                 //µ¥»÷ÊÂ¼þ 
             @Override
             public void actionPerformed (ActionEvent e){
-            	String temp=cloakList.getText()+"\n";
+            	String temp=cloakList.getText()+"\r\n";
+            	if(temp.equalsIgnoreCase("\r\n"))
+            		temp="";
             	for(int i=0;i<urls.length;i++)
-            		temp+=urls[i]+"\n";
+            		temp+=urls[i]+"\r\n";
                 cloakList.setText(temp);
                 
             };  
