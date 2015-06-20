@@ -11,6 +11,8 @@ public class ThreadDownloadImageData extends AbstractTexture
     private Thread imageThread;
     private SimpleTexture imageLocation;
     private boolean textureUploaded;
+	
+	public boolean enabled;//For Optifine
 
     public ThreadDownloadImageData(String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
     {

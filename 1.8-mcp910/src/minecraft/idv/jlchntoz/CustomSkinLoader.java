@@ -10,17 +10,19 @@ import java.util.regex.*;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 2nd Subversion 2015.6.7
+ * @version 12th Revision 3rd Subversion 2015.6.20
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.2";
+	public final static String VERSION="12.3";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
+	
 	private final static Pattern newResPattern = Pattern.compile("^http://textures.minecraft.net/texture/(.*?)?(Skin|Cloak)=(.*?)$"),
 								 newURLPattern = Pattern.compile("^http://skins.minecraft.net/Minecraft(Skin|Cloak)s/(.*?).png$"),
-								 oldURLPattern = Pattern.compile("^http://s3.amazonaws.com/Minecraft(Skin|Cloak)s/(.*?).png$");
+								 oldURLPattern = Pattern.compile("^http://s3.amazonaws.com/Minecraft(Skin|Cloak)s/(.*?).png$"),
+								 optifineCapeURLPattern = Pattern.compile("^http://s.optifine.net/capes/(.*?).png$");
 	
 	private final static File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader");
 	private final static File SKIN_DIR=new File(DATA_DIR,"skins");
@@ -29,7 +31,9 @@ public class CustomSkinLoader {
 	
 	private static String[] cloakURLs = null, skinURLs = null;
 	private HttpURLConnection C = null;
+	
 	private boolean loadFromCache=false;
+	private boolean cacheSelfOnly=false;
 
 	public InputStream getPlayerSkinStream(String path) {
 		if(!DATA_DIR.exists())
@@ -48,11 +52,14 @@ public class CustomSkinLoader {
 		}else{
 			m = newResPattern.matcher(path);
 			if(m.matches()){
-				logger.info("Matches");
 				if (m.group(2).contains("Skin")) // Skin
 					return getPlayerSkinStream(false, m.group(3));
 				else if (m.group(2).contains("Cloak")) // Cloak
 					return getPlayerSkinStream(true, m.group(3));
+			}else{
+				m = optifineCapeURLPattern.matcher(path);
+				if(m.matches())//Optifine Cape
+					return null;//Not Load This
 			}
 		}
 		return getStream(path, false); // Neither skin nor cloak...
@@ -79,7 +86,7 @@ public class CustomSkinLoader {
 			}
 			S = getStream(loc, true,last);
 			if(loadFromCache){
-				logger.info("" + (isCloak ? "Cloak" : "Skin") + " in " + loc + "will be load from cache.");
+				logger.info("" + (isCloak ? "Cloak" : "Skin") + " in " + loc + " will be load from cache.");
 				break;
 			}
 			if (S == null){
@@ -110,7 +117,7 @@ public class CustomSkinLoader {
 			}
 		}else{
 			String user= Minecraft.getMinecraft().getSession().getUsername();
-			if(user.equalsIgnoreCase(playerName)){//Only save user's skin
+			if(!cacheSelfOnly||user.equalsIgnoreCase(playerName)){//Only save user's skin or cache everyone
 				logger.info("Try save local " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
 				FileOutputStream fs=null;
 				int times=0;

@@ -27,6 +27,8 @@ public class ThreadDownloadImageData extends SimpleTexture
     private boolean textureUploaded;
     private static final String __OBFID = "CL_00001049";
 	public CustomSkinLoader customSkinLoader=new CustomSkinLoader();
+	
+	public boolean enabled;//For Optifine
 
     public ThreadDownloadImageData(String par1Str, ResourceLocation par2ResourceLocation, IImageBuffer par3IImageBuffer)
     {

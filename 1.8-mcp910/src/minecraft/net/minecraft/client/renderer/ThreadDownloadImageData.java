@@ -30,6 +30,8 @@ public class ThreadDownloadImageData extends SimpleTexture
     private Thread imageThread;
     private boolean textureUploaded;
     private static final String __OBFID = "CL_00001049";
+	
+	public Boolean imageFound = null; //For Optifine
 
     public ThreadDownloadImageData(File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_, IImageBuffer p_i1049_4_)
     {
@@ -116,7 +118,7 @@ public class ThreadDownloadImageData extends SimpleTexture
             {
 				CustomSkinLoader loader=new CustomSkinLoader();
                 //HttpURLConnection var1 = null;
-                ThreadDownloadImageData.logger.debug("Downloading http texture from {} to {}", new Object[] {ThreadDownloadImageData.this.imageUrl, ThreadDownloadImageData.this.field_152434_e});
+                ThreadDownloadImageData.logger.info("Downloading http texture from {} to {}", new Object[] {ThreadDownloadImageData.this.imageUrl, ThreadDownloadImageData.this.field_152434_e});
 
                 try
                 {
