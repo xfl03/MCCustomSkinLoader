@@ -3,18 +3,28 @@ package idv.jlchntoz;
 import net.minecraft.client.Minecraft;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.*;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.logging.*;
 import java.util.regex.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 3rd Subversion 2015.6.20
+ * @version 12th Revision 4th Subversion 2015.6.22
+ * 
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.3";
+	public final static String VERSION="12.4";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
@@ -25,8 +35,8 @@ public class CustomSkinLoader {
 								 optifineCapeURLPattern = Pattern.compile("^http://s.optifine.net/capes/(.*?).png$");
 	
 	private final static File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader");
-	private final static File SKIN_DIR=new File(DATA_DIR,"skins");
-	private final static File CLOAK_DIR=new File(DATA_DIR,"cloaks");
+	private final static File CACHE_DIR=new File(DATA_DIR,"caches");
+	private final static File CACHE_JSON=new File(CACHE_DIR,"caches");
 	private final static MainLogger logger = new MainLogger(new File(DATA_DIR,"CustomSkinLoader.log"));
 	
 	private static String[] cloakURLs = null, skinURLs = null;
@@ -38,6 +48,8 @@ public class CustomSkinLoader {
 	public InputStream getPlayerSkinStream(String path) {
 		if(!DATA_DIR.exists())
 			DATA_DIR.mkdir();
+		if(!CACHE_DIR.exists())
+			CACHE_DIR.mkdir();
 		logger.info("Get a request: "+path);
 		Matcher m = newURLPattern.matcher(path);
 		if (!m.matches())//Is not new url
@@ -70,22 +82,54 @@ public class CustomSkinLoader {
 				|| cloakURLs.length <= 0)
 			refreshSkinURL(); // If the list is blank or null, try to load again.
 		InputStream S=null;
-		File temp=null;
-		if(isCloak)
-			temp=new File(CLOAK_DIR,playerName+".png");
-		else
-			temp=new File(SKIN_DIR,playerName+".png");
+		String json="";
+		Gson gson=new GsonBuilder().setPrettyPrinting().create();
+		HashMap<String,CachedUser> users=null;
+		
+		if(CACHE_JSON.exists()&&CACHE_JSON.length()>20){
+			try {
+				json=read(CACHE_JSON);
+			} catch (Exception e) {
+				logger.warning(e.getMessage());
+			}
+			if(!json.equalsIgnoreCase("")){
+				users=gson.fromJson(json, new TypeToken<HashMap<String,CachedUser>>(){}.getType());
+			}else{
+				users=new HashMap<String,CachedUser>();
+			}
+		}else{
+			users=new HashMap<String,CachedUser>();
+			try {
+				CACHE_JSON.createNewFile();
+			} catch (IOException e) {
+				logger.log(Level.WARNING, e.getMessage());
+			}
+		}
+		
+		CachedUser cu=users.get(playerName);
+		boolean hasCache=false;
+		File cacheFile=null;
+		if(cu!=null){
+			if(isCloak&&cu.cloak!=null&&!cu.cloak.equalsIgnoreCase(""))
+				cacheFile=new File(CACHE_DIR,cu.cloak);
+			else if(cu.skin!=null&&!cu.skin.equalsIgnoreCase(""))
+				cacheFile=new File(CACHE_DIR,cu.skin);
+		}
+		
+		long last=0;
+		if(cacheFile!=null&&cacheFile.exists()&&cacheFile.length()>0){//Have cached
+			last=cacheFile.lastModified();
+			if(last<=0)
+				last=1;
+		}
+		
 		for (String l : isCloak ? cloakURLs : skinURLs) {
 			if(l==null||l.equalsIgnoreCase(""))
 				continue;
 			String loc = str_replace("*", playerName, l);
 			logger.log(Level.INFO, "Try to load " + (isCloak ? "cloak" : "skin") + " in " + loc);
-			long last=0;
-			if(temp.exists()&&temp.length()>0){
-				last=temp.lastModified();
-			}
 			S = getStream(loc, true,last);
-			if(loadFromCache){
+			if(last>0&&loadFromCache){
 				logger.info("" + (isCloak ? "Cloak" : "Skin") + " in " + loc + " will be load from cache.");
 				break;
 			}
@@ -99,72 +143,99 @@ public class CustomSkinLoader {
 		}
 		if(S==null){
 			try{//Read Local Skin File
-				if(temp.exists() && temp.length()>1){
-					logger.info("Try load local " + (isCloak ? "cloak" : "skin") + " in " + temp.getAbsolutePath());
-					InputStream in = new FileInputStream(temp);
-					BufferedInputStream bis=new BufferedInputStream(in);
-					if(bis.available()<=0){
-						logger.info("Cannot load local " + (isCloak ? "cloak" : "skin") + " in " + temp.getAbsolutePath());
+				if(last>0){
+					if(cacheFile.exists() && cacheFile.length()>1){
+						logger.info("Try load local " + (isCloak ? "cloak" : "skin") + " in " + cacheFile.getAbsolutePath());
+						InputStream in = new FileInputStream(cacheFile);
+						BufferedInputStream bis=new BufferedInputStream(in);
+						if(bis.available()<=0){
+							logger.info("Cannot load local " + (isCloak ? "cloak" : "skin") + " in " + cacheFile.getAbsolutePath());
+						}else{
+							logger.info("Successfully load " + (isCloak ? "cloak" : "skin") + " in " + cacheFile.getAbsolutePath());
+							return bis;
+						}
 					}else{
-						logger.info("Successfully load " + (isCloak ? "cloak" : "skin") + " in " + temp.getAbsolutePath());
-						return bis;
+						logger.info("No local " + (isCloak ? "cloak" : "skin") + " found in " + cacheFile.getAbsolutePath());
 					}
 				}else{
-					logger.info("No local " + (isCloak ? "cloak" : "skin") + " found in " + temp.getAbsolutePath());
+					logger.info("No local " + (isCloak ? "cloak" : "skin") + " found for " + playerName);
 				}
 			}catch(Exception e){
 				logger.log(Level.WARNING, e.getMessage());
 			}
 		}else{
-			String user= Minecraft.getMinecraft().getSession().getUsername();
-			if(!cacheSelfOnly||user.equalsIgnoreCase(playerName)){//Only save user's skin or cache everyone
-				logger.info("Try save local " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
-				FileOutputStream fs=null;
-				int times=0;
-				try{//Save to Local Skin File
-					//logger.info(user);
-					if(!temp.getParentFile().exists())
-						temp.getParentFile().mkdir();
-					else if(temp.exists()){
-						temp.delete();
-					}
-					//temp.createNewFile();
-					fs = new FileOutputStream(temp);
-					int byteRead = 0;
-					byte[] buffer = new byte[1024];
-					//S.reset();
-					while (( byteRead = S.read(buffer)) != -1) {
-						times+=byteRead;
-						//logger.info(""+S.available());
-						fs.write(buffer, 0, byteRead);
-						if(times>=C.getContentLength()){
-							logger.info(times+" "+C.getContentLength());
-							break;
-						}
-					}
-					
-					if(temp.length()>1){
-						logger.info("Successfully save " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
-					}else{
-						temp.delete();
-						logger.info("Cannot save local " + (isCloak ? "cloak" : "skin") + " to " + temp.getAbsolutePath());
-					}
-				}catch(Exception e){
-					e.printStackTrace();
-					logger.info(times+"");
-					logger.warning(e);
-				}finally{
-					try {
-						if(fs!=null)
-							fs.close();
-						S.reset();
-						logger.info((isCloak ? "Cloak" : "Skin")+" size : "+S.available());
-					} catch (IOException e) {
-						logger.warning(e);
+			File tempFile=null;
+			if(isCloak)
+				tempFile=new File(CACHE_DIR,playerName+"-cloak");
+			else
+				tempFile=new File(CACHE_DIR,playerName+"-skin");
+			logger.info("Try save local " + (isCloak ? "cloak" : "skin") + " to " + tempFile.getAbsolutePath());
+			FileOutputStream fs=null;
+			int times=0;
+			try{//Save to Local Skin File
+				//logger.info(user);
+				if(tempFile.exists()){
+					tempFile.delete();
+				}
+				//temp.createNewFile();
+				fs = new FileOutputStream(tempFile);
+				int byteRead = 0;
+				byte[] buffer = new byte[1024];
+				//S.reset();
+				while (( byteRead = S.read(buffer)) != -1) {
+					times+=byteRead;
+					//logger.info(""+S.available());
+					fs.write(buffer, 0, byteRead);
+					if(times>=C.getContentLength()){
+						//logger.info(times+" "+C.getContentLength());
+						break;
 					}
 				}
+				
+				if(tempFile.length()>1){
+					logger.info("Successfully save " + (isCloak ? "cloak" : "skin") + " to " + tempFile.getAbsolutePath());
+					String md5=getMd5ByFile(tempFile);
+					cacheFile=new File(CACHE_DIR,md5);
+					fs.close();
+					fs=null;
+					logger.info("Try to move " + tempFile.getAbsolutePath() + " to " + cacheFile.getAbsolutePath());
+					if(!cacheFile.exists()||!getMd5ByFile(cacheFile).equalsIgnoreCase(md5)){
+						if(tempFile.renameTo(cacheFile)){
+							logger.info("Successfully move " + tempFile.getAbsolutePath() + " to " + cacheFile.getAbsolutePath());
+						}else{
+							logger.info("Cannot move " + tempFile.getAbsolutePath() + " to " + cacheFile.getAbsolutePath());
+						}
+					}
+					if(cu==null){
+						cu=new CachedUser();
+						users.put(playerName, cu);
+					}
+					if(isCloak){
+						cu.cloak=md5;
+					}else{
+						cu.skin=md5;
+					}
+					String json2=gson.toJson(users);
+					if(!json2.equalsIgnoreCase(json))
+						write(CACHE_JSON,json2);
+				}else{
+					tempFile.delete();
+					logger.info("Cannot save local " + (isCloak ? "cloak" : "skin") + " to " + tempFile.getAbsolutePath());
+				}
+			}catch(Exception e){
+				//e.printStackTrace();
+				//logger.info(""+times);
+				logger.warning(e.getMessage());
+			}finally{
+				try {
+					if(fs!=null)
+						fs.close();
+					S.reset();
+					logger.info((isCloak ? "Cloak" : "Skin")+" size : "+S.available());
+				} catch (IOException e) {
+					logger.warning(e.getMessage());
+				}
 			}
-			
 			return S;
 		}
 		
@@ -344,4 +415,35 @@ public class CustomSkinLoader {
 			return false;
 		}
 	}
+	private void write(File file,String Data) throws Exception{
+		System.out.println("Write to "+file.getAbsolutePath());
+		FileWriter fw=null;
+		fw = new FileWriter(file);
+		fw.write(Data,0,Data.length()); 
+		fw.flush();
+		fw.close();
+	   }
+	private String read(File file) throws Exception{
+		System.out.println("Read from "+file.getAbsolutePath());
+		BufferedReader br = null;
+        String data="";
+        br = new BufferedReader(new FileReader(file));
+        data = br.readLine();
+        while( br.ready()){   
+        	data += "\r\n"+br.readLine(); 
+        }
+        br.close();
+        return data;
+   }
+	private String getMd5ByFile(File file) throws Exception {  
+		String value = null;  
+        FileInputStream in = new FileInputStream(file);
+        MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());  
+        MessageDigest md5 = MessageDigest.getInstance("MD5");  
+        md5.update(byteBuffer);  
+        BigInteger bi = new BigInteger(1, md5.digest());  
+        value = bi.toString(16);
+        in.close();  
+    	return value;  
+    }  
 }
