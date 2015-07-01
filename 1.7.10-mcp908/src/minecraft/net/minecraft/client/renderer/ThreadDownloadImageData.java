@@ -30,6 +30,8 @@ public class ThreadDownloadImageData extends SimpleTexture
     private Thread imageThread;
     private boolean textureUploaded;
     private static final String __OBFID = "CL_00001049";
+	
+	public Boolean imageFound = null;//For Optifine
 
     public ThreadDownloadImageData(File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_, IImageBuffer p_i1049_4_)
     {
