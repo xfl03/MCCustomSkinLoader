@@ -3,6 +3,7 @@ package idv.jlchntoz;
 public class Version {
 	private String version;
 	private long longVersion;
+	
 	public Version(String version){
 		this.version=version;
 		longVersion=getLongVersion(version);
@@ -20,14 +21,23 @@ public class Version {
 		//System.out.println(temp1);
 		return temp1;
 	}
+	
 	public String getVersion(){
 		return version;
 	}
 	public long getLongVersion(){
 		return longVersion;
 	}
+	
+	public boolean isNewerThan(Version compareVersion){
+		return longVersion>compareVersion.getLongVersion();
+	}
 	public boolean isNewerThan(String compareVersion){
 		return longVersion>getLongVersion(compareVersion);
+	}
+	
+	public boolean isNewerThanOrEquals(Version compareVersion){
+		return longVersion>=compareVersion.getLongVersion();
 	}
 	public boolean isNewerThanOrEquals(String compareVersion){
 		return longVersion>=getLongVersion(compareVersion);

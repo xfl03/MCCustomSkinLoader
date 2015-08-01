@@ -28,8 +28,8 @@ public class SkinFrame {
 	
 	public static final String[] urls0={
 		"#"+lang.minecraftOffical(),
-		"http://s3.amazonaws.com/MinecraftSkins/*.png",
 		"http://skins.minecraft.net/MinecraftSkins/*.png",
+		"http://s3.amazonaws.com/MinecraftSkins/*.png",
 		"#MineCrack",
 		"http://minecrack.fr.nf/mc/skinsminecrackd/*.png",
 		/*
@@ -43,8 +43,8 @@ public class SkinFrame {
 	};
 	public static final String[] urls1={
 		"#"+lang.minecraftOffical(),
-		"http://s3.amazonaws.com/MinecraftCloaks/*.png",
 		"http://skins.minecraft.net/MinecraftCloaks/*.png",
+		"http://s3.amazonaws.com/MinecraftCloaks/*.png",
 		"#Optifine",
 		"http://s.optifine.net/capes/*.png",
 		"#MineCrack",
@@ -81,8 +81,7 @@ public class SkinFrame {
 		Dimension screenSize = kit.getScreenSize();
 		int screenWidth = screenSize.width;
 		int screenHeight = screenSize.height;
-        jf.setBounds(screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2,
-        		windowWidth , windowHeight);
+        jf.setBounds(screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2, windowWidth , windowHeight);
         
         JLabel title=new JLabel();
         title.setForeground(MainFrame.bg5);
@@ -118,7 +117,7 @@ public class SkinFrame {
         else
         	defaultBtn.setFont(MainFrame.defaultSmallFont);
         con.add(defaultBtn);
-        defaultBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
+        defaultBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed (ActionEvent e){
             	String temp="";
@@ -137,7 +136,7 @@ public class SkinFrame {
         else
         	urlBtn.setFont(MainFrame.defaultSmallFont);
         con.add(urlBtn);
-        urlBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
+        urlBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed (ActionEvent e){
             	String temp=skinList.getText()+"\r\n";
@@ -161,7 +160,7 @@ public class SkinFrame {
         else
         	saveBtn.setFont(MainFrame.defaultSmallFont);
         con.add(saveBtn);
-        saveBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
+        saveBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed (ActionEvent e){
                 save(skinList.getText());
@@ -179,7 +178,7 @@ public class SkinFrame {
         else
         	closeBtn.setFont(MainFrame.defaultSmallFont);
         con.add(closeBtn);
-        closeBtn.addActionListener(new ActionListener(){                                                                 //单击事件 
+        closeBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed (ActionEvent e){
                 jf.setVisible(false);
