@@ -20,12 +20,12 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 5th Subversion 2015.8.1
+ * @version 12th Revision 6th Subversion 2015.8.8
  * 
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.5";
+	public final static String VERSION="12.6";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
@@ -35,10 +35,10 @@ public class CustomSkinLoader {
                                  oldURLPattern = Pattern.compile("^http://s3.amazonaws.com/Minecraft(Skin|Cloak)s/(.*?).png$"),
                                  optifineCapeURLPattern = Pattern.compile("^http://s.optifine.net/capes/(.*?).png$");
 	
-	private final static File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
-	                          CACHE_DIR=new File(DATA_DIR,"caches"),
-	                          LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log");
-	private final static MainLogger logger = new MainLogger(LOG_FILE);
+	public final static File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
+	                         CACHE_DIR=new File(DATA_DIR,"caches"),
+	                         LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log");
+	public final static MainLogger logger = getLogger(LOG_FILE);
 	
 	private static String[] cloakURLs = null, skinURLs = null;
 	private HttpURLConnection C = null;
@@ -353,6 +353,10 @@ public class CustomSkinLoader {
 			logger.warning(e.getMessage());
 		}
 		return "Fail";
-        
+	}
+	private static MainLogger getLogger(File logFile){
+		MainLogger mainLogger = new MainLogger(logFile);
+		mainLogger.info("CustomSkinLoader " + VERSION);
+		return mainLogger;
 	}
 }

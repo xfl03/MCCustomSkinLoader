@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+TweakClass: idv.jlchntoz.tweaker.ForgeTweaker
+TweakOrder: -10
