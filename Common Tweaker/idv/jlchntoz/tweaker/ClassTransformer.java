@@ -24,8 +24,7 @@ public class ClassTransformer implements IClassTransformer {
 				if (tempZipFile == null)
 					continue;
 				zipFile = tempZipFile;
-				ForgeTweaker.logger.info("URL: " + url);
-				ForgeTweaker.logger.info("File: " + zipFile);
+				ForgeTweaker.logger.info("Jar File URL: " + url);
 				break;
 			}
 		} catch (Exception e) {

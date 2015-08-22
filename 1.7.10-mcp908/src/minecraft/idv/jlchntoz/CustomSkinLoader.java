@@ -20,12 +20,12 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 6th Subversion 2015.8.8
+ * @version 12th Revision 7th Subversion 2015.8.22
  * 
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.6";
+	public final static String VERSION="12.7";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
@@ -69,8 +69,10 @@ public class CustomSkinLoader {
 					return getPlayerSkinStream(true, m.group(3));
 			}else{
 				m = optifineCapeURLPattern.matcher(path);
-				if(m.matches())//Optifine Cape
+				if(m.matches()){//Optifine Cape
+					logger.info("Ignore Optifine Cape.");
 					return null;//Not Load This
+				}
 			}
 		}
 		return getStream(path, false); // Neither skin nor cloak...
@@ -116,7 +118,7 @@ public class CustomSkinLoader {
 			C.setDoInput(true);
 			C.setDoOutput(false);
 			C.connect();
-			logger.info("RC: "+C.getResponseCode());
+			logger.info("Response Code: "+C.getResponseCode());
 			int respcode = C.getResponseCode() / 100;
 			if (respcode != 4 && respcode != 5) { // Successful to get skin.
 				if(alreadyCached && C.getLastModified()==cacheFile.lastModified()){

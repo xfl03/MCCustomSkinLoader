@@ -22,9 +22,15 @@ public class ImageBufferDownload implements IImageBuffer
         {
             this.imageWidth = par1BufferedImage.getWidth();//Default: 64
             this.imageHeight = par1BufferedImage.getHeight();//Default: 32
-            BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
+            BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageWidth / 2, 2);
             Graphics var3 = var2.getGraphics();
-            var3.drawImage(par1BufferedImage, 0, 0, (ImageObserver)null);
+            if(imageWidth == imageHeight){
+            	var3.drawImage(par1BufferedImage, 0, 0, this.imageWidth, this.imageWidth /  2, 0, 0, this.imageWidth, this.imageWidth /  2, (ImageObserver)null);
+            	var3.drawImage(par1BufferedImage, 0, this.imageWidth / 4, this.imageWidth, this.imageWidth /  2, 0, this.imageWidth / 2 , this.imageWidth, this.imageWidth /  4 * 3, (ImageObserver)null);
+            	imageHeight/=2;
+            }else{
+            	var3.drawImage(par1BufferedImage, 0, 0, (ImageObserver)null);
+            }
             var3.dispose();
             this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
             //this.setAreaOpaque(0, 0, 32, 16);

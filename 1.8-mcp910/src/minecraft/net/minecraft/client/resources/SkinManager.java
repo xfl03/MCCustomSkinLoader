@@ -67,7 +67,7 @@ public class SkinManager
     public ResourceLocation loadSkin(final MinecraftProfileTexture p_152789_1_, final Type p_152789_2_, final SkinManager.SkinAvailableCallback p_152789_3_)
     {
         //final ResourceLocation var4 = new ResourceLocation("skins/" + p_152789_1_.getHash());
-		final ResourceLocation var4 = new ResourceLocation(p_152789_2_.name() + "/" + p_152789_1_.getHash());
+        final ResourceLocation var4 = new ResourceLocation(p_152789_2_.name() + "/" + p_152789_1_.getHash());
         //ITextureObject var5 = this.textureManager.getTexture(var4);
 /*
         if (var5 != null)
@@ -135,24 +135,26 @@ public class SkinManager
                 {
                     var1.putAll(SkinManager.this.sessionService.getTextures(SkinManager.this.sessionService.fillProfileProperties(p_152790_1_, false), false));
                 }
-				//CustomSkinLoader Begin
+                //CustomSkinLoader Begin
                 HashMap var2 = Maps.newHashMap();
                 if (var1.containsKey(Type.SKIN)){
-                	MinecraftProfileTexture var3=((MinecraftProfileTexture)var1.get(Type.SKIN));
-                	String var4=var3.getMetadata("model");
-                	HashMap var5 = null;
-                	if(var4!=null){
-                		var5 = Maps.newHashMap();
-                		var5.put("model", var4);
-                		}
-                	var2.put(Type.SKIN, new MinecraftProfileTexture(var3.getUrl()+"?Skin="+p_152790_1_.getName(),var5));
+                    MinecraftProfileTexture var3=((MinecraftProfileTexture)var1.get(Type.SKIN));
+                    String var4=var3.getMetadata("model");
+                    HashMap var5 = null;
+                    if(var4!=null){
+                        var5 = Maps.newHashMap();
+                        var5.put("model", var4);
+                        }
+                    var2.put(Type.SKIN, new MinecraftProfileTexture(var3.getUrl()+"?Skin="+p_152790_1_.getName(),var5));
                 }else{
-                	var2.put(Type.SKIN,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftSkins/"+p_152790_1_.getName()+".png",null));
+                    HashMap var5 = Maps.newHashMap();
+                    var5.put("model", "slim");
+                    var2.put(Type.SKIN,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftSkins/"+p_152790_1_.getName()+".png",var5));
                 }
                 if (var1.containsKey(Type.CAPE)){
-                	var2.put(Type.CAPE, new MinecraftProfileTexture(((MinecraftProfileTexture)var1.get(Type.CAPE)).getUrl()+"?Cloak="+p_152790_1_.getName(),null));
+                    var2.put(Type.CAPE, new MinecraftProfileTexture(((MinecraftProfileTexture)var1.get(Type.CAPE)).getUrl()+"?Cloak="+p_152790_1_.getName(),null));
                 }else{
-                	var2.put(Type.CAPE,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftCloaks/"+p_152790_1_.getName()+".png",null));
+                    var2.put(Type.CAPE,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftCloaks/"+p_152790_1_.getName()+".png",null));
                 }
                 var1.clear();
                 var1.putAll(var2);
