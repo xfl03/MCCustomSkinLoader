@@ -148,7 +148,7 @@ public class SkinManager
                     var2.put(Type.SKIN, new MinecraftProfileTexture(var3.getUrl()+"?Skin="+p_152790_1_.getName(),var5));
                 }else{
                     HashMap var5 = Maps.newHashMap();
-                    var5.put("model", "slim");
+                    //var5.put("model", "slim");
                     var2.put(Type.SKIN,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftSkins/"+p_152790_1_.getName()+".png",var5));
                 }
                 if (var1.containsKey(Type.CAPE)){
