@@ -1,7 +1,5 @@
 MCCustomSkinLoader
 ==================
-/*
-
 版权所有(C) 2013-2014 JLChnToZ xfl03
 
     这一程序是自由软件，你可以遵照自由软件基金会出版的GNU通用公共许可证条款来修改和重新发布这一程序。或者用许可证的第三版，或者（根据你的选择）用任何更新的版本。
@@ -16,6 +14,4 @@ Copyright(C) 2013-2014 JLChnToZ xfl03
     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
     
     
-http://www.gnu.org/licenses/gpl.html
-
-*/
+GPLv3: http://www.gnu.org/licenses/gpl.html

@@ -13,16 +13,12 @@ import java.util.HashMap;
 import java.util.logging.*;
 import java.util.regex.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 7th Subversion 2015.8.22
+ * @version 12th Revision 8th Subversion 2016.2.3
  * 
- * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2015
+ * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
  */
 public class CustomSkinLoader {
 	public final static String VERSION="12.7";
@@ -37,8 +33,20 @@ public class CustomSkinLoader {
 	
 	public final static File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
 	                         CACHE_DIR=new File(DATA_DIR,"caches"),
-	                         LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log");
+	                         LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
+	                         SKIN_URL_FILE=new File(DATA_DIR,"skinurls.txt"),
+	                         CAPE_URL_FILE=new File(DATA_DIR,"capeurls.txt");
 	public final static MainLogger logger = getLogger(LOG_FILE);
+	
+	public final static String[] DEFAULT_SKIN_URLS={
+			"http://skins.minecraft.net/MinecraftSkins/*.png",
+			"http://minecrack.fr.nf/mc/skinsminecrackd/*.png",
+			"http://www.skinme.cc/MinecraftSkins/*.png"};
+	public final static String[] DEFAULT_CAPE_URLS={
+			"http://skins.minecraft.net/MinecraftCloaks/*.png",
+			"http://s.optifine.net/capes/*.png",
+			"http://minecrack.fr.nf/mc/cloaksminecrackd/*.png",
+			"http://www.skinme.cc:88/MinecraftCloaks/*.png"};
 	
 	private static String[] cloakURLs = null, skinURLs = null;
 	private HttpURLConnection C = null;
@@ -50,6 +58,8 @@ public class CustomSkinLoader {
 		if(!CACHE_DIR.exists())
 			CACHE_DIR.mkdir();
 		logger.info("Get a request: "+path);
+		if(path.contains("NOCSL"))//Not to use CSL to load, prepared for json api
+			return getStream(path, false);
 		Matcher m = newURLPattern.matcher(path);
 		if (!m.matches())//Is not new url
         {
@@ -223,29 +233,41 @@ public class CustomSkinLoader {
 
 	private static void refreshSkinURL() {
 		try {
-			skinURLs = readAllLines(DATA_DIR, "skinurls.txt");
-			cloakURLs = readAllLines(DATA_DIR, "capeurls.txt");
+			if(!SKIN_URL_FILE.exists()){
+				logger.log(Level.INFO, "SKIN config not found, create a new one.");
+				SKIN_URL_FILE.createNewFile();
+			}
+			if(!CAPE_URL_FILE.exists()){
+				logger.log(Level.INFO, "CAPE config not found, create a new one.");
+				CAPE_URL_FILE.createNewFile();
+			}
+			skinURLs = readAllLines(SKIN_URL_FILE);
+			cloakURLs = readAllLines(CAPE_URL_FILE);
 		} catch (Exception ex) {
 			logger.log(Level.WARNING, ex.getMessage());
 		} finally {
 			if(skinURLs.length==0&&cloakURLs.length==0){
-				logger.info("No skinURLs and cloak URLS found, try to show GUI.");
-				showGUI();
+				logger.info("No skinURLs and cloak URLS found, try to init and use default settings.");
+				initSkinURL();
+				refreshSkinURL();
 			}else{
 				logger.log(Level.INFO, "Skin URLs Refreshed. Skin count = "
 						+ skinURLs.length + ",  Cloak count = " + cloakURLs.length);
 			}
 		}
 	}
+	private static void initSkinURL(){
+		//TODO Init URL List
+		skinURLs=DEFAULT_SKIN_URLS;
+		writeToFile(new File(DATA_DIR,"skinurls.txt"),parseArrayToText(skinURLs));
+		cloakURLs=DEFAULT_CAPE_URLS;
+		writeToFile(new File(DATA_DIR,"capeurls.txt"),parseArrayToText(cloakURLs));
+	}
 
-	private static String[] readAllLines(File dir, String path) {
+	private static String[] readAllLines(File F) {
 		try {
-			File F = new File(dir, path);
 			logger.log(Level.INFO, "Config file: " + F.getAbsolutePath());
-			if (!F.exists()) {
-				logger.log(Level.INFO, "Config file not found.");
-				return new String[0];
-			} else if (F.length() <= 0) {
+			if (F.length() <= 0) {
 				logger.log(Level.INFO, "Config file is blank, skipped.");
 				return new String[0];
 			} else {
@@ -258,9 +280,9 @@ public class CustomSkinLoader {
 				String[] re= str_replace("\r", "\n",
 						str_replace("\r\n", "\n", new String(b))).split("\n");
 				for(int i=0;i<re.length;i++){
-					if(re[i].startsWith("#"))
+					if(re[i].startsWith("#"))//Remove note
 						re[i]=null;
-					else{
+					else{//Remove same URL
 						for(int g=0;g<re.length;g++){
 							if(i==g)
 								continue;
@@ -287,58 +309,30 @@ public class CustomSkinLoader {
 			result.replace(pos, pos + search.length(), replace);
 		return result.toString();
 	}
-	
-	public static void showGUI(){
-		try{
-			Class clazz=Class.forName("idv.jlchntoz.CustomSkinLoaderGUI");
-			String[] arg={"f",VERSION,"in"};
-			CustomSkinLoaderGUI.main(arg);
-			return;
-		}catch(Exception e){
-			logger.warning(e.getMessage());
-		}
-		
-		File a=new File(DATA_DIR,"CustomSkinLoaderGUI.jar");
-		if(!a.exists()||a.length()<1){
-			a.delete();
-			logger.info("No GUI file found, try to download one to "+a.getAbsolutePath());
-			downloadFile("https://raw.githubusercontent.com/JLChnToZ/MCCustomSkinLoader/GUI/CustomSkinLoaderGUI.jar",a);
-		}
-		try{
-			String toRun="java -jar \""+a.getAbsolutePath()+"\" f "+VERSION;
-			logger.info("Run: "+toRun);
-			Runtime.getRuntime().exec(toRun);
-		}catch(Exception e){
-			logger.warning(e.getMessage());
-		}
+	private static String parseArrayToText(String[] data){
+		StringBuilder temp=new StringBuilder();
+		for(int i=0;i<data.length-1;i++)
+			temp.append(data[i]).append("\r\n");
+		temp.append(data[data.length-1]);
+		return temp.toString();
 	}
-	public static boolean downloadFile(String remote,File local){
-		try {
-			File LCK=new File(local.getParentFile(),"download.lck");
-			if(LCK.exists()&&LCK.lastModified()>=System.currentTimeMillis()-10000){
-				logger.info("'download.lck' found! Download will not start.");
-				return false;
-			}
-			LCK.createNewFile();
-			logger.info("Downloading "+remote+" to "+local.getAbsolutePath());
-			URL url = new URL(remote);
-			URLConnection conn = url.openConnection();
-			InputStream inStream = conn.getInputStream();
-			FileOutputStream fs = new FileOutputStream(local);
-			int byteRead = 0;
-			byte[] buffer = new byte[1024];
-			while (( byteRead = inStream.read(buffer)) != -1) {
-				fs.write(buffer, 0, byteRead);
-			}
-			fs.close();
-			LCK.delete();
-			logger.info("Download successfully!");
-			return local.exists();
-		}catch (Exception e) {
-			logger.warning(e.getMessage());
+	private static boolean writeToFile(File file,String Data){
+		System.out.print("Write to "+file.getAbsolutePath()+" ");
+		FileWriter fw=null;
+		try{
+			fw = new FileWriter(file);
+			fw.write(Data,0,Data.length()); 
+			fw.flush();
+			fw.close();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			System.out.println("failed.");
 			return false;
 		}
+		System.out.println("succeed.");
+		return true;
 	}
+
 	public String MD5(String str){
 		byte [] buf = str.getBytes();
         MessageDigest md5;
@@ -356,6 +350,7 @@ public class CustomSkinLoader {
 		}
 		return "Fail";
 	}
+	
 	private static MainLogger getLogger(File logFile){
 		MainLogger mainLogger = new MainLogger(logFile);
 		mainLogger.info("CustomSkinLoader " + VERSION);
