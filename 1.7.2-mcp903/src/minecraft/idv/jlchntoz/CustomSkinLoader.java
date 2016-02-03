@@ -21,7 +21,7 @@ import java.util.regex.*;
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.7";
+	public final static String VERSION="12.8";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
@@ -46,7 +46,7 @@ public class CustomSkinLoader {
 			"http://skins.minecraft.net/MinecraftCloaks/*.png",
 			"http://s.optifine.net/capes/*.png",
 			"http://minecrack.fr.nf/mc/cloaksminecrackd/*.png",
-			"http://www.skinme.cc:88/MinecraftCloaks/*.png"};
+			"http://www.skinme.cc/MinecraftCloaks/*.png"};
 	
 	private static String[] cloakURLs = null, skinURLs = null;
 	private HttpURLConnection C = null;
