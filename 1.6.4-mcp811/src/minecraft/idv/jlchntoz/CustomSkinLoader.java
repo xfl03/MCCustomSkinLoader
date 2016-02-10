@@ -16,12 +16,12 @@ import java.util.regex.*;
 /**
  * Custom skin loader mod for Minecraft.
  * 
- * @version 12th Revision 8th Subversion 2016.2.3
+ * @version 12th Revision 9th Subversion 2016.2.10
  * 
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
  */
 public class CustomSkinLoader {
-	public final static String VERSION="12.8";
+	public final static String VERSION="12.9";
 	
 	public final static String DefaultSkinURL = "http://skins.minecraft.net/MinecraftSkins/*.png";
 	public final static String DefaultCloakURL = "http://skins.minecraft.net/MinecraftCloaks/*.png";
@@ -89,8 +89,7 @@ public class CustomSkinLoader {
 	}
 
 	public InputStream getPlayerSkinStream(Boolean isCloak, String playerName) {
-		if (skinURLs == null || cloakURLs == null || skinURLs.length <= 0
-				|| cloakURLs.length <= 0)
+		if ((skinURLs == null|| skinURLs.length <= 0) && (cloakURLs == null || cloakURLs.length <= 0))
 			refreshSkinURL(); // If the list is blank or null, try to load again.
 		InputStream S=null;
 		
@@ -119,7 +118,7 @@ public class CustomSkinLoader {
 		boolean alreadyCached=false;
 		if(cacheFile.exists()&&cacheFile.length()>1){
 			alreadyCached=true;
-			logger.info("Cache File Found");
+			logger.info("Cache File Found (LastModified: "+cacheFile.lastModified()+" , Size: "+cacheFile.length()+")");
 		}
 		try {
 			URL U = new URL(URL);
@@ -131,12 +130,14 @@ public class CustomSkinLoader {
 			logger.info("Response Code: "+C.getResponseCode());
 			int respcode = C.getResponseCode() / 100;
 			if (respcode != 4 && respcode != 5) { // Successful to get skin.
-				if(alreadyCached && C.getLastModified()==cacheFile.lastModified()){
-					logger.info("Not Modified!");
-					return getStreamFromCache(cacheFile);
-				}
-				if(C.getContentLength()<=0){//Nothing to get
+				if(C.getContentLength()<=0){//Nothing got
+					logger.info("Nothing got.");
 					return null;
+				}
+				logger.info("Successfully Get Resource (LastModified: "+C.getLastModified()+" , ContentLength: "+C.getContentLength()+")");
+				if(alreadyCached && C.getLastModified()==cacheFile.lastModified() && C.getContentLength()==cacheFile.length()){
+					logger.info("Not Modified.");
+					return getStreamFromCache(cacheFile);
 				}
 				InputStream IS=new BufferedInputStream(C.getInputStream());
 				if (!CheckPNG){ // If no need to check PNG header, just skip it.
@@ -204,7 +205,8 @@ public class CustomSkinLoader {
 			}
 			
 			if(to.length()>1){
-				logger.info("Successfully save cache to " + to.getAbsolutePath());
+				to.setLastModified(C.getLastModified());
+				logger.info("Cache saved to " + to.getAbsolutePath()+" (LastModified: "+to.lastModified()+" , Size: "+to.length()+")");
 			}else{
 				to.delete();
 				logger.info("Cannot save local cache to " + to.getAbsolutePath());
@@ -216,12 +218,8 @@ public class CustomSkinLoader {
 				if(fs!=null)
 					fs.close();
 				is.reset();
-				logger.info("Cache size : "+is.available());
 			} catch (IOException e) {
 				logger.warning(e.getMessage());
-			}
-			if(to.exists()){
-				to.setLastModified(C.getLastModified());
 			}
 		}
 	}
@@ -257,7 +255,7 @@ public class CustomSkinLoader {
 		}
 	}
 	private static void initSkinURL(){
-		//TODO Init URL List
+		//Init URL List
 		skinURLs=DEFAULT_SKIN_URLS;
 		writeToFile(new File(DATA_DIR,"skinurls.txt"),parseArrayToText(skinURLs));
 		cloakURLs=DEFAULT_CAPE_URLS;
