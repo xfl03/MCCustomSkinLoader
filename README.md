@@ -1,17 +1,29 @@
-MCCustomSkinLoader
-==================
-版权所有(C) 2013-2016 JLChnToZ xfl03
-
-    这一程序是自由软件，你可以遵照自由软件基金会出版的GNU通用公共许可证条款来修改和重新发布这一程序。或者用许可证的第三版，或者（根据你的选择）用任何更新的版本。
-    
-    发布这一程序的目的是希望它有用，但没有任何担保。甚至没有适合特定目的的隐含的担保。更详细的情况请参阅GNU通用公共许可证。
-
-
+#CustomSkinLoader
+##What's this?
+Custom Skin Loader mod for Minecraft.
+You can use it to load any skin from any website.
+##Feature
+###Plenty of Skin Load API Support and Customizable Skin Load List
+Skin Load API Supported:
+- [Mojang API](http://wiki.vg/Mojang_API)
+- [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)
+- [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
+- Legacy  
+You can use this feature to customize your skin load list so as to load from any website you want.
+If you are the owner of skin website, you can use CustomSkinLoader to load skin from your website if one of the api has been actualized.
+###HD skins support
+Even though there is no Optifine, CustomSkinLoader has fix this problem.
+You can easily to get a better view in skin.
+##Default Load List
+- [Mojang](http://www.minecraft.net/) (Mojang API)
+- [Blessing Skin](https://skin.prinzeugen.net/) (CustomSkinAPI)
+- SkinMe (UniSkinAPI)
+If you want to apply to add other skin website to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).
+##Copyright
 Copyright(C) 2013-2016 JLChnToZ xfl03
 
     This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
     
     This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-    
     
 GPLv3: http://www.gnu.org/licenses/gpl.html

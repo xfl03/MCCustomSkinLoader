@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -61,10 +62,8 @@ public class SkinManager
 
     public ResourceLocation func_152789_a(MinecraftProfileTexture p_152789_1_, final Type p_152789_2_, final SkinManager.SkinAvailableCallback p_152789_3_)
     {
-    	
-        final ResourceLocation var4 = new ResourceLocation(p_152789_2_.name()+"/" + p_152789_1_.getHash());
-        //ITextureObject var5 = this.field_152795_c.getTexture(var4);
-/*
+        final ResourceLocation var4 = new ResourceLocation("skins/" + p_152789_1_.getHash());
+        ITextureObject var5 = this.field_152795_c.getTexture(var4);
         if (var5 != null)
         {
             if (p_152789_3_ != null)
@@ -73,7 +72,7 @@ public class SkinManager
             }
         }
         else
-        {*/
+        {
             File var6 = new File(this.field_152796_d, p_152789_1_.getHash().substring(0, 2));
             File var7 = new File(var6, p_152789_1_.getHash());
             final ImageBufferDownload var8 = p_152789_2_ == Type.SKIN ? new ImageBufferDownload() : null;
@@ -103,7 +102,8 @@ public class SkinManager
                 }
             });
             this.field_152795_c.loadTexture(var4, var9);
-//}
+        }
+
         return var4;
     }
 
@@ -124,28 +124,22 @@ public class SkinManager
                 {
                     ;
                 }
-
+                
+                /*
+                 * If keep this, code below will not be executed.
+                 * p_152790_1_.getId() may be null, so NullPointerException may be thrown.
+                 * Minecraft.getMinecraft().getSession().func_148256_e().getId() also may be null, which makes it meaningless.
                 if (var1.isEmpty() && p_152790_1_.getId().equals(Minecraft.getMinecraft().getSession().func_148256_e().getId()))
                 {
+                	System.out.println("RUN3");
                     var1.putAll(SkinManager.this.field_152797_e.getTextures(SkinManager.this.field_152797_e.fillProfileProperties(p_152790_1_, false), false));
-                }
+                }*/
                 
                 //CustomSkinLoader Begin
-                HashMap var2 = Maps.newHashMap();
-                if (var1.containsKey(Type.SKIN)){
-                	var2.put(Type.SKIN, new MinecraftProfileTexture(((MinecraftProfileTexture)var1.get(Type.SKIN)).getUrl()+"?Skin="+p_152790_1_.getName()));
-                }else{
-                	var2.put(Type.SKIN,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftSkins/"+p_152790_1_.getName()+".png"));
-                }
-                if (var1.containsKey(Type.CAPE)){
-                	var2.put(Type.CAPE, new MinecraftProfileTexture(((MinecraftProfileTexture)var1.get(Type.CAPE)).getUrl()+"?Cloak="+p_152790_1_.getName()));
-                }else{
-                	var2.put(Type.CAPE,new MinecraftProfileTexture( "http://skins.minecraft.net/MinecraftCloaks/"+p_152790_1_.getName()+".png"));
-                }
                 var1.clear();
-                var1.putAll(var2);
+                var1.putAll(customskinloader.CustomSkinLoader.loadProfile(p_152790_1_.getName(), var1));
                 //CustomSkinLoader End
-                
+
                 Minecraft.getMinecraft().func_152344_a(new Runnable()
                 {
                     private static final String __OBFID = "CL_00001826";

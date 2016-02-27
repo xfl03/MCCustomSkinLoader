@@ -20,25 +20,22 @@ public class ImageBufferDownload implements IImageBuffer
         }
         else
         {
-        	this.imageWidth = p_78432_1_.getWidth();//Default: 64
-            this.imageHeight = p_78432_1_.getHeight();//Default: 32
-            BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageWidth / 2, 2);
+        	int radio=p_78432_1_.getWidth()/64;
+            this.imageWidth = 64*radio;
+            this.imageHeight = 32*radio;
+            BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
             Graphics var3 = var2.getGraphics();
-            if(imageWidth == imageHeight){
-            	var3.drawImage(p_78432_1_, 0, 0, this.imageWidth, this.imageWidth /  2, 0, 0, this.imageWidth, this.imageWidth /  2, (ImageObserver)null);
-            	var3.drawImage(p_78432_1_, 0, this.imageWidth / 4, this.imageWidth, this.imageWidth /  2, 0, this.imageWidth / 2 , this.imageWidth, this.imageWidth /  4 * 3, (ImageObserver)null);
-            	imageHeight/=2;
+            if(imageWidth == p_78432_1_.getHeight()){
+            	var3.drawImage(p_78432_1_, 0 *radio, 0 *radio, 64*radio, 32*radio, 0 *radio, 0 *radio, 64*radio, 32*radio, (ImageObserver)null);
+            	var3.drawImage(p_78432_1_, 0 *radio, 16*radio, 64*radio, 32*radio, 0 *radio, 32*radio, 64*radio, 48*radio, (ImageObserver)null);
             }else{
             	var3.drawImage(p_78432_1_, 0, 0, (ImageObserver)null);
             }
             var3.dispose();
             this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
-            //this.setAreaOpaque(0, 0, 32, 16);
-            //this.setAreaTransparent(32, 0, 64, 32);
-            //this.setAreaOpaque(0, 16, 64, 32);
-			this.setAreaOpaque(0, 0, imageWidth / 2, imageHeight / 2);
-			this.setAreaTransparent(imageWidth / 2, 0, imageWidth, imageHeight);
-			this.setAreaOpaque(0, imageHeight / 2, imageWidth, imageHeight);
+            this.setAreaOpaque(0, 0, 32*radio, 16*radio);
+            this.setAreaTransparent(32*radio, 0, 64*radio, 32*radio);
+            this.setAreaOpaque(0, 16*radio, 64*radio, 32*radio);
             return var2;
         }
     }
