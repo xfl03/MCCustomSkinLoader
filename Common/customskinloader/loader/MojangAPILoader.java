@@ -14,14 +14,14 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.ModelManager;
 import customskinloader.UserProfile;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.utils.HttpUtil;
+import customskinloader.utils.HttpUtil0;
 
 public class MojangAPILoader implements IProfileLoader {
 
 	@Override
 	public UserProfile loadProfile(SkinSiteProfile ssp, String username) throws Exception {
 		//Get UUID Begin (http://wiki.vg/Mojang_API#Username_-.3E_UUID_at_time)
-		String json0=HttpUtil.readHttp("https://api.mojang.com/users/profiles/minecraft/"+username);
+		String json0=HttpUtil0.readHttp("https://api.mojang.com/users/profiles/minecraft/"+username);
 		if(json0==null||json0.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.("+username+"'s UUID not found.)");
 			return null;
@@ -34,7 +34,7 @@ public class MojangAPILoader implements IProfileLoader {
 		}
 		//Get UUID End
 		//Get Profile Begin (http://wiki.vg/Mojang_API#UUID_-.3E_Profile_.2B_Skin.2FCape)
-		String json1=HttpUtil.readHttp("https://sessionserver.mojang.com/session/minecraft/profile/"+uuidProfile.id);
+		String json1=HttpUtil0.readHttp("https://sessionserver.mojang.com/session/minecraft/profile/"+uuidProfile.id);
 		if(json1==null||json1.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.("+username+"'s Profile is empty.)");
 			return null;

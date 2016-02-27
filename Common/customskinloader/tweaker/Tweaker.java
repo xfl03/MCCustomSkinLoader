@@ -17,7 +17,7 @@ public class Tweaker implements ITweaker {
 	private String profile;
 	
 	private static final File TWEAKER_LOG_FILE = new File("CustomSkinLoader/Tweaker.log");
-	public static MainLogger logger = new MainLogger(TWEAKER_LOG_FILE);
+	public static Logger logger = new Logger(TWEAKER_LOG_FILE);
 
 	public Tweaker() {
 		logger.info("Using Tweaker");

@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 
 import customskinloader.CustomSkinLoader;
 
-public class HttpUtil {
+public class HttpUtil0 {
 	/**
 	 * Read all text from http.
 	 */

@@ -14,7 +14,7 @@ public class ClassTransformer implements IClassTransformer {
 	public ClassTransformer() {
 		ForgeTweaker.logger.info("ClassTransformer Begin");
 		try {
-			URLClassLoader ucl = (URLClassLoader)idv.jlchntoz.tweaker.ClassTransformer.class.getClassLoader();
+			URLClassLoader ucl = (URLClassLoader)this.getClass().getClassLoader();
 			URL urls[] = ucl.getURLs();
 			for (int i = 0; i < urls.length; i++) {
 				URL url = urls[i];

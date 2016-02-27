@@ -9,7 +9,7 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.ModelManager;
 import customskinloader.UserProfile;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.utils.HttpUtil;
+import customskinloader.utils.HttpUtil0;
 
 public class CustomSkinAPILoader implements IProfileLoader {
 	public static final String TEXTURES="textures/";
@@ -19,7 +19,7 @@ public class CustomSkinAPILoader implements IProfileLoader {
 			CustomSkinLoader.logger.info("Root not denined.");
 			return null;
 		}
-		String json=HttpUtil.readHttp(ssp.root+username+".json");
+		String json=HttpUtil0.readHttp(ssp.root+username+".json");
 		if(json==null||json.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.");
 			return null;

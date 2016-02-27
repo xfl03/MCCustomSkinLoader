@@ -11,7 +11,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 public class ForgeTweaker implements ITweaker {
 	
 	private static final File TWEAKER_LOG_FILE = new File("CustomSkinLoader/Tweaker.log");
-	public static MainLogger logger = new MainLogger(TWEAKER_LOG_FILE);
+	public static Logger logger = new Logger(TWEAKER_LOG_FILE);
 	
 	public ForgeTweaker() {
 		logger.info("Using ForgeTweaker");
