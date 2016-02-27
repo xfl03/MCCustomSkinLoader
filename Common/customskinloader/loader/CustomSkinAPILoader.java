@@ -1,6 +1,6 @@
 package customskinloader.loader;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -29,6 +29,7 @@ public class CustomSkinAPILoader implements IProfileLoader {
 		if(profile.skins!=null && !profile.skins.isEmpty()){
 			Set<String> keys=profile.skins.keySet();
 			for(String s:keys){
+				System.out.println(s+" "+ModelManager.checkModel(s));
 				if(ModelManager.checkModel(s)){
 					p.skinUrl=ssp.root+TEXTURES+profile.skins.get(s);
 					p.model=s;
@@ -55,7 +56,7 @@ public class CustomSkinAPILoader implements IProfileLoader {
 
 	private class CustomSkinAPI{
 		public String username;
-		public HashMap<String,String> skins;
+		public Map<String,String> skins;
 		public String skin;
 		public String cape;
 	}
