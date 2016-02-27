@@ -11,6 +11,7 @@ Skin Load API Supported:
 - Legacy  
 You can use this feature to customize your skin load list so as to load from any website you want.
 If you are the owner of skin website, you can use CustomSkinLoader to load skin from your website if one of the api has been actualized.  
+
 ###HD skins support  
 Even though there is no Optifine, CustomSkinLoader has fix this problem.
 You can easily to get a better view in skin.  
