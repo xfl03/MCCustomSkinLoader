@@ -10,16 +10,18 @@ Skin Load API Supported:
 - [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
 - Legacy  
 You can use this feature to customize your skin load list so as to load from any website you want.
-If you are the owner of skin website, you can use CustomSkinLoader to load skin from your website if one of the api has been actualized.
-###HD skins support
+If you are the owner of skin website, you can use CustomSkinLoader to load skin from your website if one of the api has been actualized.  
+###HD skins support  
 Even though there is no Optifine, CustomSkinLoader has fix this problem.
-You can easily to get a better view in skin.
-##Default Load List
+You can easily to get a better view in skin.  
+
+##Default Load List  
 - [Mojang](http://www.minecraft.net/) (Mojang API)
 - [Blessing Skin](https://skin.prinzeugen.net/) (CustomSkinAPI)
-- SkinMe (UniSkinAPI)
-If you want to apply to add other skin website to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).
-##Copyright
+- SkinMe (UniSkinAPI)  
+If you want to apply to add other skin website to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
+
+##Copyright  
 Copyright(C) 2013-2016 JLChnToZ xfl03
 
     This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
