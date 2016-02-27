@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
@@ -42,7 +43,7 @@ public class CustomSkinLoader {
 	public static final Logger logger=initLogger();
 	public static final Config config=loadConfig0();
 	
-	public static HashMap loadProfile(String username,HashMap defaultProfile){
+	public static Map loadProfile(String username,Map defaultProfile){
 		for(int i=0;i<config.loadlist.length;i++){
 			SkinSiteProfile ssp=config.loadlist[i];
 			logger.info((i+1)+"/"+config.loadlist.length+" Try to load profile from '"+ssp.name+"'.");

@@ -1,7 +1,7 @@
 package customskinloader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import com.google.common.collect.Maps;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -33,7 +33,7 @@ public class ModelManager {
 	 * @return profile - UserProfile instance
 	 * @since 13.1
 	 */
-	public static UserProfile toUserProfile(HashMap profile){
+	public static UserProfile toUserProfile(Map profile){
 		UserProfile userProfile=new UserProfile();
 		MinecraftProfileTexture skin=(MinecraftProfileTexture)profile.get(Type.SKIN);
 		userProfile.skinUrl= skin==null?null:skin.getUrl();//Avoid NullPointerException
@@ -49,13 +49,13 @@ public class ModelManager {
 	 * @return profile - hashMapProfile (HashMap<String,MinecraftProfileTexture>)
 	 * @since 13.1
 	 */
-	public static HashMap fromUserProfile(UserProfile profile){
-		HashMap hashMap=Maps.newHashMap();
+	public static Map fromUserProfile(UserProfile profile){
+		Map map=Maps.newHashMap();
 		if(profile.skinUrl!=null)
-			hashMap.put(Type.SKIN, new MinecraftProfileTexture(profile.skinUrl));
+			map.put(Type.SKIN, new MinecraftProfileTexture(profile.skinUrl));
 		if(profile.capeUrl!=null)
-			hashMap.put(Type.CAPE, new MinecraftProfileTexture(profile.capeUrl));
-		return hashMap;
+			map.put(Type.CAPE, new MinecraftProfileTexture(profile.capeUrl));
+		return map;
 	}
 	
 	private static void refreshModels(){
