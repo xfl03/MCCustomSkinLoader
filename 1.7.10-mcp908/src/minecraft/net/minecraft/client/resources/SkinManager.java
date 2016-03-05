@@ -137,7 +137,7 @@ public class SkinManager
                 
                 //CustomSkinLoader Begin
                 if(customskinloader.CustomSkinLoader.config.enable){
-                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), var1);
+                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(p_152790_1_.getName(), var1);
                 	if(!newMap.isEmpty()){
                 		var1.clear();
                 		var1.putAll(newMap);
