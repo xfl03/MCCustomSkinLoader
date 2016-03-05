@@ -25,10 +25,10 @@ import net.minecraft.client.Minecraft;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.1
+ * @version 13.2 (2016.3.5)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.1";
+	public static final String CustomSkinLoader_VERSION="13.2";
 	public static final File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");

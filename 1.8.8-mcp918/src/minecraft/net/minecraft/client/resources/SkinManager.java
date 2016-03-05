@@ -8,6 +8,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.InsecureTextureException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
+
+import customskinloader.CustomSkinLoader;
+
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -130,8 +133,13 @@ public class SkinManager
                 }*/
                 
                 //CustomSkinLoader Begin
-                map.clear();
-                map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map));
+                if(CustomSkinLoader.config.enable){
+                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
+                	if(!newMap.isEmpty()){
+                		map.clear();
+                		map.putAll(newMap);
+                	}
+                }
                 //CustomSkinLoader End
 
                 Minecraft.getMinecraft().addScheduledTask(new Runnable()
