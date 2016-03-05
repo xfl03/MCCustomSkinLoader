@@ -49,9 +49,9 @@ public class bwn
 		return a(profileTexture, textureType, ((a) (null)));
 	}
 
-	public kk a(MinecraftProfileTexture profileTexture, com.mojang.authlib.minecraft.MinecraftProfileTexture.Type textureType, a skinAvailableCallback)
+	public kk a(final MinecraftProfileTexture profileTexture,final com.mojang.authlib.minecraft.MinecraftProfileTexture.Type textureType, final a skinAvailableCallback)
 	{
-		kk resourceLocation = new kk((new StringBuilder()).append("skins/").append(profileTexture.getHash()).toString());
+		final kk resourceLocation = new kk((new StringBuilder()).append("skins/").append(profileTexture.getHash()).toString());
 		bvj textureObject = b.b(resourceLocation);
 		if (textureObject != null)
 		{
@@ -61,7 +61,7 @@ public class bwn
 		{
 			File cacheDir = new File(c, profileTexture.getHash().length() <= 2 ? "xx" : profileTexture.getHash().substring(0, 2));
 			File cacheFile = new File(cacheDir, profileTexture.getHash());
-			bnj imageBuffer = textureType != com.mojang.authlib.minecraft.MinecraftProfileTexture.Type.SKIN ? null : ((bnj) (new bnp()));
+			final bnj imageBuffer = textureType != com.mojang.authlib.minecraft.MinecraftProfileTexture.Type.SKIN ? null : ((bnj) (new bnp()));
 			buy threadDownloadImageData = new buy(cacheFile, profileTexture.getUrl(), bvw.a(), new bnj() {
 
 				public BufferedImage a(BufferedImage image)
@@ -85,13 +85,13 @@ public class bwn
 		return resourceLocation;
 	}
 
-	public void a(GameProfile profile, a skinAvailableCallback, boolean requireSecure)
+	public void a(final GameProfile profile, final a skinAvailableCallback, final boolean requireSecure)
 	{
 		a.submit(new Runnable() {
 
 			public void run()
 			{
-				Map map = Maps.newHashMap();
+				final Map map = Maps.newHashMap();
 				try
 				{
 					map.putAll(bwn.this.d.getTextures(profile, requireSecure));
