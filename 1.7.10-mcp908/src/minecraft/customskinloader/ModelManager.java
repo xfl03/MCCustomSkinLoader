@@ -1,9 +1,11 @@
 package customskinloader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
@@ -52,10 +54,26 @@ public class ModelManager {
 	public static Map fromUserProfile(UserProfile profile){
 		Map map=Maps.newHashMap();
 		if(profile.skinUrl!=null)
-			map.put(Type.SKIN, new MinecraftProfileTexture(profile.skinUrl));
+			map.put(Type.SKIN, getProfileTexture(profile.skinUrl));
 		if(profile.capeUrl!=null)
-			map.put(Type.CAPE, new MinecraftProfileTexture(profile.capeUrl));
+			map.put(Type.CAPE, getProfileTexture(profile.capeUrl));
 		return map;
+	}
+	
+	/**
+	 * Parse url to MinecraftProfileTexture
+	 * Fix authlib 21 bug
+	 * @param url - textureUrl
+	 * @return MinecraftProfileTexture
+	 * @since 13.2
+	 */
+	public static MinecraftProfileTexture getProfileTexture(String url){
+		Map hashMap=new HashMap<String,String>();
+		hashMap.put("url", url);
+		Gson gson=new Gson();
+		String json=gson.toJson(hashMap);
+		MinecraftProfileTexture pt=gson.fromJson(json, MinecraftProfileTexture.class);
+		return pt;
 	}
 	
 	private static void refreshModels(){

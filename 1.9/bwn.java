@@ -105,8 +105,13 @@ public class bwn
 					map.putAll(bwn.this.d.getTextures(profile, false));
 				}*/
 				//CustomSkinLoader Begin
-                map.clear();
-                map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map));
+                if(customskinloader.CustomSkinLoader.config.enable){
+                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
+                	if(!newMap.isEmpty()){
+                		map.clear();
+                		map.putAll(newMap);
+                	}
+                }
                 //CustomSkinLoader End
 				bcf.z().a(new Runnable() {
 
