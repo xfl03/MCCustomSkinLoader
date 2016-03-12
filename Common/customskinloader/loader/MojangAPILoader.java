@@ -11,7 +11,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.properties.Property;
 
 import customskinloader.CustomSkinLoader;
-import customskinloader.ModelManager;
+import customskinloader.ModelManager0;
 import customskinloader.UserProfile;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.utils.HttpUtil0;
@@ -59,7 +59,7 @@ public class MojangAPILoader implements IProfileLoader {
 			return null;
 		}
 		//Get Texture End
-		return ModelManager.toUserProfile(texture1.textures);
+		return ModelManager0.toUserProfile(texture1.textures);
 	}
 	
 	private class UUIDProfile{

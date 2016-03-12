@@ -49,7 +49,7 @@ public class CustomSkinLoader {
 			logger.info((i+1)+"/"+config.loadlist.length+" Try to load profile from '"+ssp.name+"'.");
 			if(ssp.type.equalsIgnoreCase("MojangAPI") && !defaultProfile.isEmpty()){
 				logger.info("Default profile will be used.");
-				logger.info(ModelManager.toUserProfile(defaultProfile).toString());
+				logger.info(ModelManager0.toUserProfile(defaultProfile).toString());
 				return defaultProfile;
 			}
 			IProfileLoader loader=LOADERS.get(ssp.type.toLowerCase());
@@ -67,7 +67,7 @@ public class CustomSkinLoader {
 				continue;
 			logger.info(username+"'s profile loaded.");
 			logger.info(profile.toString());
-			return ModelManager.fromUserProfile(profile);
+			return ModelManager0.fromUserProfile(profile);
 		}
 		return defaultProfile;
 	}

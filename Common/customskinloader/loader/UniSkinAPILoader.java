@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import customskinloader.CustomSkinLoader;
-import customskinloader.ModelManager;
+import customskinloader.ModelManager0;
 import customskinloader.UserProfile;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.utils.HttpUtil0;
@@ -29,7 +29,9 @@ public class UniSkinAPILoader implements IProfileLoader {
 		if(profile.skins!=null && !profile.skins.isEmpty()){
 			if(profile.model_preference!=null && !profile.model_preference.isEmpty()){
 				for(String s:profile.model_preference){
-					if(ModelManager.checkModel(s)){
+					if(ModelManager0.checkModel(s)){
+						if(profile.skins.get(s)==null||profile.skins.get(s).equals(""))
+							continue;
 						p.skinUrl=ssp.root+TEXTURES+profile.skins.get(s);
 						p.model=s;
 						break;
@@ -44,7 +46,9 @@ public class UniSkinAPILoader implements IProfileLoader {
 				}
 			}
 		}
-		if(profile.cape!=null && !profile.cape.equals("")){
+		if(profile.skins.get("cape")!=null && !profile.skins.get("cape").equals("")){
+			p.capeUrl=ssp.root+TEXTURES+profile.skins.get("cape");
+		}else if(profile.cape!=null && !profile.cape.equals("")){
 			p.capeUrl=ssp.root+TEXTURES+profile.cape;
 		}
 		if(p.isEmpty()){

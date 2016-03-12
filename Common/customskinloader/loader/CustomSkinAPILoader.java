@@ -6,7 +6,7 @@ import java.util.Set;
 import com.google.gson.Gson;
 
 import customskinloader.CustomSkinLoader;
-import customskinloader.ModelManager;
+import customskinloader.ModelManager0;
 import customskinloader.UserProfile;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.utils.HttpUtil0;
@@ -29,8 +29,10 @@ public class CustomSkinAPILoader implements IProfileLoader {
 		if(profile.skins!=null && !profile.skins.isEmpty()){
 			Set<String> keys=profile.skins.keySet();
 			for(String s:keys){
-				System.out.println(s+" "+ModelManager.checkModel(s));
-				if(ModelManager.checkModel(s)){
+				//System.out.println(s+" "+ModelManager0.checkModel(s));
+				if(ModelManager0.checkModel(s)){
+					if(profile.skins.get(s)==null||profile.skins.get(s).equals(""))
+							continue;
 					p.skinUrl=ssp.root+TEXTURES+profile.skins.get(s);
 					p.model=s;
 					break;

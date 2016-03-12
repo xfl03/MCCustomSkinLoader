@@ -13,7 +13,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
  * It is the only class in package 'customskinloader' which has differences in different Minecraft version.
  * @since 13.1
  */
-public class ModelManager {
+public class ModelManager0 {
 	private static ArrayList<String> models=null;
 	
 	/**
