@@ -75,7 +75,7 @@ public class bwn
 				{
 					if (imageBuffer != null)
 						imageBuffer.a();
-					if (b != null)
+					if (skinAvailableCallback != null)
 						skinAvailableCallback.a(textureType, resourceLocation, profileTexture);
 				}
 
