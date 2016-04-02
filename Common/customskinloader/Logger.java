@@ -40,15 +40,17 @@ public class Logger {
 		if(level.intValue()>=LOWEST_DISPLAY_LEVEL) 
 			System.out.println(msg);
 		try {
-			writer.write("[");
-			writer.write(DATE_FORMAT.format(new Date()));
-			writer.write(" ");
-			writer.write(Thread.currentThread().getName());
-			writer.write(" ");
-			writer.write(level.getName());
-			writer.write("] ");
-			writer.write(msg);
-			writer.write("\r\n");
+			StringBuilder sb=new StringBuilder();
+			sb.append("[");
+			sb.append(DATE_FORMAT.format(new Date()));
+			sb.append(" ");
+			sb.append(Thread.currentThread().getName());
+			sb.append(" ");
+			sb.append(level.getName());
+			sb.append("] ");
+			sb.append(msg);
+			sb.append("\r\n");
+			writer.write(sb.toString());
 			writer.flush();
 		} catch (Exception e) {
 			e.printStackTrace();

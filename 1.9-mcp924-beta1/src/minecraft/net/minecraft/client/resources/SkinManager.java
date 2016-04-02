@@ -131,14 +131,13 @@ public class SkinManager
                 
                 //CustomSkinLoader Begin
                 if(customskinloader.CustomSkinLoader.config.enable){
-                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
+                	Map<Type, MinecraftProfileTexture> newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
                 	if(!newMap.isEmpty()){
                 		map.clear();
                 		map.putAll(newMap);
                 	}
                 }
                 //CustomSkinLoader End
-
                 Minecraft.getMinecraft().addScheduledTask(new Runnable()
                 {
                     public void run()
@@ -160,7 +159,8 @@ public class SkinManager
 
     public Map<Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile)
     {
-        return (Map)this.skinCacheLoader.getUnchecked(profile);
+    	return customskinloader.CustomSkinLoader.loadProfileFromCache(profile.getName());
+        //return (Map)this.skinCacheLoader.getUnchecked(profile);
     }
 
     public interface SkinAvailableCallback

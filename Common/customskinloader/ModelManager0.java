@@ -53,6 +53,8 @@ public class ModelManager0 {
 	 */
 	public static Map fromUserProfile(UserProfile profile){
 		Map map=Maps.newHashMap();
+		if(profile==null)
+			return map;
 		if(profile.skinUrl!=null){
 			Map metadata=null;
 			if(profile.model!=null&&profile.model.equals("slim")){

@@ -12,6 +12,8 @@ import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
@@ -25,10 +27,10 @@ import net.minecraft.client.Minecraft;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.3 (2016.3.13)
+ * @version 13.4 (2016.4.3)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.3";
+	public static final String CustomSkinLoader_VERSION="13.4";
 	public static final File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -43,14 +45,33 @@ public class CustomSkinLoader {
 	public static final Logger logger=initLogger();
 	public static final Config config=loadConfig0();
 	
+	private static final Map<String,UserProfile> profileCache=new HashMap<String,UserProfile>();
+	
+	//Entrance
 	public static Map loadProfile(String username,Map defaultProfile){
+		String tempName=Thread.currentThread().getName();
+		Thread.currentThread().setName(username);//Change Thread Name
+		UserProfile profile=loadProfile(username,ModelManager0.toUserProfile(defaultProfile));
+		Thread.currentThread().setName(tempName);
+		return ModelManager0.fromUserProfile(profile);
+	}
+	public static UserProfile loadProfile(String username,UserProfile defaultProfile){
+		logger.info("Loading "+username+"'s profile.");
+		if(profileCache.get(username)!=null){
+			logger.info("Cached profile will be used.");
+			UserProfile profile=profileCache.get(username);
+			logger.info(profile.toString());
+			return profile;
+		}
+		profileCache.put(username, null);
 		for(int i=0;i<config.loadlist.length;i++){
 			SkinSiteProfile ssp=config.loadlist[i];
 			logger.info((i+1)+"/"+config.loadlist.length+" Try to load profile from '"+ssp.name+"'.");
 			if(ssp.type.equalsIgnoreCase("MojangAPI") && !defaultProfile.isEmpty()){
 				logger.info("Default profile will be used.");
-				logger.info(ModelManager0.toUserProfile(defaultProfile).toString());
-				return defaultProfile;
+				logger.info(defaultProfile.toString());
+				profileCache.put(username, defaultProfile);
+				return defaultProfile;//Create a new map instance
 			}
 			IProfileLoader loader=LOADERS.get(ssp.type.toLowerCase());
 			if(loader==null){
@@ -67,9 +88,18 @@ public class CustomSkinLoader {
 				continue;
 			logger.info(username+"'s profile loaded.");
 			logger.info(profile.toString());
+			profileCache.put(username, profile);
+			return profile;
+		}
+		logger.info(username+"'s profile not found.");
+		return defaultProfile;
+	}
+	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(String username) {
+		if(profileCache.containsKey(username)){
+			UserProfile profile=profileCache.get(username);
 			return ModelManager0.fromUserProfile(profile);
 		}
-		return defaultProfile;
+		return loadProfile(username,(Map)null);
 	}
 	
 	private static Logger initLogger() {
