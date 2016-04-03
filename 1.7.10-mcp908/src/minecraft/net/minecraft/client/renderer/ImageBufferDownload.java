@@ -33,9 +33,11 @@ public class ImageBufferDownload implements IImageBuffer
             }
             var3.dispose();
             this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
-            this.setAreaOpaque(0, 0, 32*radio, 16*radio);
-            this.setAreaTransparent(32*radio, 0, 64*radio, 32*radio);
-            this.setAreaOpaque(0, 16*radio, 64*radio, 32*radio);
+            if(!customskinloader.CustomSkinLoader.config.enableTransparentSkin){
+                this.setAreaOpaque(0, 0, 32*radio, 16*radio);
+                this.setAreaTransparent(32*radio, 0, 64*radio, 32*radio);
+                this.setAreaOpaque(0, 16*radio, 64*radio, 32*radio);
+            }
             return var2;
         }
     }

@@ -135,7 +135,7 @@ public class SkinManager
                     var1.putAll(SkinManager.this.field_152797_e.getTextures(SkinManager.this.field_152797_e.fillProfileProperties(p_152790_1_, false), false));
                 }*/
                 
-                //CustomSkinLoader Begin
+                //CustomSkinLoader Begin (User Skin/Cape Part)
                 if(customskinloader.CustomSkinLoader.config.enable){
                 	Map newMap=customskinloader.CustomSkinLoader.loadProfile(p_152790_1_.getName(), var1);
                 	if(!newMap.isEmpty()){
@@ -167,7 +167,12 @@ public class SkinManager
 
     public Map func_152788_a(GameProfile p_152788_1_)
     {
-        return (Map)this.field_152798_f.getUnchecked(p_152788_1_);
+		//CustomSkinLoader Begin (Skull Part)
+    	//return (Map)this.skinCacheLoader.getUnchecked(p_152788_1_);
+    	return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
+    			customskinloader.CustomSkinLoader.loadProfileFromCache(p_152788_1_.getName()):
+    				this.skinCacheLoader.getUnchecked(p_152788_1_);
+    	//CustomSkinLoader End
     }
 
     public interface SkinAvailableCallback

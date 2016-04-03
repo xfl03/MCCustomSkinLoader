@@ -129,7 +129,7 @@ public class SkinManager
                     map.putAll(SkinManager.this.sessionService.getTextures(profile, false));
                 }*/
                 
-                //CustomSkinLoader Begin
+                //CustomSkinLoader Begin (User Skin/Cape Part)
                 if(customskinloader.CustomSkinLoader.config.enable){
                 	Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
                 	if(!newMap.isEmpty()){
@@ -160,7 +160,12 @@ public class SkinManager
 
     public Map<Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile)
     {
-        return (Map)this.skinCacheLoader.getUnchecked(profile);
+        //CustomSkinLoader Begin (Skull Part)
+    	//return (Map)this.skinCacheLoader.getUnchecked(profile);
+    	return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
+    			customskinloader.CustomSkinLoader.loadProfileFromCache(profile.getName()):
+    				this.skinCacheLoader.getUnchecked(profile);
+    	//CustomSkinLoader End
     }
 
     public interface SkinAvailableCallback

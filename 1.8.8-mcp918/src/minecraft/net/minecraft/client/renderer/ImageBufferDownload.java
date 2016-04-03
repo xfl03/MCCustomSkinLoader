@@ -44,15 +44,17 @@ public class ImageBufferDownload implements IImageBuffer
 
             var3.dispose();
             this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
-            this.setAreaOpaque(0, 0, 32 * ratio, 16 * ratio);
-            this.setAreaTransparent(32 * ratio, 0, 64 * ratio, 32 * ratio);
-            this.setAreaOpaque(0, 16 * ratio, 64 * ratio, 32 * ratio);
-            this.setAreaTransparent(0, 32 * ratio, 16 * ratio, 48 * ratio);
-            this.setAreaTransparent(16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);
-            this.setAreaTransparent(40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);
-            this.setAreaTransparent(0, 48 * ratio, 16 * ratio, 64 * ratio);
-            this.setAreaOpaque(16 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);
-            this.setAreaTransparent(48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);
+		    if(!customskinloader.CustomSkinLoader.config.enableTransparentSkin){
+		        this.setAreaOpaque(0, 0, 32 * ratio, 16 * ratio);
+		        this.setAreaTransparent(32 * ratio, 0, 64 * ratio, 32 * ratio);
+		        this.setAreaOpaque(0, 16 * ratio, 64 * ratio, 32 * ratio);
+		        this.setAreaTransparent(0, 32 * ratio, 16 * ratio, 48 * ratio);
+		        this.setAreaTransparent(16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);
+		        this.setAreaTransparent(40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);
+		        this.setAreaTransparent(0, 48 * ratio, 16 * ratio, 64 * ratio);
+		        this.setAreaOpaque(16 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);
+		        this.setAreaTransparent(48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);
+            }
             return var2;
         }
     }
