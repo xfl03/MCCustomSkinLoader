@@ -5,6 +5,7 @@ import customskinloader.CustomSkinLoader;
 public class Config {
 	public String version;
 	public boolean enable=true;
+	public boolean enableCache=true;
 	public boolean enableSkull=true;
 	public boolean enableTransparentSkin=false;
 	public SkinSiteProfile[] loadlist;

@@ -35,6 +35,8 @@ public class ModelManager0 {
 	 */
 	public static UserProfile toUserProfile(Map profile){
 		UserProfile userProfile=new UserProfile();
+		if(profile==null)
+			return userProfile;
 		MinecraftProfileTexture skin=(MinecraftProfileTexture)profile.get(Type.SKIN);
 		userProfile.skinUrl= skin==null?null:skin.getUrl();//Avoid NullPointerException
 		userProfile.model= skin==null?null:skin.getMetadata("model");

@@ -27,10 +27,10 @@ import net.minecraft.client.Minecraft;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.4 (2016.4.3)
+ * @version 13.5 (2016.4.3)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.4";
+	public static final String CustomSkinLoader_VERSION="13.5";
 	public static final File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -58,7 +58,7 @@ public class CustomSkinLoader {
 	}
 	public static UserProfile loadProfile(String username,UserProfile defaultProfile){
 		logger.info("Loading "+username+"'s profile.");
-		if(profileCache.get(username)!=null){
+		if(config.enableCache&&profileCache.get(username)!=null){
 			logger.info("Cached profile will be used.");
 			UserProfile profile=profileCache.get(username);
 			logger.info(profile.toString());
@@ -95,22 +95,13 @@ public class CustomSkinLoader {
 		logger.info(username+"'s profile not found.");
 		return defaultProfile;
 	}
-	//For Skull (1.8.2 and Higher)
+	//For Skull
 	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(String username) {
 		if(profileCache.containsKey(username)){
 			UserProfile profile=profileCache.get(username);
 			return ModelManager0.fromUserProfile(profile);
 		}
 		return loadProfile(username,(Map)null);
-	}
-	//For Skull (1.8.1 and Lower)
-	public static String loadSkinFromCache(String username) {
-		if(profileCache.containsKey(username)){
-			UserProfile profile=profileCache.get(username);
-			return profile==null?null:profile.skinUrl;
-		}
-		UserProfile profile=loadProfile(username,(UserProfile)null);
-		return profile==null?null:profile.skinUrl;
 	}
 	
 	private static Logger initLogger() {
@@ -131,8 +122,9 @@ public class CustomSkinLoader {
 
 	private static Config loadConfig0() {
 		Config config=loadConfig();
-		logger.info("Enable: "+config.enable);
-		logger.info("LoadList: "+(config.loadlist==null?0:config.loadlist.length));
+		logger.info("Enable:"+config.enable+", EnableCache:"+config.enableCache+
+				", EnableSkull:"+config.enableSkull+", EnableTranSkin:"+config.enableTransparentSkin+
+				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
 		if(config.version==null||Float.parseFloat(config.version)<Float.parseFloat(CustomSkinLoader_VERSION)){
 			logger.info("Config File is out of date: "+config.version);
 			config.version=CustomSkinLoader_VERSION;
