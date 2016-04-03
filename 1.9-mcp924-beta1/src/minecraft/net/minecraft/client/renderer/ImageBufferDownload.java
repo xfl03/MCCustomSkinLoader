@@ -19,15 +19,15 @@ public class ImageBufferDownload implements IImageBuffer
         }
         else
         {
-		    int ratio = image.getWidth() / 64;
-		    this.imageWidth = 64 * ratio;
+            int ratio = image.getWidth() / 64;
+            this.imageWidth = 64 * ratio;
             this.imageHeight = 64 * ratio;
-		    BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
-		    Graphics var3 = var2.getGraphics();
-		    var3.drawImage(image, 0, 0, null);
-		    if (image.getHeight() == 32 * ratio)
-		    {
-			    var3.drawImage(var2, 24 * ratio, 48 * ratio, 20 * ratio, 52 * ratio,  4 * ratio, 16 * ratio,  8 * ratio, 20 * ratio, (ImageObserver)null);
+            BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
+            Graphics var3 = var2.getGraphics();
+            var3.drawImage(image, 0, 0, null);
+            if (image.getHeight() == 32 * ratio)
+            {
+                var3.drawImage(var2, 24 * ratio, 48 * ratio, 20 * ratio, 52 * ratio,  4 * ratio, 16 * ratio,  8 * ratio, 20 * ratio, (ImageObserver)null);
                 var3.drawImage(var2, 28 * ratio, 48 * ratio, 24 * ratio, 52 * ratio,  8 * ratio, 16 * ratio, 12 * ratio, 20 * ratio, (ImageObserver)null);
                 var3.drawImage(var2, 20 * ratio, 52 * ratio, 16 * ratio, 64 * ratio,  8 * ratio, 20 * ratio, 12 * ratio, 32 * ratio, (ImageObserver)null);
                 var3.drawImage(var2, 24 * ratio, 52 * ratio, 20 * ratio, 64 * ratio,  4 * ratio, 20 * ratio,  8 * ratio, 32 * ratio, (ImageObserver)null);
@@ -39,21 +39,21 @@ public class ImageBufferDownload implements IImageBuffer
                 var3.drawImage(var2, 40 * ratio, 52 * ratio, 36 * ratio, 64 * ratio, 44 * ratio, 20 * ratio, 48 * ratio, 32 * ratio, (ImageObserver)null);
                 var3.drawImage(var2, 44 * ratio, 52 * ratio, 40 * ratio, 64 * ratio, 40 * ratio, 20 * ratio, 44 * ratio, 32 * ratio, (ImageObserver)null);
                 var3.drawImage(var2, 48 * ratio, 52 * ratio, 44 * ratio, 64 * ratio, 52 * ratio, 20 * ratio, 56 * ratio, 32 * ratio, (ImageObserver)null);
-		    }
-		    var3.dispose();
-		    this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
-		    if(!customskinloader.CustomSkinLoader.config.enableTransparentSkin){
-		        this.setAreaOpaque(0, 0, 32 * ratio, 16 * ratio);
-		        this.setAreaTransparent(32 * ratio, 0, 64 * ratio, 32 * ratio);
-		        this.setAreaOpaque(0, 16 * ratio, 64 * ratio, 32 * ratio);
-		        this.setAreaTransparent(0, 32 * ratio, 16 * ratio, 48 * ratio);
-		        this.setAreaTransparent(16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);
-		        this.setAreaTransparent(40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);
-		        this.setAreaTransparent(0, 48 * ratio, 16 * ratio, 64 * ratio);
-		        this.setAreaOpaque(16 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);
-		        this.setAreaTransparent(48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);
             }
-		    return var2;
+            var3.dispose();
+            this.imageData = ((DataBufferInt)var2.getRaster().getDataBuffer()).getData();
+            if(!customskinloader.CustomSkinLoader.config.enableTransparentSkin){
+                this.setAreaOpaque(0, 0, 32 * ratio, 16 * ratio);
+                this.setAreaTransparent(32 * ratio, 0, 64 * ratio, 32 * ratio);
+                this.setAreaOpaque(0, 16 * ratio, 64 * ratio, 32 * ratio);
+                this.setAreaTransparent(0, 32 * ratio, 16 * ratio, 48 * ratio);
+                this.setAreaTransparent(16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);
+                this.setAreaTransparent(40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);
+                this.setAreaTransparent(0, 48 * ratio, 16 * ratio, 64 * ratio);
+                this.setAreaOpaque(16 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);
+                this.setAreaTransparent(48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);
+            }
+            return var2;
         }
     }
 
