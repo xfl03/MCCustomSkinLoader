@@ -39,7 +39,8 @@ public class CustomSkinLoader {
 			new SkinSiteProfile("BlessingSkin","CustomSkinAPI","https://skin.prinzeugen.net/csl/"),
 			//Minecrack could not load skin correctly
 			//new SkinSiteProfile("Minecrack","Legacy","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"),
-			new SkinSiteProfile("SkinMe","UniSkinAPI","http://www.skinme.cc/uniskin/")};
+			new SkinSiteProfile("SkinMe","UniSkinAPI","http://www.skinme.cc/uniskin/"),
+			new SkinSiteProfile("McSkin","CustomSkinAPI","http://www.mcskin.cc/")};
 	public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
 	
 	public static final Logger logger=initLogger();
@@ -94,12 +95,22 @@ public class CustomSkinLoader {
 		logger.info(username+"'s profile not found.");
 		return defaultProfile;
 	}
+	//For Skull (1.8.2 and Higher)
 	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(String username) {
 		if(profileCache.containsKey(username)){
 			UserProfile profile=profileCache.get(username);
 			return ModelManager0.fromUserProfile(profile);
 		}
 		return loadProfile(username,(Map)null);
+	}
+	//For Skull (1.8.1 and Lower)
+	public static String loadSkinFromCache(String username) {
+		if(profileCache.containsKey(username)){
+			UserProfile profile=profileCache.get(username);
+			return profile==null?null:profile.skinUrl;
+		}
+		UserProfile profile=loadProfile(username,(UserProfile)null);
+		return profile==null?null:profile.skinUrl;
 	}
 	
 	private static Logger initLogger() {
@@ -122,6 +133,11 @@ public class CustomSkinLoader {
 		Config config=loadConfig();
 		logger.info("Enable: "+config.enable);
 		logger.info("LoadList: "+(config.loadlist==null?0:config.loadlist.length));
+		if(config.version==null||Float.parseFloat(config.version)<Float.parseFloat(CustomSkinLoader_VERSION)){
+			logger.info("Config File is out of date: "+config.version);
+			config.version=CustomSkinLoader_VERSION;
+			writeConfig(config,true);
+		}
 		return config;
 	}
 
@@ -145,6 +161,10 @@ public class CustomSkinLoader {
 
 	private static Config initConfig() {
 		Config config=new Config(DEFAULT_LOAD_LIST);
+		writeConfig(config,false);
+		return config;
+	}
+	private static void writeConfig(Config config,boolean update){
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String json=gson.toJson(config);
 		if(CONFIG_FILE.exists())
@@ -152,10 +172,9 @@ public class CustomSkinLoader {
 		try {
 			CONFIG_FILE.createNewFile();
 			IOUtils.write(json, new FileOutputStream(CONFIG_FILE));
-			logger.info("Successfully create config.");
+			logger.info("Successfully "+(update?"update":"create")+" config.");
 		} catch (Exception e) {
-			logger.info("Failed to create config.("+e.getMessage()+")");
+			logger.info("Failed to "+(update?"update":"create")+" config.("+e.getMessage()+")");
 		}
-		return config;
 	}
 }

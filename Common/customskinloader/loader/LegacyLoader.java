@@ -14,7 +14,7 @@ public class LegacyLoader implements IProfileLoader {
 			String skin=HttpUtil0.getRealUrl(ssp.skin.replaceAll(USERNAME_REGEX, username));
 			if(skin!=null&&!skin.equals("")){
 				profile.skinUrl=skin;
-				profile.model="default";
+				profile.model=(ssp.model==null?"default":ssp.model);
 			}
 		}
 		if(ssp.cape!=null && !ssp.cape.equals("")){

@@ -25,6 +25,10 @@ public class UniSkinAPILoader implements IProfileLoader {
 			return null;
 		}
 		UniSkinAPI profile=new Gson().fromJson(json, UniSkinAPI.class);
+		if(profile.errno!=0){
+			CustomSkinLoader.logger.info("Error: "+profile.msg);
+			return null;
+		}
 		UserProfile p=new UserProfile();
 		if(profile.skins!=null && !profile.skins.isEmpty()){
 			if(profile.model_preference!=null && !profile.model_preference.isEmpty()){
@@ -69,5 +73,8 @@ public class UniSkinAPILoader implements IProfileLoader {
         public List<String> model_preference;
         public Map<String,String> skins;
         public String cape;
+        
+        public int errno;
+        public String msg;
 	}
 }

@@ -38,6 +38,6 @@ public class UserProfile {
 	 * @return status (true - empty)
 	 */
 	public boolean isEmpty(){
-		return skinUrl==null && model==null && capeUrl==null;
+		return skinUrl==null && (model==null||model.equalsIgnoreCase("default")) && capeUrl==null;
 	}
 }
