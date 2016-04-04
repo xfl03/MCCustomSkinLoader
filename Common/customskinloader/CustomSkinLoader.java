@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -68,7 +69,7 @@ public class CustomSkinLoader {
 		for(int i=0;i<config.loadlist.length;i++){
 			SkinSiteProfile ssp=config.loadlist[i];
 			logger.info((i+1)+"/"+config.loadlist.length+" Try to load profile from '"+ssp.name+"'.");
-			if(ssp.type.equalsIgnoreCase("MojangAPI") && !defaultProfile.isEmpty()){
+			if(ssp.type.equalsIgnoreCase("MojangAPI") && defaultProfile!=null && !defaultProfile.isEmpty()){
 				logger.info("Default profile will be used.");
 				logger.info(defaultProfile.toString());
 				profileCache.put(username, defaultProfile);
@@ -96,12 +97,20 @@ public class CustomSkinLoader {
 		return defaultProfile;
 	}
 	//For Skull
-	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(String username) {
+	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username) {
 		if(profileCache.containsKey(username)){
 			UserProfile profile=profileCache.get(username);
 			return ModelManager0.fromUserProfile(profile);
 		}
-		return loadProfile(username,(Map)null);
+		profileCache.put(username, null);
+		Thread loadThread=new Thread(){
+			public void run(){
+				loadProfile(username,(UserProfile)null);//Load in thread
+			}
+		};
+		loadThread.setName(username+"'s skull");
+		loadThread.start();
+		return Maps.newHashMap();
 	}
 	
 	private static Logger initLogger() {
