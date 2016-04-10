@@ -55,6 +55,8 @@ public class ModelManager0 {
 	 */
 	public static Map fromUserProfile(UserProfile profile){
 		Map map=Maps.newHashMap();
+		if(profile==null)
+			return map;
 		if(profile.skinUrl!=null)
 			map.put(Type.SKIN, getProfileTexture(profile.skinUrl));
 		if(profile.capeUrl!=null)
