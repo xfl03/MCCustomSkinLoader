@@ -23,16 +23,16 @@ import customskinloader.loader.IProfileLoader;
 import customskinloader.loader.LegacyLoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.loader.UniSkinAPILoader;
-import net.minecraft.client.Minecraft;
+import customskinloader.utils.MinecraftUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.5 (2016.4.3)
+ * @version 13.6 (2016.4.30)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.5";
-	public static final File DATA_DIR=new File(Minecraft.getMinecraft().mcDataDir,"CustomSkinLoader"),
+	public static final String CustomSkinLoader_VERSION="13.6";
+	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
 	public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
@@ -116,7 +116,8 @@ public class CustomSkinLoader {
 	private static Logger initLogger() {
 		Logger logger=new Logger(LOG_FILE);
 		logger.info("CustomSkinLoader "+CustomSkinLoader_VERSION);
-		logger.info("Log File: "+LOG_FILE.getAbsolutePath());
+		logger.info("DataDir: "+DATA_DIR.getAbsolutePath());
+		logger.info("Minecraft: "+MinecraftUtil.getMinecraftVersion());
 		return logger;
 	}
 

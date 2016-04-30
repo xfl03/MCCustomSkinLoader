@@ -1,6 +1,6 @@
 package customskinloader.loader;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
@@ -73,6 +73,6 @@ public class MojangAPILoader implements IProfileLoader {
 		public Property[] properties;
 	}
 	private class UserTexture{
-		public HashMap<Type,MinecraftProfileTexture> textures;
+		public Map<Type,MinecraftProfileTexture> textures;
 	}
 }

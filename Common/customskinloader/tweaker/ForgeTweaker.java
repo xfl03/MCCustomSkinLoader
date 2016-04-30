@@ -1,6 +1,7 @@
 package customskinloader.tweaker;
 
 import customskinloader.Logger;
+import customskinloader.utils.MinecraftUtil;
 
 import java.io.File;
 import java.util.List;
@@ -10,7 +11,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 
 public class ForgeTweaker implements ITweaker {
 	
-	private static final File TWEAKER_LOG_FILE = new File("CustomSkinLoader/Tweaker.log");
+	private static final File TWEAKER_LOG_FILE = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");
 	public static Logger logger = new Logger(TWEAKER_LOG_FILE);
 	
 	public ForgeTweaker() {
