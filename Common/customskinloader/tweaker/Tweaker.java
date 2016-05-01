@@ -17,14 +17,18 @@ public class Tweaker implements ITweaker {
 	private String assetsDir;
 	private String profile;
 	
-	private static final File TWEAKER_LOG_FILE = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");
-	public static Logger logger = new Logger(TWEAKER_LOG_FILE);
+	public static Logger logger = new Logger();
 
 	public Tweaker() {
 		logger.info("Using Tweaker");
 	}
 
 	public void acceptOptions(List args, File gameDir, File assetsDir, String profile) {
+		MinecraftUtil.minecraftDataFolder=gameDir;
+		File tweakerLogFile = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");
+		logger = new Logger(tweakerLogFile);
+		
+		logger.info("Using Tweaker");
 		logger.info("Tweaker: acceptOptions");
 		this.args = new ArrayList(args);
 		this.gameDir = gameDir.getAbsolutePath();

@@ -11,7 +11,10 @@ import java.util.logging.Level;
 public class Logger {
 	private static final int LOWEST_DISPLAY_LEVEL=Level.INFO.intValue();
 	SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private BufferedWriter writer;
+	private BufferedWriter writer=null;
+	public Logger(){
+		//Logger isn't created.
+	}
 	public Logger(File logFile){
 		try {
 			if(!logFile.getParentFile().exists()){
@@ -39,6 +42,8 @@ public class Logger {
 	public void log(Level level,String msg){
 		if(level.intValue()>=LOWEST_DISPLAY_LEVEL) 
 			System.out.println(msg);
+		if(writer==null)
+			return;
 		try {
 			StringBuilder sb=new StringBuilder();
 			sb.append("[");

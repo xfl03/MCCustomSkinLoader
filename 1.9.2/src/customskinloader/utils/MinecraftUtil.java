@@ -19,8 +19,11 @@ public class MinecraftUtil {
 		return getMinecraftDataDir();
 	}
 	
-	private static String MINECRAFT_DATA_FOLDER=".minecraft";
+	public static File minecraftDataFolder=null;
+	private static final String MINECRAFT_DATA_FOLDER=".minecraft";
 	public static File getMinecraftDataDir(){
+		if(minecraftDataFolder!=null)
+			return minecraftDataFolder;
 		File temp=new File("");
 		if(temp.getAbsolutePath().endsWith(MINECRAFT_DATA_FOLDER))
 			return temp;

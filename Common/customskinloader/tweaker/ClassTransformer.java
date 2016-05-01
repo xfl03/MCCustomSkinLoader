@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.io.IOUtils;
+
 import net.minecraft.launchwrapper.IClassTransformer;
 
 public class ClassTransformer implements IClassTransformer {
@@ -19,17 +21,19 @@ public class ClassTransformer implements IClassTransformer {
 			for (int i = 0; i < urls.length; i++) {
 				URL url = urls[i];
 				ZipFile tempZipFile = getZipFile(url);
-				if (tempZipFile == null)
+				if (tempZipFile.getEntry("customskinloader/tweaker/ClassTransformer.class") == null){
+					tempZipFile.close();
 					continue;
+				}
 				zipFile = tempZipFile;
 				ForgeTweaker.logger.info("Jar File URL: " + url);
 				break;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ForgeTweaker.logger.warning(e);
 		}
 		if (zipFile == null) {
-			ForgeTweaker.logger.info("Can not find needed JAR in the classpath.");
+			ForgeTweaker.logger.info("Can not find JAR in the classpath.");
 		}
 	}
 
@@ -37,61 +41,44 @@ public class ClassTransformer implements IClassTransformer {
 	{
 		ZipFile zipFile0;
 		try {
-			URI uri = url.toURI();
-			File file = new File(uri);
+			File file = new File(url.toURI());
 			zipFile0 = new ZipFile(file);
-			if (zipFile0.getEntry("customskinloader/tweaker/ClassTransformer.class") != null){
-				ForgeTweaker.logger.info("JAR Found!");
-				return zipFile0;
-			}
-			zipFile0.close();
+			return zipFile0;
 		} catch (Exception e) {
+			ForgeTweaker.logger.warning(e);
 		}
 		return null;
 	}
 
 	public byte[] transform(String name, String transformedName, byte bytes[]) {
-		byte diBytes[] = getClass(name);
+		if (zipFile == null)
+			return bytes;
+		String fullName = name + ".class";
+		ZipEntry ze = zipFile.getEntry(fullName);
+		if (ze == null)
+			return bytes;
+		byte diBytes[] = getClass(ze);
 		if (diBytes != null) {
-			ForgeTweaker.logger.info("Class '" + name + "' transformed.");
+			ForgeTweaker.logger.info("Class '" + name + "'("+transformedName+") transformed.");
 			return diBytes;
 		}
 		else
 			return bytes;
 	}
 
-	private byte[] getClass(String name) {
-		if (zipFile == null)
-			return null;
-		String fullName = name + ".class";
-		ZipEntry ze = zipFile.getEntry(fullName);
+	private byte[] getClass(ZipEntry ze) {
 		if (ze == null)
 			return null;
 		try {
-			InputStream in = zipFile.getInputStream(ze);
-			byte[] bytes = readAll(in);
+			InputStream is = zipFile.getInputStream(ze);
+			byte[] bytes = IOUtils.toByteArray(is);
 			if ((long)bytes.length == ze.getSize())
 				return bytes;
-			ForgeTweaker.logger.info("Failed: " + fullName + " " + bytes.length + " / " + ze.getSize());
+			ForgeTweaker.logger.info("Failed: " + ze.getName() + " " + bytes.length + " / " + ze.getSize());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 		
-	}
-
-	public static byte[] readAll(InputStream is) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		byte buffer[] = new byte[1024];
-		do {
-			int len = is.read(buffer);
-			if (len >= 0) {
-				baos.write(buffer, 0, len);
-			} else {
-				is.close();
-				byte bytes[] = baos.toByteArray();
-				return bytes;
-			}
-		} while (true);
 	}
 }

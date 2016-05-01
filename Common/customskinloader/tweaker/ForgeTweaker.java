@@ -11,14 +11,17 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 
 public class ForgeTweaker implements ITweaker {
 	
-	private static final File TWEAKER_LOG_FILE = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");
-	public static Logger logger = new Logger(TWEAKER_LOG_FILE);
+	public static Logger logger = new Logger();
 	
 	public ForgeTweaker() {
-		logger.info("Using ForgeTweaker");
 	}
 
 	public void acceptOptions(List args, File gameDir, File assetsDir, String profile) {
+		MinecraftUtil.minecraftDataFolder=gameDir;
+		File tweakerLogFile = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");
+		logger = new Logger(tweakerLogFile);
+		
+		logger.info("Using ForgeTweaker");
 		logger.info("ForgeTweaker: acceptOptions");
 	}
 
