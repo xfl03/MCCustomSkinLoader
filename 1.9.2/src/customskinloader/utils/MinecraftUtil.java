@@ -24,6 +24,9 @@ public class MinecraftUtil {
 	public static File getMinecraftDataDir(){
 		if(minecraftDataFolder!=null)
 			return minecraftDataFolder;
+		testProbe();
+		if(minecraftDataFolder!=null)
+			return minecraftDataFolder;
 		File temp=new File("");
 		if(temp.getAbsolutePath().endsWith(MINECRAFT_DATA_FOLDER))
 			return temp;
@@ -33,18 +36,33 @@ public class MinecraftUtil {
 		return temp;
 	}
 	
-	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/(.*?)/(.*?).jar$");
+	private static String minecraftVersion=null;
 	public static String getMinecraftVersion(){
+		if(minecraftVersion!=null)
+			return minecraftVersion;
+		testProbe();
+		return minecraftVersion;
+	}
+	
+	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/(.*?)/(.*?).jar$");
+	public static void testProbe(){
 		URLClassLoader ucl = (URLClassLoader)new MinecraftUtil().getClass().getClassLoader();
 		URL urls[] = ucl.getURLs();
 		for(URL url:urls){
 			Matcher m = MINECRAFT_CORE_FILE_PATTERN.matcher(url.getPath());
-			//System.out.println(m.matches()+" "+url.getPath());
 			if(!m.matches())
 				continue;
-			return m.group(2);
+			if(minecraftDataFolder==null){
+				try{
+					minecraftDataFolder=new File(url.getPath()).getParentFile().getParentFile().getParentFile();
+				}catch(Exception e){
+					minecraftDataFolder=null;
+				}
+			}
+			System.out.println(url.getPath()+" "+minecraftDataFolder.getAbsolutePath());
+			if(minecraftVersion==null)
+				minecraftVersion=m.group(2);
+			break;
 		}
-		return "Unknown Version";
 	}
-	
 }
