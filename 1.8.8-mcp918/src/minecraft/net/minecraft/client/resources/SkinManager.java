@@ -163,7 +163,7 @@ public class SkinManager
         //CustomSkinLoader Begin (Skull Part)
     	//return (Map)this.skinCacheLoader.getUnchecked(profile);
     	return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
-    			customskinloader.CustomSkinLoader.loadProfileFromCache(profile.getName()):
+    			customskinloader.CustomSkinLoader.loadProfileFromCache(profile.getName(),this.skinCacheLoader.getUnchecked(profile)):
     				this.skinCacheLoader.getUnchecked(profile);
     	//CustomSkinLoader End
     }

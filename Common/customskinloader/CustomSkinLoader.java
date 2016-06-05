@@ -28,10 +28,10 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.7 (2016.5.7)
+ * @version 13.8 (2016.6.5)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.7";
+	public static final String CustomSkinLoader_VERSION="13.8";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -96,8 +96,9 @@ public class CustomSkinLoader {
 		logger.info(username+"'s profile not found.");
 		return defaultProfile;
 	}
+	
 	//For Skull
-	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username) {
+	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username,final Map defaultProfile) {
 		if(profileCache.containsKey(username)){
 			UserProfile profile=profileCache.get(username);
 			return ModelManager0.fromUserProfile(profile);
@@ -105,12 +106,15 @@ public class CustomSkinLoader {
 		profileCache.put(username, null);
 		Thread loadThread=new Thread(){
 			public void run(){
-				loadProfile(username,(UserProfile)null);//Load in thread
+				loadProfile(username,ModelManager0.toUserProfile(defaultProfile));//Load in thread
 			}
 		};
 		loadThread.setName(username+"'s skull");
 		loadThread.start();
 		return Maps.newHashMap();
+	}
+	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username) {
+		return loadProfileFromCache(username,null);
 	}
 	
 	private static Logger initLogger() {

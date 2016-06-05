@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
@@ -121,7 +122,7 @@ public class SkinManager
                     ;
                 }
 
-                /*
+				/*
                 if (map.isEmpty() && profile.getId().equals(Minecraft.getMinecraft().getSession().getProfile().getId()))
                 {
                     profile.getProperties().clear();
@@ -131,11 +132,11 @@ public class SkinManager
                 
                 //CustomSkinLoader Begin (User Skin/Cape Part)
                 if(customskinloader.CustomSkinLoader.config.enable){
-                    Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
-                    if(!newMap.isEmpty()){
-                        map.clear();
-                        map.putAll(newMap);
-                    }
+                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(profile.getName(), map);
+                	if(!newMap.isEmpty()){
+                		map.clear();
+                		map.putAll(newMap);
+                	}
                 }
                 //CustomSkinLoader End
                 Minecraft.getMinecraft().addScheduledTask(new Runnable()
@@ -159,12 +160,12 @@ public class SkinManager
 
     public Map<Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile)
     {
-        //CustomSkinLoader Begin (Skull Part)
-        //return (Map)this.skinCacheLoader.getUnchecked(profile);
-        return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
-                customskinloader.CustomSkinLoader.loadProfileFromCache(profile.getName()):
-                    this.skinCacheLoader.getUnchecked(profile);
-        //CustomSkinLoader End
+    	//CustomSkinLoader Begin (Skull Part)
+    	//return (Map)this.skinCacheLoader.getUnchecked(profile);
+    	return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
+    			customskinloader.CustomSkinLoader.loadProfileFromCache(profile.getName(),this.skinCacheLoader.getUnchecked(profile)):
+    				this.skinCacheLoader.getUnchecked(profile);
+    	//CustomSkinLoader End
     }
 
     public interface SkinAvailableCallback
