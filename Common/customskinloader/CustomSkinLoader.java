@@ -28,13 +28,13 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.9 (2016.6.9)
+ * @version 13.9 (2016.6.6)
  */
 public class CustomSkinLoader {
 	public static final String CustomSkinLoader_VERSION="13.9";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
-            LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
-            CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
+			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
+			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
 	public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
 			new SkinSiteProfile("Mojang","MojangAPI"),
 			new SkinSiteProfile("BlessingSkin","CustomSkinAPI","https://skin.prinzeugen.net/csl/"),
@@ -100,7 +100,7 @@ public class CustomSkinLoader {
 	//For Skull
 	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username,final Map defaultProfile) {
 		if(defaultProfile!=null&&!defaultProfile.isEmpty())
-    		return defaultProfile;
+			return defaultProfile;
 		if(profileCache.containsKey(username)){
 			UserProfile profile=profileCache.get(username);
 			return ModelManager0.fromUserProfile(profile);
