@@ -28,10 +28,10 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.9 (2016.6.6)
+ * @version 13.10 (2016.6.25)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.9";
+	public static final String CustomSkinLoader_VERSION="13.10";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -51,6 +51,11 @@ public class CustomSkinLoader {
 	
 	//Entrance
 	public static Map loadProfile(String username,Map defaultProfile){
+		//Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
+		if(username==null){
+			logger.warn("Could not load profile: username is null.");
+			return Maps.newHashMap();
+		}
 		String tempName=Thread.currentThread().getName();
 		Thread.currentThread().setName(username);//Change Thread Name
 		UserProfile profile=loadProfile(username,ModelManager0.toUserProfile(defaultProfile));
