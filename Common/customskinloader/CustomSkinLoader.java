@@ -53,7 +53,7 @@ public class CustomSkinLoader {
 	public static Map loadProfile(String username,Map defaultProfile){
 		//Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
 		if(username==null){
-			logger.warn("Could not load profile: username is null.");
+			logger.warning("Could not load profile: username is null.");
 			return Maps.newHashMap();
 		}
 		String tempName=Thread.currentThread().getName();
