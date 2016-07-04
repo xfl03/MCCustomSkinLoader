@@ -24,6 +24,7 @@ Fixed skull load bug.
 ##Default Load List  
 - [Mojang](http://www.minecraft.net/) (Mojang API)
 - [Blessing Skin](https://skin.prinzeugen.net/) (CustomSkinAPI)
+- [OneSkin] (http://fleey.org/skin/) (CustomSkinAPI)
 - SkinMe (UniSkinAPI)  
 - [McSkin](https://www.mcskin.cc/) (CustomSkinAPI)  
 If you want to apply to add other skin website to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  

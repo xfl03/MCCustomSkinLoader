@@ -7,6 +7,7 @@ public class SkinSiteProfile {
 	public String skin;
 	public String cape;
 	public String model;
+	public String userAgent;
 	
 	//For MojangAPI
 	public SkinSiteProfile(String name,String type){

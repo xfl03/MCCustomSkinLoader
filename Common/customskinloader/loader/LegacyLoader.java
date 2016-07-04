@@ -11,14 +11,14 @@ public class LegacyLoader implements IProfileLoader {
 	public UserProfile loadProfile(SkinSiteProfile ssp, String username) throws Exception {
 		UserProfile profile=new UserProfile();
 		if(ssp.skin!=null && !ssp.skin.equals("")){
-			String skin=HttpUtil0.getRealUrl(ssp.skin.replaceAll(USERNAME_REGEX, username));
+			String skin=HttpUtil0.getRealUrl(ssp.skin.replaceAll(USERNAME_REGEX, username),ssp.userAgent);
 			if(skin!=null&&!skin.equals("")){
 				profile.skinUrl=skin;
 				profile.model=(ssp.model==null?"default":ssp.model);
 			}
 		}
 		if(ssp.cape!=null && !ssp.cape.equals("")){
-			String cape=HttpUtil0.getRealUrl(ssp.cape.replaceAll(USERNAME_REGEX, username));
+			String cape=HttpUtil0.getRealUrl(ssp.cape.replaceAll(USERNAME_REGEX, username),ssp.userAgent);
 			if(cape!=null&&!cape.equals("")){
 				profile.capeUrl=cape;
 			}

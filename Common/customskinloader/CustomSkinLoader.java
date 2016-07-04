@@ -28,16 +28,17 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.10 (2016.6.25)
+ * @version 13.11 (2016.7.3)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.10";
+	public static final String CustomSkinLoader_VERSION="13.11";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
 	public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
 			new SkinSiteProfile("Mojang","MojangAPI"),
 			new SkinSiteProfile("BlessingSkin","CustomSkinAPI","https://skin.prinzeugen.net/csl/"),
+			new SkinSiteProfile("OneSkin","CustomSkinAPI","http://fleey.org/skin/skin_user/skin_json.php/"),
 			//Minecrack could not load skin correctly
 			//new SkinSiteProfile("Minecrack","Legacy","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"),
 			new SkinSiteProfile("SkinMe","UniSkinAPI","http://www.skinme.cc/uniskin/"),
@@ -168,6 +169,10 @@ public class CustomSkinLoader {
 			return config;
 		}catch (Exception e) {
 			logger.info("Failed to load config, use default instead.("+e.getMessage()+")");
+			File brokenFile=new File(DATA_DIR,"BROKEN-CustomSkinLoader.json");
+			if(brokenFile.exists())
+				brokenFile.delete();
+			CONFIG_FILE.renameTo(brokenFile);
 			return initConfig();
 		}
 	}

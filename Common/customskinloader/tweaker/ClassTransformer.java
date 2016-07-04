@@ -1,7 +1,12 @@
 package customskinloader.tweaker;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -12,6 +17,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 public class ClassTransformer implements IClassTransformer {
 
 	private ZipFile zipFile = null;
+	private ArrayList<String> classes=new ArrayList<String>();
 
 	public ClassTransformer() {
 		ForgeTweaker.logger.info("ClassTransformer Begin");
@@ -26,7 +32,19 @@ public class ClassTransformer implements IClassTransformer {
 					continue;
 				}
 				zipFile = tempZipFile;
+				Enumeration<ZipEntry> entries=(Enumeration<ZipEntry>) zipFile.entries();
+				StringBuilder sb=new StringBuilder();
+				while(entries.hasMoreElements()){
+					ZipEntry entry=entries.nextElement();
+					String name=entry.getName();
+					if(name.endsWith(".class")&&!name.contains("/")){
+						classes.add(name);
+						sb.append(" ");
+						sb.append(name);
+					}
+				}
 				ForgeTweaker.logger.info("Jar File URL: " + url);
+				ForgeTweaker.logger.info("Classes:" + sb.toString());
 				break;
 			}
 		} catch (Exception e) {
@@ -53,7 +71,10 @@ public class ClassTransformer implements IClassTransformer {
 	public byte[] transform(String name, String transformedName, byte bytes[]) {
 		if (zipFile == null)
 			return bytes;
+		
 		String fullName = name + ".class";
+		if(!classes.contains(fullName))
+			return bytes;
 		ZipEntry ze = zipFile.getEntry(fullName);
 		if (ze == null)
 			return bytes;
@@ -67,8 +88,6 @@ public class ClassTransformer implements IClassTransformer {
 	}
 
 	private byte[] getClass(ZipEntry ze) {
-		if (ze == null)
-			return null;
 		try {
 			InputStream is = zipFile.getInputStream(ze);
 			byte[] bytes = IOUtils.toByteArray(is);

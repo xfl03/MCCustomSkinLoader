@@ -19,7 +19,7 @@ public class CustomSkinAPILoader implements IProfileLoader {
 			CustomSkinLoader.logger.info("Root not denined.");
 			return null;
 		}
-		String json=HttpUtil0.readHttp(ssp.root+username+".json");
+		String json=HttpUtil0.readHttp(ssp.root+username+".json",ssp.userAgent);
 		if(json==null||json.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.");
 			return null;
