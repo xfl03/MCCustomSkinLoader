@@ -26,7 +26,7 @@ public class ImageBufferDownload implements IImageBuffer
             BufferedImage bufferedimage = new BufferedImage(this.imageWidth, this.imageHeight, 2);
             Graphics graphics = bufferedimage.getGraphics();
             graphics.drawImage(image, 0, 0, (ImageObserver)null);
-            boolean flag = image.getHeight() == 32;
+            boolean flag = image.getHeight() == 32 * ratio;
 
             if (flag)
             {

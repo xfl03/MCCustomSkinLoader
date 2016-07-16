@@ -30,6 +30,7 @@ Fixed skull load bug.
 If you want to apply to add other skin website to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
 
 ##Copyright  
+####Package 'customskinloader'
 Copyright(C) 2013-2016 JLChnToZ xfl03
 
     This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
