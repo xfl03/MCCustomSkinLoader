@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
-TweakClass: customskinloader.tweaker.ForgeTweaker
+TweakClass: customskinloader.tweaker.ModSystemTweaker
+TweakName: CustomSkinLoader
+TweakAuthor: xfl03,JLChnToZ
 TweakOrder: -10

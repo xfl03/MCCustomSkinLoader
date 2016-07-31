@@ -12,6 +12,7 @@ import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
 
+import customskinloader.utils.MinecraftUtil;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 public class ClassTransformer implements IClassTransformer {
@@ -20,13 +21,14 @@ public class ClassTransformer implements IClassTransformer {
 	private ArrayList<String> classes=new ArrayList<String>();
 
 	public ClassTransformer() {
-		ForgeTweaker.logger.info("ClassTransformer Begin");
+		ModSystemTweaker.logger.info("ClassTransformer Begin");
 		try {
 			URLClassLoader ucl = (URLClassLoader)this.getClass().getClassLoader();
 			URL urls[] = ucl.getURLs();
-			for (int i = 0; i < urls.length; i++) {
-				URL url = urls[i];
+			for (URL url : urls) {
 				ZipFile tempZipFile = getZipFile(url);
+				if(tempZipFile==null)
+					continue;
 				if (tempZipFile.getEntry("customskinloader/tweaker/ClassTransformer.class") == null){
 					tempZipFile.close();
 					continue;
@@ -43,27 +45,29 @@ public class ClassTransformer implements IClassTransformer {
 						sb.append(name);
 					}
 				}
-				ForgeTweaker.logger.info("Jar File URL: " + url);
-				ForgeTweaker.logger.info("Classes:" + sb.toString());
+				ModSystemTweaker.logger.info("Jar File URL: " + url);
+				ModSystemTweaker.logger.info("Classes:" + sb.toString());
 				break;
 			}
 		} catch (Exception e) {
-			ForgeTweaker.logger.warning(e);
+			ModSystemTweaker.logger.warning(e);
 		}
 		if (zipFile == null) {
-			ForgeTweaker.logger.info("Can not find JAR in the classpath.");
+			ModSystemTweaker.logger.info("Can not find JAR in the classpath.");
 		}
 	}
 
 	private static ZipFile getZipFile(URL url)
 	{
+		if(MinecraftUtil.isCoreFile(url))
+			return null;
 		ZipFile zipFile0;
 		try {
 			File file = new File(url.toURI());
 			zipFile0 = new ZipFile(file);
 			return zipFile0;
 		} catch (Exception e) {
-			ForgeTweaker.logger.warning(e);
+			ModSystemTweaker.logger.warning(e);
 		}
 		return null;
 	}
@@ -80,7 +84,7 @@ public class ClassTransformer implements IClassTransformer {
 			return bytes;
 		byte diBytes[] = getClass(ze);
 		if (diBytes != null) {
-			ForgeTweaker.logger.info("Class '" + name + "'("+transformedName+") transformed.");
+			ModSystemTweaker.logger.info("Class '" + name + "'("+transformedName+") transformed.");
 			return diBytes;
 		}
 		else
@@ -93,7 +97,7 @@ public class ClassTransformer implements IClassTransformer {
 			byte[] bytes = IOUtils.toByteArray(is);
 			if ((long)bytes.length == ze.getSize())
 				return bytes;
-			ForgeTweaker.logger.info("Failed: " + ze.getName() + " " + bytes.length + " / " + ze.getSize());
+			ModSystemTweaker.logger.info("Failed: " + ze.getName() + " " + bytes.length + " / " + ze.getSize());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

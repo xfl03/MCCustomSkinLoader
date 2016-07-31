@@ -1,4 +1,4 @@
-package customskinloader;
+package customskinloader.profile;
 
 /**The instance to storage user's profile in memory temporarily.
  * In this manner, it could be easier to pass profile in program.
@@ -30,7 +30,10 @@ public class UserProfile {
 	 */
 	@Override
 	public String toString(){
-		return "(SkinUrl: "+skinUrl+" , Model: "+model+" , CapeUrl: "+capeUrl+")";
+		return toString(0);
+	}
+	public String toString(long expiry){
+		return "(SkinUrl: "+skinUrl+" , Model: "+model+" , CapeUrl: "+capeUrl+(expiry==0?"":(" , Expiry: "+expiry))+")";
 	}
 	
 	/**

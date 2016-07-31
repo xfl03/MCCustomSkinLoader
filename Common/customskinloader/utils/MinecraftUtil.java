@@ -68,4 +68,16 @@ public class MinecraftUtil {
 			break;
 		}
 	}
+	public static boolean isCoreFile(URL url){
+		Matcher m = null;
+		try{
+			m=MINECRAFT_CORE_FILE_PATTERN.matcher(URLDecoder.decode(url.getPath(),"UTF-8"));
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		if(m==null)
+			return false;
+		return m.matches();
+	}
 }

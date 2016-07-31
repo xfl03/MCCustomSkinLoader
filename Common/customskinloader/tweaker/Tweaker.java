@@ -19,10 +19,6 @@ public class Tweaker implements ITweaker {
 	
 	public static Logger logger = new Logger();
 
-	public Tweaker() {
-		logger.info("Using Tweaker");
-	}
-
 	public void acceptOptions(List args, File gameDir, File assetsDir, String profile) {
 		MinecraftUtil.minecraftDataFolder=gameDir;
 		File tweakerLogFile = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");

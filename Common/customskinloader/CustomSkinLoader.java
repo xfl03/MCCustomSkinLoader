@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
@@ -23,35 +24,41 @@ import customskinloader.loader.IProfileLoader;
 import customskinloader.loader.LegacyLoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.loader.UniSkinAPILoader;
+import customskinloader.profile.ModelManager0;
+import customskinloader.profile.ProfileCache;
+import customskinloader.profile.UserProfile;
 import customskinloader.utils.MinecraftUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 13.11 (2016.7.3)
+ * @version 14.1 (2016.7.31)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="13.11";
+	public static final String CustomSkinLoader_VERSION="14.1";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
 	public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
-			new SkinSiteProfile("Mojang","MojangAPI"),
-			new SkinSiteProfile("BlessingSkin","CustomSkinAPI","https://skin.prinzeugen.net/csl/"),
-			new SkinSiteProfile("OneSkin","CustomSkinAPI","http://fleey.org/skin/skin_user/skin_json.php/"),
+			SkinSiteProfile.createMojangAPI("Mojang"),
+			SkinSiteProfile.createCustomSkinAPI("BlessingSkin","https://skin.prinzeugen.net/csl/"),
+			SkinSiteProfile.createCustomSkinAPI("OneSkin","http://fleey.org/skin/skin_user/skin_json.php/"),
 			//Minecrack could not load skin correctly
-			//new SkinSiteProfile("Minecrack","Legacy","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"),
-			new SkinSiteProfile("SkinMe","UniSkinAPI","http://www.skinme.cc/uniskin/"),
-			new SkinSiteProfile("McSkin","CustomSkinAPI","http://www.mcskin.cc/")};
+			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"),
+			SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
+			SkinSiteProfile.createCustomSkinAPI("McSkin","http://www.mcskin.cc/"),
+			SkinSiteProfile.createLegacy("LocalSkin", true, "LocalSkin/skins/{USERNAME}.png", "LocalSkin/capes/{USERNAME}.png")};
 	public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
 	
+	public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
 	public static final Logger logger=initLogger();
 	public static final Config config=loadConfig0();
 	
-	private static final Map<String,UserProfile> profileCache=new HashMap<String,UserProfile>();
+	private static final ProfileCache profileCache=new ProfileCache();
 	
-	//Entrance
-	public static Map loadProfile(String username,Map defaultProfile){
+	//For User Skin
+	public static Map loadProfile(GameProfile gameProfile){
+		String username=gameProfile.getName();
 		//Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
 		if(username==null){
 			logger.warning("Could not load profile: username is null.");
@@ -59,28 +66,34 @@ public class CustomSkinLoader {
 		}
 		String tempName=Thread.currentThread().getName();
 		Thread.currentThread().setName(username);//Change Thread Name
-		UserProfile profile=loadProfile(username,ModelManager0.toUserProfile(defaultProfile));
+		UserProfile profile=null;
+		if(profileCache.isReady(username)){
+			logger.info("Cached profile will be used.");
+			profile=profileCache.getProfile(username);
+			if(profile==null){
+				logger.warning("(!Cached Profile is empty!) Expiry:"+profileCache.getExpiry(username));
+				if(profileCache.isExpired(username)){//force load
+					profileCache.setLoading(username, true);
+					profile=loadProfile0(gameProfile);
+				}
+			}
+			else
+				logger.info(profile.toString(profileCache.getExpiry(username)));
+		}else{
+			profileCache.setLoading(username, true);
+			profile=loadProfile0(gameProfile);
+		}
 		Thread.currentThread().setName(tempName);
 		return ModelManager0.fromUserProfile(profile);
 	}
-	public static UserProfile loadProfile(String username,UserProfile defaultProfile){
+	//Core
+	public static UserProfile loadProfile0(GameProfile gameProfile){
+		String username=gameProfile.getName();
+		profileCache.setLoading(username, true);
 		logger.info("Loading "+username+"'s profile.");
-		if(config.enableCache&&profileCache.get(username)!=null){
-			logger.info("Cached profile will be used.");
-			UserProfile profile=profileCache.get(username);
-			logger.info(profile.toString());
-			return profile;
-		}
-		profileCache.put(username, null);
 		for(int i=0;i<config.loadlist.length;i++){
 			SkinSiteProfile ssp=config.loadlist[i];
 			logger.info((i+1)+"/"+config.loadlist.length+" Try to load profile from '"+ssp.name+"'.");
-			if(ssp.type.equalsIgnoreCase("MojangAPI") && defaultProfile!=null && !defaultProfile.isEmpty()){
-				logger.info("Default profile will be used.");
-				logger.info(defaultProfile.toString());
-				profileCache.put(username, defaultProfile);
-				return defaultProfile;//Create a new map instance
-			}
 			IProfileLoader loader=LOADERS.get(ssp.type.toLowerCase());
 			if(loader==null){
 				logger.info("Type '"+ssp.type+"' is not defined.");
@@ -88,41 +101,59 @@ public class CustomSkinLoader {
 			}
 			UserProfile profile=null;
 			try{
-				profile=loader.loadProfile(ssp, username);
+				if(ssp.local==null||ssp.local==false)
+					profile=loader.loadProfile(ssp, gameProfile);
+				else
+					profile=loader.loadLocalProfile(ssp, gameProfile);
 			}catch(Exception e){
-				logger.info("Exception occurs while loading: "+e.getMessage());
+				logger.warning("Exception occurs while loading.");
+				logger.warning(e);
 			}
 			if(profile==null)
 				continue;
 			logger.info(username+"'s profile loaded.");
-			logger.info(profile.toString());
-			profileCache.put(username, profile);
+			profileCache.updateCache(username, profile);
+			profileCache.setLoading(username, false);
+			logger.info(profile.toString(profileCache.getExpiry(username)));
 			return profile;
 		}
-		logger.info(username+"'s profile not found.");
-		return defaultProfile;
+		logger.info(username+"'s profile not found in load list.");
+		if(config.enableLocalProfileCache){
+			UserProfile profile=profileCache.getLocalProfile(username);
+			if(profile==null)
+				logger.info(username+"'s LocalProfile not found.");
+			else{
+				profileCache.updateCache(username, profile, false);
+				profileCache.setLoading(username, false);
+				logger.info(username+"'s LocalProfile will be used.");
+				logger.info(profile.toString(profileCache.getExpiry(username)));
+				return profile;
+			}
+		}
+		profileCache.setLoading(username, false);
+		return null;
 	}
 	
 	//For Skull
-	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username,final Map defaultProfile) {
-		if(defaultProfile!=null&&!defaultProfile.isEmpty())
-			return defaultProfile;
-		if(profileCache.containsKey(username)){
-			UserProfile profile=profileCache.get(username);
+	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
+		String username=gameProfile.getName();
+		if(username==null){
+			logger.warning("Could not load profile from cache: username is null.");
+			return Maps.newHashMap();
+		}
+		if(config.enableUpdateSkull?profileCache.isReady(username):profileCache.isExist(username)){
+			UserProfile profile=profileCache.getProfile(username);
 			return ModelManager0.fromUserProfile(profile);
 		}
-		profileCache.put(username, null);
+		//profileCache.setLoading(username, true);
 		Thread loadThread=new Thread(){
 			public void run(){
-				loadProfile(username,ModelManager0.toUserProfile(defaultProfile));//Load in thread
+				loadProfile0(gameProfile);//Load in thread
 			}
 		};
 		loadThread.setName(username+"'s skull");
 		loadThread.start();
 		return Maps.newHashMap();
-	}
-	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final String username) {
-		return loadProfileFromCache(username,null);
 	}
 	
 	private static Logger initLogger() {
@@ -144,10 +175,14 @@ public class CustomSkinLoader {
 
 	private static Config loadConfig0() {
 		Config config=loadConfig();
-		logger.info("Enable:"+config.enable+", EnableCache:"+config.enableCache+
-				", EnableSkull:"+config.enableSkull+", EnableTranSkin:"+config.enableTransparentSkin+
+		logger.info("Enable:"+config.enable+
+				", EnableSkull:"+config.enableSkull+
+				", EnableTranSkin:"+config.enableTransparentSkin+
+				", CacheExpiry:"+config.cacheExpiry+
+				", enableUpdateSkull:"+config.enableUpdateSkull+
+				", LocalProfileCache:"+config.enableLocalProfileCache+
 				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
-		if(config.version==null||Float.parseFloat(config.version)<Float.parseFloat(CustomSkinLoader_VERSION)){
+		if(config.version==null||Float.parseFloat(CustomSkinLoader_VERSION)-Float.parseFloat(config.version)>0.01){
 			logger.info("Config File is out of date: "+config.version);
 			config.version=CustomSkinLoader_VERSION;
 			writeConfig(config,true);
@@ -164,7 +199,7 @@ public class CustomSkinLoader {
 		try {
 			logger.info("Try to load config.");
 			String json=IOUtils.toString(new FileInputStream(CONFIG_FILE));
-			Config config=new Gson().fromJson(json, Config.class);
+			Config config=GSON.fromJson(json, Config.class);
 			logger.info("Successfully load config.");
 			return config;
 		}catch (Exception e) {
@@ -183,8 +218,7 @@ public class CustomSkinLoader {
 		return config;
 	}
 	private static void writeConfig(Config config,boolean update){
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		String json=gson.toJson(config);
+		String json=GSON.toJson(config);
 		if(CONFIG_FILE.exists())
 			CONFIG_FILE.delete();
 		try {

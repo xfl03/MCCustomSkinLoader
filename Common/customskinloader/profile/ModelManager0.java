@@ -1,4 +1,4 @@
-package customskinloader;
+package customskinloader.profile;
 
 import java.util.ArrayList;
 import java.util.Map;

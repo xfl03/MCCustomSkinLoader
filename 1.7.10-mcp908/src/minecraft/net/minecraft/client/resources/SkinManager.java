@@ -53,6 +53,9 @@ public class SkinManager
                 return this.func_152786_a((GameProfile)p_load_1_);
             }
         });
+        //CustomSkinLoader Begin (Init Session Service)
+        customskinloader.loader.MojangAPILoader.defaultSessionService=p_i1044_3_;
+        //CustomSkinLoader End
     }
 
     public ResourceLocation func_152792_a(MinecraftProfileTexture p_152792_1_, Type p_152792_2_)
@@ -62,7 +65,10 @@ public class SkinManager
 
     public ResourceLocation func_152789_a(MinecraftProfileTexture p_152789_1_, final Type p_152789_2_, final SkinManager.SkinAvailableCallback p_152789_3_)
     {
-        final ResourceLocation var4 = new ResourceLocation("skins/" + p_152789_1_.getHash());
+        //CustomSkinLoader Begin (Parse HttpTextureInfo)
+    	customskinloader.utils.HttpTextureUtil.HttpTextureInfo info=customskinloader.utils.HttpTextureUtil.toHttpTextureInfo(this.field_152796_d, p_152789_1_.getUrl());
+    	//CustomSkinLoader End
+        final ResourceLocation var4 = new ResourceLocation("skins/" + info.hash);//Modified
         ITextureObject var5 = this.field_152795_c.getTexture(var4);
         if (var5 != null)
         {
@@ -73,10 +79,8 @@ public class SkinManager
         }
         else
         {
-            File var6 = new File(this.field_152796_d, p_152789_1_.getHash().substring(0, 2));
-            File var7 = new File(var6, p_152789_1_.getHash());
             final ImageBufferDownload var8 = p_152789_2_ == Type.SKIN ? new ImageBufferDownload() : null;
-            ThreadDownloadImageData var9 = new ThreadDownloadImageData(var7, p_152789_1_.getUrl(), field_152793_a, new IImageBuffer()
+            ThreadDownloadImageData var9 = new ThreadDownloadImageData(info.cacheFile, info.url, field_152793_a, new IImageBuffer()//Modified
             {
                 private static final String __OBFID = "CL_00001828";
                 public BufferedImage parseUserSkin(BufferedImage p_78432_1_)
@@ -116,32 +120,13 @@ public class SkinManager
             {
                 final HashMap var1 = Maps.newHashMap();
 
-                try
-                {
-                    var1.putAll(SkinManager.this.field_152797_e.getTextures(p_152790_1_, p_152790_3_));
-                }
-                catch (InsecureTextureException var3)
-                {
-                    ;
-                }
-                
-                /*
-                 * If keep this, code below will not be executed.
-                 * p_152790_1_.getId() may be null, so NullPointerException may be thrown.
-                 * Minecraft.getMinecraft().getSession().func_148256_e().getId() also may be null, which makes it meaningless.
-                if (var1.isEmpty() && p_152790_1_.getId().equals(Minecraft.getMinecraft().getSession().func_148256_e().getId()))
-                {
-                	System.out.println("RUN3");
-                    var1.putAll(SkinManager.this.field_152797_e.getTextures(SkinManager.this.field_152797_e.fillProfileProperties(p_152790_1_, false), false));
-                }*/
-                
                 //CustomSkinLoader Begin (User Skin/Cape Part)
                 if(customskinloader.CustomSkinLoader.config.enable){
-                	Map newMap=customskinloader.CustomSkinLoader.loadProfile(p_152790_1_.getName(), var1);
-                	if(!newMap.isEmpty()){
-                		var1.clear();
-                		var1.putAll(newMap);
-                	}
+                    var1.putAll(customskinloader.CustomSkinLoader.loadProfile(p_152790_1_));
+                }else{
+                    try{
+                        var1.putAll(SkinManager.this.field_152797_e.getTextures(p_152790_1_, p_152790_3_));
+                    }catch(InsecureTextureException var3){}
                 }
                 //CustomSkinLoader End
 
@@ -167,12 +152,14 @@ public class SkinManager
 
     public Map func_152788_a(GameProfile p_152788_1_)
     {
-		//CustomSkinLoader Begin (Skull Part)
-    	//return (Map)this.field_152798_f.getUnchecked(p_152788_1_);
-    	return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
-    			customskinloader.CustomSkinLoader.loadProfileFromCache(p_152788_1_.getName(),(Map)this.field_152798_f.getUnchecked(p_152788_1_)):
-    				(Map)this.field_152798_f.getUnchecked(p_152788_1_);
-    	//CustomSkinLoader End
+        //CustomSkinLoader Begin (Skull Part)
+        //return (Map)this.skinCacheLoader.getUnchecked(profile);
+        if(p_152788_1_.getName()==null)
+            return (Map)this.field_152798_f.getUnchecked(p_152788_1_);
+        return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
+                customskinloader.CustomSkinLoader.loadProfileFromCache(p_152788_1_):
+                    (Map)this.field_152798_f.getUnchecked(p_152788_1_);
+        //CustomSkinLoader End
     }
 
     public interface SkinAvailableCallback
