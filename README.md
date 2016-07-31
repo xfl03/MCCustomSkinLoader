@@ -19,14 +19,27 @@ You can easily to get a better view in skin.
 ###Skull Support  
 Fixed skull load bug.  
   
+###Profile Cache
+- Decrease frenquency of using network.  
+- Meanwhile,you can still load profile without network.  
+*Should be open in configratulation file.  
+  
+###Local Skin
+Load skin without skin website.
+Furthermore, by using this function you can preview your skin in game and even change default skin and model.    
+You can load local skin by using any API(excluding MojangAPI).  
+*While using default configratulation, just put skin into `.minecraft/CustomSkinLoader/LocalSkin/(skin|cape)s/{USERNAME}.png`.   
+  
 ###Transparent Skin Support
+*Should be open in configratulation file.
   
 ##Default Load List  
 - [Mojang](http://www.minecraft.net/) (Mojang API)
 - [Blessing Skin](https://skin.prinzeugen.net/) (CustomSkinAPI)
 - [OneSkin] (http://fleey.org/skin/) (CustomSkinAPI)
 - SkinMe (UniSkinAPI)  
-- [McSkin](https://www.mcskin.cc/) (CustomSkinAPI)  
+- [McSkin](https://www.mcskin.cc/) (CustomSkinAPI)
+- LocalSkin (Legacy)  
 If you want to apply to add other skin website to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
 
 ##Copyright  
