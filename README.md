@@ -25,7 +25,7 @@ Fixed skull load bug.
 *Should be open in configratulation file.  
   
 ###Local Skin
-Load skin without skin website.
+Load skin without skin website.  
 Furthermore, by using this function you can preview your skin in game and even change default skin and model.    
 You can load local skin by using any API(excluding MojangAPI).  
 *While using default configratulation, just put skin into `.minecraft/CustomSkinLoader/LocalSkin/(skin|cape)s/{USERNAME}.png`.   

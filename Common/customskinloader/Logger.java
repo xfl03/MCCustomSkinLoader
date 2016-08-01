@@ -68,7 +68,7 @@ public class Logger {
 		log(Level.WARNING,msg);
 	}
 	public void warning(Exception e){
-		log(Level.WARNING,"Exception: "+e.getMessage());
+		log(Level.WARNING,"Exception: "+e.toString());
 		StackTraceElement[] stes=e.getStackTrace();
 		for(StackTraceElement ste : stes){
 			log(Level.WARNING,ste.toString());

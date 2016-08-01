@@ -61,9 +61,11 @@ public class ClassTransformer implements IClassTransformer {
 	{
 		if(MinecraftUtil.isCoreFile(url))
 			return null;
-		ZipFile zipFile0;
+		ZipFile zipFile0=null;
 		try {
 			File file = new File(url.toURI());
+			if(!file.exists()||!file.isFile())
+				return null;
 			zipFile0 = new ZipFile(file);
 			return zipFile0;
 		} catch (Exception e) {
