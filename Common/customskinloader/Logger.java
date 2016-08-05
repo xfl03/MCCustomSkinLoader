@@ -40,22 +40,20 @@ public class Logger {
 	}
 	
 	public void log(Level level,String msg){
-		if(level.intValue()>=LOWEST_DISPLAY_LEVEL) 
-			System.out.println(msg);
+		if(level.intValue()<LOWEST_DISPLAY_LEVEL&&writer==null)
+			return;
+		StringBuilder sb=new StringBuilder();
+		sb.append("[").append(Thread.currentThread().getName()).append(" ").append(level.getName()).append("] ");
+		sb.append(msg);
+		if(level.intValue()>=LOWEST_DISPLAY_LEVEL)
+			System.out.println(sb.toString());
 		if(writer==null)
 			return;
 		try {
-			StringBuilder sb=new StringBuilder();
-			sb.append("[");
-			sb.append(DATE_FORMAT.format(new Date()));
-			sb.append(" ");
-			sb.append(Thread.currentThread().getName());
-			sb.append(" ");
-			sb.append(level.getName());
-			sb.append("] ");
-			sb.append(msg);
-			sb.append("\r\n");
-			writer.write(sb.toString());
+			StringBuilder sb2=new StringBuilder();
+			sb2.append("[").append(DATE_FORMAT.format(new Date())).append("] ");
+			sb2.append(sb.toString());
+			writer.write(sb2.toString());
 			writer.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,6 +71,5 @@ public class Logger {
 		for(StackTraceElement ste : stes){
 			log(Level.WARNING,ste.toString());
 		}
-		log(Level.WARNING,"");
 	}
 }

@@ -23,7 +23,9 @@ public class MojangAPILoader implements IProfileLoader {
 
 	public static MinecraftSessionService defaultSessionService=null;
 	@Override
-	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
+	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile, boolean local) throws Exception {
+		if(local)
+			CustomSkinLoader.logger.warning("!!Local Skin couldn't load by MojangAPI.!!");
 		if(defaultSessionService==null){
 			CustomSkinLoader.logger.warning("Session Service Not Exist.");
 			return null;
@@ -58,11 +60,5 @@ public class MojangAPILoader implements IProfileLoader {
 		if(gameProfile.getId()==null)
 			return null;
 		return new GameProfile(gameProfile.getId(),gameProfile.getName());
-	}
-	
-	@Override
-	public UserProfile loadLocalProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
-		CustomSkinLoader.logger.warning("Local Skin couldn't load by MojangAPI.");
-		return loadProfile(ssp,gameProfile);
 	}
 }

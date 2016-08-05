@@ -32,10 +32,10 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 14.1 (2016.7.31)
+ * @version 14.2 (2016.8.5)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="14.1";
+	public static final String CustomSkinLoader_VERSION="14.2";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -101,10 +101,7 @@ public class CustomSkinLoader {
 			}
 			UserProfile profile=null;
 			try{
-				if(ssp.local==null||ssp.local==false)
-					profile=loader.loadProfile(ssp, gameProfile);
-				else
-					profile=loader.loadLocalProfile(ssp, gameProfile);
+				profile=loader.loadProfile(ssp, gameProfile,(ssp.local==null?false:ssp.local==true));
 			}catch(Exception e){
 				logger.warning("Exception occurs while loading.");
 				logger.warning(e);

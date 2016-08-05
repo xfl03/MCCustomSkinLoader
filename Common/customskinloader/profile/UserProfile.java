@@ -41,6 +41,9 @@ public class UserProfile {
 	 * @return status (true - empty)
 	 */
 	public boolean isEmpty(){
-		return skinUrl==null && (model==null||model.equalsIgnoreCase("default")) && capeUrl==null;
+		return skinUrl==null && capeUrl==null;
+	}
+	public boolean hasSkinUrl(){
+		return (skinUrl!=null&&!skinUrl.equals(""));
 	}
 }
