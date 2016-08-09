@@ -30,7 +30,7 @@ public class HttpUtil0 {
 			InputStream is = c.getInputStream();
 			return IOUtils.toString(is, Charsets.UTF_8);
 		} catch (Exception e) {
-			CustomSkinLoader.logger.info("Failed to read (Exception: "+e.getMessage()+")");
+			CustomSkinLoader.logger.info("Failed to read (Exception: "+e.toString()+")");
 			return null;
 		} finally {
 			if(c!=null)
@@ -62,7 +62,7 @@ public class HttpUtil0 {
 					+ "Real URL: "+url1+")");
 			return HttpTextureUtil.getLegacyFakeUrl(url1, HttpTextureUtil.getHash(url1, c.getContentLength(), c.getLastModified()));
 		} catch (Exception e) {
-			CustomSkinLoader.logger.info("Failed to get fake url (Exception: "+e.getMessage()+")");
+			CustomSkinLoader.logger.info("Failed to get fake url (Exception: "+e.toString()+")");
 			return null;
 		} finally{
 			if(c!=null)

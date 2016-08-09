@@ -83,7 +83,7 @@ public class ProfileCache {
 			CustomSkinLoader.logger.info("Successfully load LocalProfile.");
 			return profile;
 		}catch(Exception e){
-			CustomSkinLoader.logger.info("Failed to load LocalProfile.("+e.getMessage()+")");
+			CustomSkinLoader.logger.info("Failed to load LocalProfile.("+e.toString()+")");
 			localProfiles.put(username.toLowerCase(), null);
 		}
 		return null;
@@ -98,7 +98,7 @@ public class ProfileCache {
 			IOUtils.write(json, new FileOutputStream(localProfile));
 			CustomSkinLoader.logger.info("Successfully save LocalProfile.");
 		} catch (Exception e) {
-			CustomSkinLoader.logger.info("Failed to save LocalProfile.("+e.getMessage()+")");
+			CustomSkinLoader.logger.info("Failed to save LocalProfile.("+e.toString()+")");
 		}
 	}
 }

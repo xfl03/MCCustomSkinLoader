@@ -19,11 +19,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.CustomSkinAPILoader;
-import customskinloader.loader.IProfileLoader;
-import customskinloader.loader.LegacyLoader;
-import customskinloader.loader.MojangAPILoader;
-import customskinloader.loader.UniSkinAPILoader;
+import customskinloader.loader.*;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
 import customskinloader.profile.UserProfile;
@@ -32,10 +28,10 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 14.2 (2016.8.5)
+ * @version 14.3 (2016.8.9)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="14.2";
+	public static final String CustomSkinLoader_VERSION="14.3";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -72,10 +68,8 @@ public class CustomSkinLoader {
 			profile=profileCache.getProfile(username);
 			if(profile==null){
 				logger.warning("(!Cached Profile is empty!) Expiry:"+profileCache.getExpiry(username));
-				if(profileCache.isExpired(username)){//force load
-					profileCache.setLoading(username, true);
+				if(profileCache.isExpired(username))//force load
 					profile=loadProfile0(gameProfile);
-				}
 			}
 			else
 				logger.info(profile.toString(profileCache.getExpiry(username)));
@@ -164,9 +158,9 @@ public class CustomSkinLoader {
 	private static HashMap<String, IProfileLoader> initLoaders() {
 		HashMap<String, IProfileLoader> loaders=new HashMap<String, IProfileLoader>();
 		loaders.put("mojangapi", new MojangAPILoader());
-		loaders.put("customskinapi", new CustomSkinAPILoader());
+		loaders.put("customskinapi", new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPI));
 		loaders.put("legacy", new LegacyLoader());
-		loaders.put("uniskinapi", new UniSkinAPILoader());
+		loaders.put("uniskinapi", new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI));
 		return loaders;
 	}
 
@@ -200,7 +194,7 @@ public class CustomSkinLoader {
 			logger.info("Successfully load config.");
 			return config;
 		}catch (Exception e) {
-			logger.info("Failed to load config, use default instead.("+e.getMessage()+")");
+			logger.info("Failed to load config, use default instead.("+e.toString()+")");
 			File brokenFile=new File(DATA_DIR,"BROKEN-CustomSkinLoader.json");
 			if(brokenFile.exists())
 				brokenFile.delete();
@@ -223,7 +217,7 @@ public class CustomSkinLoader {
 			IOUtils.write(json, new FileOutputStream(CONFIG_FILE));
 			logger.info("Successfully "+(update?"update":"create")+" config.");
 		} catch (Exception e) {
-			logger.info("Failed to "+(update?"update":"create")+" config.("+e.getMessage()+")");
+			logger.info("Failed to "+(update?"update":"create")+" config.("+e.toString()+")");
 		}
 	}
 }
