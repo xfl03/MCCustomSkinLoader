@@ -7,15 +7,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 public class Tweaker implements ITweaker {
 
-	private List args;
-	private String gameDir;
-	private String assetsDir;
-	private String profile;
+	private String[] args;
 	
 	public static Logger logger = new Logger();
 
@@ -26,10 +25,8 @@ public class Tweaker implements ITweaker {
 		
 		logger.info("Using Tweaker");
 		logger.info("Tweaker: acceptOptions");
-		this.args = new ArrayList(args);
-		this.gameDir = gameDir.getAbsolutePath();
-		this.assetsDir = assetsDir.getAbsolutePath();
-		this.profile = profile;
+		String[] temp={"--gameDir",gameDir.getAbsolutePath(),"--assetsDir",assetsDir.getAbsolutePath(),"--version",profile};
+		this.args=ArrayUtils.addAll((String[])args.toArray(), temp);
 	}
 
 	public void injectIntoClassLoader(LaunchClassLoader classLoader) {
@@ -44,12 +41,6 @@ public class Tweaker implements ITweaker {
 
 	public String[] getLaunchArguments() {
 		logger.info("Tweaker: getLaunchArguments");
-		this.args.add("--gameDir");
-		this.args.add(gameDir);
-		this.args.add("--assetsDir");
-		this.args.add(assetsDir);
-		this.args.add("--version");
-		this.args.add(profile);
-		return (String[])args.toArray(new String[args.size()]);
+		return args;
 	}
 }

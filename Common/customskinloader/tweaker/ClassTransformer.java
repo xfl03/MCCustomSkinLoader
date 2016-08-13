@@ -26,11 +26,23 @@ public class ClassTransformer implements IClassTransformer {
 			URLClassLoader ucl = (URLClassLoader)this.getClass().getClassLoader();
 			URL urls[] = ucl.getURLs();
 			for (URL url : urls) {
-				ZipFile tempZipFile = getZipFile(url);
-				if(tempZipFile==null)
+				if(MinecraftUtil.isCoreFile(url)){
+					ModSystemTweaker.logger.info(url.toString()+" : SKIP (is core file).");
 					continue;
+				}
+				File file = new File(url.toURI());
+				if(file==null||!file.isFile()){
+					ModSystemTweaker.logger.info(url.toString()+" : SKIP (file not found).");
+					continue;
+				}
+				ZipFile tempZipFile = getZipFile(file);
+				if(tempZipFile==null){
+					ModSystemTweaker.logger.info(url.toString()+" : SKIP (^^^Exception^^^).");
+					continue;
+				}
 				if (tempZipFile.getEntry("customskinloader/tweaker/ClassTransformer.class") == null){
 					tempZipFile.close();
+					ModSystemTweaker.logger.info(url.toString()+" : SKIP (is not target).");
 					continue;
 				}
 				zipFile = tempZipFile;
@@ -39,13 +51,13 @@ public class ClassTransformer implements IClassTransformer {
 				while(entries.hasMoreElements()){
 					ZipEntry entry=entries.nextElement();
 					String name=entry.getName();
-					if(name.endsWith(".class")&&!name.contains("/")){
+					if(name.endsWith(".class")&&(!name.contains("/")||name.startsWith("net"))){
 						classes.add(name);
 						sb.append(" ");
 						sb.append(name);
 					}
 				}
-				ModSystemTweaker.logger.info("Jar File URL: " + url);
+				ModSystemTweaker.logger.info(url.toString()+" : CHOOSE.");
 				ModSystemTweaker.logger.info("Classes:" + sb.toString());
 				break;
 			}
@@ -57,15 +69,10 @@ public class ClassTransformer implements IClassTransformer {
 		}
 	}
 
-	private static ZipFile getZipFile(URL url)
+	private static ZipFile getZipFile(File file)
 	{
-		if(MinecraftUtil.isCoreFile(url))
-			return null;
 		ZipFile zipFile0=null;
 		try {
-			File file = new File(url.toURI());
-			if(!file.exists()||!file.isFile())
-				return null;
 			zipFile0 = new ZipFile(file);
 			return zipFile0;
 		} catch (Exception e) {
@@ -78,7 +85,7 @@ public class ClassTransformer implements IClassTransformer {
 		if (zipFile == null)
 			return bytes;
 		
-		String fullName = name + ".class";
+		String fullName = name.replaceAll(".", "/") + ".class";
 		if(!classes.contains(fullName))
 			return bytes;
 		ZipEntry ze = zipFile.getEntry(fullName);

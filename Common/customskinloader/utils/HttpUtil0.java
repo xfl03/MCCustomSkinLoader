@@ -42,7 +42,7 @@ public class HttpUtil0 {
 	 * Get faked url after redirect.
 	 * Using this method, can also check if it is exist.
 	 * @param url - before redirect
-	 * @return url - faked after redirect (null for not exist)
+	 * @return url - faked url after redirect (null for not exist)
 	 * @since 14.1
 	 */
 	public static String getFakeUrl(String url,String userAgent){

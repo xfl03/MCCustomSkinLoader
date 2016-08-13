@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 
 import com.google.common.collect.Maps;
@@ -28,10 +29,10 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 14.3 (2016.8.9)
+ * @version 14.4 (2016.8.13)
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="14.3";
+	public static final String CustomSkinLoader_VERSION="14.4";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -189,7 +190,7 @@ public class CustomSkinLoader {
 		}
 		try {
 			logger.info("Try to load config.");
-			String json=IOUtils.toString(new FileInputStream(CONFIG_FILE));
+			String json=IOUtils.toString(new FileInputStream(CONFIG_FILE),Charsets.UTF_8);
 			Config config=GSON.fromJson(json, Config.class);
 			logger.info("Successfully load config.");
 			return config;
@@ -214,7 +215,7 @@ public class CustomSkinLoader {
 			CONFIG_FILE.delete();
 		try {
 			CONFIG_FILE.createNewFile();
-			IOUtils.write(json, new FileOutputStream(CONFIG_FILE));
+			IOUtils.write(json, new FileOutputStream(CONFIG_FILE),Charsets.UTF_8);
 			logger.info("Successfully "+(update?"update":"create")+" config.");
 		} catch (Exception e) {
 			logger.info("Failed to "+(update?"update":"create")+" config.("+e.toString()+")");
