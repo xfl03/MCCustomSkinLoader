@@ -123,7 +123,7 @@ public class SkinManager
                 }else{
                     try{
                         map.putAll(SkinManager.this.sessionService.getTextures(profile, requireSecure));
-                    }catch(InsecureTextureException var3){}
+                    }catch (InsecureTextureException var3){}
                 }
                 //CustomSkinLoader End
 

@@ -66,13 +66,13 @@ public class ImageBufferDownload implements IImageBuffer
      * layer of a skin around the head if it was saved all opaque; this would be redundant so it's assumed that the skin
      * maker is just using an image editor without an alpha channel)
      */
-    private void setAreaTransparent(int p_78434_1_, int p_78434_2_, int p_78434_3_, int p_78434_4_)
+    private void setAreaTransparent(int x, int y, int width, int height)
     {
-        if (!this.hasTransparency(p_78434_1_, p_78434_2_, p_78434_3_, p_78434_4_))
+        if (!this.hasTransparency(x, y, width, height))
         {
-            for (int i = p_78434_1_; i < p_78434_3_; ++i)
+            for (int i = x; i < width; ++i)
             {
-                for (int j = p_78434_2_; j < p_78434_4_; ++j)
+                for (int j = y; j < height; ++j)
                 {
                     this.imageData[i + j * this.imageWidth] &= 16777215;
                 }
@@ -83,11 +83,11 @@ public class ImageBufferDownload implements IImageBuffer
     /**
      * Makes the given area of the image opaque
      */
-    private void setAreaOpaque(int p_78433_1_, int p_78433_2_, int p_78433_3_, int p_78433_4_)
+    private void setAreaOpaque(int x, int y, int width, int height)
     {
-        for (int i = p_78433_1_; i < p_78433_3_; ++i)
+        for (int i = x; i < width; ++i)
         {
-            for (int j = p_78433_2_; j < p_78433_4_; ++j)
+            for (int j = y; j < height; ++j)
             {
                 this.imageData[i + j * this.imageWidth] |= -16777216;
             }
@@ -97,11 +97,11 @@ public class ImageBufferDownload implements IImageBuffer
     /**
      * Returns true if the given area of the image contains transparent pixels
      */
-    private boolean hasTransparency(int p_78435_1_, int p_78435_2_, int p_78435_3_, int p_78435_4_)
+    private boolean hasTransparency(int x, int y, int width, int height)
     {
-        for (int i = p_78435_1_; i < p_78435_3_; ++i)
+        for (int i = x; i < width; ++i)
         {
-            for (int j = p_78435_2_; j < p_78435_4_; ++j)
+            for (int j = y; j < height; ++j)
             {
                 int k = this.imageData[i + j * this.imageWidth];
 

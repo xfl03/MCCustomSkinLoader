@@ -55,7 +55,7 @@ public class ImageBufferDownload implements IImageBuffer
 
                 if (flag)
                 {
-                    this.func_189559_a(32, 0, 64, 32);
+                    this.doTransparencyHack(32, 0, 64, 32);
                 }
 
                 this.setAreaOpaque(0, 16, 64, 32);
@@ -69,7 +69,7 @@ public class ImageBufferDownload implements IImageBuffer
     {
     }
 
-    private void func_189559_a(int p_189559_1_, int p_189559_2_, int p_189559_3_, int p_189559_4_)
+    private void doTransparencyHack(int p_189559_1_, int p_189559_2_, int p_189559_3_, int p_189559_4_)
     {
         for (int i = p_189559_1_; i < p_189559_3_; ++i)
         {

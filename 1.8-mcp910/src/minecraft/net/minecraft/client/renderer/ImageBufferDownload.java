@@ -12,22 +12,22 @@ public class ImageBufferDownload implements IImageBuffer
     private int imageHeight;
     private static final String __OBFID = "CL_00000956";
 
-    public BufferedImage parseUserSkin(BufferedImage p_78432_1_)
+    public BufferedImage parseUserSkin(BufferedImage image)
     {
-        if (p_78432_1_ == null)
+        if (image == null)
         {
             return null;
         }
         else
         {
-        	int ratio=p_78432_1_.getWidth()/64;
+        	int ratio=image.getWidth()/64;
             this.imageWidth = 64 * ratio;
             this.imageHeight = 64 * ratio;
             BufferedImage var2 = new BufferedImage(this.imageWidth, this.imageHeight, 2);
             Graphics var3 = var2.getGraphics();
-            var3.drawImage(p_78432_1_, 0, 0, (ImageObserver)null);
+            var3.drawImage(image, 0, 0, (ImageObserver)null);
 
-            if (p_78432_1_.getHeight() == 32 * ratio)
+            if (image.getHeight() == 32 * ratio)
             {
                 var3.drawImage(var2, 24 * ratio, 48 * ratio, 20 * ratio, 52 * ratio,  4 * ratio, 16 * ratio,  8 * ratio, 20 * ratio, (ImageObserver)null);
                 var3.drawImage(var2, 28 * ratio, 48 * ratio, 24 * ratio, 52 * ratio,  8 * ratio, 16 * ratio, 12 * ratio, 20 * ratio, (ImageObserver)null);
@@ -60,7 +60,7 @@ public class ImageBufferDownload implements IImageBuffer
         }
     }
 
-    public void func_152634_a() {}
+    public void skinAvailable() {}
 
     /**
      * Makes the given area of the image transparent if it was previously completely opaque (used to remove the outer
