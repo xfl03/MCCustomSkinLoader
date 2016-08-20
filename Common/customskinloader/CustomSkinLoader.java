@@ -29,10 +29,11 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
- * @version 14.4 (2016.8.13)
+ * @version @MOD_FULL_VERSION@
  */
 public class CustomSkinLoader {
-	public static final String CustomSkinLoader_VERSION="14.4";
+	public static final String CustomSkinLoader_VERSION="@MOD_VERSION@";
+	public static final String CustomSkinLoader_FULL_VERSION="@MOD_FULL_VERSION@";
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -150,7 +151,7 @@ public class CustomSkinLoader {
 	
 	private static Logger initLogger() {
 		Logger logger=new Logger(LOG_FILE);
-		logger.info("CustomSkinLoader "+CustomSkinLoader_VERSION);
+		logger.info("CustomSkinLoader "+CustomSkinLoader_FULL_VERSION);
 		logger.info("DataDir: "+DATA_DIR.getAbsolutePath());
 		logger.info("Minecraft: "+MinecraftUtil.getMinecraftVersion());
 		return logger;

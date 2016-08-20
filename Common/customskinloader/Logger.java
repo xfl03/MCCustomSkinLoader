@@ -52,7 +52,7 @@ public class Logger {
 		try {
 			StringBuilder sb2=new StringBuilder();
 			sb2.append("[").append(DATE_FORMAT.format(new Date())).append("] ");
-			sb2.append(sb.toString());
+			sb2.append(sb.toString()).append("\r\n");
 			writer.write(sb2.toString());
 			writer.flush();
 		} catch (Exception e) {

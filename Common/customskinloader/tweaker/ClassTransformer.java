@@ -27,22 +27,22 @@ public class ClassTransformer implements IClassTransformer {
 			URL urls[] = ucl.getURLs();
 			for (URL url : urls) {
 				if(MinecraftUtil.isCoreFile(url)){
-					ModSystemTweaker.logger.info(url.toString()+" : SKIP (is core file).");
+					ModSystemTweaker.logger.info(url.toString()+" : SKIP (core file).");
 					continue;
 				}
 				File file = new File(url.toURI());
 				if(file==null||!file.isFile()){
-					ModSystemTweaker.logger.info(url.toString()+" : SKIP (file not found).");
+					ModSystemTweaker.logger.info(url.toString()+" : EXCEPTION (file not found).");
 					continue;
 				}
 				ZipFile tempZipFile = getZipFile(file);
 				if(tempZipFile==null){
-					ModSystemTweaker.logger.info(url.toString()+" : SKIP (^^^Exception^^^).");
+					ModSystemTweaker.logger.info(url.toString()+" : EXCEPTION (¡ü Message ¡ü).");
 					continue;
 				}
 				if (tempZipFile.getEntry("customskinloader/tweaker/ClassTransformer.class") == null){
 					tempZipFile.close();
-					ModSystemTweaker.logger.info(url.toString()+" : SKIP (is not target).");
+					ModSystemTweaker.logger.info(url.toString()+" : FINISH (not target).");
 					continue;
 				}
 				zipFile = tempZipFile;
@@ -85,7 +85,7 @@ public class ClassTransformer implements IClassTransformer {
 		if (zipFile == null)
 			return bytes;
 		
-		String fullName = name.replaceAll(".", "/") + ".class";
+		String fullName = new StringBuilder().append(name.startsWith("net") ? name.replaceAll("\\.", "\\/") : name).append(".class").toString();
 		if(!classes.contains(fullName))
 			return bytes;
 		ZipEntry ze = zipFile.getEntry(fullName);

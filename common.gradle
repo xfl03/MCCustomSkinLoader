@@ -1,0 +1,115 @@
+buildscript {
+    repositories {
+        maven {
+            name = "fmm"
+            url = "http://forgemavenmirror.sinaapp.com/maven"
+        }
+		jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+ext.configFile = file "build.properties"
+configFile.withReader {
+    // read config.  it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+//Example: 14.4a-SNAPSHOT-20160820
+version = rootProject.ext.config.version + rootProject.ext.config.dev_version + (rootProject.ext.config.snapshot_version==''?'':('-SNAPSHOT-'+rootProject.ext.config.snapshot_version))
+group = config.group
+archivesBaseName = rootProject.ext.config.name+"_"+config.minecraft_version
+
+minecraft {
+    version = config.forge_version
+    runDir = "run"
+    mappings = config.mappings_version
+    
+    replace '@MOD_VERSION@', rootProject.ext.config.version
+    replace '@MOD_FULL_VERSION@', project.version
+    replaceIn 'CustomSkinLoader.java'
+}
+
+jar {
+    manifest {
+        attributes 'TweakClass'   : 'customskinloader.tweaker.ModSystemTweaker'
+        attributes 'TweakName'    : rootProject.ext.config.name
+        attributes 'TweakAuthor'  : 'xfl03,JLChnToZ'
+        attributes 'TweakVersion' : version
+        attributes 'TweakOrder'   : '-10'
+    }
+}
+
+task copySource << {
+    def outputFile = file("src/main/java")
+    outputFile.deleteDir()
+    copy {
+        from '../Common'
+        from 'src/minecraft/'
+        into 'src/main/java'
+		include '**/*.java'
+    }
+}
+sourceMainJava.dependsOn copySource
+
+task copyResources << {
+    def outputFile = file("src/main/resources")
+    outputFile.deleteDir()
+    copy {
+        from '../Common'
+        into 'src/main/resources'
+		exclude '**/*.java'
+    }
+}
+processResources.dependsOn copyResources
+
+task afterBuild << {
+    //renameSrgJar
+    def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
+    def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
+    file0.renameTo(file1)
+    
+    //reobfToNotch
+    reobfToNotch()
+    
+    //copyBuildFile
+    copy {
+        from 'build/libs'
+        into '../build/libs'
+		include '**/*.jar'
+        exclude '**/*-srg.jar'
+        exclude '**/*-sources.jar'
+    }
+}
+build.finalizedBy afterBuild
+
+//notch pack
+void reobfToNotch(){
+    def inputName = "${archivesBaseName}-${version}-srg.jar"
+    def mcpVersion = minecraft.mappings.replace('_',"/")
+    def outputName = inputName.replace('-srg', '')
+    def mapping = new net.md_5.specialsource.JarMapping()
+    def srgFile = file(System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/srgs/mcp-notch.srg")
+    def inputFile = file("build/libs/${inputName}")
+    def outputFile = file("build/libs/${outputName}")
+    def remapper = new net.md_5.specialsource.JarRemapper(null, mapping)
+    def inputJar = net.md_5.specialsource.Jar.init(inputFile)
+    def inheritanceProviders = new net.md_5.specialsource.provider.JointProvider()
+    def jarProvider = new net.md_5.specialsource.provider.JarProvider(inputJar)
+    inheritanceProviders.add(jarProvider)
+    mapping.loadMappings(srgFile)
+    mapping.setFallbackInheritanceProvider(inheritanceProviders)
+    remapper.remapJar(inputJar, outputFile)
+}
