@@ -1,10 +1,12 @@
 buildscript {
     repositories {
+        /*
         maven {
             name = "fmm"
             url = "http://forgemavenmirror.sinaapp.com/maven"
         }
-		jcenter()
+        */
+        jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
