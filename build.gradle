@@ -9,10 +9,12 @@ configFile.withReader {
 }
 buildscript {
     repositories {
+        /*
         maven {
             name = "fmm"
             url = "http://forgemavenmirror.sinaapp.com/maven"
         }
+        */
 		jcenter()
         maven {
             name = "forge"
