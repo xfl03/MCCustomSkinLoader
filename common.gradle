@@ -35,7 +35,7 @@ group = config.group
 archivesBaseName = rootProject.ext.config.name+"_"+config.minecraft_version
 
 minecraft {
-    version = config.forge_version
+    version = config.forge_mc_version+"-"+config.forge_version
     runDir = "run"
     mappings = config.mappings_version
     
@@ -83,8 +83,8 @@ task afterBuild << {
     def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
     file0.renameTo(file1)
     
-    //reobfToNotch
-    reobfToNotch()
+    //reobfSrgToNotch
+    reobfSrgToNotch()
     
     //copyBuildFile
     copy {
@@ -98,12 +98,18 @@ task afterBuild << {
 build.finalizedBy afterBuild
 
 //notch pack
-void reobfToNotch(){
-    def inputName = "${archivesBaseName}-${version}-srg.jar"
+void reobfSrgToNotch(){
+    def srgName = "${archivesBaseName}-${version}-srg.jar"
+    def mcpName = srgName.replace('-srg', '-dev')
+    applySpecialSource(srgName,mcpName,"srg-mcp")
+    def notchName = srgName.replace('-srg', '')
+    applySpecialSource(mcpName,notchName,"mcp-notch")
+}
+
+void applySpecialSource(String inputName,String outputName,String srgType){
     def mcpVersion = minecraft.mappings.replace('_',"/")
-    def outputName = inputName.replace('-srg', '')
     def mapping = new net.md_5.specialsource.JarMapping()
-    def srgFile = file(System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/srgs/mcp-notch.srg")
+    def srgFile = file(System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/${config.forge_mc_version}/srgs/${srgType}.srg")
     def inputFile = file("build/libs/${inputName}")
     def outputFile = file("build/libs/${outputName}")
     def remapper = new net.md_5.specialsource.JarRemapper(null, mapping)

@@ -37,7 +37,7 @@ public class ClassTransformer implements IClassTransformer {
 				}
 				ZipFile tempZipFile = getZipFile(file);
 				if(tempZipFile==null){
-					ModSystemTweaker.logger.info(url.toString()+" : EXCEPTION (¡ü Message ¡ü).");
+					ModSystemTweaker.logger.info(url.toString()+" : EXCEPTION (^ Message ^).");
 					continue;
 				}
 				if (tempZipFile.getEntry("customskinloader/tweaker/ClassTransformer.class") == null){
