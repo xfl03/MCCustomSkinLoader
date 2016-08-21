@@ -18,7 +18,7 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
-public class JsonAPILoader implements IProfileLoader {
+public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	public static final String TEXTURES="textures/";
 	public static enum Type{
 		CustomSkinAPI(new CustomSkinAPI()),UniSkinAPI(new UniSkinAPI());
@@ -61,5 +61,9 @@ public class JsonAPILoader implements IProfileLoader {
 		}else{
 			return p;
 		}
+	}
+	@Override
+	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
+		return ssp0.root.equalsIgnoreCase(ssp1.root);
 	}
 }

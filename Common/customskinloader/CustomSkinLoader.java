@@ -46,11 +46,10 @@ public class CustomSkinLoader {
 			SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
 			SkinSiteProfile.createCustomSkinAPI("McSkin","http://www.mcskin.cc/"),
 			SkinSiteProfile.createLegacy("LocalSkin", true, "LocalSkin/skins/{USERNAME}.png", "LocalSkin/capes/{USERNAME}.png")};
-	public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
 	
 	public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
 	public static final Logger logger=initLogger();
-	public static final Config config=loadConfig0();
+	public static final Config config=Config.loadConfig0();
 	
 	private static final ProfileCache profileCache=new ProfileCache();
 	
@@ -90,7 +89,7 @@ public class CustomSkinLoader {
 		for(int i=0;i<config.loadlist.length;i++){
 			SkinSiteProfile ssp=config.loadlist[i];
 			logger.info((i+1)+"/"+config.loadlist.length+" Try to load profile from '"+ssp.name+"'.");
-			IProfileLoader loader=LOADERS.get(ssp.type.toLowerCase());
+			ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
 			if(loader==null){
 				logger.info("Type '"+ssp.type+"' is not defined.");
 				continue;
@@ -155,71 +154,5 @@ public class CustomSkinLoader {
 		logger.info("DataDir: "+DATA_DIR.getAbsolutePath());
 		logger.info("Minecraft: "+MinecraftUtil.getMinecraftVersion());
 		return logger;
-	}
-
-	private static HashMap<String, IProfileLoader> initLoaders() {
-		HashMap<String, IProfileLoader> loaders=new HashMap<String, IProfileLoader>();
-		loaders.put("mojangapi", new MojangAPILoader());
-		loaders.put("customskinapi", new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPI));
-		loaders.put("legacy", new LegacyLoader());
-		loaders.put("uniskinapi", new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI));
-		return loaders;
-	}
-
-	private static Config loadConfig0() {
-		Config config=loadConfig();
-		logger.info("Enable:"+config.enable+
-				", EnableSkull:"+config.enableSkull+
-				", EnableTranSkin:"+config.enableTransparentSkin+
-				", CacheExpiry:"+config.cacheExpiry+
-				", enableUpdateSkull:"+config.enableUpdateSkull+
-				", LocalProfileCache:"+config.enableLocalProfileCache+
-				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
-		if(config.version==null||Float.parseFloat(CustomSkinLoader_VERSION)-Float.parseFloat(config.version)>0.01){
-			logger.info("Config File is out of date: "+config.version);
-			config.version=CustomSkinLoader_VERSION;
-			writeConfig(config,true);
-		}
-		return config;
-	}
-
-	private static Config loadConfig() {
-		logger.info("Config File: "+CONFIG_FILE.getAbsolutePath());
-		if(!CONFIG_FILE.exists()){
-			logger.info("Config file not found, use default instead.");
-			return initConfig();
-		}
-		try {
-			logger.info("Try to load config.");
-			String json=IOUtils.toString(new FileInputStream(CONFIG_FILE),Charsets.UTF_8);
-			Config config=GSON.fromJson(json, Config.class);
-			logger.info("Successfully load config.");
-			return config;
-		}catch (Exception e) {
-			logger.info("Failed to load config, use default instead.("+e.toString()+")");
-			File brokenFile=new File(DATA_DIR,"BROKEN-CustomSkinLoader.json");
-			if(brokenFile.exists())
-				brokenFile.delete();
-			CONFIG_FILE.renameTo(brokenFile);
-			return initConfig();
-		}
-	}
-
-	private static Config initConfig() {
-		Config config=new Config(DEFAULT_LOAD_LIST);
-		writeConfig(config,false);
-		return config;
-	}
-	private static void writeConfig(Config config,boolean update){
-		String json=GSON.toJson(config);
-		if(CONFIG_FILE.exists())
-			CONFIG_FILE.delete();
-		try {
-			CONFIG_FILE.createNewFile();
-			IOUtils.write(json, new FileOutputStream(CONFIG_FILE),Charsets.UTF_8);
-			logger.info("Successfully "+(update?"update":"create")+" config.");
-		} catch (Exception e) {
-			logger.info("Failed to "+(update?"update":"create")+" config.("+e.toString()+")");
-		}
 	}
 }

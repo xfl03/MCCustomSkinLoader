@@ -10,7 +10,7 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
-public class LegacyLoader implements IProfileLoader {
+public class LegacyLoader implements ProfileLoader.IProfileLoader {
 	public static final String USERNAME_REGEX="\\{USERNAME\\}";
 	
 	@Override
@@ -47,5 +47,10 @@ public class LegacyLoader implements IProfileLoader {
 			return null;
 		}
 		return profile;
+	}
+
+	@Override
+	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
+		return ssp0.skin.equalsIgnoreCase(ssp1.skin) || ssp0.cape.equalsIgnoreCase(ssp1.cape);
 	}
 }

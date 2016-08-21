@@ -19,7 +19,7 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpUtil0;
 import net.minecraft.client.Minecraft;
 
-public class MojangAPILoader implements IProfileLoader {
+public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
 	public static MinecraftSessionService defaultSessionService=null;
 	@Override
@@ -60,5 +60,9 @@ public class MojangAPILoader implements IProfileLoader {
 		if(gameProfile.getId()==null)
 			return null;
 		return new GameProfile(gameProfile.getId(),gameProfile.getName());
+	}
+	@Override
+	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
+		return true;
 	}
 }
