@@ -115,7 +115,7 @@ void reobfSrgToNotch(){
 void applySpecialSource(String inputName,String outputName,String srgType){
     def mcpVersion = minecraft.mappings.replace('_',"/")
     def mapping = new net.md_5.specialsource.JarMapping()
-    def srgFile = file(System.getProperty('user.home') + "/.gradle/caches/minecraft/net/minecraftforge/forge/${config.forge_mc_version}-${config.forge_version}/srgs/${srgType}.srg")
+    def srgFile = file(System.getProperty('user.home') + "/.gradle/caches/minecraft/net/minecraftforge/forge/${config.forge_mc_version}-${config.forge_version}/${mcpVersion}/srgs/${srgType}.srg")
     def inputFile = file("build/libs/${inputName}")
     def outputFile = file("build/libs/${outputName}")
     def remapper = new net.md_5.specialsource.JarRemapper(null, mapping)
