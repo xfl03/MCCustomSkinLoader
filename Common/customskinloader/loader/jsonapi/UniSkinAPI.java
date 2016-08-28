@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import customskinloader.CustomSkinLoader;
+import customskinloader.loader.JsonAPILoader.IJsonAPI;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
@@ -75,5 +76,8 @@ public class UniSkinAPI implements IJsonAPI {
         public int errno;
         public String msg;
 	}
-
+	@Override
+	public String getName() {
+		return "UniSkinAPI";
+	}
 }

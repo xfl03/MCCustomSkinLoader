@@ -20,6 +20,11 @@ import customskinloader.utils.HttpUtil0;
 
 public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	public static final String TEXTURES="textures/";
+	public interface IJsonAPI {
+		public String toJsonUrl(String root,String username);
+		public UserProfile toUserProfile(String root,String json,boolean local);
+		public String getName();
+	}
 	public static enum Type{
 		CustomSkinAPI(new CustomSkinAPI()),UniSkinAPI(new UniSkinAPI());
 		public IJsonAPI jsonAPI;
@@ -65,5 +70,9 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	@Override
 	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
 		return ssp0.root.equalsIgnoreCase(ssp1.root);
+	}
+	@Override
+	public String getName() {
+		return type.jsonAPI.getName();
 	}
 }

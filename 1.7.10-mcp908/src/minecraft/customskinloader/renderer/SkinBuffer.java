@@ -67,8 +67,7 @@ public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 	 *  11111110 11111111 11111111 11111111 ->
 	 *  11111111 00000000 00000000 00000000 */
 	private static final int B=-16777216;
-	private void setAreaOpaque(int x0,int y0,int x1,int y1)
-	{
+	private void setAreaOpaque(int x0,int y0,int x1,int y1){
 		for (int x=x0;x<x1;++x)
 			for (int y=y0;y<y1;++y)
 				this.imageData[getPosition(x,y)] |= B;
@@ -83,10 +82,10 @@ public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 
 
 	@Override
-	public void func_152634_a() {
+	public void func_152634_a(){
 	}
 	
-	private static int getARGB(int a,int r,int g,int b) {
+	private static int getARGB(int a,int r,int g,int b){
 		return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 	

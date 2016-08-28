@@ -65,4 +65,8 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
 		return true;
 	}
+	@Override
+	public String getName() {
+		return "MojangAPI";
+	}
 }

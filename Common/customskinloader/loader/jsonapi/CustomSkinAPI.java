@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import customskinloader.CustomSkinLoader;
+import customskinloader.loader.JsonAPILoader.IJsonAPI;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
@@ -55,5 +56,8 @@ public class CustomSkinAPI implements IJsonAPI {
 		public String skin;
 		public String cape;
 	}
-
+	@Override
+	public String getName() {
+		return "CustomSkinAPI";
+	}
 }
