@@ -19,7 +19,7 @@ public class HttpUtil0 {
 	public static String readHttp(String url,String userAgent){
 		HttpURLConnection c=null;
 		try {
-			CustomSkinLoader.logger.info("Try to read '"+url+(userAgent==null?" without user agent.":"' with user agent '"+userAgent+"'."));
+			CustomSkinLoader.logger.info("Try to read '"+url+(userAgent==null?"' without user agent.":"' with user agent '"+userAgent+"'."));
 			c=createConnection(url,userAgent);
 			int res = c.getResponseCode()/100;
 			if (res==4||res==5||c.getResponseCode()==HttpURLConnection.HTTP_NO_CONTENT) {
