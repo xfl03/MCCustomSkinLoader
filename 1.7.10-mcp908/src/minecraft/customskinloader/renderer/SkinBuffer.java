@@ -21,8 +21,8 @@ public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 		graphics.setColor(new Color(0,0,0,0));
 		graphics.fillRect(0,0,64,32);
 		if (image.getHeight() == 64 * ratio){//Double layer
-			graphics.drawImage(image, 0 *radio, 0 *radio, 64*radio, 32*radio, 0 *radio, 0 *radio, 64*radio, 32*radio, (ImageObserver)null);
-			graphics.drawImage(image, 0 *radio, 16*radio, 64*radio, 32*radio, 0 *radio, 32*radio, 64*radio, 48*radio, (ImageObserver)null);
+			graphics.drawImage(image, 0 *ratio, 0 *ratio, 64*ratio, 32*ratio, 0 *ratio, 0 *ratio, 64*ratio, 32*ratio, (ImageObserver)null);
+			graphics.drawImage(image, 0 *ratio, 16*ratio, 64*ratio, 32*ratio, 0 *ratio, 32*ratio, 64*ratio, 48*ratio, (ImageObserver)null);
 		}else{
 			graphics.drawImage(image, 0, 0, (ImageObserver)null);
 		}
