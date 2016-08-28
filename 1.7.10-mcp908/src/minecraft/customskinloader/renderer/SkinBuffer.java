@@ -16,14 +16,15 @@ public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 		if(image==null)
 			return null;
 		ratio = image.getWidth() / 64;
-		BufferedImage bufferedimage = new BufferedImage(64 * ratio, 64 * ratio, 2);
+		BufferedImage bufferedimage = new BufferedImage(64 * ratio, 32 * ratio, 2);
 		Graphics graphics = bufferedimage.getGraphics();
 		graphics.setColor(new Color(0,0,0,0));
-		graphics.fillRect(0,0,64,64);
-		graphics.drawImage(image,0,0,(ImageObserver)null);
-		if (image.getHeight() == 32 * ratio){//Single Layer
-			graphics.drawImage(bufferedimage,32 * ratio,48 * ratio,16 * ratio,64 * ratio, 0 * ratio,16 * ratio,16 * ratio,32 * ratio,(ImageObserver)null);
-			graphics.drawImage(bufferedimage,48 * ratio,48 * ratio,32 * ratio,64 * ratio,40 * ratio,16 * ratio,56 * ratio,32 * ratio,(ImageObserver)null);
+		graphics.fillRect(0,0,64,32);
+		if (image.getHeight() == 64 * ratio){//Double layer
+			graphics.drawImage(image, 0 *radio, 0 *radio, 64*radio, 32*radio, 0 *radio, 0 *radio, 64*radio, 32*radio, (ImageObserver)null);
+			graphics.drawImage(image, 0 *radio, 16*radio, 64*radio, 32*radio, 0 *radio, 32*radio, 64*radio, 48*radio, (ImageObserver)null);
+		}else{
+			graphics.drawImage(image, 0, 0, (ImageObserver)null);
 		}
 		graphics.dispose();
 		this.imageData = ((DataBufferInt)bufferedimage.getRaster().getDataBuffer()).getData();
@@ -31,18 +32,9 @@ public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 		setAreaDueToConfig( 0 * ratio, 0 * ratio,32 * ratio,16 * ratio);//Head - 1
 		setAreaTransparent(32 * ratio, 0 * ratio,64 * ratio,16 * ratio);//Head - 2
 		
-		setAreaDueToConfig( 0 * ratio,16 * ratio,16 * ratio,32 * ratio);//Right Leg - 1
+		setAreaDueToConfig( 0 * ratio,16 * ratio,16 * ratio,32 * ratio);//Leg  - 1
 		setAreaDueToConfig(16 * ratio,16 * ratio,40 * ratio,32 * ratio);//Body - 1
-		setAreaDueToConfig(40 * ratio,16 * ratio,56 * ratio,32 * ratio);//Right Arm - 1
-		
-		setAreaTransparent( 0 * ratio,32 * ratio,16 * ratio,48 * ratio);//Right Leg - 2
-		setAreaTransparent(16 * ratio,32 * ratio,40 * ratio,48 * ratio);//Body - 2
-		setAreaTransparent(40 * ratio,32 * ratio,56 * ratio,48 * ratio);//Right Arm - 2
-		
-		setAreaTransparent( 0 * ratio,48 * ratio,16 * ratio,64 * ratio);//Left Leg - 2
-		setAreaDueToConfig(16 * ratio,48 * ratio,32 * ratio,64 * ratio);//Left Leg - 1
-		setAreaDueToConfig(32 * ratio,48 * ratio,48 * ratio,64 * ratio);//Left Arm - 1
-		setAreaTransparent(48 * ratio,48 * ratio,64 * ratio,64 * ratio);//Left Arm - 2
+		setAreaDueToConfig(40 * ratio,16 * ratio,56 * ratio,32 * ratio);//Arm  - 1
 		
 		return bufferedimage;
 	}
@@ -91,7 +83,7 @@ public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 
 
 	@Override
-	public void skinAvailable() {
+	public void func_152634_a() {
 	}
 	
 	private static int getARGB(int a,int r,int g,int b) {

@@ -85,7 +85,7 @@ public class SkinManager
         }
         else
         {
-            final ImageBufferDownload var8 = p_152789_2_ == Type.SKIN ? new customskinloader.renderer.SkinBuffer() : null;//Modified
+            final IImageBuffer var8 = p_152789_2_ == Type.SKIN ? new customskinloader.renderer.SkinBuffer() : null;//Modified
             ThreadDownloadImageData var9 = new ThreadDownloadImageData(info.cacheFile, info.url, DEFAULT_SKIN, new IImageBuffer()//Modified
             {
                 private static final String __OBFID = "CL_00001828";
