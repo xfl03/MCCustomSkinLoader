@@ -48,7 +48,7 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 			CustomSkinLoader.logger.info("Profile not found.("+username+"'s profile not found.)");
 			return null;
 		}
-		defaultSessionService.fillProfileProperties(newGameProfile, false);
+		newGameProfile=defaultSessionService.fillProfileProperties(newGameProfile, false);
 		map=getTextures(newGameProfile);
 		if(!map.isEmpty()){
 			gameProfile.getProperties().putAll(newGameProfile.getProperties());
