@@ -77,7 +77,7 @@ public class SkinManager
         }
         else
         {
-            final IImageBuffer iimagebuffer = p_152789_2_ == Type.SKIN ? new ImageBufferDownload() : null;
+            final IImageBuffer iimagebuffer = p_152789_2_ == Type.SKIN ? new customskinloader.renderer.SkinBuffer() : null;//Modified
             ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer()//Modified
             {
                 public BufferedImage parseUserSkin(BufferedImage image)

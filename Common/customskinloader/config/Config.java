@@ -16,7 +16,7 @@ public class Config {
 	public String version;
 	public boolean enable=true;
 	public boolean enableSkull=true;
-	public boolean enableTransparentSkin=false;
+	public boolean enableTransparentSkin=true;
 	public int cacheExpiry=10;
 	public boolean enableUpdateSkull=false;
 	public boolean enableLocalProfileCache=false;
@@ -77,7 +77,7 @@ public class Config {
 		ArrayList<SkinSiteProfile> adds=new ArrayList<SkinSiteProfile>();
 		File[] files=listAddition.listFiles();
 		for(File file:files){
-			if(!file.getName().endsWith(".json")&&!file.getName().endsWith(".txt"))
+			if(!file.getName().toLowerCase().endsWith(".json")&&!file.getName().toLowerCase().endsWith(".txt"))
 				continue;
 			try {
 				CustomSkinLoader.logger.info("Try to load Extra List.("+file.getName()+")");
