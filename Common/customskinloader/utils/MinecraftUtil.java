@@ -45,7 +45,7 @@ public class MinecraftUtil {
 		return minecraftVersion;
 	}
 	
-	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/(.*?)/(.*?).jar$");
+	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\]*?)/([^\\/\\]*?).jar$");
 	private static void testProbe(){
 		URLClassLoader ucl = (URLClassLoader)new MinecraftUtil().getClass().getClassLoader();
 		URL urls[] = ucl.getURLs();

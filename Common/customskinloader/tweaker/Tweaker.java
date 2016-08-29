@@ -18,15 +18,16 @@ public class Tweaker implements ITweaker {
 	
 	public static Logger logger = new Logger();
 
-	public void acceptOptions(List args, File gameDir, File assetsDir, String profile) {
+	public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
 		MinecraftUtil.minecraftDataFolder=gameDir;
 		File tweakerLogFile = new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader/Tweaker.log");
 		logger = new Logger(tweakerLogFile);
 		
 		logger.info("Using Tweaker");
 		logger.info("Tweaker: acceptOptions");
+		
 		String[] temp={"--gameDir",gameDir.getAbsolutePath(),"--assetsDir",assetsDir.getAbsolutePath(),"--version",profile};
-		this.args=ArrayUtils.addAll((String[])args.toArray(), temp);
+		this.args=ArrayUtils.addAll(args.toArray(new String[args.size()]), temp);
 	}
 
 	public void injectIntoClassLoader(LaunchClassLoader classLoader) {
