@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -29,7 +30,7 @@ public class HttpUtil0 {
 				return null;
 			}
 			CustomSkinLoader.logger.info("Successfully read (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
-			InputStream is = c.getInputStream();
+			InputStream is = getStream(c);
 			return IOUtils.toString(is, Charsets.UTF_8);
 		} catch (Exception e) {
 			CustomSkinLoader.logger.info("Failed to read (Exception: "+e.toString()+")");
@@ -51,7 +52,7 @@ public class HttpUtil0 {
 				return false;
 			}
 			CustomSkinLoader.logger.info("Successfully save (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
-			InputStream is = c.getInputStream();
+			InputStream is = getStream(c);
 			byte [] bytes = IOUtils.toByteArray(is);
 			FileUtils.writeByteArrayToFile(target,bytes);
 			return target.exists();
@@ -99,12 +100,19 @@ public class HttpUtil0 {
 		HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
 		c.setReadTimeout(1000 * 10);
 		c.setConnectTimeout(1000 * 10);
+		c.setRequestProperty("Accept-Encoding", "gzip");
 		if(userAgent!=null)
 			c.setRequestProperty("User-Agent",userAgent);
 		c.setUseCaches(false);
 		c.setInstanceFollowRedirects(true);
 		c.connect();
 		return c;
+	}
+	private static InputStream getStream(HttpURLConnection connection) throws IOException{
+		if ("gzip".equals(connection.getContentEncoding()))
+			return new GZIPInputStream(connection.getInputStream());
+		else
+			return connection.getInputStream();
 	}
 	
 	public static boolean isLocal(String url){
