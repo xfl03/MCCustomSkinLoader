@@ -64,7 +64,7 @@ public class SkinManager
     public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final Type p_152789_2_, final SkinManager.SkinAvailableCallback skinAvailableCallback)
     {
         //CustomSkinLoader Begin (Parse HttpTextureInfo)
-    	customskinloader.utils.HttpTextureUtil.HttpTextureInfo info=customskinloader.utils.HttpTextureUtil.toHttpTextureInfo(this.skinCacheDir, profileTexture.getUrl());
+    	customskinloader.utils.HttpTextureUtil.HttpTextureInfo info=customskinloader.utils.HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
     	//CustomSkinLoader End
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + info.hash);//Modified
         ITextureObject itextureobject = this.textureManager.getTexture(resourcelocation);
