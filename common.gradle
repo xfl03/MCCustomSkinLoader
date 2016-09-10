@@ -101,7 +101,7 @@ build.finalizedBy afterBuild
 void reobfSrgToNotch(){
     def srgName = "${archivesBaseName}-${version}-srg.jar"
     def notchName = srgName.replace('-srg', '')
-    if(config.srg_notch_map==null||config.srg_notch_map==""){
+    if(config.srg_notch_map==null||config.srg_notch_map.length()<=3){
         //Default Map
         def mcpName = srgName.replace('-srg', '-dev')
         applySpecialSource(srgName,mcpName,getDefaultMap("srg-mcp"))
