@@ -1,5 +1,6 @@
 package customskinloader.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -7,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import customskinloader.CustomSkinLoader;
@@ -32,6 +34,30 @@ public class HttpUtil0 {
 		} catch (Exception e) {
 			CustomSkinLoader.logger.info("Failed to read (Exception: "+e.toString()+")");
 			return null;
+		} finally {
+			if(c!=null)
+				c.disconnect();
+		}
+	}
+	
+	public static boolean saveHttp(String url,File target){
+		HttpURLConnection c=null;
+		try {
+			CustomSkinLoader.logger.info("Try to save '"+url+"' to '"+target.getAbsolutePath()+"'.");
+			c=createConnection(url,null);
+			int res = c.getResponseCode()/100;
+			if (res==4||res==5||c.getResponseCode()==HttpURLConnection.HTTP_NO_CONTENT) {
+				CustomSkinLoader.logger.info("Failed to save (Response Code: "+c.getResponseCode()+")");
+				return false;
+			}
+			CustomSkinLoader.logger.info("Successfully save (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
+			InputStream is = c.getInputStream();
+			byte [] bytes = IOUtils.toByteArray(is);
+			FileUtils.writeByteArrayToFile(target,bytes);
+			return target.exists();
+		} catch (Exception e) {
+			CustomSkinLoader.logger.info("Failed to save (Exception: "+e.toString()+")");
+			return false;
 		} finally {
 			if(c!=null)
 				c.disconnect();
@@ -79,5 +105,9 @@ public class HttpUtil0 {
 		c.setInstanceFollowRedirects(true);
 		c.connect();
 		return c;
+	}
+	
+	public static boolean isLocal(String url){
+		return url==null? false : !url.startsWith("http");
 	}
 }

@@ -45,8 +45,9 @@ public class SkinManager
                 return Minecraft.getMinecraft().getSessionService().getTextures(p_load_1_, false);
             }
         });
-        //CustomSkinLoader Begin (Init Session Service)
+        //CustomSkinLoader Begin (Init)
         customskinloader.loader.MojangAPILoader.defaultSessionService=sessionService;
+        customskinloader.utils.HttpTextureUtil.defaultCacheDir=skinCacheDirectory;
         //CustomSkinLoader End
     }
 
@@ -150,8 +151,6 @@ public class SkinManager
     {
         //CustomSkinLoader Begin (Skull Part)
         //return (Map)this.skinCacheLoader.getUnchecked(profile);
-        if(profile.getName()==null)
-            return this.skinCacheLoader.getUnchecked(profile);
         return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
                 customskinloader.CustomSkinLoader.loadProfileFromCache(profile):
                     this.skinCacheLoader.getUnchecked(profile);

@@ -2,6 +2,8 @@ package customskinloader.loader;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.mojang.authlib.GameProfile;
 
 import customskinloader.CustomSkinLoader;
@@ -14,12 +16,12 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 	public static final String USERNAME_REGEX="\\{USERNAME\\}";
 	
 	@Override
-	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile, boolean local) throws Exception {
+	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
 		String username=gameProfile.getName();
 		UserProfile profile=new UserProfile();
-		if(ssp.skin!=null && !ssp.skin.equals("")){
+		if(StringUtils.isNoneEmpty(ssp.skin)){
 			String skin=ssp.skin.replaceAll(USERNAME_REGEX, username);
-			if(local){
+			if(HttpUtil0.isLocal(ssp.skin)){
 				File skinFile=new File(CustomSkinLoader.DATA_DIR,skin);
 				if(skinFile.exists()&&skinFile.isFile())
 					profile.skinUrl=HttpTextureUtil.getLocalLegacyFakeUrl(skin, HttpTextureUtil.getHash(skin, skinFile.length(), skinFile.lastModified()));
@@ -30,9 +32,9 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 			}
 			profile.model=profile.hasSkinUrl()?ssp.model:null;
 		}
-		if(ssp.cape!=null && !ssp.cape.equals("")){
+		if(StringUtils.isNoneEmpty(ssp.cape)){
 			String cape=ssp.cape.replaceAll(USERNAME_REGEX, username);
-			if(local){
+			if(HttpUtil0.isLocal(ssp.cape)){
 				File capeFile=new File(CustomSkinLoader.DATA_DIR,cape);
 				if(capeFile.exists()&&capeFile.isFile())
 					profile.capeUrl=HttpTextureUtil.getLocalLegacyFakeUrl(cape, HttpTextureUtil.getHash(cape, capeFile.length(), capeFile.lastModified()));
@@ -51,7 +53,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 
 	@Override
 	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
-		return ssp0.skin.equalsIgnoreCase(ssp1.skin) || ssp0.cape.equalsIgnoreCase(ssp1.cape);
+		return (StringUtils.isNoneEmpty(ssp0.skin)?ssp0.skin.equalsIgnoreCase(ssp1.skin):true) || (StringUtils.isNoneEmpty(ssp0.cape)?ssp0.cape.equalsIgnoreCase(ssp1.cape):true);
 	}
 	@Override
 	public String getName() {

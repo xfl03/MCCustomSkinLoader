@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
@@ -30,9 +31,7 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
 	public static MinecraftSessionService defaultSessionService=null;
 	@Override
-	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile, boolean local) throws Exception {
-		if(local)
-			CustomSkinLoader.logger.warning("!!Local Skin couldn't load by MojangAPI.!!");
+	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
 		if(defaultSessionService==null){
 			CustomSkinLoader.logger.warning("Session Service Not Exist.");
 			return null;
@@ -74,11 +73,11 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 		if (textureProperty==null)
 			return new HashMap();
 		String value=textureProperty.getValue();
-		if(value==null||value.equals(""))
+		if(StringUtils.isBlank(value))
 			return new HashMap();
 		String json=new String(Base64.decodeBase64(value),Charsets.UTF_8);
 		Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class,new UUIDTypeAdapter()).create();
-		MinecraftTexturesPayload result=(MinecraftTexturesPayload)gson.fromJson(json,MinecraftTexturesPayload.class);
+		MinecraftTexturesPayload result=gson.fromJson(json,MinecraftTexturesPayload.class);
 		if (result==null||result.getTextures()==null)
 			return new HashMap();
 		return result.getTextures();

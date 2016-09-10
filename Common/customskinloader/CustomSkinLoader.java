@@ -21,6 +21,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.*;
+import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
 import customskinloader.profile.UserProfile;
@@ -45,13 +46,14 @@ public class CustomSkinLoader {
 			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"),
 			SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
 			SkinSiteProfile.createCustomSkinAPI("McSkin","http://www.mcskin.cc/"),
-			SkinSiteProfile.createLegacy("LocalSkin", true, "LocalSkin/skins/{USERNAME}.png", "LocalSkin/capes/{USERNAME}.png")};
+			SkinSiteProfile.createLegacy("LocalSkin", "LocalSkin/skins/{USERNAME}.png", "LocalSkin/capes/{USERNAME}.png")};
 	
 	public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
 	public static final Logger logger=initLogger();
 	public static final Config config=Config.loadConfig0();
 	
 	private static final ProfileCache profileCache=new ProfileCache();
+	private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
 	
 	//For User Skin
 	public static Map loadProfile(GameProfile gameProfile){
@@ -96,7 +98,7 @@ public class CustomSkinLoader {
 			}
 			UserProfile profile=null;
 			try{
-				profile=loader.loadProfile(ssp, gameProfile,(ssp.local==null?false:ssp.local==true));
+				profile=loader.loadProfile(ssp, gameProfile);
 			}catch(Exception e){
 				logger.warning("Exception occurs while loading.");
 				logger.warning(e);
@@ -129,10 +131,8 @@ public class CustomSkinLoader {
 	//For Skull
 	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
 		String username=gameProfile.getName();
-		if(username==null){
-			logger.warning("Could not load profile from cache: username is null.");
-			return Maps.newHashMap();
-		}
+		if(username==null)
+			return dynamicSkullManager.getTexture(gameProfile);
 		if(config.enableUpdateSkull?profileCache.isReady(username):profileCache.isExist(username)){
 			UserProfile profile=profileCache.getProfile(username);
 			return ModelManager0.fromUserProfile(profile);

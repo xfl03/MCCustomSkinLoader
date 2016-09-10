@@ -45,8 +45,9 @@ public class SkinManager
                 return Minecraft.getMinecraft().getSessionService().getTextures(p_load_1_, false);
             }
         });
-        //CustomSkinLoader Begin (Init Session Service)
+        //CustomSkinLoader Begin (Init)
         customskinloader.loader.MojangAPILoader.defaultSessionService=sessionService;
+        customskinloader.utils.HttpTextureUtil.defaultCacheDir=skinCacheDirectory;
         //CustomSkinLoader End
     }
 
@@ -64,7 +65,7 @@ public class SkinManager
     public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final Type textureType, @Nullable final SkinManager.SkinAvailableCallback skinAvailableCallback)
     {
     	//CustomSkinLoader Begin (Parse HttpTextureInfo)
-    	customskinloader.utils.HttpTextureUtil.HttpTextureInfo info=customskinloader.utils.HttpTextureUtil.toHttpTextureInfo(this.skinCacheDir, profileTexture.getUrl());
+    	customskinloader.utils.HttpTextureUtil.HttpTextureInfo info=customskinloader.utils.HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
     	//CustomSkinLoader End
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + info.hash);//Modified
         ITextureObject itextureobject = this.textureManager.getTexture(resourcelocation);
@@ -150,8 +151,6 @@ public class SkinManager
     {
         //CustomSkinLoader Begin (Skull Part)
         //return (Map)this.skinCacheLoader.getUnchecked(profile);
-        if(profile.getName()==null)
-            return this.skinCacheLoader.getUnchecked(profile);
         return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
                 customskinloader.CustomSkinLoader.loadProfileFromCache(profile):
                     this.skinCacheLoader.getUnchecked(profile);

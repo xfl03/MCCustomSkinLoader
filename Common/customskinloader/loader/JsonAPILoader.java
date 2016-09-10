@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -37,8 +38,9 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 		this.type=type;
 	}
 	@Override
-	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile, boolean local) throws Exception {
+	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
 		String username=gameProfile.getName();
+		boolean local=HttpUtil0.isLocal(ssp.root);
 		if(ssp.root==null||ssp.root.equals("")){
 			CustomSkinLoader.logger.info("Root not defined.");
 			return null;
@@ -69,7 +71,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	}
 	@Override
 	public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
-		return ssp0.root.equalsIgnoreCase(ssp1.root);
+		return StringUtils.isNoneEmpty(ssp0.root)?ssp0.root.equalsIgnoreCase(ssp1.root):true;
 	}
 	@Override
 	public String getName() {

@@ -16,6 +16,7 @@ public class Config {
 	public String version;
 	public boolean enable=true;
 	public boolean enableSkull=true;
+	public boolean enableDynamicSkull=true;
 	public boolean enableTransparentSkin=true;
 	public int cacheExpiry=10;
 	public boolean enableUpdateSkull=false;
@@ -38,7 +39,13 @@ public class Config {
 				", enableUpdateSkull:"+config.enableUpdateSkull+
 				", LocalProfileCache:"+config.enableLocalProfileCache+
 				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
-		if(config.version==null||Float.parseFloat(CustomSkinLoader.CustomSkinLoader_VERSION)-Float.parseFloat(config.version)>0.01){
+		float floatVersion=0f;
+		try{
+			floatVersion=Float.parseFloat(CustomSkinLoader.CustomSkinLoader_VERSION);
+		}catch (Exception e){
+			CustomSkinLoader.logger.warning("Exception occurs while parsing version: "+e.toString());
+		}
+		if(config.version==null||floatVersion-Float.parseFloat(config.version)>0.01){
 			CustomSkinLoader.logger.info("Config File is out of date: "+config.version);
 			config.version=CustomSkinLoader.CustomSkinLoader_VERSION;
 			writeConfig(config,true);

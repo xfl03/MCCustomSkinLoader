@@ -36,7 +36,7 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 //Example: 14.4a-SNAPSHOT-20160820
-version = rootConfig.version + rootConfig.dev_version + (rootConfig.snapshot_version==''?'':('-SNAPSHOT-'+rootConfig.snapshot_version))
+version = rootConfig.version + rootConfig.dev_version + (rootConfig.snapshot==''?'':('-SNAPSHOT-'+System.getenv("BUILD_NUMBER")))
 group = config.group
 archivesBaseName = rootConfig.name+"_"+config.minecraft_version
 

@@ -58,20 +58,21 @@ public class ModelManager0 {
 		if(profile==null)
 			return map;
 		if(profile.skinUrl!=null)
-			map.put(Type.SKIN, getProfileTexture(profile.skinUrl));
+			map.put(Type.SKIN, getProfileTexture(profile.skinUrl,null));
 		if(profile.capeUrl!=null)
-			map.put(Type.CAPE, getProfileTexture(profile.capeUrl));
+			map.put(Type.CAPE, getProfileTexture(profile.capeUrl,null));
 		return map;
 	}
 	
 	/**
 	 * Parse url to MinecraftProfileTexture
-	 * Fix authlib 21 bug
+	 * Fix authlib 21 bug for 1.7.10
 	 * @param url - textureUrl
+	 *        metadata - metadata
 	 * @return MinecraftProfileTexture
-	 * @since 13.2
+	 * @since 14.5
 	 */
-	public static MinecraftProfileTexture getProfileTexture(String url){
+	public static MinecraftProfileTexture getProfileTexture(String url,Map metadata){
 		Map hashMap=new HashMap<String,String>();
 		hashMap.put("url", url);
 		Gson gson=new Gson();

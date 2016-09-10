@@ -51,8 +51,9 @@ public class SkinManager
                 return this.func_152786_a((GameProfile)p_load_1_);
             }
         });
-        //CustomSkinLoader Begin (Init Session Service)
+        //CustomSkinLoader Begin (Init)
         customskinloader.loader.MojangAPILoader.defaultSessionService=sessionService;
+        customskinloader.utils.HttpTextureUtil.defaultCacheDir=skinCacheDirectory;
         //CustomSkinLoader End
     }
 
@@ -159,8 +160,6 @@ public class SkinManager
     {
         //CustomSkinLoader Begin (Skull Part)
         //return (Map)this.skinCacheLoader.getUnchecked(profile);
-        if(profile.getName()==null)
-            return (Map)this.skinCacheLoader.getUnchecked(profile);
         return (customskinloader.CustomSkinLoader.config.enable && customskinloader.CustomSkinLoader.config.enableSkull)?
                 customskinloader.CustomSkinLoader.loadProfileFromCache(profile):
                     (Map)this.skinCacheLoader.getUnchecked(profile);

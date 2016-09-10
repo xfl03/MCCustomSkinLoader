@@ -17,13 +17,13 @@ public class HttpTextureUtil {
 			LEGACY_MARK="(LEGACY)",
 			LOCAL_MARK="(LOCAL)",
 			LOCAL_LEGACY_MARK="(LOCAL_LEGACY)";
-	
-	public static HttpTextureInfo toHttpTextureInfo(File defaultCacheDir,String fakeUrl){
+	public static File defaultCacheDir;
+	public static HttpTextureInfo toHttpTextureInfo(String fakeUrl){
 		HttpTextureInfo info=new HttpTextureInfo();
 		if(fakeUrl.startsWith("http")){
 			info.url=fakeUrl;
 			info.hash=FilenameUtils.getBaseName(fakeUrl);
-            info.cacheFile=getCacheFile(defaultCacheDir,info.hash);
+            info.cacheFile=getCacheFile(info.hash);
             return info;
 		}
 		if(fakeUrl.startsWith(LOCAL_LEGACY_MARK)){
@@ -48,7 +48,7 @@ public class HttpTextureUtil {
 				return info;
 			info.url=t[1];
 			info.hash=t[0];
-			info.cacheFile=getCacheFile(defaultCacheDir,info.hash);
+			info.cacheFile=getCacheFile(info.hash);
 			return info;
 		}
 		return info;
@@ -66,8 +66,10 @@ public class HttpTextureUtil {
 	public static String getHash(String url,long size,long lastModified){
 		return DigestUtils.sha1Hex(size+url+lastModified);
 	}
-	
-	private static File getCacheFile(File cacheDir,String hash){
+	public static File getCacheFile(String hash){
+		return getCacheFile(defaultCacheDir,hash);
+	}
+	public static File getCacheFile(File cacheDir,String hash){
 		return new File(new File(cacheDir,hash.length()>2?hash.substring(0,2):"xx"), hash);
 	}	
 }

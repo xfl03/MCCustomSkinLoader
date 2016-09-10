@@ -63,11 +63,23 @@ public class ModelManager0 {
 				metadata = Maps.newHashMap();
 				metadata.put("model", "slim");
 			}
-			map.put(Type.SKIN, new MinecraftProfileTexture(profile.skinUrl,metadata));
+			map.put(Type.SKIN, getProfileTexture(profile.skinUrl,metadata));
 		}
 		if(profile.capeUrl!=null)
-			map.put(Type.CAPE, new MinecraftProfileTexture(profile.capeUrl,null));
+			map.put(Type.CAPE, getProfileTexture(profile.capeUrl,null));
 		return map;
+	}
+	
+	/**
+	 * Parse url to MinecraftProfileTexture
+	 * 
+	 * @param url - textureUrl
+	 *        metadata - metadata
+	 * @return MinecraftProfileTexture
+	 * @since 14.5
+	 */
+	public static MinecraftProfileTexture getProfileTexture(String url,Map metadata){
+		return new MinecraftProfileTexture(url,metadata);
 	}
 	
 	private static void refreshModels(){
