@@ -32,6 +32,7 @@ public class Config {
 	public static Config loadConfig0() {
 		Config config=loadConfig();
 		config.loadExtraList();
+		config.initLocalFolder();
 		CustomSkinLoader.logger.info("Enable:"+config.enable+
 				", EnableSkull:"+config.enableSkull+
 				", EnableTranSkin:"+config.enableTransparentSkin+
@@ -40,12 +41,14 @@ public class Config {
 				", LocalProfileCache:"+config.enableLocalProfileCache+
 				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
 		float floatVersion=0f;
+		float configVersion=0f;
 		try{
 			floatVersion=Float.parseFloat(CustomSkinLoader.CustomSkinLoader_VERSION);
+			configVersion=Float.parseFloat(config.version);
 		}catch (Exception e){
 			CustomSkinLoader.logger.warning("Exception occurs while parsing version: "+e.toString());
 		}
-		if(config.version==null||floatVersion-Float.parseFloat(config.version)>0.01){
+		if(config.version==null||floatVersion < configVersion){
 			CustomSkinLoader.logger.info("Config File is out of date: "+config.version);
 			config.version=CustomSkinLoader.CustomSkinLoader_VERSION;
 			writeConfig(config,true);
@@ -119,6 +122,15 @@ public class Config {
 		if(adds.size()!=0){
 			this.loadlist=ArrayUtils.addAll((SkinSiteProfile[]) adds.toArray(),this.loadlist);
 			writeConfig(this,true);
+		}
+	}
+	
+	private void initLocalFolder(){
+		for(SkinSiteProfile ssp:this.loadlist){
+			ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
+			if(loader==null)
+				continue;
+			loader.initLocalFolder(ssp);
 		}
 	}
 

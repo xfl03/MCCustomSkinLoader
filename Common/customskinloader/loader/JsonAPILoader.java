@@ -77,4 +77,12 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	public String getName() {
 		return type.jsonAPI.getName();
 	}
+	@Override
+	public void initLocalFolder(SkinSiteProfile ssp) {
+		if(HttpUtil0.isLocal(ssp.root)){
+			File f=new File(ssp.root);
+			if(!f.exists())
+				f.mkdirs();
+		}
+	}
 }

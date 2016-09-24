@@ -118,7 +118,7 @@ public class SkinManager
             {
                 final Map<Type, MinecraftProfileTexture> map = Maps.<Type, MinecraftProfileTexture>newHashMap();
                 
-                //CustomSkinLoader Begin (User Skin/Cape Part)
+                //CustomSkinLoader Begin (User Profile Part)
                 if(customskinloader.CustomSkinLoader.config.enable){
                     map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile));
                 }else{
@@ -132,15 +132,12 @@ public class SkinManager
                 {
                     public void run()
                     {
-                        if (map.containsKey(Type.SKIN))
-                        {
-                            SkinManager.this.loadSkin((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN, skinAvailableCallback);
+                        //CustomSkinLoader Begin (Loading Task)
+                        for(Type type:Type.values()){
+                            if(map.containsKey(type))
+                                SkinManager.this.loadSkin((MinecraftProfileTexture)map.get(type), type, skinAvailableCallback);
                         }
-
-                        if (map.containsKey(Type.CAPE))
-                        {
-                            SkinManager.this.loadSkin((MinecraftProfileTexture)map.get(Type.CAPE), Type.CAPE, skinAvailableCallback);
-                        }
+                        //CustomSkinLoader End
                     }
                 });
             }

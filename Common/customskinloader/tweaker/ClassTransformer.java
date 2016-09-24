@@ -30,6 +30,10 @@ public class ClassTransformer implements IClassTransformer {
 					ModSystemTweaker.logger.info(url.toString()+" : SKIP (core file).");
 					continue;
 				}
+				if(MinecraftUtil.isLibraryFile(url)){
+					ModSystemTweaker.logger.info(url.toString()+" : SKIP (library file).");
+					continue;
+				}
 				File file = new File(url.toURI());
 				if(file==null||!file.isFile()){
 					ModSystemTweaker.logger.info(url.toString()+" : EXCEPTION (file not found).");

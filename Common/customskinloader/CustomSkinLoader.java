@@ -153,7 +153,7 @@ public class CustomSkinLoader {
 		Logger logger=new Logger(LOG_FILE);
 		logger.info("CustomSkinLoader "+CustomSkinLoader_FULL_VERSION);
 		logger.info("DataDir: "+DATA_DIR.getAbsolutePath());
-		logger.info("Minecraft: "+MinecraftUtil.getMinecraftVersion());
+		logger.info("Minecraft: "+MinecraftUtil.getMinecraftMainVersion()+"("+MinecraftUtil.getMinecraftVersionText()+")");
 		return logger;
 	}
 }

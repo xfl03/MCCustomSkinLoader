@@ -28,5 +28,6 @@ public class ProfileLoader {
 		public UserProfile loadProfile(SkinSiteProfile ssp,GameProfile gameProfile) throws Exception;
 		public boolean compare(SkinSiteProfile ssp0,SkinSiteProfile ssp1);
 		public String getName();
+		public void initLocalFolder(SkinSiteProfile ssp);
 	}
 }

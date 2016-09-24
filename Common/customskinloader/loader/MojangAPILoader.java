@@ -91,4 +91,8 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 	public String getName() {
 		return "MojangAPI";
 	}
+
+	@Override
+	public void initLocalFolder(SkinSiteProfile ssp) {
+	}
 }

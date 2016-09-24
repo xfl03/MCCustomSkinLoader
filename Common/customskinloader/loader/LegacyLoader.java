@@ -72,4 +72,20 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 	public String getName() {
 		return "Legacy";
 	}
+
+	@Override
+	public void initLocalFolder(SkinSiteProfile ssp) {
+		if(HttpUtil0.isLocal(ssp.skin))
+			initFolder(ssp.skin);
+		if(HttpUtil0.isLocal(ssp.cape))
+			initFolder(ssp.cape);
+		if(HttpUtil0.isLocal(ssp.elytra))
+			initFolder(ssp.elytra);
+	}
+	private void initFolder(String target){
+		String file=target.replaceAll(USERNAME_REGEX, "init");
+		File folder=new File(CustomSkinLoader.DATA_DIR,file).getParentFile();
+		if(folder!=null&&!folder.exists())
+			folder.mkdirs();
+	}
 }
