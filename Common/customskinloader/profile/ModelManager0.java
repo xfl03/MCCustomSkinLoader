@@ -1,7 +1,9 @@
 package customskinloader.profile;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Maps;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -14,17 +16,41 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
  * @since 13.1
  */
 public class ModelManager0 {
-	private static ArrayList<String> models=null;
+	public static enum Model{
+		SKIN_DEFAULT,
+		SKIN_SLIM,
+		CAPE,
+		ELYTRA
+	}
+	private static HashMap<String,Model> models=new HashMap<String,Model>();
+	private static Type typeElytra=null;
+	static{
+		for(Type type:Type.values()){
+			if(type.ordinal()==2)//ELYTRA
+				typeElytra=type;
+		}
+		models.put("default", Model.SKIN_DEFAULT);
+		models.put("slim", Model.SKIN_SLIM);
+		models.put("cape", Model.CAPE);
+		if(typeElytra!=null)
+			models.put("elytra", Model.ELYTRA);
+	}
 	
 	/**
-	 * Check if model is available.
-	 * @param model - default/slim
-	 * @since 13.1
+	 * Get enum for the model.
+	 * @param model - string model
+	 * @since 14.5
 	 */
-	public static boolean checkModel(String model){
-		if(models==null)
-			refreshModels();
-		return models.contains(model);
+	public static Model getEnumModel(String model){
+		return models.get(model);
+	}
+	
+	/**
+	 * Check if elytra is supported.
+	 * @since 14.5
+	 */
+	public static boolean isElytraSupported(){
+		return typeElytra!=null;
 	}
 	
 	/**
@@ -40,8 +66,9 @@ public class ModelManager0 {
 		MinecraftProfileTexture skin=(MinecraftProfileTexture)profile.get(Type.SKIN);
 		userProfile.skinUrl= skin==null?null:skin.getUrl();//Avoid NullPointerException
 		userProfile.model= skin==null?null:skin.getMetadata("model");
-		if(userProfile.model==null||userProfile.model.equals(""))
+		if(StringUtils.isEmpty(userProfile.model))
 			userProfile.model="default";
+		
 		MinecraftProfileTexture cape=(MinecraftProfileTexture)profile.get(Type.CAPE);
 		userProfile.capeUrl= cape==null?null:cape.getUrl();
 		return userProfile;
@@ -67,6 +94,8 @@ public class ModelManager0 {
 		}
 		if(profile.capeUrl!=null)
 			map.put(Type.CAPE, getProfileTexture(profile.capeUrl,null));
+		if(typeElytra!=null && profile.elytraUrl!=null)
+			map.put(typeElytra, getProfileTexture(profile.elytraUrl,null));
 		return map;
 	}
 	
@@ -80,11 +109,5 @@ public class ModelManager0 {
 	 */
 	public static MinecraftProfileTexture getProfileTexture(String url,Map metadata){
 		return new MinecraftProfileTexture(url,metadata);
-	}
-	
-	private static void refreshModels(){
-		models=new ArrayList<String>();
-		models.add("default");
-		models.add("slim");
 	}
 }

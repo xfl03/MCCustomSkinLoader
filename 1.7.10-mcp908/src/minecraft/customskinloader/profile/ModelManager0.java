@@ -1,6 +1,5 @@
 package customskinloader.profile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,17 +15,34 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
  * @since 13.1
  */
 public class ModelManager0 {
-	private static ArrayList<String> models=null;
+	public static enum Model{
+		SKIN_DEFAULT,
+		SKIN_SLIM,
+		CAPE,
+		ELYTRA
+	}
+	private static HashMap<String,Model> models=new HashMap<String,Model>();
+	private static Type typeElytra=null;
+	static{
+		models.put("default", Model.SKIN_DEFAULT);
+		models.put("cape", Model.CAPE);
+	}
 	
 	/**
-	 * Check if model is available.
-	 * @param model - default/slim
-	 * @since 13.1
+	 * Get enum for the model.
+	 * @param model - string model
+	 * @since 14.5
 	 */
-	public static boolean checkModel(String model){
-		if(models==null)
-			refreshModels();
-		return models.contains(model);
+	public static Model getEnumModel(String model){
+		return models.get(model);
+	}
+	
+	/**
+	 * Check if elytra is supported.
+	 * @since 14.5
+	 */
+	public static boolean isElytraSupported(){
+		return false;
 	}
 	
 	/**
@@ -79,10 +95,5 @@ public class ModelManager0 {
 		String json=gson.toJson(hashMap);
 		MinecraftProfileTexture pt=gson.fromJson(json, MinecraftProfileTexture.class);
 		return pt;
-	}
-	
-	private static void refreshModels(){
-		models=new ArrayList<String>();
-		models.add("default");
 	}
 }

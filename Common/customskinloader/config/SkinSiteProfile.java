@@ -3,12 +3,14 @@ package customskinloader.config;
 public class SkinSiteProfile {
 	public String name;
 	public String type;
-	public Boolean local=null;
-	public String root;
-	public String skin;
-	public String cape;
-	public String model;
 	public String userAgent;
+	
+	public String root;
+	
+	public String skin;
+	public String model;
+	public String cape;
+	public String elytra;
 	
 	public static SkinSiteProfile createMojangAPI(String name){
 		SkinSiteProfile ssp=new SkinSiteProfile();
@@ -30,12 +32,13 @@ public class SkinSiteProfile {
 		ssp.root=root;
 		return ssp;
 	}
-	public static SkinSiteProfile createLegacy(String name,String skin,String cape){
+	public static SkinSiteProfile createLegacy(String name,String skin,String cape,String elytra){
 		SkinSiteProfile ssp=new SkinSiteProfile();
 		ssp.name=name;
 		ssp.type="Legacy";
 		ssp.skin=skin;
 		ssp.cape=cape;
+		ssp.elytra=elytra;
 		return ssp;
 	}
 }

@@ -1,12 +1,16 @@
 package customskinloader.loader.jsonapi;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.JsonAPILoader.IJsonAPI;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
+import customskinloader.profile.ModelManager0.Model;
 import customskinloader.utils.HttpTextureUtil;
 
 public class UniSkinAPI implements IJsonAPI {
@@ -26,39 +30,25 @@ public class UniSkinAPI implements IJsonAPI {
 			return null;
 		}
 		UserProfile p=new UserProfile();
-		if(profile.skins!=null && !profile.skins.isEmpty()){
-			if(profile.model_preference!=null && !profile.model_preference.isEmpty()){
-				for(String s:profile.model_preference){
-					if(ModelManager0.checkModel(s)){
-						if(profile.skins.get(s)==null||profile.skins.get(s).equals(""))
-							continue;
-						p.skinUrl=root+TEXTURES+profile.skins.get(s);
-						if(local)
-							p.skinUrl=HttpTextureUtil.getLocalFakeUrl(p.skinUrl);
-						p.model=s;
-						break;
-					}
-				}		
-			}
-			if(p.skinUrl==null){
-				String s=profile.skins.get("default");
-				if(s!=null){
-					p.skinUrl=root+TEXTURES+s;
-					if(local)
-						p.skinUrl=HttpTextureUtil.getLocalFakeUrl(p.skinUrl);
-					p.model="default";
-				}
-			}
-		}
-		if(profile.skins.get("cape")!=null && !profile.skins.get("cape").equals("")){
-			p.capeUrl=root+TEXTURES+profile.skins.get("cape");
-			if(local)
-				p.capeUrl=HttpTextureUtil.getLocalFakeUrl(p.capeUrl);
-		}else if(profile.cape!=null && !profile.cape.equals("")){
+		
+		if(StringUtils.isNotBlank(profile.cape)){
 			p.capeUrl=root+TEXTURES+profile.cape;
 			if(local)
 				p.capeUrl=HttpTextureUtil.getLocalFakeUrl(p.capeUrl);
 		}
+		
+		if(profile.skins==null||profile.skins.isEmpty())
+			return p;
+		for(String model:profile.model_preference){
+			Model enumModel=ModelManager0.getEnumModel(model);
+			if(enumModel==null||StringUtils.isEmpty(profile.skins.get(model)))
+				continue;
+			String url=root+TEXTURES+profile.skins.get(model);
+			if(local)
+				url=HttpTextureUtil.getLocalFakeUrl(url);
+			p.put(enumModel, url);
+		}
+		
 		return p;
 	}
 	/**

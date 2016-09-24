@@ -8,6 +8,7 @@ import com.mojang.authlib.GameProfile;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
@@ -42,6 +43,18 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 				String fakeCapeUrl=HttpUtil0.getFakeUrl(cape,ssp.userAgent);
 				if(fakeCapeUrl!=null&&fakeCapeUrl.equals(""))
 					profile.capeUrl=fakeCapeUrl;
+			}
+		}
+		if(ModelManager0.isElytraSupported()&&StringUtils.isNoneEmpty(ssp.elytra)){
+			String elytra=ssp.elytra.replaceAll(USERNAME_REGEX, username);
+			if(HttpUtil0.isLocal(ssp.elytra)){
+				File elytraFile=new File(CustomSkinLoader.DATA_DIR,elytra);
+				if(elytraFile.exists()&&elytraFile.isFile())
+					profile.elytraUrl=HttpTextureUtil.getLocalLegacyFakeUrl(elytra, HttpTextureUtil.getHash(elytra, elytraFile.length(), elytraFile.lastModified()));
+			}else{
+				String fakeCapeUrl=HttpUtil0.getFakeUrl(elytra,ssp.userAgent);
+				if(fakeCapeUrl!=null&&fakeCapeUrl.equals(""))
+					profile.elytraUrl=fakeCapeUrl;
 			}
 		}
 		if(profile.isEmpty()){

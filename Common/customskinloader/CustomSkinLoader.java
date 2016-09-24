@@ -35,6 +35,7 @@ import customskinloader.utils.MinecraftUtil;
 public class CustomSkinLoader {
 	public static final String CustomSkinLoader_VERSION="@MOD_VERSION@";
 	public static final String CustomSkinLoader_FULL_VERSION="@MOD_FULL_VERSION@";
+	
 	public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir0(),"CustomSkinLoader"),
 			LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
@@ -43,10 +44,10 @@ public class CustomSkinLoader {
 			SkinSiteProfile.createCustomSkinAPI("BlessingSkin","https://skin.prinzeugen.net/csl/"),
 			SkinSiteProfile.createCustomSkinAPI("OneSkin","http://fleey.org/skin/skin_user/skin_json.php/"),
 			//Minecrack could not load skin correctly
-			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"),
+			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png",null),
 			SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
 			SkinSiteProfile.createCustomSkinAPI("McSkin","http://www.mcskin.cc/"),
-			SkinSiteProfile.createLegacy("LocalSkin", "LocalSkin/skins/{USERNAME}.png", "LocalSkin/capes/{USERNAME}.png")};
+			SkinSiteProfile.createLegacy("LocalSkin","LocalSkin/skins/{USERNAME}.png","LocalSkin/capes/{USERNAME}.png","LocalSkin/elytras/{USERNAME}.png")};
 	
 	public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
 	public static final Logger logger=initLogger();
