@@ -48,7 +48,7 @@ public class Config {
 		}catch (Exception e){
 			CustomSkinLoader.logger.warning("Exception occurs while parsing version: "+e.toString());
 		}
-		if(config.version==null||floatVersion < configVersion){
+		if(config.version==null || configVersion==0f || floatVersion > configVersion){
 			CustomSkinLoader.logger.info("Config File is out of date: "+config.version);
 			config.version=CustomSkinLoader.CustomSkinLoader_VERSION;
 			writeConfig(config,true);
