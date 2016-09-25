@@ -25,6 +25,10 @@ public class CustomSkinAPI implements IJsonAPI {
 	@Override
 	public UserProfile toUserProfile(String root, String json, boolean local) {
 		CustomSkinAPIProfile profile=CustomSkinLoader.GSON.fromJson(json, CustomSkinAPIProfile.class);
+		if(profile.errno!=0){
+			CustomSkinLoader.logger.info("Error "+profile.errno+": "+profile.msg);
+			return null;
+		}
 		UserProfile p=new UserProfile();
 		
 		if(StringUtils.isNotBlank(profile.skin)){
@@ -70,6 +74,9 @@ public class CustomSkinAPI implements IJsonAPI {
 		public String skin;
 		public String cape;
 		public String elytra;
+		
+		public int errno;
+		public String msg;
 	}
 	@Override
 	public String getName() {

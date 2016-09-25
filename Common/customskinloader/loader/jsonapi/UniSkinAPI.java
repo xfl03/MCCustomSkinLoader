@@ -26,7 +26,7 @@ public class UniSkinAPI implements IJsonAPI {
 	public UserProfile toUserProfile(String root, String json, boolean local) {
 		UniSkinAPIProfile profile=CustomSkinLoader.GSON.fromJson(json, UniSkinAPIProfile.class);
 		if(profile.errno!=0){
-			CustomSkinLoader.logger.info("Error: "+profile.msg);
+			CustomSkinLoader.logger.info("Error "+profile.errno+": "+profile.msg);
 			return null;
 		}
 		UserProfile p=new UserProfile();
@@ -58,13 +58,14 @@ public class UniSkinAPI implements IJsonAPI {
 	 */
 	private class UniSkinAPIProfile{
 		public String player_name;
-        public long last_update;
-        public List<String> model_preference;
-        public Map<String,String> skins;
-        public String cape;
-        
-        public int errno;
-        public String msg;
+		public long last_update;
+		public List<String> model_preference;
+		public Map<String,String> skins;
+		
+		public String cape;
+		
+		public int errno;
+		public String msg;
 	}
 	@Override
 	public String getName() {

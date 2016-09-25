@@ -62,7 +62,7 @@ public class DynamicSkullManager {
 		if(!CustomSkinLoader.config.enableDynamicSkull||result.skins==null||result.skins.isEmpty())
 			return;
 		
-		CustomSkinLoader.logger.info("Dynamic Skull: "+json);
+		CustomSkinLoader.logger.info("Try to load Dynamic Skull: "+json);
 		
 		for(int i=0;i<result.skins.size();i++){//check and cache skins
 			String skin=result.skins.get(i);
@@ -88,12 +88,15 @@ public class DynamicSkullManager {
 			}
 		}
 		
-		if(result.skins.isEmpty())//Nothing loaded
+		if(result.skins.isEmpty()){//Nothing loaded
+			CustomSkinLoader.logger.info("Failed: Nothing loaded.");
 			return;
+		}
 		result.interval=Math.max(result.interval, 50);
 		if(result.fromZero)
 			result.startTime=System.currentTimeMillis();
 		result.period=result.interval*result.skins.size();
+		CustomSkinLoader.logger.info("Successfully loaded Dynamic Skull: "+new Gson().toJson(result));
 		dynamicTextures.put(profile, result);
 		staticTextures.remove(profile);
 	}
