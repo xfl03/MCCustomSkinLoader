@@ -104,7 +104,7 @@ public class DynamicSkullManager {
 		if(dynamicTextures.containsKey(profile)){
 			SkullTexture texture=dynamicTextures.get(profile);
 			long time=System.currentTimeMillis()-texture.startTime;
-			int index=(int)Math.floor((time%texture.period)/texture.skins.size());
+			int index=(int)Math.floor((time%texture.period)/texture.interval);
 			Map<Type,MinecraftProfileTexture> map=Maps.newHashMap();
 			map.put(Type.SKIN, ModelManager0.getProfileTexture(texture.skins.get(index), null));
 			return map;
@@ -117,7 +117,7 @@ public class DynamicSkullManager {
 				loadingList.remove(profile);
 			}
 		};
-		loadThread.setName(profile.toString()+"'s dynamic skull");
+		loadThread.setName("Dynamic Skull "+profile.toString());
 		loadThread.start();
 		return new HashMap();
 	}

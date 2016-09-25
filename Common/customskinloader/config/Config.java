@@ -35,6 +35,7 @@ public class Config {
 		config.initLocalFolder();
 		CustomSkinLoader.logger.info("Enable:"+config.enable+
 				", EnableSkull:"+config.enableSkull+
+				", EnableDynamicSkull:"+config.enableDynamicSkull+
 				", EnableTranSkin:"+config.enableTransparentSkin+
 				", CacheExpiry:"+config.cacheExpiry+
 				", enableUpdateSkull:"+config.enableUpdateSkull+
