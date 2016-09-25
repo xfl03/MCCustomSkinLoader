@@ -45,6 +45,10 @@ public class HttpUtil0 {
 		HttpURLConnection c=null;
 		try {
 			CustomSkinLoader.logger.info("Try to save '"+url+"' to '"+target.getAbsolutePath()+"'.");
+			if(target.isFile()){
+				CustomSkinLoader.logger.info("Cache file found (Length: "+target.length()+")");
+				return true;
+			}
 			c=createConnection(url,null);
 			int res = c.getResponseCode()/100;
 			if (res==4||res==5||c.getResponseCode()==HttpURLConnection.HTTP_NO_CONTENT) {

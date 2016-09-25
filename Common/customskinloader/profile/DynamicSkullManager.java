@@ -33,8 +33,8 @@ public class DynamicSkullManager {
 		public int interval;
 		public boolean fromZero;
 		//For program
-		public long startTime=0;
-		public int period=1;
+		public long startTime;
+		public int period;
 	}
 	private Map<GameProfile,SkullTexture> dynamicTextures=new HashMap<GameProfile,SkullTexture>();
 	private Map<GameProfile,Map<Type,MinecraftProfileTexture>> staticTextures=new HashMap<GameProfile,Map<Type,MinecraftProfileTexture>>();
@@ -62,6 +62,8 @@ public class DynamicSkullManager {
 		if(!CustomSkinLoader.config.enableDynamicSkull||result.skins==null||result.skins.isEmpty())
 			return;
 		
+		CustomSkinLoader.logger.info("Dynamic Skull: "+json);
+		
 		for(int i=0;i<result.skins.size();i++){//check and cache skins
 			String skin=result.skins.get(i);
 			if(HttpUtil0.isLocal(skin)){
@@ -88,7 +90,7 @@ public class DynamicSkullManager {
 		
 		if(result.skins.isEmpty())//Nothing loaded
 			return;
-		result.interval=Math.min(result.interval, 50);
+		result.interval=Math.max(result.interval, 50);
 		if(result.fromZero)
 			result.startTime=System.currentTimeMillis();
 		result.period=result.interval*result.skins.size();
@@ -117,7 +119,7 @@ public class DynamicSkullManager {
 				loadingList.remove(profile);
 			}
 		};
-		loadThread.setName("Dynamic Skull "+profile.toString());
+		loadThread.setName("Skull "+profile.hashCode());
 		loadThread.start();
 		return new HashMap();
 	}
