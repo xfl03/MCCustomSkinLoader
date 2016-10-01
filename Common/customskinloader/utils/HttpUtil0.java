@@ -3,6 +3,7 @@ package customskinloader.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,6 +12,7 @@ import java.util.zip.GZIPInputStream;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import customskinloader.CustomSkinLoader;
 
@@ -20,10 +22,13 @@ public class HttpUtil0 {
 	 * @since 13.11
 	 */
 	public static String readHttp(String url,String userAgent){
+		return readHttp(url,userAgent,null);
+	}
+	public static String readHttp(String url,String userAgent,String payload){
 		HttpURLConnection c=null;
 		try {
 			CustomSkinLoader.logger.info("Try to read '"+url+(userAgent==null?"' without user agent.":"' with user agent '"+userAgent+"'."));
-			c=createConnection(url,userAgent);
+			c=createConnection(url,userAgent,payload);
 			int res = c.getResponseCode()/100;
 			if (res==4||res==5||c.getResponseCode()==HttpURLConnection.HTTP_NO_CONTENT) {
 				CustomSkinLoader.logger.info("Failed to read (Response Code: "+c.getResponseCode()+")");
@@ -31,7 +36,9 @@ public class HttpUtil0 {
 			}
 			CustomSkinLoader.logger.info("Successfully read (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
 			InputStream is = getStream(c);
-			return IOUtils.toString(is, Charsets.UTF_8);
+			String text=IOUtils.toString(is, Charsets.UTF_8);
+			CustomSkinLoader.logger.info("Content: "+text);
+			return text;
 		} catch (Exception e) {
 			CustomSkinLoader.logger.info("Failed to read (Exception: "+e.toString()+")");
 			return null;
@@ -101,14 +108,26 @@ public class HttpUtil0 {
 		}
 	}
 	private static HttpURLConnection createConnection(String url,String userAgent) throws MalformedURLException, IOException{
+		return createConnection(url,userAgent,null);
+	}
+	private static HttpURLConnection createConnection(String url,String userAgent,String payload) throws MalformedURLException, IOException{
 		HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
 		c.setReadTimeout(1000 * 10);
 		c.setConnectTimeout(1000 * 10);
+		c.setDoInput(true);
+		c.setUseCaches(false);
+		c.setInstanceFollowRedirects(true);
+		
 		c.setRequestProperty("Accept-Encoding", "gzip");
 		if(userAgent!=null)
 			c.setRequestProperty("User-Agent",userAgent);
-		c.setUseCaches(false);
-		c.setInstanceFollowRedirects(true);
+		if(StringUtils.isNotEmpty(payload)){
+			CustomSkinLoader.logger.info("Payload: "+payload);
+			c.setDoOutput(true);
+			OutputStream os=c.getOutputStream();
+			IOUtils.write(payload, os);
+			IOUtils.closeQuietly(os);
+		}
 		c.connect();
 		return c;
 	}

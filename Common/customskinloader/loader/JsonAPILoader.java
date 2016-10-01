@@ -20,11 +20,16 @@ import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
 public class JsonAPILoader implements ProfileLoader.IProfileLoader {
-	public static final String TEXTURES="textures/";
+	
 	public interface IJsonAPI {
 		public String toJsonUrl(String root,String username);
+		public String getPayload();
 		public UserProfile toUserProfile(String root,String json,boolean local);
 		public String getName();
+	}
+	public static class ErrorProfile{
+		public int errno;
+		public String msg;
 	}
 	public static enum Type{
 		CustomSkinAPI(new CustomSkinAPI()),UniSkinAPI(new UniSkinAPI());
@@ -33,10 +38,12 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 			this.jsonAPI=jsonAPI;
 		}
 	}
+	
 	private Type type;
 	public JsonAPILoader(Type type){
 		this.type=type;
 	}
+	
 	@Override
 	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
 		String username=gameProfile.getName();
@@ -55,12 +62,19 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 			}
 			json=IOUtils.toString(new FileInputStream(jsonFile));
 		}else{
-			json=HttpUtil0.readHttp(jsonUrl,ssp.userAgent);
+			json=HttpUtil0.readHttp(jsonUrl,ssp.userAgent,type.jsonAPI.getPayload());
 		}
 		if(json==null||json.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.");
 			return null;
 		}
+		
+		ErrorProfile profile=CustomSkinLoader.GSON.fromJson(json, ErrorProfile.class);
+		if(profile.errno!=0){
+			CustomSkinLoader.logger.info("Error "+profile.errno+": "+profile.msg);
+			return null;
+		}
+		
 		UserProfile p=type.jsonAPI.toUserProfile(ssp.root, json, local);
 		if(p==null||p.isEmpty()){
 			CustomSkinLoader.logger.info("Both skin and cape not found.");

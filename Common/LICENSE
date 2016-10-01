@@ -1,3 +1,5 @@
+English(en)
+
 LICENSE - Binary File
 You could not modify binary file.
 Feel free to use and share this mod and unmodified file in anyway like modpack.
@@ -5,9 +7,30 @@ When using in modpack, you must put 'CustomSkinLoader' in mod list.
 You could not repost this mod to any website without permission.
 You could not earn money with this mod excluding modpack.
 
+LICENSE - Source Code
+GPLv3: http://www.gnu.org/licenses/gpl.html  
+When using the code, you should change the name of package to avoid others' misunderstanding.  
+
+OTHER - Useful Link
+Source Code: https://github.com/xfl03/MCCustomSkinLoader
+Release Page: http://www.mcbbs.net/thread-269807-1-1.html
+Build Server: https://ci.infstudio.net/job/CustomSkinLoader/
+
+
+中文简体(zh_cn)
+
 许可 - 编译产物
 您不得对CustomSkinLoader的成品jar内部内容进行任何修改
 您可以在不经我许可的情况下，以任意方式传播这一mod以及jar文件(例如加入整合包)。
-在加入整合包时，请必须在帖子内mod列表中明确写上"万用皮肤补丁"或者"CustomSkinLoader"或者附上本贴地址。
+在加入整合包时，请必须在帖子内mod列表中明确写上"万用皮肤补丁"或者"CustomSkinLoader"或者附上发布页面地址。
 您不得在未经许可的情况下，在国内外任何网站进行二次发布(包括皮肤站)。
 您不得以任何形式出售CustomSkinLoader或任何使用或参考CustomSkinLoader源代码的作品。
+
+许可 - 源代码
+GPLv3: http://www.gnu.org/licenses/gpl.html  
+为避免他人误解，您在使用代码时必须修改包名。
+
+其他 - 有用的链接
+源代码: https://github.com/xfl03/MCCustomSkinLoader
+发布页面: http://www.mcbbs.net/thread-269807-1-1.html
+构建服务器: https://ci.infstudio.net/job/CustomSkinLoader/

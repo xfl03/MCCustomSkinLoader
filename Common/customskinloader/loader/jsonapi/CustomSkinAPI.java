@@ -25,10 +25,6 @@ public class CustomSkinAPI implements IJsonAPI {
 	@Override
 	public UserProfile toUserProfile(String root, String json, boolean local) {
 		CustomSkinAPIProfile profile=CustomSkinLoader.GSON.fromJson(json, CustomSkinAPIProfile.class);
-		if(profile.errno!=0){
-			CustomSkinLoader.logger.info("Error "+profile.errno+": "+profile.msg);
-			return null;
-		}
 		UserProfile p=new UserProfile();
 		
 		if(StringUtils.isNotBlank(profile.skin)){
@@ -54,10 +50,17 @@ public class CustomSkinAPI implements IJsonAPI {
 			textures.putAll(profile.textures);
 		if(textures.isEmpty())
 			return p;
+		
+		boolean hasSkin=false;
 		for(String model:textures.keySet()){
 			Model enumModel=ModelManager0.getEnumModel(model);
 			if(enumModel==null||StringUtils.isEmpty(textures.get(model)))
 				continue;
+			if(ModelManager0.isSkin(enumModel))
+				if(hasSkin)
+					continue;
+				else
+					hasSkin=true;
 			String url=root+TEXTURES+textures.get(model);
 			if(local)
 				url=HttpTextureUtil.getLocalFakeUrl(url);
@@ -71,12 +74,14 @@ public class CustomSkinAPI implements IJsonAPI {
 		public Map<String,String> textures;
 		
 		public Map<String,String> skins;
+		
 		public String skin;
 		public String cape;
 		public String elytra;
-		
-		public int errno;
-		public String msg;
+	}
+	@Override
+	public String getPayload() {
+		return null;
 	}
 	@Override
 	public String getName() {

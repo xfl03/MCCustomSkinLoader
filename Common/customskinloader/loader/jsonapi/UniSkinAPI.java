@@ -25,10 +25,6 @@ public class UniSkinAPI implements IJsonAPI {
 	@Override
 	public UserProfile toUserProfile(String root, String json, boolean local) {
 		UniSkinAPIProfile profile=CustomSkinLoader.GSON.fromJson(json, UniSkinAPIProfile.class);
-		if(profile.errno!=0){
-			CustomSkinLoader.logger.info("Error "+profile.errno+": "+profile.msg);
-			return null;
-		}
 		UserProfile p=new UserProfile();
 		
 		if(StringUtils.isNotBlank(profile.cape)){
@@ -39,10 +35,17 @@ public class UniSkinAPI implements IJsonAPI {
 		
 		if(profile.skins==null||profile.skins.isEmpty())
 			return p;
+		
+		boolean hasSkin=false;
 		for(String model:profile.model_preference){
 			Model enumModel=ModelManager0.getEnumModel(model);
 			if(enumModel==null||StringUtils.isEmpty(profile.skins.get(model)))
 				continue;
+			if(ModelManager0.isSkin(enumModel))
+				if(hasSkin)
+					continue;
+				else
+					hasSkin=true;
 			String url=root+TEXTURES+profile.skins.get(model);
 			if(local)
 				url=HttpTextureUtil.getLocalFakeUrl(url);
@@ -63,9 +66,10 @@ public class UniSkinAPI implements IJsonAPI {
 		public Map<String,String> skins;
 		
 		public String cape;
-		
-		public int errno;
-		public String msg;
+	}
+	@Override
+	public String getPayload() {
+		return null;
 	}
 	@Override
 	public String getName() {

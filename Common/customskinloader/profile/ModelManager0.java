@@ -46,6 +46,14 @@ public class ModelManager0 {
 	}
 	
 	/**
+	 * Check if model is skin.
+	 * @since 14.5
+	 * */
+	public static boolean isSkin(Model model){
+		return model==Model.SKIN_DEFAULT||model==Model.SKIN_SLIM;
+	}
+	
+	/**
 	 * Check if elytra is supported.
 	 * @since 14.5
 	 */
