@@ -76,7 +76,7 @@ public class MinecraftUtil {
 		net.minecraft.client.multiplayer.ServerData data=net.minecraft.client.Minecraft.getMinecraft().getCurrentServerData();
 		if(data==null)//Single Player
 			return true;
-		return data.isOnLAN();
+		return data.serverIP==null;
 	}
 	
 	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");
