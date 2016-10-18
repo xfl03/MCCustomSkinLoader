@@ -18,6 +18,13 @@ public class HttpTextureUtil {
 			LOCAL_MARK="(LOCAL)",
 			LOCAL_LEGACY_MARK="(LOCAL_LEGACY)";
 	public static File defaultCacheDir;
+	public static void initDefaultCacheDir(){
+		if(CustomSkinLoader.config.enableCacheAutoClean && !CustomSkinLoader.config.enableLocalProfileCache && defaultCacheDir!=null){
+			defaultCacheDir.delete();
+			defaultCacheDir.mkdirs();
+		}
+	}
+	
 	public static HttpTextureInfo toHttpTextureInfo(String fakeUrl){
 		HttpTextureInfo info=new HttpTextureInfo();
 		if(fakeUrl.startsWith("http")){

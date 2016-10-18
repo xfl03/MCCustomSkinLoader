@@ -23,7 +23,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	
 	public interface IJsonAPI {
 		public String toJsonUrl(String root,String username);
-		public String getPayload();
+		public String getPayload(SkinSiteProfile ssp);
 		public UserProfile toUserProfile(String root,String json,boolean local);
 		public String getName();
 	}
@@ -32,7 +32,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 		public String msg;
 	}
 	public static enum Type{
-		CustomSkinAPI(new CustomSkinAPI()),UniSkinAPI(new UniSkinAPI());
+		CustomSkinAPI(new CustomSkinAPI()),CustomSkinAPIPlus(new CustomSkinAPIPlus()),UniSkinAPI(new UniSkinAPI());
 		public IJsonAPI jsonAPI;
 		private Type(IJsonAPI jsonAPI){
 			this.jsonAPI=jsonAPI;
@@ -62,7 +62,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 			}
 			json=IOUtils.toString(new FileInputStream(jsonFile));
 		}else{
-			json=HttpUtil0.readHttp(jsonUrl,ssp.userAgent,type.jsonAPI.getPayload());
+			json=HttpUtil0.readHttp(jsonUrl,ssp.userAgent,type.jsonAPI.getPayload(ssp));
 		}
 		if(json==null||json.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.");

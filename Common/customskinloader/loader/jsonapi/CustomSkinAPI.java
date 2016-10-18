@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import customskinloader.CustomSkinLoader;
+import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader.IJsonAPI;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ModelManager0.Model;
@@ -80,7 +81,7 @@ public class CustomSkinAPI implements IJsonAPI {
 		public String elytra;
 	}
 	@Override
-	public String getPayload() {
+	public String getPayload(SkinSiteProfile ssp) {
 		return null;
 	}
 	@Override

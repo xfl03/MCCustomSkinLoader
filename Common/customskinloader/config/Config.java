@@ -11,17 +11,26 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
+import customskinloader.utils.HttpUtil0;
 
 public class Config {
+	//Program
 	public String version;
 	public boolean enable=true;
+	public SkinSiteProfile[] loadlist;
+	
+	//Function
 	public boolean enableSkull=true;
 	public boolean enableDynamicSkull=true;
 	public boolean enableTransparentSkin=true;
+	public boolean ignoreHttpsCertificate=false;
+	
+	//Cache
 	public int cacheExpiry=10;
 	public boolean enableUpdateSkull=false;
 	public boolean enableLocalProfileCache=false;
-	public SkinSiteProfile[] loadlist;
+	public boolean enableCacheAutoClean=false;
+	
 	
 	//Init config
 	public Config(SkinSiteProfile[] loadlist){
@@ -31,16 +40,26 @@ public class Config {
 	
 	public static Config loadConfig0() {
 		Config config=loadConfig();
+		
+		//Init program
 		config.loadExtraList();
 		config.initLocalFolder();
+		if(config.ignoreHttpsCertificate)
+			HttpUtil0.ignoreHttpsCertificate();
+		
+		//Output config
 		CustomSkinLoader.logger.info("Enable:"+config.enable+
 				", EnableSkull:"+config.enableSkull+
 				", EnableDynamicSkull:"+config.enableDynamicSkull+
 				", EnableTranSkin:"+config.enableTransparentSkin+
+				", IgnoreHttpsCertificate:"+config.ignoreHttpsCertificate+
 				", CacheExpiry:"+config.cacheExpiry+
-				", enableUpdateSkull:"+config.enableUpdateSkull+
-				", LocalProfileCache:"+config.enableLocalProfileCache+
+				", EnableUpdateSkull:"+config.enableUpdateSkull+
+				", EnableLocalProfileCache:"+config.enableLocalProfileCache+
+				", EnableCacheAutoClean:"+config.enableCacheAutoClean+
 				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
+		
+		//Check config version
 		float floatVersion=0f;
 		float configVersion=0f;
 		try{
@@ -54,6 +73,7 @@ public class Config {
 			config.version=CustomSkinLoader.CustomSkinLoader_VERSION;
 			writeConfig(config,true);
 		}
+		
 		return config;
 	}
 

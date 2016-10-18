@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import customskinloader.CustomSkinLoader;
+import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader.IJsonAPI;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
@@ -68,7 +69,7 @@ public class UniSkinAPI implements IJsonAPI {
 		public String cape;
 	}
 	@Override
-	public String getPayload() {
+	public String getPayload(SkinSiteProfile ssp) {
 		return null;
 	}
 	@Override

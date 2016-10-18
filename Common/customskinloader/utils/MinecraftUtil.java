@@ -66,6 +66,19 @@ public class MinecraftUtil {
 		return minecraftMainVersion;
 	}
 	
+	public static String getServerAddress(){
+		net.minecraft.client.multiplayer.ServerData data=net.minecraft.client.Minecraft.getMinecraft().getCurrentServerData();
+		if(data==null)//Single Player
+			return null;
+		return data.serverIP;
+	}
+	public static boolean isLanServer(){
+		net.minecraft.client.multiplayer.ServerData data=net.minecraft.client.Minecraft.getMinecraft().getCurrentServerData();
+		if(data==null)//Single Player
+			return true;
+		return data.isOnLAN();
+	}
+	
 	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");
 	private static void testProbe(){
 		minecraftVersion.clear();

@@ -7,7 +7,15 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.zip.GZIPInputStream;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -140,5 +148,31 @@ public class HttpUtil0 {
 	
 	public static boolean isLocal(String url){
 		return url==null? false : !url.startsWith("http");
+	}
+	
+	//From: http://blog.csdn.net/xiyushiyi/article/details/46685387
+	public static void ignoreHttpsCertificate(){
+		HostnameVerifier doNotVerify = new HostnameVerifier() {
+
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+		};
+		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+			public X509Certificate[] getAcceptedIssuers() {
+				return new X509Certificate[] {};
+			}
+			public void checkClientTrusted(X509Certificate[] chain, String authType){}
+			public void checkServerTrusted(X509Certificate[] chain, String authType){}
+		}};
+
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			HttpsURLConnection.setDefaultHostnameVerifier(doNotVerify);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
