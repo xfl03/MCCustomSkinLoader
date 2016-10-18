@@ -54,6 +54,7 @@ public class SkinManager
         //CustomSkinLoader Begin (Init)
         customskinloader.loader.MojangAPILoader.defaultSessionService=sessionService;
         customskinloader.utils.HttpTextureUtil.defaultCacheDir=skinCacheDirectory;
+        customskinloader.utils.HttpTextureUtil.initDefaultCacheDir();
         //CustomSkinLoader End
     }
 
