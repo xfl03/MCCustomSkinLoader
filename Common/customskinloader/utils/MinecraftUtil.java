@@ -54,11 +54,11 @@ public class MinecraftUtil {
 		for(String version:getMinecraftVersions()){
 			Matcher m = null;
 			try{
-				m=MINECRAFT_VERSION_PATTERN.matcher(version);
+				m=MINECRAFT_VERSION_PATTERN.matcher(" "+version+" ");
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			if(m==null || !m.matches())
+			if(m==null || (!m.matches() && !m.find()))
 				continue;
 			minecraftMainVersion=m.group(0);
 			break;

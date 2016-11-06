@@ -151,6 +151,7 @@ public class HttpRequestUtil {
 					cacheInfo.expire=getExpire(c,request.cacheTime);
 					FileUtils.write(cacheInfoFile, CustomSkinLoader.GSON.toJson(cacheInfo));
 				}
+				CustomSkinLoader.logger.info("Saved to cache (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+cacheInfo.expire+")");
 			}
 			if(!request.loadContent)
 				return responce;
@@ -187,13 +188,12 @@ public class HttpRequestUtil {
 		}
 		return responce;
 	}
-	private final static Pattern MAX_AGE_PATTERN = Pattern.compile("max-age=(\\d+)");
+	private final static Pattern MAX_AGE_PATTERN = Pattern.compile("(\\d+)");
 	private static long getExpire(HttpURLConnection connection,int cacheTime){
 		String cacheControl=connection.getHeaderField("Cache-Control");
 		if(StringUtils.isNotEmpty(cacheControl)){
-			cacheControl=cacheControl.replaceAll(" ", "");
 			Matcher m=MAX_AGE_PATTERN.matcher(cacheControl);
-			if(m!=null && m.matches())
+			if(m!=null && (m.matches()||m.find()))
 				return TimeUtil.getUnixTimestamp(Long.parseLong(m.group(0)));
 		}
 		long expires=connection.getExpiration();
