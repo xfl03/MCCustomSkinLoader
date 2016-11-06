@@ -24,6 +24,9 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
+import customskinloader.utils.HttpRequestUtil;
+import customskinloader.utils.HttpRequestUtil.HttpRequest;
+import customskinloader.utils.HttpRequestUtil.HttpResponce;
 import customskinloader.utils.HttpUtil0;
 import net.minecraft.client.Minecraft;
 
@@ -59,11 +62,11 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 	
 	public static GameProfile loadGameProfile(String username) throws Exception{
 		//Doc (http://wiki.vg/Mojang_API#Username_-.3E_UUID_at_time)
-		String json0=HttpUtil0.readHttp("https://api.mojang.com/users/profiles/minecraft/"+username,null);
-		if(json0==null||json0.equals(""))
+		HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://api.mojang.com/users/profiles/minecraft/"+username).setCacheTime(0));
+		if(StringUtils.isEmpty(responce.content))
 			return null;
 		Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-		GameProfile gameProfile=gson.fromJson(json0, GameProfile.class);
+		GameProfile gameProfile=gson.fromJson(responce.content, GameProfile.class);
 		if(gameProfile.getId()==null)
 			return null;
 		return new GameProfile(gameProfile.getId(),gameProfile.getName());

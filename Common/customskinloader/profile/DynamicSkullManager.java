@@ -23,6 +23,9 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.util.UUIDTypeAdapter;
 
 import customskinloader.CustomSkinLoader;
+import customskinloader.utils.HttpRequestUtil;
+import customskinloader.utils.HttpRequestUtil.HttpRequest;
+import customskinloader.utils.HttpRequestUtil.HttpResponce;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
@@ -71,7 +74,7 @@ public class DynamicSkullManager {
 				File skinFile=new File(CustomSkinLoader.DATA_DIR,skin);
 				if(skinFile.isFile()&&skinFile.length()>0){
 					//Skin found
-					String fakeUrl=HttpTextureUtil.getLocalLegacyFakeUrl(skin, HttpTextureUtil.getHash(skin, skinFile.length(), skinFile.lastModified()));
+					String fakeUrl=HttpTextureUtil.getLocalFakeUrl(skin);
 					result.skins.set(i, fakeUrl);
 				}else{
 					//Could not find skin
@@ -80,7 +83,8 @@ public class DynamicSkullManager {
 				}
 			}else{
 				//Online Skin
-				if(!HttpUtil0.saveHttp(skin, HttpTextureUtil.getCacheFile(FilenameUtils.getBaseName(skin)))){
+				HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(skin).setCacheFile(HttpTextureUtil.getCacheFile(FilenameUtils.getBaseName(skin))).setCacheTime(0).setLoadContent(false));
+				if(!responce.success){
 					//Could not load skin
 					result.skins.remove(i--);
 					continue;

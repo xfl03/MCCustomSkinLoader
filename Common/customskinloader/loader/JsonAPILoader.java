@@ -16,8 +16,11 @@ import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.jsonapi.*;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
+import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
+import customskinloader.utils.HttpRequestUtil.HttpRequest;
+import customskinloader.utils.HttpRequestUtil.HttpResponce;
 
 public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 	
@@ -62,7 +65,8 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
 			}
 			json=IOUtils.toString(new FileInputStream(jsonFile));
 		}else{
-			json=HttpUtil0.readHttp(jsonUrl,ssp.userAgent,type.jsonAPI.getPayload(ssp));
+			HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(jsonUrl).setUserAgent(ssp.userAgent).setPayload(type.jsonAPI.getPayload(ssp)));
+			json=responce.content;
 		}
 		if(json==null||json.equals("")){
 			CustomSkinLoader.logger.info("Profile not found.");

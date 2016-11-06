@@ -10,6 +10,9 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
+import customskinloader.utils.HttpRequestUtil;
+import customskinloader.utils.HttpRequestUtil.HttpRequest;
+import customskinloader.utils.HttpRequestUtil.HttpResponce;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
@@ -27,9 +30,9 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 				if(skinFile.exists()&&skinFile.isFile())
 					profile.skinUrl=HttpTextureUtil.getLocalLegacyFakeUrl(skin, HttpTextureUtil.getHash(skin, skinFile.length(), skinFile.lastModified()));
 			}else{
-				String fakeSkinUrl=HttpUtil0.getFakeUrl(skin,ssp.userAgent);
-				if(fakeSkinUrl!=null&&!fakeSkinUrl.equals(""))
-					profile.skinUrl=fakeSkinUrl;
+				HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(skin).setUserAgent(ssp.userAgent).setLoadContent(false));
+				if(responce.success)
+					profile.skinUrl=HttpTextureUtil.getLegacyFakeUrl(skin);
 			}
 			profile.model=profile.hasSkinUrl()?ssp.model:null;
 		}
@@ -40,9 +43,9 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 				if(capeFile.exists()&&capeFile.isFile())
 					profile.capeUrl=HttpTextureUtil.getLocalLegacyFakeUrl(cape, HttpTextureUtil.getHash(cape, capeFile.length(), capeFile.lastModified()));
 			}else{
-				String fakeCapeUrl=HttpUtil0.getFakeUrl(cape,ssp.userAgent);
-				if(fakeCapeUrl!=null&&fakeCapeUrl.equals(""))
-					profile.capeUrl=fakeCapeUrl;
+				HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(cape).setUserAgent(ssp.userAgent).setLoadContent(false));
+				if(responce.success)
+					profile.capeUrl=HttpTextureUtil.getLegacyFakeUrl(cape);
 			}
 		}
 		if(ModelManager0.isElytraSupported()&&StringUtils.isNoneEmpty(ssp.elytra)){
@@ -52,9 +55,9 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 				if(elytraFile.exists()&&elytraFile.isFile())
 					profile.elytraUrl=HttpTextureUtil.getLocalLegacyFakeUrl(elytra, HttpTextureUtil.getHash(elytra, elytraFile.length(), elytraFile.lastModified()));
 			}else{
-				String fakeCapeUrl=HttpUtil0.getFakeUrl(elytra,ssp.userAgent);
-				if(fakeCapeUrl!=null&&fakeCapeUrl.equals(""))
-					profile.elytraUrl=fakeCapeUrl;
+				HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(elytra).setUserAgent(ssp.userAgent).setLoadContent(false));
+				if(responce.success)
+					profile.elytraUrl=HttpTextureUtil.getLegacyFakeUrl(elytra);
 			}
 		}
 		if(profile.isEmpty()){

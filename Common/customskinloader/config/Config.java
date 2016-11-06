@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
+import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpUtil0;
 
 public class Config {
@@ -46,6 +47,8 @@ public class Config {
 		config.initLocalFolder();
 		if(config.ignoreHttpsCertificate)
 			HttpUtil0.ignoreHttpsCertificate();
+		if(config.enableCacheAutoClean)
+			HttpRequestUtil.CACHE_DIR.delete();
 		
 		//Output config
 		CustomSkinLoader.logger.info("Enable:"+config.enable+
