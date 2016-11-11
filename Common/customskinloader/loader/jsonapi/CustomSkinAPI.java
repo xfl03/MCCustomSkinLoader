@@ -2,7 +2,6 @@ package customskinloader.loader.jsonapi;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 

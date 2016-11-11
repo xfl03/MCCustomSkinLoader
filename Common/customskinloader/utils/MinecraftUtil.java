@@ -35,7 +35,7 @@ public class MinecraftUtil {
 	
 	private static ArrayList<String> minecraftVersion=new ArrayList<String>();
 	private static String minecraftMainVersion=null;
-	private final static Pattern MINECRAFT_VERSION_PATTERN = Pattern.compile("(\\d+\\.\\d+[\\.]?\\d*)");
+	private final static Pattern MINECRAFT_VERSION_PATTERN = Pattern.compile(".*?(\\d+\\.\\d+[\\.]?\\d*).*?");
 	public static ArrayList<String> getMinecraftVersions(){
 		if(minecraftVersion!=null&&!minecraftVersion.isEmpty())
 			return minecraftVersion;
@@ -54,13 +54,13 @@ public class MinecraftUtil {
 		for(String version:getMinecraftVersions()){
 			Matcher m = null;
 			try{
-				m=MINECRAFT_VERSION_PATTERN.matcher(" "+version+" ");
+				m=MINECRAFT_VERSION_PATTERN.matcher(version);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			if(m==null || (!m.matches() && !m.find()))
+			if(m==null || !m.matches())
 				continue;
-			minecraftMainVersion=m.group(0);
+			minecraftMainVersion=m.group(m.groupCount());
 			break;
 		}
 		return minecraftMainVersion;
@@ -77,6 +77,9 @@ public class MinecraftUtil {
 		if(data==null)//Single Player
 			return true;
 		return HttpUtil0.isLanServer(data.serverIP);
+	}
+	public static String getCurrentUsername(){
+		return net.minecraft.client.Minecraft.getMinecraft().getSession().getProfile().getName();
 	}
 	
 	private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");

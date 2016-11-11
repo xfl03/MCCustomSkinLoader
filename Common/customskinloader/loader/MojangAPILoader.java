@@ -11,10 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
@@ -27,8 +25,6 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpRequestUtil.HttpRequest;
 import customskinloader.utils.HttpRequestUtil.HttpResponce;
-import customskinloader.utils.HttpUtil0;
-import net.minecraft.client.Minecraft;
 
 public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 

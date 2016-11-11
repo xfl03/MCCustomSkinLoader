@@ -7,10 +7,7 @@ import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 
-import com.google.gson.Gson;
-
 import customskinloader.CustomSkinLoader;
-import customskinloader.config.Config;
 import customskinloader.utils.TimeUtil;
 
 public class ProfileCache {

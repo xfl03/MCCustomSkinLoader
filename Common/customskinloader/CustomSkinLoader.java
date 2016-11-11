@@ -1,15 +1,7 @@
 package customskinloader;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.io.Charsets;
-import org.apache.commons.io.IOUtils;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -47,6 +39,7 @@ public class CustomSkinLoader {
 			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png",null),
 			SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
 			SkinSiteProfile.createCustomSkinAPI("McSkin","http://www.mcskin.cc/"),
+			SkinSiteProfile.createElfSkin("ElfSkin"),
 			SkinSiteProfile.createLegacy("LocalSkin","LocalSkin/skins/{USERNAME}.png","LocalSkin/capes/{USERNAME}.png","LocalSkin/elytras/{USERNAME}.png")};
 	
 	public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();

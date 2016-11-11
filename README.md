@@ -13,8 +13,10 @@ Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html)
 Skin Load API Supported:
 - [Mojang API](http://wiki.vg/Mojang_API)
 - [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)
+- CustomSkinAPIPlus (Test Only)  
 - [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
 - Legacy  
+- ElfSkin (Test Only)  
 
 You can use this feature to customize your skin load list so as to load from any skin server you want.  
 If you are the owner of skin server, you can use CustomSkinLoader to load skin from your server if one of the api has been actualized.  

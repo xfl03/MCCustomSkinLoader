@@ -72,7 +72,7 @@ public class UserProfile {
 	 * @return status (true - empty)
 	 */
 	public boolean isEmpty(){
-		return skinUrl==null && capeUrl==null && elytraUrl==null;
+		return StringUtils.isEmpty(skinUrl) &&  StringUtils.isEmpty(capeUrl) &&  StringUtils.isEmpty(elytraUrl);
 	}
 	public boolean hasSkinUrl(){
 		return StringUtils.isNotEmpty(skinUrl);

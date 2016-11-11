@@ -25,6 +25,13 @@ public class SkinSiteProfile {
 		ssp.root=root;
 		return ssp;
 	}
+	public static SkinSiteProfile creatCustomSkinAPIPlus(String name,String root){
+		SkinSiteProfile ssp=new SkinSiteProfile();
+		ssp.name=name;
+		ssp.type="CustomSkinAPIPlus";
+		ssp.root=root;
+		return ssp;
+	}
 	public static SkinSiteProfile createUniSkinAPI(String name,String root){
 		SkinSiteProfile ssp=new SkinSiteProfile();
 		ssp.name=name;
@@ -39,6 +46,12 @@ public class SkinSiteProfile {
 		ssp.skin=skin;
 		ssp.cape=cape;
 		ssp.elytra=elytra;
+		return ssp;
+	}
+	public static SkinSiteProfile createElfSkin(String name){
+		SkinSiteProfile ssp=new SkinSiteProfile();
+		ssp.name=name;
+		ssp.type="ElfSkin";
 		return ssp;
 	}
 }

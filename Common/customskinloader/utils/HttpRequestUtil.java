@@ -5,19 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.security.cert.X509Certificate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.Charsets;
@@ -102,7 +94,10 @@ public class HttpRequestUtil {
 			}
 			
 			//Init Connection
-			HttpURLConnection c = (HttpURLConnection) (new URL(request.url)).openConnection();
+			String url=new URI(request.url).toASCIIString();
+			if(!url.equalsIgnoreCase(request.url))
+				CustomSkinLoader.logger.info("Encoded URL: "+url);
+			HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
 			c.setReadTimeout(1000 * 10);
 			c.setConnectTimeout(1000 * 10);
 			c.setDoInput(true);
@@ -188,13 +183,13 @@ public class HttpRequestUtil {
 		}
 		return responce;
 	}
-	private final static Pattern MAX_AGE_PATTERN = Pattern.compile("(\\d+)");
+	private final static Pattern MAX_AGE_PATTERN = Pattern.compile(".*?max-age=(\\d+).*?");
 	private static long getExpire(HttpURLConnection connection,int cacheTime){
 		String cacheControl=connection.getHeaderField("Cache-Control");
 		if(StringUtils.isNotEmpty(cacheControl)){
 			Matcher m=MAX_AGE_PATTERN.matcher(cacheControl);
-			if(m!=null && (m.matches()||m.find()))
-				return TimeUtil.getUnixTimestamp(Long.parseLong(m.group(0)));
+			if(m!=null && m.matches())
+				return TimeUtil.getUnixTimestamp(Long.parseLong(m.group(m.groupCount())));
 		}
 		long expires=connection.getExpiration();
 		if(expires>0)
