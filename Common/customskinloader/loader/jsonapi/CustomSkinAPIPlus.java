@@ -1,5 +1,13 @@
 package customskinloader.loader.jsonapi;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+import java.util.prefs.Preferences;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.gson.Gson;
 
 import customskinloader.CustomSkinLoader;
@@ -11,6 +19,30 @@ import customskinloader.utils.MinecraftUtil;
 
 public class CustomSkinAPIPlus implements IJsonAPI {
 
+	private static String clientID=null;
+	private static String deviceID=Preferences.systemRoot().node("CustomSkinAPIPlus").get("id", null);
+	public CustomSkinAPIPlus(){
+		File clientIDFile=new File(CustomSkinLoader.DATA_DIR,"CustomSkinAPIPlus-ClientID");
+		
+		if(clientIDFile.isFile())
+			try{
+				clientID=FileUtils.readFileToString(clientIDFile);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		if(clientID==null){
+			clientID=UUID.randomUUID().toString();
+			try {
+				FileUtils.write(clientIDFile, clientID);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if(StringUtils.isEmpty(deviceID)){
+			deviceID=UUID.randomUUID().toString();
+			Preferences.systemRoot().node("CustomSkinAPIPlus").put("id", deviceID);
+		}
+	}
 	@Override
 	public String toJsonUrl(String root, String username) {
 		return JsonAPILoader.Type.CustomSkinAPI.jsonAPI.toJsonUrl(root, username);
@@ -18,7 +50,9 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 
 	@Override
 	public String getPayload(SkinSiteProfile ssp) {
-		return new Gson().toJson(new CustomSkinAPIPlusPayload());
+		if(ssp.privacy==null)
+			ssp.privacy=new CustomSkinAPIPlusPrivacy();
+		return new Gson().toJson(new CustomSkinAPIPlusPayload(ssp.privacy));
 	}
 
 	@Override
@@ -32,13 +66,29 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 	}
 
 	public static class CustomSkinAPIPlusPayload{
-		public static String gameVersion = MinecraftUtil.getMinecraftMainVersion();//minecraft version
-		public static String modVersion = CustomSkinLoader.CustomSkinLoader_FULL_VERSION;//mod version
-		public String serverAddress = MinecraftUtil.isLanServer()?null:MinecraftUtil.getServerAddress();//ip:port
+		public String gameVersion;//minecraft version
+		public String modVersion;//mod version
+		public String serverAddress;//ip:port
+		public String clientID;//Minecraft Client ID
+		public String deviceID;//Device ID
+		public CustomSkinAPIPlusPayload(CustomSkinAPIPlusPrivacy privacy){
+			if(privacy.gameVersion)
+				gameVersion=MinecraftUtil.getMinecraftMainVersion();
+			if(privacy.modVersion)
+				modVersion=CustomSkinLoader.CustomSkinLoader_VERSION;
+			if(privacy.serverAddress)
+				serverAddress=MinecraftUtil.isLanServer()?null:MinecraftUtil.getStandardServerAddress();
+			if(privacy.clientID)
+				clientID=CustomSkinAPIPlus.clientID;
+			if(privacy.deviceID)
+				deviceID=CustomSkinAPIPlus.deviceID;
+		}
 	}
 	public static class CustomSkinAPIPlusPrivacy{
-		public static boolean gameVersion;
-		public static boolean modVersion;
-		public static boolean serverAddress;
+		public boolean gameVersion=true;
+		public boolean modVersion=true;
+		public boolean serverAddress=true;
+		public boolean clientID=true;
+		public boolean deviceID=true;
 	}
 }

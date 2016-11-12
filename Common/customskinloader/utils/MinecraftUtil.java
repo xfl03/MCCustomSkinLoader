@@ -66,17 +66,19 @@ public class MinecraftUtil {
 		return minecraftMainVersion;
 	}
 	
+	// (domain|ip)(:port)
 	public static String getServerAddress(){
 		net.minecraft.client.multiplayer.ServerData data=net.minecraft.client.Minecraft.getMinecraft().getCurrentServerData();
 		if(data==null)//Single Player
 			return null;
 		return data.serverIP;
 	}
+	// ip:port
+	public static String getStandardServerAddress(){
+		return HttpUtil0.parseAddress(getServerAddress());
+	}
 	public static boolean isLanServer(){
-		net.minecraft.client.multiplayer.ServerData data=net.minecraft.client.Minecraft.getMinecraft().getCurrentServerData();
-		if(data==null)//Single Player
-			return true;
-		return HttpUtil0.isLanServer(data.serverIP);
+		return HttpUtil0.isLanServer(getStandardServerAddress());
 	}
 	public static String getCurrentUsername(){
 		return net.minecraft.client.Minecraft.getMinecraft().getSession().getProfile().getName();

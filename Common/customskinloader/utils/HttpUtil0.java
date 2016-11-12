@@ -44,18 +44,24 @@ public class HttpUtil0 {
 		}
 	}
 	
-	public static boolean isLanServer(String address){
+	public static String parseAddress(String address) {
 		if(StringUtils.isEmpty(address))
-			return true;
+			return null;
 		String[] addresses=address.split(":");
 		InetAddress add;
 		try {
 			add = InetAddress.getByName(addresses[0]);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-			return true;
+			return null;
 		}
-		int numIp=getNumIp(add.getHostAddress());
+		return add.getHostAddress()+(addresses.length==2 ? addresses[1] : "25565");
+	}
+	public static boolean isLanServer(String standardAddress){
+		if(StringUtils.isEmpty(standardAddress))
+			return true;
+		String[] addresses=standardAddress.split(":");
+		int numIp=getNumIp(addresses[0]);
 		return numIp==0||numIp==getNumIp("127.0.0.1")||
 				(numIp>=getNumIp("192.168.0.0")&&numIp<=getNumIp("192.168.255.255"))||
 				(numIp>=getNumIp("10.0.0.0")&&numIp<=getNumIp("10.255.255.255"))||
