@@ -51,7 +51,6 @@ jar {
         attributes 'TweakAuthor'  : 'xfl03,JLChnToZ'
         attributes 'TweakVersion' : version
         attributes 'TweakOrder'   : '-10'
-        attributes 'FMLCorePluginContainsFMLMod' : true
     }
 }
 
