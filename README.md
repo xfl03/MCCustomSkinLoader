@@ -16,7 +16,7 @@ Skin Load API Supported:
 - CustomSkinAPIPlus (Test Only)  
 - [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
 - Legacy  
-- ElfSkin (Test Only)  
+- ElfSkin (Self-made API, Test Only)  
 
 You can use this feature to customize your skin load list so as to load from any skin server you want.  
 If you are the owner of skin server, you can use CustomSkinLoader to load skin from your server if one of the api has been actualized.  
@@ -52,8 +52,6 @@ The problem of rendering incorrect texture has been fixed.
 - [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
 - [OneSkin](http://fleey.org/skin/) (CustomSkinAPI)
 - SkinMe (UniSkinAPI)  
-- [McSkin](http://www.mcskin.cc/) (CustomSkinAPI)
-- [ElfSkin](http://www.mcelf.com/s/mcskin/) (Self-made API)
 - LocalSkin (Legacy)  
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
   

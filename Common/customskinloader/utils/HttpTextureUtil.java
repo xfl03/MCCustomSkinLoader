@@ -34,7 +34,7 @@ public class HttpTextureUtil {
             return info;
 		}
 		if(fakeUrl.startsWith(LOCAL_LEGACY_MARK)){
-			fakeUrl=fakeUrl.replaceFirst(LOCAL_LEGACY_MARK, "");
+			fakeUrl=fakeUrl.replace(LOCAL_LEGACY_MARK, "");
 			String[] t=fakeUrl.split(",",2);
 			if(t.length!=2)
 				return info;
@@ -43,13 +43,13 @@ public class HttpTextureUtil {
 			return info;
 		}
 		if(fakeUrl.startsWith(LOCAL_MARK)){
-			fakeUrl=fakeUrl.replaceFirst(LOCAL_MARK, "");
+			fakeUrl=fakeUrl.replace(LOCAL_MARK, "");
 			info.cacheFile=new File(CustomSkinLoader.DATA_DIR,fakeUrl);
 			info.hash=FilenameUtils.getBaseName(fakeUrl);
 			return info;
 		}
 		if(fakeUrl.startsWith(LEGACY_MARK)){
-			fakeUrl=fakeUrl.replaceFirst(LEGACY_MARK, "");
+			fakeUrl=fakeUrl.replace(LEGACY_MARK, "");
 			info.url=fakeUrl;
 			info.hash=DigestUtils.sha1Hex(info.url);;
             info.cacheFile=HttpTextureUtil.getCacheFile(info.hash);

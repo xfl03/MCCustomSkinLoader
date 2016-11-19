@@ -1,7 +1,6 @@
 package customskinloader.loader.jsonapi;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.UUID;
 import java.util.prefs.Preferences;
 
@@ -20,7 +19,6 @@ import customskinloader.utils.MinecraftUtil;
 public class CustomSkinAPIPlus implements IJsonAPI {
 
 	private static String clientID=null;
-	private static String deviceID=Preferences.systemRoot().node("CustomSkinAPIPlus").get("id", null);
 	public CustomSkinAPIPlus(){
 		File clientIDFile=new File(CustomSkinLoader.DATA_DIR,"CustomSkinAPIPlus-ClientID");
 		
@@ -37,10 +35,6 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		if(StringUtils.isEmpty(deviceID)){
-			deviceID=UUID.randomUUID().toString();
-			Preferences.systemRoot().node("CustomSkinAPIPlus").put("id", deviceID);
 		}
 	}
 	@Override
@@ -70,7 +64,6 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 		public String modVersion;//mod version
 		public String serverAddress;//ip:port
 		public String clientID;//Minecraft Client ID
-		public String deviceID;//Device ID
 		public CustomSkinAPIPlusPayload(CustomSkinAPIPlusPrivacy privacy){
 			if(privacy.gameVersion)
 				gameVersion=MinecraftUtil.getMinecraftMainVersion();
@@ -80,8 +73,6 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 				serverAddress=MinecraftUtil.isLanServer()?null:MinecraftUtil.getStandardServerAddress();
 			if(privacy.clientID)
 				clientID=CustomSkinAPIPlus.clientID;
-			if(privacy.deviceID)
-				deviceID=CustomSkinAPIPlus.deviceID;
 		}
 	}
 	public static class CustomSkinAPIPlusPrivacy{
@@ -89,6 +80,5 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 		public boolean modVersion=true;
 		public boolean serverAddress=true;
 		public boolean clientID=true;
-		public boolean deviceID=true;
 	}
 }

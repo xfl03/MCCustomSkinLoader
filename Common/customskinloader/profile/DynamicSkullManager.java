@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,6 +33,7 @@ import customskinloader.utils.HttpUtil0;
 public class DynamicSkullManager {
 	public static class SkullTexture{
 		public Map<Type,MinecraftProfileTexture> textures;
+		public String index;//Index File
 		public ArrayList<String> skins;
 		public int interval;
 		public boolean fromZero;
@@ -61,7 +63,22 @@ public class DynamicSkullManager {
 			staticTextures.put(profile, new HashMap());
 			return;
 		}
-		staticTextures.put(profile, result.textures==null?new HashMap():result.textures);
+		staticTextures.put(profile, (result.textures==null||!result.textures.containsKey(Type.SKIN))?new HashMap():parseTextures(result.textures));
+		
+		if(StringUtils.isNotEmpty(result.index)){
+			File indexFile=new File(CustomSkinLoader.DATA_DIR,result.index);
+			try{
+				String index=FileUtils.readFileToString(indexFile, Charsets.UTF_8);
+				if(StringUtils.isNotEmpty(index)){
+					ArrayList<String> skins=CustomSkinLoader.GSON.fromJson(index, ArrayList.class);
+					if(skins!=null&&!skins.isEmpty())
+						result.skins=skins;
+				}
+			}catch(Exception e){
+				CustomSkinLoader.logger.warning("Exception occurs while parsing index file: "+e.toString());
+			}
+		}
+		
 		if(!CustomSkinLoader.config.enableDynamicSkull||result.skins==null||result.skins.isEmpty())
 			return;
 		
@@ -105,6 +122,19 @@ public class DynamicSkullManager {
 		staticTextures.remove(profile);
 	}
 	
+	//Support local skin for skull
+	public Map<Type, MinecraftProfileTexture> parseTextures(Map<Type, MinecraftProfileTexture> textures) {
+		MinecraftProfileTexture skin=textures.get(Type.SKIN);
+		String skinUrl=skin.getUrl();
+		if(!HttpUtil0.isLocal(skinUrl))
+			return textures;
+		File skinFile=new File(CustomSkinLoader.DATA_DIR,skinUrl);
+		if(!skinFile.isFile())
+			return new HashMap();
+		textures.put(Type.SKIN, ModelManager0.getProfileTexture(HttpTextureUtil.getLocalFakeUrl(skinUrl), null));
+		return textures;
+	}
+
 	public Map<Type,MinecraftProfileTexture> getTexture(final GameProfile profile){
 		if(staticTextures.get(profile)!=null)
 			return staticTextures.get(profile);

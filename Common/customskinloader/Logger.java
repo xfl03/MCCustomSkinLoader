@@ -6,11 +6,28 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
 
 public class Logger {
-	private static final int LOWEST_DISPLAY_LEVEL=Level.INFO.intValue();
-	SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public enum Level{
+		DEBUG("DEBUG",false),
+		INFO("INFO",true),
+		WARNING("WARNING",true);
+		
+		
+		String name;
+		boolean display;
+		Level(String name,boolean display){
+			this.name=name;
+			this.display=display;
+		}
+		public String getName(){
+			return name;
+		}
+		public boolean display(){
+			return display;
+		}
+	}
 	private BufferedWriter writer=null;
 	public Logger(){
 		//Logger isn't created.
@@ -40,12 +57,12 @@ public class Logger {
 	}
 	
 	public void log(Level level,String msg){
-		if(level.intValue()<LOWEST_DISPLAY_LEVEL&&writer==null)
+		if(!level.display()&&writer==null)
 			return;
 		StringBuilder sb=new StringBuilder();
 		sb.append("[").append(Thread.currentThread().getName()).append(" ").append(level.getName()).append("] ");
 		sb.append(msg);
-		if(level.intValue()>=LOWEST_DISPLAY_LEVEL)
+		if(level.display)
 			System.out.println(sb.toString());
 		if(writer==null)
 			return;
@@ -58,6 +75,9 @@ public class Logger {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public void debug(String msg){
+		log(Level.DEBUG,msg);
 	}
 	public void info(String msg){
 		log(Level.INFO,msg);

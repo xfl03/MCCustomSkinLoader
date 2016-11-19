@@ -38,8 +38,6 @@ public class CustomSkinLoader {
 			//Minecrack could not load skin correctly
 			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png",null),
 			SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
-			SkinSiteProfile.createCustomSkinAPI("McSkin","http://www.mcskin.cc/"),
-			SkinSiteProfile.createElfSkin("ElfSkin"),
 			SkinSiteProfile.createLegacy("LocalSkin","LocalSkin/skins/{USERNAME}.png","LocalSkin/capes/{USERNAME}.png","LocalSkin/elytras/{USERNAME}.png")};
 	
 	public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
