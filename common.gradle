@@ -69,11 +69,11 @@ sourceMainJava.dependsOn copySource
 processResources {
     expand ([
         modVersion:rootProject.ext.config.version,
-        modFullVersion:config.minecraft_full_versions,
+        modFullVersion:project.version,
         mcVersion:config.minecraft_version,
         mcFullVersions:config.minecraft_full_versions,
         forgeVersion:config.forge_version,
-        gitVersion:System.getenv("GIT_VERSION"),
+        gitVersion:System.getenv("GIT_COMMIT"),
         buildUrl:System.getenv("BUILD_URL")
     ])
 }
