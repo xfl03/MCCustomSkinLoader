@@ -25,6 +25,7 @@ public class HttpRequestUtil {
 		public String userAgent=null;
 		public String payload=null;
 		public boolean loadContent=true;
+		public boolean checkPNG=false;
 		
 		public int cacheTime=600;//-1=No Cache  0=Always Cache  t=Default Cache Time(second)
 		public File cacheFile=null;//Default Cache File
@@ -42,6 +43,10 @@ public class HttpRequestUtil {
 		}
 		public HttpRequest setLoadContent(boolean loadContent){
 			this.loadContent=loadContent;
+			return this;
+		}
+		public HttpRequest setCheckPNG(boolean checkPNG){
+			this.checkPNG=checkPNG;
 			return this;
 		}
 		public HttpRequest setCacheTime(int cacheTime){
@@ -137,6 +142,11 @@ public class HttpRequestUtil {
 			//Load Content
 			InputStream is="gzip".equals(c.getContentEncoding())?new GZIPInputStream(c.getInputStream()):c.getInputStream();
 			byte [] bytes = IOUtils.toByteArray(is);
+			if(request.checkPNG&&(bytes.length<=4||bytes[1]!=(byte)'P'||bytes[2]!=(byte)'N'||bytes[3]!=(byte)'G')){
+				CustomSkinLoader.logger.info("Failed to request (Not Standard PNG)");
+				responce.success=false;
+				return responce;
+			}
 			if(request.cacheFile!=null){
 				FileUtils.writeByteArrayToFile(request.cacheFile, bytes);
 				if(cacheInfoFile!=null){

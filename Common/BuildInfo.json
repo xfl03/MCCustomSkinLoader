@@ -1,0 +1,10 @@
+{
+  "name": "CustomSkinLoader",
+  "version": "@MOD_VERSION@",
+  "fullVersion": "@MOD_FULL_VERSION@",
+  "mcVersion": "@MC_VERSION@",
+  "mcFullVersions": "@MC_FULL_VERSIONS@",
+  "forgeVersion": "@FORGE_VERSION@",
+  "gitVersion": "@GIT_VERSION@",
+  "buildUrl": "@BUILD_URL@"
+}

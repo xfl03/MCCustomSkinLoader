@@ -10,6 +10,7 @@ public class SkinSiteProfile {
 	public String root;
 	public CustomSkinAPIPlusPrivacy privacy;
 	
+	public Boolean checkPNG;//Not suitable for local skin
 	public String skin;
 	public String model;
 	public String cape;
@@ -47,7 +48,9 @@ public class SkinSiteProfile {
 		SkinSiteProfile ssp=new SkinSiteProfile();
 		ssp.name=name;
 		ssp.type="Legacy";
+		ssp.checkPNG=false;
 		ssp.skin=skin;
+		ssp.model="default";
 		ssp.cape=cape;
 		ssp.elytra=elytra;
 		return ssp;

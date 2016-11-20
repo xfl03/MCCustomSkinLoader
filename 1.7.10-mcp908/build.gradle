@@ -48,6 +48,13 @@ minecraft {
     replace '@MOD_VERSION@', rootConfig.version
     replace '@MOD_FULL_VERSION@', project.version
     replaceIn 'CustomSkinLoader.java'
+    
+    replace '@MC_VERSION@', config.minecraft_version
+    replace '@MC_FULL_VERSIONS@', config.minecraft_full_versions
+    replace '@FORGE_VERSION@', config.forge_version
+    replace '@GIT_VERSION@', System.getenv("GIT_VERSION")
+    replace '@BUILD_URL@', System.getenv("BUILD_URL")
+    replaceIn 'BuildInfo.json'
 }
 
 jar {
