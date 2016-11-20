@@ -48,14 +48,6 @@ minecraft {
     replace '@MOD_VERSION@', rootConfig.version
     replace '@MOD_FULL_VERSION@', project.version
     replaceIn 'CustomSkinLoader.java'
-    
-    /*
-    replace '@MC_VERSION@', config.minecraft_version
-    replace '@MC_FULL_VERSIONS@', config.minecraft_full_versions
-    replace '@FORGE_VERSION@', config.forge_version
-    replace '@GIT_VERSION@', System.getenv("GIT_VERSION")
-    replace '@BUILD_URL@', System.getenv("BUILD_URL")
-    replaceIn 'BuildInfo.json'*/
 }
 
 jar {
@@ -80,6 +72,17 @@ task copySource << {
 }
 sourceMainJava.dependsOn copySource
 
+processResources {
+    expand ([
+        modVersion:rootProject.ext.config.version,
+        modFullVersion:config.minecraft_full_versions,
+        mcVersion:config.minecraft_version,
+        mcFullVersions:config.minecraft_full_versions,
+        forgeVersion:config.forge_version,
+        gitVersion:System.getenv("GIT_VERSION"),
+        buildUrl:System.getenv("BUILD_URL")
+    ])
+}
 task copyResources << {
     def outputFile = file("src/main/resources")
     outputFile.deleteDir()
@@ -90,6 +93,7 @@ task copyResources << {
     }
 }
 processResources.dependsOn copyResources
+
 
 task afterBuild << {
     //renameSrgJar
