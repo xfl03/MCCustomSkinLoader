@@ -75,6 +75,7 @@ task copySource << {
         from 'src/minecraft/'
         into 'src/main/java'
 		include '**/*.java'
+        include 'BuildInfo.json'
     }
 }
 sourceMainJava.dependsOn copySource
@@ -86,6 +87,7 @@ task copyResources << {
         from '../Common'
         into 'src/main/resources'
 		exclude '**/*.java'
+        exclude 'BuildInfo.json'
     }
 }
 processResources.dependsOn copyResources
