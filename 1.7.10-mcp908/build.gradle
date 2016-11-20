@@ -49,12 +49,13 @@ minecraft {
     replace '@MOD_FULL_VERSION@', project.version
     replaceIn 'CustomSkinLoader.java'
     
+    /*
     replace '@MC_VERSION@', config.minecraft_version
     replace '@MC_FULL_VERSIONS@', config.minecraft_full_versions
     replace '@FORGE_VERSION@', config.forge_version
     replace '@GIT_VERSION@', System.getenv("GIT_VERSION")
     replace '@BUILD_URL@', System.getenv("BUILD_URL")
-    replaceIn 'BuildInfo.json'
+    replaceIn 'BuildInfo.json'*/
 }
 
 jar {
@@ -75,7 +76,6 @@ task copySource << {
         from 'src/minecraft/'
         into 'src/main/java'
 		include '**/*.java'
-        include 'BuildInfo.json'
     }
 }
 sourceMainJava.dependsOn copySource
@@ -87,7 +87,6 @@ task copyResources << {
         from '../Common'
         into 'src/main/resources'
 		exclude '**/*.java'
-        exclude 'BuildInfo.json'
     }
 }
 processResources.dependsOn copyResources
