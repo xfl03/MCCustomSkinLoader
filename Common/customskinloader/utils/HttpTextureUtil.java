@@ -18,8 +18,8 @@ public class HttpTextureUtil {
 			LOCAL_MARK="(LOCAL)",
 			LOCAL_LEGACY_MARK="(LOCAL_LEGACY)";
 	public static File defaultCacheDir;
-	public static void initDefaultCacheDir(){
-		if(CustomSkinLoader.config.enableCacheAutoClean && !CustomSkinLoader.config.enableLocalProfileCache && defaultCacheDir!=null){
+	public static void cleanCacheDir(){
+		if(defaultCacheDir!=null){
 			defaultCacheDir.delete();
 			defaultCacheDir.mkdirs();
 		}

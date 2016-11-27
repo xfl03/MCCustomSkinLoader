@@ -1,24 +1,24 @@
 package customskinloader.config;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.io.Charsets;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.io.FileUtils;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
 import customskinloader.utils.HttpRequestUtil;
+import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
 public class Config {
 	//Program
 	public String version;
 	public boolean enable=true;
-	public SkinSiteProfile[] loadlist;
+	public List<SkinSiteProfile> loadlist;
 	
 	//Function
 	public boolean enableSkull=true;
@@ -36,19 +36,31 @@ public class Config {
 	//Init config
 	public Config(SkinSiteProfile[] loadlist){
 		this.version=CustomSkinLoader.CustomSkinLoader_VERSION;
-		this.loadlist=loadlist;
+		this.loadlist=Arrays.asList(loadlist);
 	}
 	
 	public static Config loadConfig0() {
 		Config config=loadConfig();
+		
+		//LoadList null checker
+		if(config.loadlist==null){
+			config.loadlist=new ArrayList<SkinSiteProfile>();
+		}else{
+			for(int i=0;i<config.loadlist.size();i++){
+				if(config.loadlist.get(i)==null)
+					config.loadlist.remove(i--);
+			}
+		}
 		
 		//Init program
 		config.loadExtraList();
 		config.initLocalFolder();
 		if(config.ignoreHttpsCertificate)
 			HttpUtil0.ignoreHttpsCertificate();
-		if(config.enableCacheAutoClean)
+		if(config.enableCacheAutoClean && !config.enableLocalProfileCache){
 			HttpRequestUtil.CACHE_DIR.delete();
+			HttpTextureUtil.cleanCacheDir();
+		}
 		
 		//Output config
 		CustomSkinLoader.logger.info("Enable:"+config.enable+
@@ -60,7 +72,7 @@ public class Config {
 				", EnableUpdateSkull:"+config.enableUpdateSkull+
 				", EnableLocalProfileCache:"+config.enableLocalProfileCache+
 				", EnableCacheAutoClean:"+config.enableCacheAutoClean+
-				", LoadList:"+(config.loadlist==null?0:config.loadlist.length));
+				", LoadList:"+(config.loadlist==null?0:config.loadlist.size()));
 		
 		//Check config version
 		float floatVersion=0f;
@@ -88,7 +100,7 @@ public class Config {
 		}
 		try {
 			CustomSkinLoader.logger.info("Try to load config.");
-			String json=IOUtils.toString(new FileInputStream(CustomSkinLoader.CONFIG_FILE),Charsets.UTF_8);
+			String json=FileUtils.readFileToString(CustomSkinLoader.CONFIG_FILE,Charsets.UTF_8);
 			Config config=CustomSkinLoader.GSON.fromJson(json, Config.class);
 			CustomSkinLoader.logger.info("Successfully load config.");
 			return config;
@@ -108,14 +120,14 @@ public class Config {
 			listAddition.mkdirs();
 			return;
 		}
-		ArrayList<SkinSiteProfile> adds=new ArrayList<SkinSiteProfile>();
+		List<SkinSiteProfile> adds=new ArrayList<SkinSiteProfile>();
 		File[] files=listAddition.listFiles();
 		for(File file:files){
 			if(!file.getName().toLowerCase().endsWith(".json")&&!file.getName().toLowerCase().endsWith(".txt"))
 				continue;
 			try {
 				CustomSkinLoader.logger.info("Try to load Extra List.("+file.getName()+")");
-				String json=IOUtils.toString(new FileInputStream(file),Charsets.UTF_8);
+				String json=FileUtils.readFileToString(file,Charsets.UTF_8);
 				SkinSiteProfile ssp=CustomSkinLoader.GSON.fromJson(json, SkinSiteProfile.class);
 				CustomSkinLoader.logger.info("Successfully load Extra List.");
 				file.delete();
@@ -144,7 +156,8 @@ public class Config {
 			}
 		}
 		if(adds.size()!=0){
-			this.loadlist=ArrayUtils.addAll((SkinSiteProfile[]) adds.toArray(),this.loadlist);
+			adds.addAll(this.loadlist);
+			this.loadlist=adds;
 			writeConfig(this,true);
 		}
 	}
@@ -169,7 +182,7 @@ public class Config {
 			CustomSkinLoader.CONFIG_FILE.delete();
 		try {
 			CustomSkinLoader.CONFIG_FILE.createNewFile();
-			IOUtils.write(json, new FileOutputStream(CustomSkinLoader.CONFIG_FILE),Charsets.UTF_8);
+			FileUtils.write(CustomSkinLoader.CONFIG_FILE, json, Charsets.UTF_8);
 			CustomSkinLoader.logger.info("Successfully "+(update?"update":"create")+" config.");
 		} catch (Exception e) {
 			CustomSkinLoader.logger.info("Failed to "+(update?"update":"create")+" config.("+e.toString()+")");
