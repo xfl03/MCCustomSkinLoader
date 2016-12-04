@@ -58,10 +58,9 @@ task copySource << {
     def outputFile = file("src/main/java")
     outputFile.deleteDir()
     copy {
-        from '../Common'
+        from '../Common/source'
         from 'src/minecraft/'
         into 'src/main/java'
-		include '**/*.java'
     }
 }
 sourceMainJava.dependsOn copySource
@@ -81,9 +80,8 @@ task copyResources << {
     def outputFile = file("src/main/resources")
     outputFile.deleteDir()
     copy {
-        from '../Common'
+        from '../Common/resource'
         into 'src/main/resources'
-		exclude '**/*.java'
     }
 }
 processResources.dependsOn copyResources

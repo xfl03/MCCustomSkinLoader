@@ -31,5 +31,6 @@ buildscript {
 }
 
 subprojects {
-    apply from: rootProject.file('common.gradle')
+    if(!project.name.toLowerCase().contains("forge"))
+        apply from: rootProject.file('common.gradle')
 }

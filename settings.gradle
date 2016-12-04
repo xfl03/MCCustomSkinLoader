@@ -1,8 +1,9 @@
-//Remove Build 1.7.10
-//include "1.7.10-mcp908"
 include "1.8-mcp910"
 include "1.8.8-mcp918"
 include "1.9-mcp924"
 include "1.9.4-mcp928"
 include "1.10-mcp931"
 include "1.11-test"
+
+//Universial Forge Version for [1.8,)
+include "Forge"
