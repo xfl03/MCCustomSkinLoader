@@ -89,9 +89,14 @@ public class ClassTransformer implements IClassTransformer {
 		if (zipFile == null)
 			return bytes;
 		
-		String fullName = new StringBuilder().append(name.startsWith("net") ? name.replaceAll("\\.", "\\/") : name).append(".class").toString();
-		if(!classes.contains(fullName))
-			return bytes;
+		String fullName = new StringBuilder().append(name.startsWith("net") ? name.replaceAll("\\.", "\\/") : name).append(".class").toString();//Notch(Run)/MCP(Dev) Class Name
+		if(!classes.contains(fullName)){//Check Name
+			if(name.equals(transformedName))
+				return bytes;
+			fullName = new StringBuilder().append(transformedName.replaceAll("\\.", "\\/")).append(".class").toString();//MCP Class Name
+			if(!classes.contains(fullName))//check Again
+				return bytes;
+		}
 		ZipEntry ze = zipFile.getEntry(fullName);
 		if (ze == null)
 			return bytes;
