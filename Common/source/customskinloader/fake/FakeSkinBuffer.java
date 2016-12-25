@@ -1,4 +1,4 @@
-package customskinloader.renderer;
+package customskinloader.fake;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.ImageObserver;
 
-public class SkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
+public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
 
 	private int[] imageData;
 	private int ratio=1;

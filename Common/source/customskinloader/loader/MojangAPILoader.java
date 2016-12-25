@@ -25,16 +25,13 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpRequestUtil.HttpRequest;
 import customskinloader.utils.HttpRequestUtil.HttpResponce;
+import customskinloader.utils.MinecraftUtil;
 
 public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
-	public static MinecraftSessionService defaultSessionService=null;
+	public static final MinecraftSessionService defaultSessionService=MinecraftUtil.getSessionService();
 	@Override
 	public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
-		if(defaultSessionService==null){
-			CustomSkinLoader.logger.warning("Session Service Not Exist.");
-			return null;
-		}
 		Map<MinecraftProfileTexture.Type,MinecraftProfileTexture> map=getTextures(gameProfile);
 		if(!map.isEmpty()){
 			CustomSkinLoader.logger.info("Default profile will be used.");

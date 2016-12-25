@@ -77,7 +77,7 @@ public class ElfSkinLoader implements IProfileLoader {
 	}
 	public static void makeLogout(String ip,String username){
 		String url=LOGOUT_URL.replaceAll("%SERVER_IP%", ip).replaceAll("%USERNAME%", username);
-		HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(url).setCacheTime(-1));
+		HttpRequestUtil.makeHttpRequest(new HttpRequest(url).setCacheTime(-1));
 	}
 	public static Profile getProfile(String ip,String username){
 		String url=PROFILE_URL.replaceAll("%SERVER_IP%", ip).replaceAll("%USERNAME%", username);

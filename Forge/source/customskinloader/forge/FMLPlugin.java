@@ -8,7 +8,7 @@ public class FMLPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] {customskinloader.tweaker.ClassTransformer.class.getName()};
+        return new String[] {TransformerManager.class.getName()};
     }
 
     @Override

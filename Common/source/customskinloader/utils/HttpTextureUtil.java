@@ -24,6 +24,9 @@ public class HttpTextureUtil {
 			defaultCacheDir.mkdirs();
 		}
 	}
+	public static File getCacheDir(){
+		return defaultCacheDir==null?new File(MinecraftUtil.getMinecraftDataDir(),"assets/skins"):defaultCacheDir;
+	}
 	
 	public static HttpTextureInfo toHttpTextureInfo(String fakeUrl){
 		HttpTextureInfo info=new HttpTextureInfo();

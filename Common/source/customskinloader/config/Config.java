@@ -17,7 +17,6 @@ import customskinloader.utils.HttpUtil0;
 public class Config {
 	//Program
 	public String version;
-	public boolean enable=true;
 	public List<SkinSiteProfile> loadlist;
 	
 	//Function
@@ -63,8 +62,7 @@ public class Config {
 		}
 		
 		//Output config
-		CustomSkinLoader.logger.info("Enable:"+config.enable+
-				", EnableSkull:"+config.enableSkull+
+		CustomSkinLoader.logger.info("EnableSkull:"+config.enableSkull+
 				", EnableDynamicSkull:"+config.enableDynamicSkull+
 				", EnableTranSkin:"+config.enableTransparentSkin+
 				", IgnoreHttpsCertificate:"+config.ignoreHttpsCertificate+

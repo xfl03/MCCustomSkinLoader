@@ -27,11 +27,11 @@ public class ClassTransformer implements IClassTransformer {
 			URL urls[] = ucl.getURLs();
 			for (URL url : urls) {
 				if(MinecraftUtil.isCoreFile(url)){
-					ModSystemTweaker.logger.info(url.toString()+" : SKIP (core file).");
+					ModSystemTweaker.logger.debug(url.toString()+" : SKIP (core file).");
 					continue;
 				}
 				if(MinecraftUtil.isLibraryFile(url)){
-					ModSystemTweaker.logger.info(url.toString()+" : SKIP (library file).");
+					ModSystemTweaker.logger.debug(url.toString()+" : SKIP (library file).");
 					continue;
 				}
 				File file = new File(url.toURI());
@@ -46,7 +46,7 @@ public class ClassTransformer implements IClassTransformer {
 				}
 				if (tempZipFile.getEntry("customskinloader/tweaker/ClassTransformer.class") == null){
 					tempZipFile.close();
-					ModSystemTweaker.logger.info(url.toString()+" : FINISH (not target).");
+					ModSystemTweaker.logger.debug(url.toString()+" : FINISH (not target).");
 					continue;
 				}
 				zipFile = tempZipFile;

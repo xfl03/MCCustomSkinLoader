@@ -10,27 +10,24 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.mojang.authlib.minecraft.MinecraftSessionService;
+
+import net.minecraft.client.renderer.texture.TextureManager;
+
 /**
- * MinecraftUtil for mcp version.
- * It is the only class in package 'customskinloader' which has differences in mcp/non-mcp version.
- * 
  * @author Alexander Xia
  * @since 13.6
  *
  */
 public class MinecraftUtil {
-	public static File getMinecraftDataDir0(){
+	public static File getMinecraftDataDir(){
 		return net.minecraft.client.Minecraft.getMinecraft().mcDataDir;
 	}
-	
-	public static File minecraftDataFolder=null;
-	public static File getMinecraftDataDir(){
-		if(minecraftDataFolder!=null)
-			return minecraftDataFolder;
-		testProbe();
-		if(minecraftDataFolder!=null)
-			return minecraftDataFolder;
-		return new File("");
+	public static MinecraftSessionService getSessionService(){
+		return net.minecraft.client.Minecraft.getMinecraft().getSessionService();
+	}
+	public static TextureManager getTextureManager(){
+		return net.minecraft.client.Minecraft.getMinecraft().getTextureManager();
 	}
 	
 	private static ArrayList<String> minecraftVersion=new ArrayList<String>();
@@ -98,11 +95,10 @@ public class MinecraftUtil {
 			}
 			if(m==null || !m.matches())
 				continue;
-			if(minecraftDataFolder==null)
-				minecraftDataFolder=new File(m.group(1));
 			minecraftVersion.add(m.group(2));
 		}
 	}
+	
 	public static boolean isCoreFile(URL url){
 		Matcher m = null;
 		try{

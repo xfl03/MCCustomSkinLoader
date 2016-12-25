@@ -16,7 +16,6 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 ext.MINECRAFT_VERSION="1.10.2"
 ext.FORGE_VERSION="12.18.2.2099"
 ext.MAPPING_VERSION="stable_29"
-ext.MCP_SOURCE="1.10-mcp931"
 ext.MINECRAFT_FULL_VERSIONS="1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11"
 
 ext.snapshot = !(rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)
@@ -62,7 +61,6 @@ minecraft {
 task mergeSource { doLast {
     copy {
         from '../Common/source'
-        from '../'+MCP_SOURCE+"/src/minecraft/"
         from 'source'
         into 'MergedSource'
     }
