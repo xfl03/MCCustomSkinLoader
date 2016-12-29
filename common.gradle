@@ -101,6 +101,7 @@ task afterBuild << {
         into '../build/libs'
 		include '**/*.jar'
         exclude '**/*-srg.jar'
+        exclude '**/*-dev.jar'
         exclude '**/*-sources.jar'
     }
 }
