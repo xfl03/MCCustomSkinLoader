@@ -20,7 +20,6 @@ public class Config {
 	public List<SkinSiteProfile> loadlist;
 	
 	//Function
-	public boolean enableSkull=true;
 	public boolean enableDynamicSkull=true;
 	public boolean enableTransparentSkin=true;
 	public boolean ignoreHttpsCertificate=false;
@@ -62,8 +61,7 @@ public class Config {
 		}
 		
 		//Output config
-		CustomSkinLoader.logger.info("EnableSkull:"+config.enableSkull+
-				", EnableDynamicSkull:"+config.enableDynamicSkull+
+		CustomSkinLoader.logger.info("EnableDynamicSkull:"+config.enableDynamicSkull+
 				", EnableTranSkin:"+config.enableTransparentSkin+
 				", IgnoreHttpsCertificate:"+config.ignoreHttpsCertificate+
 				", CacheExpiry:"+config.cacheExpiry+

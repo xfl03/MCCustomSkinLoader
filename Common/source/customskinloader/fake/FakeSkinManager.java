@@ -76,9 +76,7 @@ public class FakeSkinManager extends SkinManager {
 	}
 	@Override
 	public Map<Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile){
-		return CustomSkinLoader.config.enableSkull?
-				CustomSkinLoader.loadProfileFromCache(profile):
-					super.loadSkinFromCache(profile);
+		return CustomSkinLoader.loadProfileFromCache(profile);
 	}
 	
 	private static void makeCallback(SkinAvailableCallback callback,Type type, ResourceLocation location, MinecraftProfileTexture texture){

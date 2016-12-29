@@ -30,7 +30,7 @@ compileJava {
 }
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'customskinloader.forge.FMLPlugin'
+        attributes 'FMLCorePlugin': 'customskinloader.forge.ForgePlugin'
         attributes 'FMLCorePluginContainsFMLMod': true
     }
 }
