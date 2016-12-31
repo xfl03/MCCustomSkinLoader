@@ -1,6 +1,8 @@
 package customskinloader.forge;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRema
 import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 
 public class TransformerManager implements IClassTransformer {
+	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
 	public @interface TransformTarget{
 		public String className();
@@ -51,7 +54,6 @@ public class TransformerManager implements IClassTransformer {
 	//From: https://github.com/RecursiveG/UniSkinMod/blob/1.9.4/src/main/java/org/devinprogress/uniskinmod/coremod/BaseAsmTransformer.java
 	@Override
 	public byte[] transform(String obfClassName, String className, byte[] bytes) {
-		FMLRelaunchLog.info("[CSL DEBUG] CLASS %s will be ignored", className);
 		if (!map.containsKey(className)) return bytes;
 		FMLRelaunchLog.info("[CSL DEBUG] CLASS %s will be transformed", className);
 		Map<String, IMethodTransformer> transMap = map.get(className);
