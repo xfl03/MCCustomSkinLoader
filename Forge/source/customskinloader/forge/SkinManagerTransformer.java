@@ -22,6 +22,8 @@ public class SkinManagerTransformer {
 		public void transform(ClassNode cn,MethodNode mn) {
 			cn.fields.add(new FieldNode(Opcodes.ACC_PRIVATE, "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;", null, null));
 			mn.instructions.clear();
+            mn.instructions.add(new VarInsnNode(Opcodes.ALOAD,0));
+			mn.instructions.add(new MethodInsnNode(Opcodes.INVOKESPECIAL,"java/lang/Object","<init>","()V", false));
 			mn.instructions.add(new VarInsnNode(Opcodes.ALOAD,0));
 			mn.instructions.add(new TypeInsnNode(Opcodes.NEW, "customskinloader/fake/FakeSkinManager"));
 			mn.instructions.add(new InsnNode(Opcodes.DUP));
