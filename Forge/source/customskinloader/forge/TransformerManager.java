@@ -18,6 +18,8 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 
+import customskinloader.forge.Transformers.*;
+
 public class TransformerManager implements IClassTransformer {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
@@ -27,9 +29,13 @@ public class TransformerManager implements IClassTransformer {
 		public String desc();
 	}
 	public interface IMethodTransformer{
-		public void transform(MethodNode mn);
+		public void transform(ClassNode cn,MethodNode mn);
 	}
-	private static final IMethodTransformer[] TRANFORMERS={new Transformers.SkinManagerTransformer()};
+	private static final IMethodTransformer[] TRANFORMERS={
+			new SkinManagerTransformer(),
+			new SkinManagerLoadSkinTransformer(),
+			new SkinManagerLoadProfileTexturesTransformer(),
+			new SkinManagerLoadSkinFromCacheTransformer()};
 	private Map<String, Map<String, IMethodTransformer>> map;
 	public TransformerManager(){
 		map = new HashMap<String, Map<String, IMethodTransformer>>();
@@ -71,7 +77,7 @@ public class TransformerManager implements IClassTransformer {
 			if (transMap.containsKey(methodName + methodDesc)) {
 				try {
 					FMLRelaunchLog.info("[CSL DEBUG] Transforming method %s in class %s(%s)", methodName + methodDesc, obfClassName, className);
-					transMap.get(methodName + methodDesc).transform(mn);
+					transMap.get(methodName + methodDesc).transform(cn,mn);
 					FMLRelaunchLog.info("[CSL DEBUG] Successfully transformed method %s in class %s(%s)", methodName + methodDesc, obfClassName, className);
 				} catch (Exception e) {
 					FMLRelaunchLog.warning("[CSL DEBUG] An error happened when transforming method %s in class %s(%s). The whole class was not modified.", methodName + methodDesc, obfClassName, className);
