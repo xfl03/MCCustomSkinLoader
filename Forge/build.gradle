@@ -61,6 +61,7 @@ minecraft {
 task mergeSource { doLast {
     copy {
         from '../Common/source'
+        exclude '**/tweaker/**'
         from 'source'
         into 'MergedSource'
     }

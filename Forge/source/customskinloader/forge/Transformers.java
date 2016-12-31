@@ -22,13 +22,13 @@ public class Transformers {
 				if(node.getOpcode()==Opcodes.NEW){
 					TypeInsnNode typeNode=(TypeInsnNode) node;
 					if(typeNode.desc.equalsIgnoreCase("net/minecraft/client/resources/SkinManager")){
-						typeNode.desc="customskinloader/fake/FakeSkinManager";
+						typeNode.desc="customskinloader/forge/ForgeSkinManager";
 					}
 				}
 				if(node.getOpcode()==Opcodes.INVOKESPECIAL){
 					MethodInsnNode min=(MethodInsnNode) node;
 					if(min.owner.equalsIgnoreCase("net/minecraft/client/resources/SkinManager")){
-						min.owner="customskinloader/fake/FakeSkinManager";
+						min.owner="customskinloader/forge/ForgeSkinManager";
 					}
 				}
 				node=node.getNext();
