@@ -55,7 +55,7 @@ minecraft {
     replace '@MOD_VERSION@', rootProject.ext.config.version
     replace '@MOD_FULL_VERSION@', project.version
     replaceIn 'CustomSkinLoader.java'
-    replaceIn 'FMLMod.java'
+    replaceIn 'ForgeMod.java'
 }
 
 task mergeSource { doLast {

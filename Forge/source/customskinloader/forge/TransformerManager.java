@@ -31,22 +31,29 @@ public class TransformerManager implements IClassTransformer {
 	public TransformerManager(){
 		map = new HashMap<String, Map<String, IMethodTransformer>>();
 		for(IMethodTransformer t:TRANFORMERS){
-			if(!t.getClass().isAnnotationPresent(TransformTarget.class))
+            FMLRelaunchLog.info("[CSL DEBUG] REGISTERING TRANSFORMER %s",t.getClass().getName());
+			if(!t.getClass().isAnnotationPresent(TransformTarget.class)){
+				FMLRelaunchLog.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
 				continue;
+			}
 			addMethodTransformer(t.getClass().getAnnotation(TransformTarget.class),t);
 		}
 	}
 	private void addMethodTransformer(TransformTarget target, IMethodTransformer transformer) {
 		if (!map.containsKey(target.className()))
 			map.put(target.className(), new HashMap<String, IMethodTransformer>());
-		for(String methodName:target.methodNames())
+		for(String methodName:target.methodNames()){
 			map.get(target.className()).put(methodName + target.desc(), transformer);
+			FMLRelaunchLog.info("[CSL DEBUG] REGISTERING METHOD %s(%s)",target.className(),methodName + target.desc());
+		}
 	}
 	
 	//From: https://github.com/RecursiveG/UniSkinMod/blob/1.9.4/src/main/java/org/devinprogress/uniskinmod/coremod/BaseAsmTransformer.java
 	@Override
 	public byte[] transform(String obfClassName, String className, byte[] bytes) {
+		FMLRelaunchLog.info("[CSL DEBUG] CLASS %s will be ignored", className);
 		if (!map.containsKey(className)) return bytes;
+		FMLRelaunchLog.info("[CSL DEBUG] CLASS %s will be transformed", className);
 		Map<String, IMethodTransformer> transMap = map.get(className);
 		
 		ClassReader cr = new ClassReader(bytes);
@@ -61,11 +68,11 @@ public class TransformerManager implements IClassTransformer {
 			String methodDesc = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(mn.desc);
 			if (transMap.containsKey(methodName + methodDesc)) {
 				try {
-					FMLRelaunchLog.info("Transforming method %s in class %s(%s)", methodName + methodDesc, obfClassName, className);
+					FMLRelaunchLog.info("[CSL DEBUG] Transforming method %s in class %s(%s)", methodName + methodDesc, obfClassName, className);
 					transMap.get(methodName + methodDesc).transform(mn);
-					FMLRelaunchLog.info("Successfully transformed method %s in class %s(%s)", methodName + methodDesc, obfClassName, className);
+					FMLRelaunchLog.info("[CSL DEBUG] Successfully transformed method %s in class %s(%s)", methodName + methodDesc, obfClassName, className);
 				} catch (Exception e) {
-					FMLRelaunchLog.warning("An error happened when transforming method %s in class %s(%s). The whole class was not modified.", methodName + methodDesc, obfClassName, className);
+					FMLRelaunchLog.warning("[CSL DEBUG] An error happened when transforming method %s in class %s(%s). The whole class was not modified.", methodName + methodDesc, obfClassName, className);
 					e.printStackTrace();
 					return bytes;
 				}
