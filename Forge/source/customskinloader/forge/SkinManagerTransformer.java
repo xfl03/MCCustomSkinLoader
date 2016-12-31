@@ -13,11 +13,11 @@ import org.objectweb.asm.tree.VarInsnNode;
 import customskinloader.forge.TransformerManager.IMethodTransformer;
 import customskinloader.forge.TransformerManager.TransformTarget;
 
-public class Transformers {
+public class SkinManagerTransformer {
 	@TransformTarget(className="net.minecraft.client.resources.SkinManager",
 			methodNames={"<init>"},
 			desc="(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V")
-	public static class SkinManagerTransformer implements IMethodTransformer{
+	public static class InitTransformer implements IMethodTransformer{
 		@Override
 		public void transform(ClassNode cn,MethodNode mn) {
 			cn.fields.add(new FieldNode(Opcodes.ACC_PRIVATE, "fakeManager", "Lcustomskinloader/fake/FakeSkinManager", null, null));
@@ -37,7 +37,7 @@ public class Transformers {
 	@TransformTarget(className="net.minecraft.client.resources.SkinManager",
 			methodNames={"func_152789_a","loadSkin"},
 			desc="(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation;")
-	public static class SkinManagerLoadSkinTransformer implements IMethodTransformer{
+	public static class LoadSkinTransformer implements IMethodTransformer{
 		@Override
 		public void transform(ClassNode cn,MethodNode mn) {
 			mn.instructions.clear();
@@ -54,7 +54,7 @@ public class Transformers {
 	@TransformTarget(className="net.minecraft.client.resources.SkinManager",
 			methodNames={"func_152790_a","loadProfileTextures"},
 			desc="(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V")
-	public static class SkinManagerLoadProfileTexturesTransformer implements IMethodTransformer{
+	public static class LoadProfileTexturesTransformer implements IMethodTransformer{
 		@Override
 		public void transform(ClassNode cn,MethodNode mn) {
 			mn.instructions.clear();
@@ -62,7 +62,7 @@ public class Transformers {
 			mn.instructions.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager"));
 			mn.instructions.add(new VarInsnNode(Opcodes.ALOAD,1));
 			mn.instructions.add(new VarInsnNode(Opcodes.ALOAD,2));
-			mn.instructions.add(new VarInsnNode(Opcodes.ALOAD,3));
+			mn.instructions.add(new VarInsnNode(Opcodes.ILOAD,3));
 			mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL,"customskinloader/fake/FakeSkinManager","loadProfileTextures",
 					"(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V", false));
 			mn.instructions.add(new InsnNode(Opcodes.RETURN));
@@ -71,7 +71,7 @@ public class Transformers {
 	@TransformTarget(className="net.minecraft.client.resources.SkinManager",
 			methodNames={"func_152788_a","loadSkinFromCache"},
 			desc="(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;")
-	public static class SkinManagerLoadSkinFromCacheTransformer implements IMethodTransformer{
+	public static class LoadSkinFromCacheTransformer implements IMethodTransformer{
 		@Override
 		public void transform(ClassNode cn,MethodNode mn) {
 			mn.instructions.clear();

@@ -18,7 +18,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 
-import customskinloader.forge.Transformers.*;
+import customskinloader.forge.SkinManagerTransformer.*;
 
 public class TransformerManager implements IClassTransformer {
 	@Retention(RetentionPolicy.RUNTIME)
@@ -32,10 +32,10 @@ public class TransformerManager implements IClassTransformer {
 		public void transform(ClassNode cn,MethodNode mn);
 	}
 	private static final IMethodTransformer[] TRANFORMERS={
-			new SkinManagerTransformer(),
-			new SkinManagerLoadSkinTransformer(),
-			new SkinManagerLoadProfileTexturesTransformer(),
-			new SkinManagerLoadSkinFromCacheTransformer()};
+			new InitTransformer(),
+			new LoadSkinTransformer(),
+			new LoadProfileTexturesTransformer(),
+			new LoadSkinFromCacheTransformer()};
 	private Map<String, Map<String, IMethodTransformer>> map;
 	public TransformerManager(){
 		map = new HashMap<String, Map<String, IMethodTransformer>>();
