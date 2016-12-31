@@ -24,24 +24,20 @@ import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 
-public class FakeSkinManager extends SkinManager {
+public class FakeSkinManager{
 	private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue());
 	private final TextureManager textureManager;
 
 	public FakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
-		super(textureManagerInstance, skinCacheDirectory, sessionService);
 		this.textureManager=textureManagerInstance;
 		HttpTextureUtil.defaultCacheDir=skinCacheDirectory;
 	}
 	
-	@Override
 	public ResourceLocation loadSkin(MinecraftProfileTexture profileTexture, Type textureType){
 		return this.loadSkin(profileTexture, textureType, null);
 	}
-	@Override
 	public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final Type textureType, final SkinAvailableCallback skinAvailableCallback){
 		HttpTextureInfo info=HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
 		
@@ -57,7 +53,6 @@ public class FakeSkinManager extends SkinManager {
 		}
 		return resourcelocation;
 	}
-	@Override
 	public void loadProfileTextures(final GameProfile profile, final SkinAvailableCallback skinAvailableCallback, final boolean requireSecure){
 		THREAD_POOL.submit(new Runnable(){
 			public void run(){
@@ -74,7 +69,6 @@ public class FakeSkinManager extends SkinManager {
 			}
 		});
 	}
-	@Override
 	public Map<Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile){
 		return CustomSkinLoader.loadProfileFromCache(profile);
 	}
