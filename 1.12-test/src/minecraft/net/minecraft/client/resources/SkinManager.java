@@ -25,7 +25,7 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
-//From 1.10-mcp931
+//From 1.11.2-mcp937
 public class SkinManager
 {
     private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue());
@@ -45,7 +45,14 @@ public class SkinManager
         {
             public Map<Type, MinecraftProfileTexture> load(GameProfile p_load_1_) throws Exception
             {
-                return Minecraft.getMinecraft().getSessionService().getTextures(p_load_1_, false);
+                try
+                {
+                    return Minecraft.getMinecraft().getSessionService().getTextures(p_load_1_, false);
+                }
+                catch (Throwable var3)
+                {
+                    return Maps.<Type, MinecraftProfileTexture>newHashMap();
+                }
             }
         });
         this.fakeManager=new customskinloader.fake.FakeSkinManager(textureManagerInstance,skinCacheDirectory,sessionService);
