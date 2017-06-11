@@ -1,0 +1,14 @@
+machine:
+  java:
+    version: oraclejdk8
+dependencies:
+  pre:
+    - gradle --version
+    - sudo add-apt-repository ppa:cwchien/gradle -y
+    - sudo apt-get update
+    - sudo apt-get install gradle
+    - gradle --version
+  override:
+    - gradle dependencies --stacktrace
+  cache_directories:
+    - ~/.gradle
