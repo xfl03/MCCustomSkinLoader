@@ -62,7 +62,7 @@ public class Logger {
 		StringBuilder sb=new StringBuilder();
 		sb.append("[").append(Thread.currentThread().getName()).append(" ").append(level.getName()).append("] ");
 		sb.append(msg);
-		if(level.display)
+		if(level.display())
 			System.out.println(sb.toString());
 		if(writer==null)
 			return;
