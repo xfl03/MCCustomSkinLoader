@@ -13,8 +13,7 @@ public class ProfileLoader {
 			new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPI),
 			new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPIPlus),
 			new LegacyLoader(),
-			new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI),
-			new ElfSkinLoader()};
+			new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI)};
 	
 	public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
 	
