@@ -33,7 +33,7 @@ public class CustomSkinLoader {
 			CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
 	public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
 			SkinSiteProfile.createMojangAPI("Mojang"),
-			SkinSiteProfile.createCustomSkinAPI("BlessingSkin","http://http://123.57.132.134/"),
+			SkinSiteProfile.createCustomSkinAPI("BlessingSkin","http://123.57.132.134/"),
 			SkinSiteProfile.createCustomSkinAPI("OneSkin","http://fleey.cn/skin/skin_user/skin_json.php/"),
 			//Minecrack could not load skin correctly
 			//SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png",null),

@@ -17,7 +17,7 @@ import org.objectweb.asm.tree.MethodNode;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
-
+import customskinloader.forge.PlayerTabTransformer.ScoreObjectiveTransformer;
 import customskinloader.forge.SkinManagerTransformer.*;
 
 public class TransformerManager implements IClassTransformer {
@@ -35,7 +35,8 @@ public class TransformerManager implements IClassTransformer {
 			new InitTransformer(),
 			new LoadSkinTransformer(),
 			new LoadProfileTexturesTransformer(),
-			new LoadSkinFromCacheTransformer()};
+			new LoadSkinFromCacheTransformer(),
+			new ScoreObjectiveTransformer()};
 	private Map<String, Map<String, IMethodTransformer>> map;
 	public TransformerManager(){
 		map = new HashMap<String, Map<String, IMethodTransformer>>();
@@ -57,7 +58,7 @@ public class TransformerManager implements IClassTransformer {
 		}
 	}
 	
-	//From: https://github.com/RecursiveG/UniSkinMod/blob/1.9.4/src/main/java/org/devinprogress/uniskinmod/coremod/BaseAsmTransformer.java
+	//From: https://github.com/RecursiveG/UniSkinMod/blob/1.9.4/src/main/java/org/devinprogress/uniskinmod/coremod/BaseAsmTransformer.java#L83-L114
 	@Override
 	public byte[] transform(String obfClassName, String className, byte[] bytes) {
 		if (!map.containsKey(className)) return bytes;
