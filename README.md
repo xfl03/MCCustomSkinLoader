@@ -75,7 +75,6 @@ Skin Load API Supported:
 - CustomSkinAPIPlus (Test Only)  
 - [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)  
 - Legacy  
-- ElfSkin (Self-made API, Test Only)  
 
 You can use this feature to customize your skin load list so as to load from any skin server you want.  
 If you are the owner of skin server, you can use CustomSkinLoader to load skin from your server if one of the api has been actualized.  

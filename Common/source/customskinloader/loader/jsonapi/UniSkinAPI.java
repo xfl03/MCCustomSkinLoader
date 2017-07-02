@@ -35,6 +35,8 @@ public class UniSkinAPI implements IJsonAPI {
 		
 		if(profile.skins==null||profile.skins.isEmpty())
 			return p;
+		if(profile.model_preference==null||profile.model_preference.isEmpty())
+			return p;
 		
 		boolean hasSkin=false;
 		for(String model:profile.model_preference){
