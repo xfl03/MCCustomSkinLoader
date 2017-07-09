@@ -56,8 +56,13 @@ public class Config {
 		if(config.ignoreHttpsCertificate)
 			HttpUtil0.ignoreHttpsCertificate();
 		if(config.enableCacheAutoClean && !config.enableLocalProfileCache){
-			HttpRequestUtil.CACHE_DIR.delete();
-			HttpTextureUtil.cleanCacheDir();
+			try{
+				FileUtils.deleteDirectory(HttpRequestUtil.CACHE_DIR);
+				FileUtils.deleteDirectory(HttpTextureUtil.getCacheDir());
+				CustomSkinLoader.logger.info("Successfully cleaned cache.");
+			}catch(Exception e){
+				CustomSkinLoader.logger.warning("Exception occurs while cleaning cache: "+e.toString());
+			}
 		}
 		
 		//Output config
