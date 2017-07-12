@@ -84,6 +84,8 @@ public class CustomSkinLoader {
 			logger.info("LoadList is Empty.");
 			return null;
 		}
+		
+		UserProfile profile0=new UserProfile();
 		for(int i=0;i<config.loadlist.size();i++){
 			SkinSiteProfile ssp=config.loadlist.get(i);
 			logger.info((i+1)+"/"+config.loadlist.size()+" Try to load profile from '"+ssp.name+"'.");
@@ -101,13 +103,23 @@ public class CustomSkinLoader {
 			}
 			if(profile==null)
 				continue;
+			if(!config.forceLoadAllTextures){
+				profile0=profile;
+				break;
+			}
+			profile0.mix(profile);
+			if(profile0.isFull())
+				break;
+		}
+		if(!profile0.isEmpty()){
 			logger.info(username+"'s profile loaded.");
-			profileCache.updateCache(username, profile);
+			profileCache.updateCache(username, profile0);
 			profileCache.setLoading(username, false);
-			logger.info(profile.toString(profileCache.getExpiry(username)));
-			return profile;
+			logger.info(profile0.toString(profileCache.getExpiry(username)));
+			return profile0;
 		}
 		logger.info(username+"'s profile not found in load list.");
+		
 		if(config.enableLocalProfileCache){
 			UserProfile profile=profileCache.getLocalProfile(username);
 			if(profile==null)

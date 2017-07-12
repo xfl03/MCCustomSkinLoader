@@ -64,7 +64,11 @@ public class UserProfile {
 		return toString(0);
 	}
 	public String toString(long expiry){
-		return "(SkinUrl: "+skinUrl+" , Model: "+model+" , CapeUrl: "+capeUrl+" , ElytraUrl: "+elytraUrl+(expiry==0?"":(" , Expiry: "+expiry))+")";
+		return "(SkinUrl: "+skinUrl+
+				" , Model: "+model+
+				" , CapeUrl: "+capeUrl+
+				(StringUtils.isBlank(elytraUrl)?" ":" , ElytraUrl: "+elytraUrl)+
+				(expiry==0?"":(" , Expiry: "+expiry))+")";
 	}
 	
 	/**
@@ -74,7 +78,25 @@ public class UserProfile {
 	public boolean isEmpty(){
 		return StringUtils.isEmpty(skinUrl) &&  StringUtils.isEmpty(capeUrl) &&  StringUtils.isEmpty(elytraUrl);
 	}
+	/**
+	 * Check if the instance is full(Both skin and cape).
+	 * @return status (true - full)
+	 * @since 14.7
+	 */
+	public boolean isFull(){
+		return StringUtils.isNoneBlank(skinUrl,capeUrl);
+	}
 	public boolean hasSkinUrl(){
 		return StringUtils.isNotEmpty(skinUrl);
+	}
+	public void mix(UserProfile profile){
+		if(profile==null)
+			return;
+		if(StringUtils.isEmpty(this.skinUrl))
+			this.skinUrl=profile.skinUrl;
+		if(StringUtils.isEmpty(this.capeUrl))
+			this.capeUrl=profile.capeUrl;
+		if(StringUtils.isEmpty(this.elytraUrl))
+			this.elytraUrl=profile.elytraUrl;
 	}
 }

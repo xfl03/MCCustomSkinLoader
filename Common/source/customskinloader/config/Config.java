@@ -23,6 +23,7 @@ public class Config {
 	public boolean enableDynamicSkull=true;
 	public boolean enableTransparentSkin=true;
 	public boolean ignoreHttpsCertificate=false;
+	public boolean forceLoadAllTextures=false;
 	
 	//Cache
 	public int cacheExpiry=10;
@@ -81,6 +82,8 @@ public class Config {
 		try{
 			floatVersion=Float.parseFloat(CustomSkinLoader.CustomSkinLoader_VERSION);
 			configVersion=Float.parseFloat(config.version);
+			if(configVersion==15.1f)//To avoid some bug
+				configVersion=14.6f;
 		}catch (Exception e){
 			CustomSkinLoader.logger.warning("Exception occurs while parsing version: "+e.toString());
 		}

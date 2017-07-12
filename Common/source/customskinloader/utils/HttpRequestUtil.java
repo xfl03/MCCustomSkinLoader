@@ -95,7 +95,7 @@ public class HttpRequestUtil {
 				if(cacheInfo==null)
 					cacheInfo=new CacheInfo();
 				if(cacheInfo.expire>=TimeUtil.getCurrentUnixTimestamp())
-					return loadFromCache(request,new HttpResponce());
+					return loadFromCache(request,new HttpResponce(),cacheInfo.expire);
 			}
 			
 			//Init Connection
@@ -173,11 +173,13 @@ public class HttpRequestUtil {
 	public static File getCacheFile(String hash){
 		return new File(CACHE_DIR,hash);
 	}
-	
 	private static HttpResponce loadFromCache(HttpRequest request,HttpResponce responce){
+		return loadFromCache(request,responce,0);
+	}
+	private static HttpResponce loadFromCache(HttpRequest request,HttpResponce responce,long expireTime){
 		if(request.cacheFile==null||!request.cacheFile.isFile())
 			return responce;
-		CustomSkinLoader.logger.info("Cache file found (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"')");
+		CustomSkinLoader.logger.info("Cache file found (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+expireTime+"')");
 		responce.fromCache=true;
 		responce.success=true;
 		if(!request.loadContent)
