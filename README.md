@@ -50,8 +50,8 @@ The problem of rendering incorrect texture has been fixed.
   
 ## Default Load List  
 - [Mojang](http://www.minecraft.net/) (Mojang API)
-- [Blessing Skin](http://123.57.132.134/) (CustomSkinAPI)
-- [OneSkin](http://fleey.cn/skin/) (CustomSkinAPI)
+- [Little Skin](https://mcskin.littleservice.cn/) (CustomSkinAPI)  
+- [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
 - SkinMe (UniSkinAPI)  
 - LocalSkin (Legacy)  
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
