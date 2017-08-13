@@ -8,15 +8,15 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-ext.MINECRAFT_VERSION="1.10.2"
-ext.FORGE_VERSION="12.18.2.2099"
-ext.MAPPING_VERSION="stable_29"
-ext.MINECRAFT_FULL_VERSIONS="1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12"
+ext.MINECRAFT_VERSION="1.12"
+ext.FORGE_VERSION="14.21.1.2387"
+ext.MAPPING_VERSION="snapshot_20170813"
+ext.MINECRAFT_FULL_VERSIONS="1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1"
 
 ext.snapshot = !(rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)
 
