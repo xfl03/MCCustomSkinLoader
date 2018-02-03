@@ -52,6 +52,7 @@ public class CustomSkinLoader {
 	//For User Skin
 	public static Map loadProfile(GameProfile gameProfile){
 		String username=gameProfile.getName();
+		String credential=MinecraftUtil.getCredential(gameProfile);
 		//Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
 		if(username==null){
 			logger.warning("Could not load profile: username is null.");
@@ -60,18 +61,18 @@ public class CustomSkinLoader {
 		String tempName=Thread.currentThread().getName();
 		Thread.currentThread().setName(username);//Change Thread Name
 		UserProfile profile=null;
-		if(profileCache.isReady(username)){
+		if(profileCache.isReady(credential)){
 			logger.info("Cached profile will be used.");
-			profile=profileCache.getProfile(username);
+			profile=profileCache.getProfile(credential);
 			if(profile==null){
-				logger.warning("(!Cached Profile is empty!) Expiry:"+profileCache.getExpiry(username));
-				if(profileCache.isExpired(username))//force load
+				logger.warning("(!Cached Profile is empty!) Expiry:"+profileCache.getExpiry(credential));
+				if(profileCache.isExpired(credential))//force load
 					profile=loadProfile0(gameProfile);
 			}
 			else
-				logger.info(profile.toString(profileCache.getExpiry(username)));
+				logger.info(profile.toString(profileCache.getExpiry(credential)));
 		}else{
-			profileCache.setLoading(username, true);
+			profileCache.setLoading(credential, true);
 			profile=loadProfile0(gameProfile);
 		}
 		Thread.currentThread().setName(tempName);
@@ -80,7 +81,9 @@ public class CustomSkinLoader {
 	//Core
 	public static UserProfile loadProfile0(GameProfile gameProfile){
 		String username=gameProfile.getName();
-		profileCache.setLoading(username, true);
+		String credential=MinecraftUtil.getCredential(gameProfile);
+		
+		profileCache.setLoading(credential, true);
 		logger.info("Loading "+username+"'s profile.");
 		if(config.loadlist==null||config.loadlist.isEmpty()){
 			logger.info("LoadList is Empty.");
@@ -115,36 +118,38 @@ public class CustomSkinLoader {
 		}
 		if(!profile0.isEmpty()){
 			logger.info(username+"'s profile loaded.");
-			profileCache.updateCache(username, profile0);
-			profileCache.setLoading(username, false);
-			logger.info(profile0.toString(profileCache.getExpiry(username)));
+			profileCache.updateCache(credential, profile0);
+			profileCache.setLoading(credential, false);
+			logger.info(profile0.toString(profileCache.getExpiry(credential)));
 			return profile0;
 		}
 		logger.info(username+"'s profile not found in load list.");
 		
 		if(config.enableLocalProfileCache){
-			UserProfile profile=profileCache.getLocalProfile(username);
+			UserProfile profile=profileCache.getLocalProfile(credential);
 			if(profile==null)
 				logger.info(username+"'s LocalProfile not found.");
 			else{
-				profileCache.updateCache(username, profile, false);
-				profileCache.setLoading(username, false);
+				profileCache.updateCache(credential, profile, false);
+				profileCache.setLoading(credential, false);
 				logger.info(username+"'s LocalProfile will be used.");
-				logger.info(profile.toString(profileCache.getExpiry(username)));
+				logger.info(profile.toString(profileCache.getExpiry(credential)));
 				return profile;
 			}
 		}
-		profileCache.setLoading(username, false);
+		profileCache.setLoading(credential, false);
 		return null;
 	}
 	
 	//For Skull
 	public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
 		String username=gameProfile.getName();
-		if(username==null)
+		String credential=MinecraftUtil.getCredential(gameProfile);
+		
+		if(credential==null)
 			return dynamicSkullManager.getTexture(gameProfile);
-		if(config.enableUpdateSkull?profileCache.isReady(username):profileCache.isExist(username)){
-			UserProfile profile=profileCache.getProfile(username);
+		if(config.enableUpdateSkull?profileCache.isReady(credential):profileCache.isExist(credential)){
+			UserProfile profile=profileCache.getProfile(credential);
 			return ModelManager0.fromUserProfile(profile);
 		}
 		//profileCache.setLoading(username, true);

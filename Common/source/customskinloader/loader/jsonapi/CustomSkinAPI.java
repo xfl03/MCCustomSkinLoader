@@ -71,9 +71,9 @@ public class CustomSkinAPI implements IJsonAPI {
 	}
 	private class CustomSkinAPIProfile{
 		public String username;
-		public Map<String,String> textures;
+		public LinkedHashMap<String,String> textures;
 		
-		public Map<String,String> skins;
+		public LinkedHashMap<String,String> skins;
 		
 		public String skin;
 		public String cape;

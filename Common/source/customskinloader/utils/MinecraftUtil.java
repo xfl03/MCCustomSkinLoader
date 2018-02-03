@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -120,5 +121,13 @@ public class MinecraftUtil {
 			return false;
 		}
 		return m!=null && m.matches();
+	}
+	
+	public static String getCredential(GameProfile profile) {
+		if(profile!=null&&profile.hashCode()!=0)
+			return new StringBuilder().
+					append(profile.getName()).append("-").append(profile.getId().toString()).toString();
+		else 
+			return null;
 	}
 }
