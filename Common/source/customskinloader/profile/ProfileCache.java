@@ -87,7 +87,6 @@ public class ProfileCache {
 	}
 	private void saveLocalProfile(String username,UserProfile profile){
 		String json=CustomSkinLoader.GSON.toJson(profile);
-		File localProfile=new File(PROFILE_CACHE_DIR,username.toLowerCase()+".json");
 		if(localProfile.exists())
 			localProfile.delete();
 		try {

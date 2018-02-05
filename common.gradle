@@ -30,7 +30,7 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 //Example: 14.4a-SNAPSHOT-20160820
-version = rootProject.ext.config.version + rootProject.ext.config.dev_version + ((rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)?'':('-SNAPSHOT-'+System.getenv("BUILD_NUMBER")))
+version = rootProject.ext.config.version + rootProject.ext.config.dev_version + ((rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)?'':('-SNAPSHOT-'+System.getenv("CIRCLE_BUILD_NUM")))
 group = config.group
 archivesBaseName = rootProject.ext.config.name+"_"+config.minecraft_version
 
@@ -72,8 +72,10 @@ processResources {
         mcVersion:config.minecraft_version,
         mcFullVersions:config.minecraft_full_versions,
         forgeVersion:config.forge_version,
-        gitVersion:System.getenv("GIT_COMMIT"),
-        buildUrl:System.getenv("BUILD_URL")
+        //gitVersion:System.getenv("GIT_COMMIT"),
+        //buildUrl:System.getenv("BUILD_URL")
+		gitVersion:System.getenv("CIRCLE_SHA1"),
+        buildUrl:System.getenv("CIRCLE_BUILD_URL")
     ])
 }
 task copyResources << {
