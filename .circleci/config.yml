@@ -1,0 +1,36 @@
+# Java Gradle CircleCI 2.0 configuration file
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/repo
+
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - gradle-cache
+
+      # Gradle Wrapper
+      # - run: sudo chmod +x gradlew
+      # - run: ./gradlew --version
+      # - run: ./gradlew clean build
+      
+      # Gradle
+      - run: gradle --version
+      - run: gradle clean build
+
+      - store_artifacts:
+          path: ./build/libs
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-cache
