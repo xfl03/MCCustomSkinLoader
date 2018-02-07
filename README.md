@@ -4,9 +4,8 @@ Custom Skin Loader mod for Minecraft.
 You can use it to load any skin from any website.  
   
 ## Download  
-Build Server : [Infinity Studio CI](https://jenkins.mcdev.se/job/CustomSkinLoader/)  
-[![Build Status](https://jenkins.mcdev.se/job/CustomSkinLoader/badge/icon)](https://ci.infstudio.net/job/CustomSkinLoader/)  
-Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html)  
+Build Server : [~~Infinity Studio CI~~](https://ci.infstudio.net/job/CustomSkinLoader/) &  [~~CircleCI~~](https://circleci.com/gh/xfl03/MCCustomSkinLoader)  
+Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html) & [GitHub](https://github.com/xfl03/MCCustomSkinLoader/releases) & [CurseForge](https://minecraft.curseforge.com/projects/customskinloader)  
   
 ## Feature  
 ### Plenty of Skin Load API Support and Customizable Skin Load List  
