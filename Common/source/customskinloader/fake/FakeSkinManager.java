@@ -104,5 +104,4 @@ public class FakeSkinManager{
 			FakeSkinManager.makeCallback(callback,type, location, texture);
 		}
 	}
-
 }
