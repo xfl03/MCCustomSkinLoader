@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRema
 import net.minecraftforge.fml.relauncher.FMLRelaunchLog;
 import customskinloader.forge.PlayerTabTransformer.ScoreObjectiveTransformer;
 import customskinloader.forge.SkinManagerTransformer.*;
+import customskinloader.forge.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
 
 public class TransformerManager implements IClassTransformer {
 	@Retention(RetentionPolicy.RUNTIME)
@@ -36,7 +37,10 @@ public class TransformerManager implements IClassTransformer {
 			new LoadSkinTransformer(),
 			new LoadProfileTexturesTransformer(),
 			new LoadSkinFromCacheTransformer(),
-			new ScoreObjectiveTransformer()};
+			
+			new ScoreObjectiveTransformer(),
+			
+			new PlayerMenuObjectTransformer()};
 	private Map<String, Map<String, IMethodTransformer>> map;
 	public TransformerManager(){
 		map = new HashMap<String, Map<String, IMethodTransformer>>();

@@ -6,6 +6,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
+import customskinloader.CustomSkinLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
@@ -19,6 +20,7 @@ public class FakeClientPlayer {
 		//For Legacy Skin
 		public static ThreadDownloadImageData getDownloadImageSkin(ResourceLocation resourceLocationIn, String username)
 	    {
+			CustomSkinLoader.logger.debug("FakeClientPlayer/getDownloadImageSkin "+username);
 	        TextureManager textman = Minecraft.getMinecraft().getTextureManager();
 	        ITextureObject ito = textman.getTexture(resourceLocationIn);
 
@@ -37,6 +39,7 @@ public class FakeClientPlayer {
 
 	    public static ResourceLocation getLocationSkin(String username)
 	    {
+	    	CustomSkinLoader.logger.debug("FakeClientPlayer/getLocationSkin "+username);
 	        return new ResourceLocation("skins/" + username);
 	    }
 	    
@@ -44,6 +47,7 @@ public class FakeClientPlayer {
 	    	ResourceLocation resourceLocationIn;
 	    	
 	    	public LegacyBuffer(ResourceLocation resourceLocationIn) {
+	    		CustomSkinLoader.logger.debug("FakeClientPlayer/LegacyBuffer/<init> "+resourceLocationIn);
 	    		this.resourceLocationIn=resourceLocationIn;
 	    	}
 
@@ -51,6 +55,7 @@ public class FakeClientPlayer {
 			public void skinAvailable(Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
 				if(typeIn!=Type.SKIN)
 					return;
+				CustomSkinLoader.logger.debug("FakeClientPlayer/LegacyBuffer/skinAvailable "+resourceLocationIn);
 				TextureManager textman = Minecraft.getMinecraft().getTextureManager();
 				ITextureObject ito = textman.getTexture(location);
 				textman.loadTexture(resourceLocationIn, ito);

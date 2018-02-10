@@ -188,7 +188,7 @@ public class HttpRequestUtil {
 		CustomSkinLoader.logger.info("Try to load from cache '"+request.cacheFile.getAbsolutePath()+"'.");
 		try {
 			responce.content=FileUtils.readFileToString(request.cacheFile);
-			CustomSkinLoader.logger.info("Successfully to load from cache");
+			CustomSkinLoader.logger.info("Successfully load from cache");
 		} catch (IOException e) {
 			CustomSkinLoader.logger.info("Failed to load from cache (Exception: "+e.toString()+")");
 			responce.success=false;
