@@ -14,8 +14,8 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 ext.MINECRAFT_VERSION="1.12.2"
-ext.FORGE_VERSION="14.23.1.2555"
-ext.MAPPING_VERSION="snapshot_20180203"
+ext.FORGE_VERSION="14.23.2.2611"
+ext.MAPPING_VERSION="snapshot_20180210"
 ext.MINECRAFT_FULL_VERSIONS="1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2"
 
 ext.snapshot = !(rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)

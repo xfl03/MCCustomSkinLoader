@@ -37,9 +37,7 @@ public class TransformerManager implements IClassTransformer {
 			new LoadSkinTransformer(),
 			new LoadProfileTexturesTransformer(),
 			new LoadSkinFromCacheTransformer(),
-			
 			new ScoreObjectiveTransformer(),
-			
 			new PlayerMenuObjectTransformer()};
 	private Map<String, Map<String, IMethodTransformer>> map;
 	public TransformerManager(){
