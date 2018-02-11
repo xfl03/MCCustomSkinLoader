@@ -34,7 +34,10 @@ public class FakeClientPlayer {
 	            skinman.loadProfileTextures(offlineProfile, new LegacyBuffer(resourceLocationIn), false);
 	        }
 
-	        return (ThreadDownloadImageData)ito;
+	        if(ito instanceof ThreadDownloadImageData)
+	        	return (ThreadDownloadImageData)ito;
+	        else
+	        	return null;
 	    }
 
 	    public static ResourceLocation getLocationSkin(String username)

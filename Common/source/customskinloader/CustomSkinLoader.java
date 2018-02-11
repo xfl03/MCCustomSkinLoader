@@ -21,7 +21,7 @@ import customskinloader.utils.MinecraftUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
- * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2016
+ * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2018
  * @version @MOD_FULL_VERSION@
  */
 public class CustomSkinLoader {
@@ -105,6 +105,10 @@ public class CustomSkinLoader {
 			}catch(Exception e){
 				logger.warning("Exception occurs while loading.");
 				logger.warning(e);
+				if(e.getCause()!=null) {
+					logger.warning("Caused By:");
+					logger.warning(e.getCause());
+				}
 			}
 			if(profile==null)
 				continue;

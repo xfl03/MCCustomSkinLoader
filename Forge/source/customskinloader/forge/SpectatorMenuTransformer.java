@@ -22,12 +22,25 @@ public class SpectatorMenuTransformer {
 		public void transform(ClassNode cn, MethodNode mn) {
 			InsnList il=mn.instructions;
 			ListIterator<AbstractInsnNode> li=il.iterator();
+			
+			boolean flag=false;
 			while(li.hasNext()) {
-				AbstractInsnNode nn=li.next();
-				if(nn.getOpcode()!=Opcodes.INVOKESTATIC)
+				AbstractInsnNode ain=li.next();
+				if(ain.getOpcode()!=Opcodes.INVOKESTATIC)
 					continue;
-				MethodInsnNode min=(MethodInsnNode)nn;
-				min.owner="customskinloader/fake/FakeClientPlayer";
+				//MethodInsnNode min=(MethodInsnNode)nn;
+				//min.owner="customskinloader/fake/FakeClientPlayer";
+				if(!flag) {
+					//First InvokeStatic
+					il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,"customskinloader/fake/FakeClientPlayer","getLocationSkin",
+							"(Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation;",false));
+					flag=true;
+				}else {
+					//Second InvokeStatic
+					il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,"customskinloader/fake/FakeClientPlayer","getDownloadImageSkin",
+							"(Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData;",false));
+					break;
+				}
 			}
 		}
 		

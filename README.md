@@ -74,7 +74,7 @@ Including some code from
 - [AsteriskTeam/TabIconHackForge](http://git.oschina.net/AsteriskTeam/TabIconHackForge) (GPLv3)
 - [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)  
   
-Copyright(C) 2013-2017 JLChnToZ xfl03  
+Copyright(C) 2013-2018 JLChnToZ xfl03  
 
     This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
     
