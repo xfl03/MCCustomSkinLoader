@@ -70,7 +70,7 @@ public class SkinManager
      */
     public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final Type textureType, @Nullable final SkinManager.SkinAvailableCallback skinAvailableCallback)
     {
-    	return this.fakeManager.loadSkin(profileTexture, textureType, skinAvailableCallback);
+        return this.fakeManager.loadSkin(profileTexture, textureType, skinAvailableCallback);
     }
 
     public void loadProfileTextures(final GameProfile profile, final SkinManager.SkinAvailableCallback skinAvailableCallback, final boolean requireSecure)

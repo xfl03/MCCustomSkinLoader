@@ -21,11 +21,11 @@ public class PlayerMenuObject implements ISpectatorMenuObject
     public PlayerMenuObject(GameProfile profileIn)
     {
         this.profile = profileIn;
-		/*
+        /*
         this.resourceLocation = AbstractClientPlayer.getLocationSkin(profileIn.getName());
         AbstractClientPlayer.getDownloadImageSkin(this.resourceLocation, profileIn.getName());
-		*/
-		this.resourceLocation = customskinloader.fake.FakeClientPlayer.getLocationSkin(profileIn.getName());
+        */
+        this.resourceLocation = customskinloader.fake.FakeClientPlayer.getLocationSkin(profileIn.getName());
         customskinloader.fake.FakeClientPlayer.getDownloadImageSkin(this.resourceLocation, profileIn.getName());
     }
 
