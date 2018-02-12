@@ -75,7 +75,7 @@ public class HttpRequestUtil {
     
     public static HttpResponce makeHttpRequest(HttpRequest request){
         try{
-            CustomSkinLoader.logger.info("Try to request '"+request.url+(request.userAgent==null?"'.":"' with user agent '"+request.userAgent+"'."));
+            CustomSkinLoader.logger.debug("Try to request '"+request.url+(request.userAgent==null?"'.":"' with user agent '"+request.userAgent+"'."));
             //Check Cache
             if(StringUtils.isNotEmpty(request.payload))
                 request.cacheTime=-1;//No Cache
@@ -101,7 +101,7 @@ public class HttpRequestUtil {
             //Init Connection
             String url=new URI(request.url).toASCIIString();
             if(!url.equalsIgnoreCase(request.url))
-                CustomSkinLoader.logger.info("Encoded URL: "+url);
+                CustomSkinLoader.logger.debug("Encoded URL: "+url);
             HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
             c.setReadTimeout(1000 * 10);
             c.setConnectTimeout(1000 * 10);
@@ -131,11 +131,11 @@ public class HttpRequestUtil {
             responce.responceCode=c.getResponseCode();
             int res=c.getResponseCode()/100;
             if(res==4||res==5){//Failed
-                CustomSkinLoader.logger.info("Failed to request (Response Code: "+c.getResponseCode()+")");
+                CustomSkinLoader.logger.debug("Failed to request (Response Code: "+c.getResponseCode()+")");
                 return responce;
             }
             responce.success=true;
-            CustomSkinLoader.logger.info("Successfully request (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
+            CustomSkinLoader.logger.debug("Successfully request (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
             if(responce.responceCode==HttpURLConnection.HTTP_NOT_MODIFIED)
                 return loadFromCache(request,responce);
             
@@ -143,7 +143,7 @@ public class HttpRequestUtil {
             InputStream is="gzip".equals(c.getContentEncoding())?new GZIPInputStream(c.getInputStream()):c.getInputStream();
             byte [] bytes = IOUtils.toByteArray(is);
             if(request.checkPNG&&(bytes.length<=4||bytes[1]!=(byte)'P'||bytes[2]!=(byte)'N'||bytes[3]!=(byte)'G')){
-                CustomSkinLoader.logger.info("Failed to request (Not Standard PNG)");
+                CustomSkinLoader.logger.debug("Failed to request (Not Standard PNG)");
                 responce.success=false;
                 return responce;
             }
@@ -156,16 +156,16 @@ public class HttpRequestUtil {
                     cacheInfo.expire=getExpire(c,request.cacheTime);
                     FileUtils.write(cacheInfoFile, CustomSkinLoader.GSON.toJson(cacheInfo));
                 }
-                CustomSkinLoader.logger.info("Saved to cache (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+cacheInfo.expire+")");
+                CustomSkinLoader.logger.debug("Saved to cache (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+cacheInfo.expire+")");
             }
             if(!request.loadContent)
                 return responce;
             responce.content=new String(bytes,Charsets.UTF_8);
-            CustomSkinLoader.logger.info("Content: "+responce.content);
+            CustomSkinLoader.logger.debug("Content: "+responce.content);
             return responce;
             
         }catch(Exception e){
-            CustomSkinLoader.logger.info("Failed to request (Exception: "+e.toString()+")");
+            CustomSkinLoader.logger.debug("Failed to request (Exception: "+e.toString()+")");
             return loadFromCache(request,new HttpResponce());
         }
     }
@@ -179,7 +179,7 @@ public class HttpRequestUtil {
     private static HttpResponce loadFromCache(HttpRequest request,HttpResponce responce,long expireTime){
         if(request.cacheFile==null||!request.cacheFile.isFile())
             return responce;
-        CustomSkinLoader.logger.info("Cache file found (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+expireTime+"')");
+        CustomSkinLoader.logger.debug("Cache file found (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+expireTime+"')");
         responce.fromCache=true;
         responce.success=true;
         if(!request.loadContent)
@@ -188,9 +188,10 @@ public class HttpRequestUtil {
         CustomSkinLoader.logger.info("Try to load from cache '"+request.cacheFile.getAbsolutePath()+"'.");
         try {
             responce.content=FileUtils.readFileToString(request.cacheFile);
-            CustomSkinLoader.logger.info("Successfully load from cache");
+            CustomSkinLoader.logger.debug("Successfully load from cache");
+            CustomSkinLoader.logger.debug("Content: "+responce.content);
         } catch (IOException e) {
-            CustomSkinLoader.logger.info("Failed to load from cache (Exception: "+e.toString()+")");
+            CustomSkinLoader.logger.debug("Failed to load from cache (Exception: "+e.toString()+")");
             responce.success=false;
         }
         return responce;

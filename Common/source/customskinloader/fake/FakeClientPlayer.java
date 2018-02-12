@@ -57,20 +57,28 @@ public class FakeClientPlayer {
         
         private static class LegacyBuffer implements SkinAvailableCallback{
             ResourceLocation resourceLocationIn;
+            boolean loaded=false;
             
             public LegacyBuffer(ResourceLocation resourceLocationIn) {
-                CustomSkinLoader.logger.debug("Loading Legacy Texture "+resourceLocationIn);
+                CustomSkinLoader.logger.debug("Loading Legacy Texture ("+resourceLocationIn+")");
                 this.resourceLocationIn=resourceLocationIn;
             }
 
             @Override
             public void skinAvailable(Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
-                if(typeIn!=Type.SKIN)
+                if(typeIn!=Type.SKIN || loaded)
                     return;
-                CustomSkinLoader.logger.debug("Legacy Texture Loaded "+resourceLocationIn);
+                
+                loaded=true;
+                
+                
                 TextureManager textman = Minecraft.getMinecraft().getTextureManager();
                 ITextureObject ito = textman.getTexture(location);
-                textman.loadTexture(resourceLocationIn, ito);
+                
+                if(ito!=null)
+                    textman.loadTexture(resourceLocationIn, ito);
+                CustomSkinLoader.logger.debug("Legacy Texture ("+resourceLocationIn+") Loaded as "+
+                    ito==null?null:ito.toString()+" ("+location+")");
                 //textman.bindTexture(resourceLocationIn);
             }
             

@@ -60,7 +60,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
             }
             json=IOUtils.toString(new FileInputStream(jsonFile));
         }else{
-            HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(jsonUrl).setCacheTime(60).setUserAgent(ssp.userAgent).setPayload(type.jsonAPI.getPayload(ssp)));
+            HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(jsonUrl).setCacheTime(90).setUserAgent(ssp.userAgent).setPayload(type.jsonAPI.getPayload(ssp)));
             json=responce.content;
         }
         if(json==null||json.equals("")){

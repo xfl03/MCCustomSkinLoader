@@ -26,7 +26,7 @@ public class Config {
     public boolean forceLoadAllTextures=false;
     
     //Cache
-    public int cacheExpiry=10;
+    public int cacheExpiry=20;
     public boolean enableUpdateSkull=false;
     public boolean enableLocalProfileCache=false;
     public boolean enableCacheAutoClean=false;

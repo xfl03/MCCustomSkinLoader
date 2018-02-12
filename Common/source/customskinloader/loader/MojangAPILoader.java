@@ -15,6 +15,8 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
+import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import com.mojang.util.UUIDTypeAdapter;
 
@@ -59,8 +61,10 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
         HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://api.mojang.com/users/profiles/minecraft/"+username).setCacheTime(0));
         if(StringUtils.isEmpty(responce.content))
             return null;
+        
         Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
         GameProfile gameProfile=gson.fromJson(responce.content, GameProfile.class);
+        
         if(gameProfile.getId()==null)
             return null;
         return new GameProfile(gameProfile.getId(),gameProfile.getName());
@@ -68,12 +72,19 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
     //UUID -> Profile
     public static GameProfile fillGameProfile(GameProfile profile) throws Exception{
         //Doc (http://wiki.vg/Mojang_API#UUID_-.3E_Profile_.2B_Skin.2FCape)
-        HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://sessionserver.mojang.com/session/minecraft/profile/"+UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(60));
+        HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://sessionserver.mojang.com/session/minecraft/profile/"+UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
         if(StringUtils.isEmpty(responce.content))
             return profile;
-        Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-        GameProfile gameProfile=gson.fromJson(responce.content, GameProfile.class);
-        return gameProfile;
+        
+        Gson gson=new GsonBuilder()
+                .registerTypeAdapter(UUID.class, new UUIDTypeAdapter())
+                .registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer())
+                .create();
+        MinecraftProfilePropertiesResponse propertiesResponce=gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
+        GameProfile newGameProfile=new GameProfile(propertiesResponce.getId(),propertiesResponce.getName());
+        newGameProfile.getProperties().putAll(propertiesResponce.getProperties());
+        
+        return newGameProfile;
     }
     
     public static Map<MinecraftProfileTexture.Type,MinecraftProfileTexture> getTextures(GameProfile gameProfile) throws Exception{

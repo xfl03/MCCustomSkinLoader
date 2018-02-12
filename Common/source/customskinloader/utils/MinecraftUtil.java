@@ -124,10 +124,7 @@ public class MinecraftUtil {
     }
     
     public static String getCredential(GameProfile profile) {
-        if(profile!=null&&profile.hashCode()!=0)
-            return new StringBuilder().
-                    append(profile.getName()).append("-").append(profile.getId().toString()).toString();
-        else 
-            return null;
+        return (profile==null || profile.hashCode()==0) ? null : 
+            (profile.getId()==null ? profile.getName() : String.format("%s-%s", profile.getName(),profile.getId()));
     }
 }
