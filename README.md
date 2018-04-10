@@ -48,7 +48,7 @@ The problem of rendering incorrect texture has been fixed.
   
 ## Default Load List  
 - [Mojang](http://www.minecraft.net/) (Mojang API)
-- [Little Skin](https://mcskin.littleservice.cn/) (CustomSkinAPI)  
+- [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
 - [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
 - SkinMe (UniSkinAPI)  
 - LocalSkin (Legacy)  
