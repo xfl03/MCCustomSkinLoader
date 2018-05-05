@@ -1,11 +1,10 @@
 buildscript {
     repositories {
-        /*maven {
-            name = "fmm"
-            url = "http://forgemavenmirror.sinaapp.com/maven"
-        }*/
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -24,9 +23,9 @@ archivesBaseName = "CustomSkinLoader_Forge"
 version = rootProject.ext.config.version + rootProject.ext.config.dev_version + (snapshot ? "-SNAPSHOT-" + System.getenv("CIRCLE_BUILD_NUM") : "")
 group = "customskinloader"
 
-sourceCompatibility = targetCompatibility = "1.6"
+sourceCompatibility = targetCompatibility = 1.6
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.6"
+    sourceCompatibility = targetCompatibility = 1.6
 }
 jar {
     manifest {
@@ -39,7 +38,6 @@ sourceSets {
         java {
             //Common
             srcDir '../Common/source'
-            exclude '**/tweaker/**' //Exclude Vanilla Loader
             //Forge
             srcDir 'source'
         }
@@ -63,27 +61,20 @@ minecraft {
     replaceIn 'ForgeMod.java'
 }
 
-processResources
-        {
-            expand([
-                    modVersion    : rootProject.ext.config.version,
-                    modFullVersion: project.version,
-                    mcVersion     : MINECRAFT_VERSION,
-                    mcFullVersions: MINECRAFT_FULL_VERSIONS,
-                    forgeVersion  : FORGE_VERSION,
-                    gitVersion    : System.getenv("CIRCLE_SHA1"),
-                    buildUrl      : System.getenv("CIRCLE_BUILD_URL")
-            ])
-        }
+processResources {
+    expand([
+            modVersion    : rootProject.ext.config.version,
+            modFullVersion: project.version,
+            mcVersion     : MINECRAFT_VERSION,
+            mcFullVersions: MINECRAFT_FULL_VERSIONS,
+            forgeVersion  : FORGE_VERSION,
+            gitVersion    : System.getenv("CIRCLE_SHA1"),
+            buildUrl      : System.getenv("CIRCLE_BUILD_URL")
+    ])
+}
 
 task afterBuild {
     doLast {
-        //Clean Up
-        def sourceDir = file("MergedSource")
-        sourceDir.deleteDir()
-        def resourceDir = file("MergedResource")
-        resourceDir.deleteDir()
-
         //copyBuildFile
         copy {
             from 'build/libs'

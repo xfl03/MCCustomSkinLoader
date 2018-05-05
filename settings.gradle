@@ -1,6 +1,6 @@
 //Special Vanilla Edition
-include "1.12-mcp940"
-include "1.12.2-mcp"
+include "1.12"
+include "1.12.2"
 
 //Universal Forge Edition for [1.8,)
 include "Forge"

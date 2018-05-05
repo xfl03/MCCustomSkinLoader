@@ -5,10 +5,6 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -23,12 +19,17 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
-ext.snapshot = !(rootProject.ext.config.snapshot == "" || rootProject.ext.config.snapshot == "0" || rootProject.ext.config.snapshot == 0)
+ext.release = (rootProject.ext.config.snapshot == "" || rootProject.ext.config.snapshot == "0" || rootProject.ext.config.snapshot == 0)
 //Example: 14.4a-SNAPSHOT-20160820
 version = rootProject.ext.config.version + rootProject.ext.config.dev_version +
-        (ext.snapshot ? '' : ('-SNAPSHOT-' + System.getenv("CIRCLE_BUILD_NUM")))
+        (ext.release ? '' : ('-SNAPSHOT-' + System.getenv("CIRCLE_BUILD_NUM")))
 group = config.group
 archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
+
+sourceCompatibility = targetCompatibility = 1.6
+compileJava {
+    sourceCompatibility = targetCompatibility = 1.6
+}
 
 minecraft {
     version = config.forge_mc_version + "-" + config.forge_version
@@ -42,24 +43,28 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'TweakClass': 'customskinloader.tweaker.ModSystemTweaker'
-        attributes 'TweakName': rootProject.ext.config.name
-        attributes 'TweakAuthor': 'xfl03,JLChnToZ'
+        attributes 'TweakClass'  : 'customskinloader.tweaker.ModSystemTweaker'
+        attributes 'TweakName'   : rootProject.ext.config.name
+        attributes 'TweakAuthor' : 'xfl03,JLChnToZ'
         attributes 'TweakVersion': version
-        attributes 'TweakOrder': '-10'
+        attributes 'TweakOrder'  : '-10'
     }
 }
 
-task copySource << {
-    def outputFile = file("src/main/java")
-    outputFile.deleteDir()
-    copy {
-        from '../Common/source'
-        from 'src/minecraft/'
-        into 'src/main/java'
+sourceSets {
+    main {
+        java {
+            //Common
+            srcDir '../Common/source'
+            //Vanilla
+            srcDir '../Vanilla'
+        }
+        resources {
+            //Common
+            srcDir '../Common/resource'
+        }
     }
 }
-sourceMainJava.dependsOn copySource
 
 processResources {
     expand([
@@ -68,8 +73,6 @@ processResources {
             mcVersion     : config.minecraft_version,
             mcFullVersions: config.minecraft_full_versions,
             forgeVersion  : config.forge_version,
-            //gitVersion:System.getenv("GIT_COMMIT"),
-            //buildUrl:System.getenv("BUILD_URL")
             gitVersion    : System.getenv("CIRCLE_SHA1"),
             buildUrl      : System.getenv("CIRCLE_BUILD_URL")
     ])
@@ -84,23 +87,25 @@ task copyResources << {
 }
 processResources.dependsOn copyResources
 
-task afterBuild << {
-    //renameSrgJar
-    def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
-    def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
-    file0.renameTo(file1)
+task afterBuild {
+    doLast {
+        //renameSrgJar
+        def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
+        def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
+        file0.renameTo(file1)
 
-    //reobfSrgToNotch
-    reobfSrgToNotch()
+        //reobfSrgToNotch
+        reobfSrgToNotch()
 
-    //copyBuildFile
-    copy {
-        from 'build/libs'
-        into '../build/libs'
-        include '**/*.jar'
-        exclude '**/*-srg.jar'
-        exclude '**/*-dev.jar'
-        exclude '**/*-sources.jar'
+        //copyBuildFile
+        copy {
+            from 'build/libs'
+            into '../build/libs'
+            include '**/*.jar'
+            exclude '**/*-srg.jar'
+            exclude '**/*-dev.jar'
+            exclude '**/*-sources.jar'
+        }
     }
 }
 build.finalizedBy afterBuild
