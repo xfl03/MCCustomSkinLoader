@@ -1,11 +1,5 @@
 buildscript {
     repositories {
-        /*
-        maven {
-            name = "fmm"
-            url = "http://forgemavenmirror.sinaapp.com/maven"
-        }
-        */
         jcenter()
         maven {
             name = "forge"
@@ -29,16 +23,18 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
+ext.snapshot = !(rootProject.ext.config.snapshot == "" || rootProject.ext.config.snapshot == "0" || rootProject.ext.config.snapshot == 0)
 //Example: 14.4a-SNAPSHOT-20160820
-version = rootProject.ext.config.version + rootProject.ext.config.dev_version + ((rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)?'':('-SNAPSHOT-'+System.getenv("CIRCLE_BUILD_NUM")))
+version = rootProject.ext.config.version + rootProject.ext.config.dev_version +
+        (ext.snapshot ? '' : ('-SNAPSHOT-' + System.getenv("CIRCLE_BUILD_NUM")))
 group = config.group
-archivesBaseName = rootProject.ext.config.name+"_"+config.minecraft_version
+archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
 
 minecraft {
-    version = config.forge_mc_version+"-"+config.forge_version
+    version = config.forge_mc_version + "-" + config.forge_version
     runDir = "run"
     mappings = config.mappings_version
-    
+
     replace '@MOD_VERSION@', rootProject.ext.config.version
     replace '@MOD_FULL_VERSION@', project.version
     replaceIn 'CustomSkinLoader.java'
@@ -46,11 +42,11 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'TweakClass'   : 'customskinloader.tweaker.ModSystemTweaker'
-        attributes 'TweakName'    : rootProject.ext.config.name
-        attributes 'TweakAuthor'  : 'xfl03,JLChnToZ'
-        attributes 'TweakVersion' : version
-        attributes 'TweakOrder'   : '-10'
+        attributes 'TweakClass': 'customskinloader.tweaker.ModSystemTweaker'
+        attributes 'TweakName': rootProject.ext.config.name
+        attributes 'TweakAuthor': 'xfl03,JLChnToZ'
+        attributes 'TweakVersion': version
+        attributes 'TweakOrder': '-10'
     }
 }
 
@@ -66,16 +62,16 @@ task copySource << {
 sourceMainJava.dependsOn copySource
 
 processResources {
-    expand ([
-        modVersion:rootProject.ext.config.version,
-        modFullVersion:project.version,
-        mcVersion:config.minecraft_version,
-        mcFullVersions:config.minecraft_full_versions,
-        forgeVersion:config.forge_version,
-        //gitVersion:System.getenv("GIT_COMMIT"),
-        //buildUrl:System.getenv("BUILD_URL")
-        gitVersion:System.getenv("CIRCLE_SHA1"),
-        buildUrl:System.getenv("CIRCLE_BUILD_URL")
+    expand([
+            modVersion    : rootProject.ext.config.version,
+            modFullVersion: project.version,
+            mcVersion     : config.minecraft_version,
+            mcFullVersions: config.minecraft_full_versions,
+            forgeVersion  : config.forge_version,
+            //gitVersion:System.getenv("GIT_COMMIT"),
+            //buildUrl:System.getenv("BUILD_URL")
+            gitVersion    : System.getenv("CIRCLE_SHA1"),
+            buildUrl      : System.getenv("CIRCLE_BUILD_URL")
     ])
 }
 task copyResources << {
@@ -93,10 +89,10 @@ task afterBuild << {
     def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
     def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
     file0.renameTo(file1)
-    
+
     //reobfSrgToNotch
     reobfSrgToNotch()
-    
+
     //copyBuildFile
     copy {
         from 'build/libs'
@@ -110,21 +106,21 @@ task afterBuild << {
 build.finalizedBy afterBuild
 
 //notch pack
-void reobfSrgToNotch(){
+void reobfSrgToNotch() {
     def srgName = "${archivesBaseName}-${version}-srg.jar"
     def notchName = srgName.replace('-srg', '')
-    if(config.srg_notch_map==null||!(config.srg_notch_map instanceof String)||config.srg_notch_map==""){
+    if (config.srg_notch_map == null || !(config.srg_notch_map instanceof String) || config.srg_notch_map == "") {
         //Default Map
         def mcpName = srgName.replace('-srg', '-dev')
-        applySpecialSource(srgName,mcpName,getDefaultMap("srg-mcp"))
-        applySpecialSource(mcpName,notchName,getDefaultMap("mcp-notch"))
-    }else{
+        applySpecialSource(srgName, mcpName, getDefaultMap("srg-mcp"))
+        applySpecialSource(mcpName, notchName, getDefaultMap("mcp-notch"))
+    } else {
         //Custom Map
-        applySpecialSource(srgName,notchName,config.srg_notch_map)
+        applySpecialSource(srgName, notchName, config.srg_notch_map)
     }
 }
 
-void applySpecialSource(String inputName,String outputName,String mapFile){
+void applySpecialSource(String inputName, String outputName, String mapFile) {
     def mapping = new net.md_5.specialsource.JarMapping()
     def srgFile = file(mapFile)
     def inputFile = file("build/libs/${inputName}")
@@ -138,7 +134,8 @@ void applySpecialSource(String inputName,String outputName,String mapFile){
     mapping.setFallbackInheritanceProvider(inheritanceProviders)
     remapper.remapJar(inputJar, outputFile)
 }
-String getDefaultMap(String srgType){
-    def mcpVersion = minecraft.mappings.replace('_',"/")
+
+String getDefaultMap(String srgType) {
+    def mcpVersion = minecraft.mappings.replace('_', "/")
     return System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/${config.forge_mc_version}/srgs/${srgType}.srg"
 }

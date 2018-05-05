@@ -13,15 +13,15 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-ext.MINECRAFT_VERSION="1.12.2"
-ext.FORGE_VERSION="14.23.2.2611"
-ext.MAPPING_VERSION="snapshot_20180210"
-ext.MINECRAFT_FULL_VERSIONS="1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2"
+ext.MINECRAFT_VERSION = "1.12.2"
+ext.FORGE_VERSION = "14.23.3.2655"
+ext.MAPPING_VERSION = "snapshot_20180505"
+ext.MINECRAFT_FULL_VERSIONS = "1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2"
 
-ext.snapshot = !(rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)
+ext.snapshot = !(rootProject.ext.config.snapshot == "" || rootProject.ext.config.snapshot == "0" || rootProject.ext.config.snapshot == 0)
 
 archivesBaseName = "CustomSkinLoader_Forge"
-version = rootProject.ext.config.version + rootProject.ext.config.dev_version + (snapshot?"-SNAPSHOT-"+System.getenv("CIRCLE_BUILD_NUM"):"")
+version = rootProject.ext.config.version + rootProject.ext.config.dev_version + (snapshot ? "-SNAPSHOT-" + System.getenv("CIRCLE_BUILD_NUM") : "")
 group = "customskinloader"
 
 sourceCompatibility = targetCompatibility = "1.6"
@@ -37,72 +37,60 @@ jar {
 sourceSets {
     main {
         java {
-            srcDir 'MergedSource'//Merge source
+            //Common
+            srcDir '../Common/source'
+            exclude '**/tweaker/**' //Exclude Vanilla Loader
+            //Forge
+            srcDir 'source'
         }
         resources {
-            srcDir 'MergedResource'
+            //Common
+            srcDir '../Common/resource'
+            //Forge
+            srcDir 'resource'
         }
     }
 }
 
 minecraft {
-    version = MINECRAFT_VERSION+"-"+FORGE_VERSION
+    version = MINECRAFT_VERSION + "-" + FORGE_VERSION
     runDir = "run"
-    
     mappings = MAPPING_VERSION
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
+
     replace '@MOD_VERSION@', rootProject.ext.config.version
     replace '@MOD_FULL_VERSION@', project.version
     replaceIn 'CustomSkinLoader.java'
     replaceIn 'ForgeMod.java'
 }
 
-task mergeSource { doLast {
-    copy {
-        from '../Common/source'
-        exclude '**/tweaker/**'
-        from 'source'
-        into 'MergedSource'
-    }
-}}
-sourceMainJava.dependsOn mergeSource
-
-task mergeResources { doLast {
-    copy {
-        from '../Common/resource'
-        from 'resource'
-        into 'MergedResource'
-    }
-}}
-processResources.dependsOn mergeResources
-
 processResources
-{
-    expand ([
-        modVersion     :rootProject.ext.config.version,
-        modFullVersion :project.version,
-        mcVersion      :MINECRAFT_VERSION,
-        mcFullVersions :MINECRAFT_FULL_VERSIONS,
-        forgeVersion   :FORGE_VERSION,
-        gitVersion     :System.getenv("CIRCLE_SHA1"),
-        buildUrl       :System.getenv("CIRCLE_BUILD_URL")
-    ])
-}
+        {
+            expand([
+                    modVersion    : rootProject.ext.config.version,
+                    modFullVersion: project.version,
+                    mcVersion     : MINECRAFT_VERSION,
+                    mcFullVersions: MINECRAFT_FULL_VERSIONS,
+                    forgeVersion  : FORGE_VERSION,
+                    gitVersion    : System.getenv("CIRCLE_SHA1"),
+                    buildUrl      : System.getenv("CIRCLE_BUILD_URL")
+            ])
+        }
 
-task afterBuild { doLast {
-    //Clean Up
-    def sourceDir = file("MergedSource")
-    sourceDir.deleteDir()
-    def resourceDir = file("MergedResource")
-    resourceDir.deleteDir()
+task afterBuild {
+    doLast {
+        //Clean Up
+        def sourceDir = file("MergedSource")
+        sourceDir.deleteDir()
+        def resourceDir = file("MergedResource")
+        resourceDir.deleteDir()
 
-    //copyBuildFile
-    copy {
-        from 'build/libs'
-        into '../build/libs'
-        include '**/*.jar'
-        exclude '**/*-sources.jar'
+        //copyBuildFile
+        copy {
+            from 'build/libs'
+            into '../build/libs'
+            include '**/*.jar'
+            exclude '**/*-sources.jar'
+        }
     }
-}}
+}
 build.finalizedBy afterBuild

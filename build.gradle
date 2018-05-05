@@ -9,12 +9,6 @@ configFile.withReader {
 }
 buildscript {
     repositories {
-        /*
-        maven {
-            name = "fmm"
-            url = "http://forgemavenmirror.sinaapp.com/maven"
-        }
-        */
         jcenter()
         maven {
             name = "forge"
@@ -31,6 +25,6 @@ buildscript {
 }
 
 subprojects {
-    if(!project.name.toLowerCase().contains("forge"))
+    if (!project.name.toLowerCase().contains("forge"))
         apply from: rootProject.file('common.gradle')
 }

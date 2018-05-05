@@ -53,7 +53,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
         String jsonUrl=type.jsonAPI.toJsonUrl(ssp.root, username);
         String json;
         if(local){
-            File jsonFile=new File(jsonUrl);
+            File jsonFile = new File(CustomSkinLoader.DATA_DIR, jsonUrl);
             if(!jsonFile.exists()){
                 CustomSkinLoader.logger.info("Profile File not found.");
                 return null;
