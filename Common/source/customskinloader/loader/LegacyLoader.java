@@ -69,7 +69,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
 
     @Override
     public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
-        return (StringUtils.isNoneEmpty(ssp0.skin)?ssp0.skin.equalsIgnoreCase(ssp1.skin):true) || (StringUtils.isNoneEmpty(ssp0.cape)?ssp0.cape.equalsIgnoreCase(ssp1.cape):true);
+        return (!StringUtils.isNoneEmpty(ssp0.skin) || ssp0.skin.equalsIgnoreCase(ssp1.skin)) || (!StringUtils.isNoneEmpty(ssp0.cape) || ssp0.cape.equalsIgnoreCase(ssp1.cape));
     }
     @Override
     public String getName() {

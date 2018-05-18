@@ -1,7 +1,7 @@
 # CustomSkinLoader  
 ## What's this?  
 Custom Skin Loader mod for Minecraft.  
-You can use it to load any skin from any website.  
+It's a mod which can load skin from any online source or local source.
   
 ## Download  
 Build Server : [CircleCI](https://circleci.com/gh/xfl03/MCCustomSkinLoader) & [~~Infinity Studio CI~~](https://ci.infstudio.net/job/CustomSkinLoader/)   

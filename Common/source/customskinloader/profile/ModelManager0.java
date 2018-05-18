@@ -93,10 +93,10 @@ public class ModelManager0 {
         if(profile==null)
             return map;
         if(profile.skinUrl!=null){
-            Map metadata=null;
-            if(profile.model!=null&&profile.model.equals("slim")){
+            Map metadata = null;
+            if("slim".equals(profile.model) || "auto".equals(profile.model)){
                 metadata = Maps.newHashMap();
-                metadata.put("model", "slim");
+                metadata.put("model", profile.model);
             }
             map.put(Type.SKIN, getProfileTexture(profile.skinUrl,metadata));
         }

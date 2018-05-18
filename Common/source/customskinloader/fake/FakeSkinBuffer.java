@@ -10,7 +10,7 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
 
     private int[] imageData;
     private int ratio=1;
-    
+
     @Override
     public BufferedImage parseUserSkin(BufferedImage image) {
         if(image==null)
@@ -40,27 +40,41 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
         }
         graphics.dispose();
         this.imageData = ((DataBufferInt)bufferedimage.getRaster().getDataBuffer()).getData();
-        
+
         setAreaDueToConfig( 0 * ratio, 0 * ratio,32 * ratio,16 * ratio);//Head - 1
         setAreaTransparent(32 * ratio, 0 * ratio,64 * ratio,16 * ratio);//Head - 2
-        
+
         setAreaDueToConfig( 0 * ratio,16 * ratio,16 * ratio,32 * ratio);//Right Leg - 1
         setAreaDueToConfig(16 * ratio,16 * ratio,40 * ratio,32 * ratio);//Body - 1
         setAreaDueToConfig(40 * ratio,16 * ratio,56 * ratio,32 * ratio);//Right Arm - 1
-        
+
         setAreaTransparent( 0 * ratio,32 * ratio,16 * ratio,48 * ratio);//Right Leg - 2
         setAreaTransparent(16 * ratio,32 * ratio,40 * ratio,48 * ratio);//Body - 2
         setAreaTransparent(40 * ratio,32 * ratio,56 * ratio,48 * ratio);//Right Arm - 2
-        
+
         setAreaTransparent( 0 * ratio,48 * ratio,16 * ratio,64 * ratio);//Left Leg - 2
         setAreaDueToConfig(16 * ratio,48 * ratio,32 * ratio,64 * ratio);//Left Leg - 1
         setAreaDueToConfig(32 * ratio,48 * ratio,48 * ratio,64 * ratio);//Left Arm - 1
         setAreaTransparent(48 * ratio,48 * ratio,64 * ratio,64 * ratio);//Left Arm - 2
-        
+
         return bufferedimage;
     }
-    
-    /* 2^24-1 
+
+    /**
+     * Judge the type of skin
+     * Must be called after parseUserSkin
+     * @return type of skin (slim / default)
+     * @since 14.9
+     */
+    public String judgeType(){
+        if (this.imageData==null)
+            return null;
+        if (((this.imageData[getPosition(55, 20)] & B) >>> 24) == 0)//if (55,20) is transparent
+            return "slim";
+        return "default";
+    }
+
+    /* 2^24-1
      * 00000000 11111111 11111111 11111111 */
     private static final int A=16777215;
     private static final int WHITE=getARGB(255,255,255,255);
@@ -82,7 +96,7 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
             for (int y=y0;y<y1;++y)
                 this.imageData[getPosition(x,y)] &= A;
     }
-    
+
     /* -2^24
      *  00000001 00000000 00000000 00000000 ->
      *  11111110 11111111 11111111 11111111 ->
@@ -93,7 +107,7 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
             for (int y=y0;y<y1;++y)
                 this.imageData[getPosition(x,y)] |= B;
     }
-    
+
     private void setAreaDueToConfig(int x0,int y0,int x1,int y1){
         if(customskinloader.CustomSkinLoader.config.enableTransparentSkin)
             setAreaTransparent(x0,y0,x1,y1);
@@ -106,11 +120,11 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
     public void skinAvailable(){
         //A callback when skin loaded
     }
-    
+
     private static int getARGB(int a,int r,int g,int b){
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
-    
+
     private int getPosition(int x,int y){
         return x+y*64*ratio;
     }
