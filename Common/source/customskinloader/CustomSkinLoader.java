@@ -150,7 +150,7 @@ public class CustomSkinLoader {
         String username=gameProfile.getName();
         String credential=MinecraftUtil.getCredential(gameProfile);
         
-        if(credential==null)
+        if(username == null || credential == null)
             return dynamicSkullManager.getTexture(gameProfile);
         if(config.enableUpdateSkull?profileCache.isReady(credential):profileCache.isExist(credential)){
             UserProfile profile=profileCache.getProfile(credential);
