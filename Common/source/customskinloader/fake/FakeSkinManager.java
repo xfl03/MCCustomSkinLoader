@@ -98,13 +98,14 @@ public class FakeSkinManager{
             return buffer==null?image:buffer.parseUserSkin(image);
         }
         public void skinAvailable(){
-            if (buffer != null)
+            if (buffer != null){
                 buffer.skinAvailable();
-            if ("auto".equals(texture.getMetadata("model")) && buffer instanceof FakeSkinBuffer){
-                //Auto judge skin type
-                Map metadata = Maps.newHashMap();
-                metadata.put("model", ((FakeSkinBuffer) buffer).judgeType());
-                texture = new MinecraftProfileTexture(texture.getUrl(), metadata);
+                if ("auto".equals(texture.getMetadata("model")) && buffer instanceof FakeSkinBuffer){
+                    //Auto judge skin type
+                    Map metadata = Maps.newHashMap();
+                    metadata.put("model", ((FakeSkinBuffer) buffer).judgeType());
+                    texture = new MinecraftProfileTexture(texture.getUrl(), metadata);
+                }
             }
 
             FakeSkinManager.makeCallback(callback,type, location, texture);

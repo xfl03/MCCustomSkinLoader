@@ -20,7 +20,7 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
         Graphics graphics = bufferedimage.getGraphics();
         graphics.setColor(new Color(0,0,0,0));
         graphics.fillRect(0,0,64,64);
-        graphics.drawImage(image,0,0,(ImageObserver)null);
+        graphics.drawImage(image, 0, 0, null);
         if (image.getHeight() == 32 * ratio){//Single Layer
             //Revert to original algorithm
             //Right Leg -> Left Leg
@@ -67,7 +67,7 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
      * @since 14.9
      */
     public String judgeType(){
-        if (this.imageData==null)
+        if (this.imageData == null)
             return null;
         if (((this.imageData[getPosition(55, 20)] & B) >>> 24) == 0)//if (55,20) is transparent
             return "slim";

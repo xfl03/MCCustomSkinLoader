@@ -55,10 +55,4 @@ public class SkinSiteProfile {
         ssp.elytra=elytra;
         return ssp;
     }
-    public static SkinSiteProfile createElfSkin(String name){
-        SkinSiteProfile ssp=new SkinSiteProfile();
-        ssp.name=name;
-        ssp.type="ElfSkin";
-        return ssp;
-    }
 }
