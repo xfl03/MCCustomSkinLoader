@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class HttpUtil0 {
     public static boolean isLocal(String url){
-        return url==null? false : !url.startsWith("http");
+        return url != null && !url.startsWith("http");
     }
     
     //From: http://blog.csdn.net/xiyushiyi/article/details/46685387

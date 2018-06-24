@@ -1,12 +1,9 @@
 package customskinloader.profile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -46,33 +43,34 @@ public class DynamicSkullManager {
     private List<GameProfile> loadingList=new ArrayList<GameProfile>();
     
     private void parseGameProfile(GameProfile profile){
-        Property textureProperty=(Property)Iterables.getFirst(profile.getProperties().get("textures"), null);
+        Property textureProperty = Iterables.getFirst(profile.getProperties().get("textures"), null);
         if (textureProperty==null){
-            staticTextures.put(profile, new HashMap());
+            staticTextures.put(profile, Maps.<Type, MinecraftProfileTexture>newHashMap());
             return;
         }
         String value=textureProperty.getValue();
         if(StringUtils.isBlank(value)){
-            staticTextures.put(profile, new HashMap());
+            staticTextures.put(profile, Maps.<Type, MinecraftProfileTexture>newHashMap());
             return;
         }
-        String json=new String(Base64.decodeBase64(value),Charsets.UTF_8);
+        @SuppressWarnings("deprecation") String json = new String(Base64.decodeBase64(value), Charsets.UTF_8);
         Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class,new UUIDTypeAdapter()).create();
         SkullTexture result=gson.fromJson(json,SkullTexture.class);
         if(result==null){
-            staticTextures.put(profile, new HashMap());
+            staticTextures.put(profile, Maps.<Type, MinecraftProfileTexture>newHashMap());
             return;
         }
-        staticTextures.put(profile, (result.textures==null||!result.textures.containsKey(Type.SKIN))?new HashMap():parseTextures(result.textures));
+        staticTextures.put(profile, (result.textures==null || !result.textures.containsKey(Type.SKIN)) ?
+                Maps.<Type, MinecraftProfileTexture>newHashMap() : parseTextures(result.textures));
         
         if(StringUtils.isNotEmpty(result.index)){
             File indexFile=new File(CustomSkinLoader.DATA_DIR,result.index);
             try{
-                String index=FileUtils.readFileToString(indexFile, Charsets.UTF_8);
+                String index=FileUtils.readFileToString(indexFile, "UTF-8");
                 if(StringUtils.isNotEmpty(index)){
-                    ArrayList<String> skins=CustomSkinLoader.GSON.fromJson(index, ArrayList.class);
-                    if(skins!=null&&!skins.isEmpty())
-                        result.skins=skins;
+                    String[] skins = CustomSkinLoader.GSON.fromJson(index, String[].class);
+                    if(skins != null && skins.length != 0)
+                        result.skins = Lists.newArrayList(skins);
                 }
             }catch(Exception e){
                 CustomSkinLoader.logger.warning("Exception occurs while parsing index file: "+e.toString());
@@ -96,7 +94,6 @@ public class DynamicSkullManager {
                 }else{
                     //Could not find skin
                     result.skins.remove(i--);
-                    continue;
                 }
             }else{
                 //Online Skin
@@ -104,7 +101,6 @@ public class DynamicSkullManager {
                 if(!responce.success){
                     //Could not load skin
                     result.skins.remove(i--);
-                    continue;
                 }
             }
         }
@@ -130,7 +126,7 @@ public class DynamicSkullManager {
             return textures;
         File skinFile=new File(CustomSkinLoader.DATA_DIR,skinUrl);
         if(!skinFile.isFile())
-            return new HashMap();
+            return Maps.newHashMap();
         textures.put(Type.SKIN, ModelManager0.getProfileTexture(HttpTextureUtil.getLocalFakeUrl(skinUrl), null));
         return textures;
     }
@@ -139,7 +135,7 @@ public class DynamicSkullManager {
         if(staticTextures.get(profile)!=null)
             return staticTextures.get(profile);
         if(loadingList.contains(profile))
-            return new HashMap();
+            return Maps.newHashMap();
         if(dynamicTextures.containsKey(profile)){
             SkullTexture texture=dynamicTextures.get(profile);
             long time=System.currentTimeMillis()-texture.startTime;
@@ -158,6 +154,6 @@ public class DynamicSkullManager {
         };
         loadThread.setName("Skull "+profile.hashCode());
         loadThread.start();
-        return new HashMap();
+        return Maps.newHashMap();
     }
 }

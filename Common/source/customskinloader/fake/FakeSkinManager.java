@@ -28,7 +28,7 @@ import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager{
-    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue());
+    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
     private final TextureManager textureManager;
 
     public FakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
@@ -48,7 +48,7 @@ public class FakeSkinManager{
         if (itextureobject != null)//Have already loaded
             makeCallback(skinAvailableCallback,textureType, resourcelocation, profileTexture);
         else{
-            ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), 
+            ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(),
                 new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture));
             this.textureManager.loadTexture(resourcelocation, threaddownloadimagedata);
         }
@@ -57,14 +57,14 @@ public class FakeSkinManager{
     public void loadProfileTextures(final GameProfile profile, final SkinAvailableCallback skinAvailableCallback, final boolean requireSecure){
         THREAD_POOL.submit(new Runnable(){
             public void run(){
-                final Map<Type, MinecraftProfileTexture> map = Maps.<Type, MinecraftProfileTexture>newHashMap();
+                final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
                 map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile));
 
                 Minecraft.getMinecraft().addScheduledTask(new Runnable(){
                     public void run(){
                         for(Type type:Type.values())
                             if(map.containsKey(type))
-                                FakeSkinManager.this.loadSkin((MinecraftProfileTexture)map.get(type), type, skinAvailableCallback);
+                                FakeSkinManager.this.loadSkin(map.get(type), type, skinAvailableCallback);
                     }
                 });
             }
@@ -102,7 +102,7 @@ public class FakeSkinManager{
                 buffer.skinAvailable();
                 if ("auto".equals(texture.getMetadata("model")) && buffer instanceof FakeSkinBuffer){
                     //Auto judge skin type
-                    Map metadata = Maps.newHashMap();
+                    Map<String, String> metadata = Maps.newHashMap();
                     metadata.put("model", ((FakeSkinBuffer) buffer).judgeType());
                     texture = new MinecraftProfileTexture(texture.getUrl(), metadata);
                 }

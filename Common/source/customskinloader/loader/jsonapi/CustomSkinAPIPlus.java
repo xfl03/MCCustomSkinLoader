@@ -22,14 +22,14 @@ public class CustomSkinAPIPlus implements IJsonAPI {
         
         if(clientIDFile.isFile())
             try{
-                clientID=FileUtils.readFileToString(clientIDFile);
+                clientID=FileUtils.readFileToString(clientIDFile, "UTF-8");
             }catch(Exception e){
                 e.printStackTrace();
             }
         if(clientID==null){
             clientID=UUID.randomUUID().toString();
             try {
-                FileUtils.write(clientIDFile, clientID);
+                FileUtils.write(clientIDFile, clientID, "UTF-8");
             } catch (Exception e) {
                 e.printStackTrace();
             }

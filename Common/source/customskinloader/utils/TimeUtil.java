@@ -2,7 +2,7 @@ package customskinloader.utils;
 
 public class TimeUtil {
     public static long getCurrentUnixTimestamp(){
-        return System.currentTimeMillis()/1000l;
+        return System.currentTimeMillis() / 1000L;
     }
     public static long getUnixTimestamp(long offset){
         return getCurrentUnixTimestamp()+offset;

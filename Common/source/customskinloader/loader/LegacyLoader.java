@@ -55,7 +55,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
                 if(elytraFile.exists()&&elytraFile.isFile())
                     profile.elytraUrl=HttpTextureUtil.getLocalLegacyFakeUrl(elytra, HttpTextureUtil.getHash(elytra, elytraFile.length(), elytraFile.lastModified()));
             }else{
-                HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(elytra).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG!=null&&ssp.checkPNG!=false).setLoadContent(false).setCacheTime(90));
+                HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(elytra).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG!=null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if(responce.success)
                     profile.elytraUrl=HttpTextureUtil.getLegacyFakeUrl(elytra);
             }
@@ -85,6 +85,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
         if(HttpUtil0.isLocal(ssp.elytra))
             initFolder(ssp.elytra);
     }
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void initFolder(String target){
         String file=target.replaceAll(USERNAME_REGEX, "init");
         File folder=new File(CustomSkinLoader.DATA_DIR,file).getParentFile();

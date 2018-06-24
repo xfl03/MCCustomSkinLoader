@@ -1,9 +1,9 @@
 package customskinloader.loader;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +56,7 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
     }
     
     //Username -> UUID
-    public static GameProfile loadGameProfile(String username) throws Exception{
+    public static GameProfile loadGameProfile(String username) {
         //Doc (http://wiki.vg/Mojang_API#Username_-.3E_UUID_at_time)
         HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://api.mojang.com/users/profiles/minecraft/"+username).setCacheTime(0));
         if(StringUtils.isEmpty(responce.content))
@@ -70,9 +70,11 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
         return new GameProfile(gameProfile.getId(),gameProfile.getName());
     }
     //UUID -> Profile
-    public static GameProfile fillGameProfile(GameProfile profile) throws Exception{
+    public static GameProfile fillGameProfile(GameProfile profile) {
         //Doc (http://wiki.vg/Mojang_API#UUID_-.3E_Profile_.2B_Skin.2FCape)
-        HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://sessionserver.mojang.com/session/minecraft/profile/"+UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
+        HttpResponce responce = HttpRequestUtil.makeHttpRequest(
+                new HttpRequest("https://sessionserver.mojang.com/session/minecraft/profile/"
+                        + UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
         if(StringUtils.isEmpty(responce.content))
             return profile;
         
@@ -87,20 +89,20 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
         return newGameProfile;
     }
     
-    public static Map<MinecraftProfileTexture.Type,MinecraftProfileTexture> getTextures(GameProfile gameProfile) throws Exception{
+    public static Map<MinecraftProfileTexture.Type,MinecraftProfileTexture> getTextures(GameProfile gameProfile) {
         if(gameProfile==null)
-            return new HashMap();
-        Property textureProperty=(Property)Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
+            return Maps.newHashMap();
+        Property textureProperty=Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
         if (textureProperty==null)
-            return new HashMap();
+            return Maps.newHashMap();
         String value=textureProperty.getValue();
         if(StringUtils.isBlank(value))
-            return new HashMap();
-        String json=new String(Base64.decodeBase64(value),Charsets.UTF_8);
+            return Maps.newHashMap();
+        @SuppressWarnings("deprecation") String json = new String(Base64.decodeBase64(value), Charsets.UTF_8);
         Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class,new UUIDTypeAdapter()).create();
         MinecraftTexturesPayload result=gson.fromJson(json,MinecraftTexturesPayload.class);
         if (result==null||result.getTextures()==null)
-            return new HashMap();
+            return Maps.newHashMap();
         return result.getTextures();
     }
     

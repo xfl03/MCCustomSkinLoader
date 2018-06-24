@@ -19,7 +19,7 @@ public class UniSkinAPI implements IJsonAPI {
 
     @Override
     public String toJsonUrl(String root, String username) {
-        return new StringBuilder().append(root).append(username).append(SUFFIX).toString();
+        return root + username + SUFFIX;
     }
 
     @Override

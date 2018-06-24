@@ -18,6 +18,7 @@ public class HttpTextureUtil {
             LOCAL_MARK="(LOCAL)",
             LOCAL_LEGACY_MARK="(LOCAL_LEGACY)";
     public static File defaultCacheDir;
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void cleanCacheDir(){
         if(defaultCacheDir!=null){
             defaultCacheDir.delete();
@@ -54,7 +55,7 @@ public class HttpTextureUtil {
         if(fakeUrl.startsWith(LEGACY_MARK)){
             fakeUrl=fakeUrl.replace(LEGACY_MARK, "");
             info.url=fakeUrl;
-            info.hash=DigestUtils.sha1Hex(info.url);;
+            info.hash=DigestUtils.sha1Hex(info.url);
             info.cacheFile=HttpTextureUtil.getCacheFile(info.hash);
             return info;
         }

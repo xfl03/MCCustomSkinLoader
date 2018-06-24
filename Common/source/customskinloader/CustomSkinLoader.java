@@ -50,7 +50,7 @@ public class CustomSkinLoader {
     private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
     
     //For User Skin
-    public static Map loadProfile(GameProfile gameProfile){
+    public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
         String username=gameProfile.getName();
         String credential=MinecraftUtil.getCredential(gameProfile);
         //Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
@@ -60,7 +60,7 @@ public class CustomSkinLoader {
         }
         String tempName=Thread.currentThread().getName();
         Thread.currentThread().setName(username);//Change Thread Name
-        UserProfile profile=null;
+        UserProfile profile;
         if(profileCache.isReady(credential)){
             logger.info("Cached profile will be used.");
             profile=profileCache.getProfile(credential);

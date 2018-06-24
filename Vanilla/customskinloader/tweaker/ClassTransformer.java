@@ -35,7 +35,7 @@ public class ClassTransformer implements IClassTransformer {
                     continue;
                 }
                 File file = new File(url.toURI());
-                if(file==null||!file.isFile()){
+                if(!file.isFile()){
                     ModSystemTweaker.logger.info(url.toString()+" : EXCEPTION (file not found).");
                     continue;
                 }
@@ -75,7 +75,7 @@ public class ClassTransformer implements IClassTransformer {
 
     private static ZipFile getZipFile(File file)
     {
-        ZipFile zipFile0=null;
+        ZipFile zipFile0;
         try {
             zipFile0 = new ZipFile(file);
             return zipFile0;
@@ -89,11 +89,11 @@ public class ClassTransformer implements IClassTransformer {
         if (zipFile == null)
             return bytes;
         
-        String fullName = new StringBuilder().append(name.startsWith("net") ? name.replaceAll("\\.", "\\/") : name).append(".class").toString();//Notch(Run)/MCP(Dev) Class Name
+        String fullName = (name.startsWith("net") ? name.replaceAll("\\.", "\\/") : name) + ".class";//Notch(Run)/MCP(Dev) Class Name
         if(!classes.contains(fullName)){//Check Name
             if(name.equals(transformedName))
                 return bytes;
-            fullName = new StringBuilder().append(transformedName.replaceAll("\\.", "\\/")).append(".class").toString();//MCP Class Name
+            fullName = transformedName.replaceAll("\\.", "\\/") + ".class";//MCP Class Name
             if(!classes.contains(fullName))//check Again
                 return bytes;
         }

@@ -52,7 +52,6 @@ public class UserProfile {
             return;
         case ELYTRA:
             this.capeUrl=url;
-            return;
         }
     }
     

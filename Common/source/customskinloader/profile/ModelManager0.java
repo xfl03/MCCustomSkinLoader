@@ -16,7 +16,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
  * @since 13.1
  */
 public class ModelManager0 {
-    public static enum Model{
+    public enum Model{
         SKIN_DEFAULT,
         SKIN_SLIM,
         CAPE,
@@ -88,12 +88,12 @@ public class ModelManager0 {
      * @return profile - hashMapProfile (HashMap<String,MinecraftProfileTexture>)
      * @since 13.1
      */
-    public static Map fromUserProfile(UserProfile profile){
-        Map map=Maps.newHashMap();
+    public static Map<Type, MinecraftProfileTexture> fromUserProfile(UserProfile profile){
+        Map<Type, MinecraftProfileTexture> map=Maps.newHashMap();
         if(profile==null)
             return map;
         if(profile.skinUrl!=null){
-            Map metadata = null;
+            Map<String,String> metadata = null;
             if("slim".equals(profile.model) || "auto".equals(profile.model)){
                 metadata = Maps.newHashMap();
                 metadata.put("model", profile.model);
@@ -115,7 +115,7 @@ public class ModelManager0 {
      * @return MinecraftProfileTexture
      * @since 14.5
      */
-    public static MinecraftProfileTexture getProfileTexture(String url,Map metadata){
+    public static MinecraftProfileTexture getProfileTexture(String url,Map<String,String> metadata){
         return new MinecraftProfileTexture(url,metadata);
     }
 }

@@ -26,9 +26,9 @@ public class ProfileLoader {
     }
     
     public interface IProfileLoader {
-        public UserProfile loadProfile(SkinSiteProfile ssp,GameProfile gameProfile) throws Exception;
-        public boolean compare(SkinSiteProfile ssp0,SkinSiteProfile ssp1);
-        public String getName();
-        public void initLocalFolder(SkinSiteProfile ssp);
+        UserProfile loadProfile(SkinSiteProfile ssp,GameProfile gameProfile) throws Exception;
+        boolean compare(SkinSiteProfile ssp0,SkinSiteProfile ssp1);
+        String getName();
+        void initLocalFolder(SkinSiteProfile ssp);
     }
 }

@@ -89,7 +89,7 @@ public class HttpRequestUtil {
             if(request.cacheTime==0 && request.cacheFile.isFile())
                 return loadFromCache(request,new HttpResponce());
             if(cacheInfoFile!=null&&cacheInfoFile.isFile()){
-                String json=FileUtils.readFileToString(cacheInfoFile);
+                String json=FileUtils.readFileToString(cacheInfoFile, "UTF-8");
                 if(StringUtils.isNotEmpty(json))
                     cacheInfo=CustomSkinLoader.GSON.fromJson(json, CacheInfo.class);
                 if(cacheInfo==null)
@@ -121,7 +121,7 @@ public class HttpRequestUtil {
                 CustomSkinLoader.logger.info("Payload: "+request.payload);
                 c.setDoOutput(true);
                 OutputStream os=c.getOutputStream();
-                IOUtils.write(request.payload, os);
+                IOUtils.write(request.payload, os, "UTF-8");
                 IOUtils.closeQuietly(os);
             }
             c.connect();
@@ -154,13 +154,13 @@ public class HttpRequestUtil {
                     cacheInfo.etag=c.getHeaderField("ETag");
                     cacheInfo.lastModified=c.getLastModified();
                     cacheInfo.expire=getExpire(c,request.cacheTime);
-                    FileUtils.write(cacheInfoFile, CustomSkinLoader.GSON.toJson(cacheInfo));
+                    FileUtils.write(cacheInfoFile, CustomSkinLoader.GSON.toJson(cacheInfo), "UTF-8");
                 }
                 CustomSkinLoader.logger.debug("Saved to cache (Length: "+request.cacheFile.length()+" , Path: '"+request.cacheFile.getAbsolutePath()+"' , Expire: "+cacheInfo.expire+")");
             }
             if(!request.loadContent)
                 return responce;
-            responce.content=new String(bytes,Charsets.UTF_8);
+            responce.content=new String(bytes, "UTF-8");
             CustomSkinLoader.logger.debug("Content: "+responce.content);
             return responce;
             
@@ -187,7 +187,7 @@ public class HttpRequestUtil {
         
         CustomSkinLoader.logger.info("Try to load from cache '"+request.cacheFile.getAbsolutePath()+"'.");
         try {
-            responce.content=FileUtils.readFileToString(request.cacheFile);
+            responce.content=FileUtils.readFileToString(request.cacheFile, "UTF-8");
             CustomSkinLoader.logger.debug("Successfully load from cache");
             CustomSkinLoader.logger.debug("Content: "+responce.content);
         } catch (IOException e) {
@@ -201,7 +201,7 @@ public class HttpRequestUtil {
         String cacheControl=connection.getHeaderField("Cache-Control");
         if(StringUtils.isNotEmpty(cacheControl)){
             Matcher m=MAX_AGE_PATTERN.matcher(cacheControl);
-            if(m!=null && m.matches())
+            if(m.matches())
                 return TimeUtil.getUnixTimestamp(Long.parseLong(m.group(m.groupCount())));
         }
         long expires=connection.getExpiration();

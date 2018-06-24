@@ -20,19 +20,19 @@ import customskinloader.utils.HttpRequestUtil.HttpResponce;
 public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     
     public interface IJsonAPI {
-        public String toJsonUrl(String root,String username);
-        public String getPayload(SkinSiteProfile ssp);
-        public UserProfile toUserProfile(String root,String json,boolean local);
-        public String getName();
+        String toJsonUrl(String root, String username);
+        String getPayload(SkinSiteProfile ssp);
+        UserProfile toUserProfile(String root, String json, boolean local);
+        String getName();
     }
     public static class ErrorProfile{
         public int errno;
         public String msg;
     }
-    public static enum Type{
+    public enum Type{
         CustomSkinAPI(new CustomSkinAPI()),CustomSkinAPIPlus(new CustomSkinAPIPlus()),UniSkinAPI(new UniSkinAPI());
         public IJsonAPI jsonAPI;
-        private Type(IJsonAPI jsonAPI){
+        Type(IJsonAPI jsonAPI){
             this.jsonAPI=jsonAPI;
         }
     }
@@ -58,7 +58,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
                 CustomSkinLoader.logger.info("Profile File not found.");
                 return null;
             }
-            json=IOUtils.toString(new FileInputStream(jsonFile));
+            json=IOUtils.toString(new FileInputStream(jsonFile), "UTF-8");
         }else{
             HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(jsonUrl).setCacheTime(90).setUserAgent(ssp.userAgent).setPayload(type.jsonAPI.getPayload(ssp)));
             json=responce.content;
@@ -84,12 +84,13 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     }
     @Override
     public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
-        return StringUtils.isNoneEmpty(ssp0.root)?ssp0.root.equalsIgnoreCase(ssp1.root):true;
+        return !StringUtils.isNoneEmpty(ssp0.root) || ssp0.root.equalsIgnoreCase(ssp1.root);
     }
     @Override
     public String getName() {
         return type.jsonAPI.getName();
     }
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void initLocalFolder(SkinSiteProfile ssp) {
         if(HttpUtil0.isLocal(ssp.root)){

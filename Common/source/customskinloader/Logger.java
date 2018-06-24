@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Logger {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public enum Level{
@@ -31,6 +32,9 @@ public class Logger {
     private BufferedWriter writer=null;
     public Logger(){
         //Logger isn't created.
+    }
+    public Logger(String logFile) {
+        this(new File(logFile));
     }
     public Logger(File logFile){
         try {
@@ -59,18 +63,14 @@ public class Logger {
     public void log(Level level,String msg){
         if(!level.display()&&writer==null)
             return;
-        StringBuilder sb=new StringBuilder();
-        sb.append("[").append(Thread.currentThread().getName()).append(" ").append(level.getName()).append("] ");
-        sb.append(msg);
+        String sb = String.format("[%s %s] %s", Thread.currentThread().getName(), level.getName(), msg);
         if(level.display())
-            System.out.println(sb.toString());
+            System.out.println(sb);
         if(writer==null)
             return;
         try {
-            StringBuilder sb2=new StringBuilder();
-            sb2.append("[").append(DATE_FORMAT.format(new Date())).append("] ");
-            sb2.append(sb.toString()).append("\r\n");
-            writer.write(sb2.toString());
+            String sb2 = String.format("[%s] %s\r\n", DATE_FORMAT.format(new Date()), sb);
+            writer.write(sb2);
             writer.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,8 +82,14 @@ public class Logger {
     public void info(String msg){
         log(Level.INFO,msg);
     }
+    public void info(String format, Object... objs){
+        info(String.format(format, objs));
+    }
     public void warning(String msg){
         log(Level.WARNING,msg);
+    }
+    public void warning(String format, Object... objs){
+        warning(String.format(format, objs));
     }
     public void warning(Throwable e){
         log(Level.WARNING,"Exception: "+e.toString());

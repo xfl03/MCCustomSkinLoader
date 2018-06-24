@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
 import customskinloader.CustomSkinLoader;
@@ -14,6 +13,7 @@ import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Config {
     //Program
     public String version;
@@ -104,7 +104,7 @@ public class Config {
         }
         try {
             CustomSkinLoader.logger.info("Try to load config.");
-            String json=FileUtils.readFileToString(CustomSkinLoader.CONFIG_FILE,Charsets.UTF_8);
+            String json=FileUtils.readFileToString(CustomSkinLoader.CONFIG_FILE, "UTF-8");
             Config config=CustomSkinLoader.GSON.fromJson(json, Config.class);
             CustomSkinLoader.logger.info("Successfully load config.");
             return config;
@@ -126,12 +126,12 @@ public class Config {
         }
         List<SkinSiteProfile> adds=new ArrayList<SkinSiteProfile>();
         File[] files=listAddition.listFiles();
-        for(File file:files){
+        for(File file: files != null ? files : new File[0]){
             if(!file.getName().toLowerCase().endsWith(".json")&&!file.getName().toLowerCase().endsWith(".txt"))
                 continue;
             try {
                 CustomSkinLoader.logger.info("Try to load Extra List.("+file.getName()+")");
-                String json=FileUtils.readFileToString(file,Charsets.UTF_8);
+                String json=FileUtils.readFileToString(file, "UTF-8");
                 SkinSiteProfile ssp=CustomSkinLoader.GSON.fromJson(json, SkinSiteProfile.class);
                 CustomSkinLoader.logger.info("Successfully load Extra List.");
                 file.delete();
@@ -186,7 +186,7 @@ public class Config {
             CustomSkinLoader.CONFIG_FILE.delete();
         try {
             CustomSkinLoader.CONFIG_FILE.createNewFile();
-            FileUtils.write(CustomSkinLoader.CONFIG_FILE, json, Charsets.UTF_8);
+            FileUtils.write(CustomSkinLoader.CONFIG_FILE, json, "UTF-8");
             CustomSkinLoader.logger.info("Successfully "+(update?"update":"create")+" config.");
         } catch (Exception e) {
             CustomSkinLoader.logger.info("Failed to "+(update?"update":"create")+" config.("+e.toString()+")");

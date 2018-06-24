@@ -85,7 +85,7 @@ public class MinecraftUtil {
     private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");
     private static void testProbe(){
         minecraftVersion.clear();
-        URLClassLoader ucl = (URLClassLoader)new MinecraftUtil().getClass().getClassLoader();
+        URLClassLoader ucl = (URLClassLoader) MinecraftUtil.class.getClassLoader();
         URL urls[] = ucl.getURLs();
         for(URL url:urls){
             Matcher m = null;
@@ -101,26 +101,26 @@ public class MinecraftUtil {
     }
     
     public static boolean isCoreFile(URL url){
-        Matcher m = null;
+        Matcher m;
         try{
             m=MINECRAFT_CORE_FILE_PATTERN.matcher(URLDecoder.decode(url.getPath(),"UTF-8"));
         }catch(Exception e){
             e.printStackTrace();
             return false;
         }
-        return m!=null && m.matches();
+        return m.matches();
     }
     
     private final static Pattern LIBRARY_FILE_PATTERN = Pattern.compile("^(.*?)/libraries/(.*?)/([^\\/\\\\]*?).jar$");
     public static boolean isLibraryFile(URL url){
-        Matcher m = null;
+        Matcher m;
         try{
             m=LIBRARY_FILE_PATTERN.matcher(URLDecoder.decode(url.getPath(),"UTF-8"));
         }catch(Exception e){
             e.printStackTrace();
             return false;
         }
-        return m!=null && m.matches();
+        return m.matches();
     }
     
     public static String getCredential(GameProfile profile) {
