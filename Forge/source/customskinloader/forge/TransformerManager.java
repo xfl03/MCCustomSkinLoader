@@ -17,12 +17,12 @@ import org.objectweb.asm.tree.MethodNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import customskinloader.forge.PlayerTabTransformer.ScoreObjectiveTransformer;
-import customskinloader.forge.SkinManagerTransformer.*;
-import customskinloader.forge.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
+import customskinloader.forge.transformer.PlayerTabTransformer.ScoreObjectiveTransformer;
+import customskinloader.forge.transformer.SkinManagerTransformer.*;
+import customskinloader.forge.transformer.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
 
 public class TransformerManager implements IClassTransformer {
-    public static Logger logger = new Logger("ForgePlugin.log");
+    public static Logger logger = new Logger("CustomSkinLoader/ForgePlugin.log");
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface TransformTarget{

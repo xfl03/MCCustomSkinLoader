@@ -1,4 +1,4 @@
-package customskinloader.forge;
+package customskinloader.forge.transformer;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;

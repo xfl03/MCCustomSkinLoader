@@ -1,4 +1,4 @@
-package customskinloader.forge;
+package customskinloader.forge.transformer;
 
 import java.util.ListIterator;
 
