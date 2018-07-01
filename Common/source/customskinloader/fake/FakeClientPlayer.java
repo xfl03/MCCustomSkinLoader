@@ -69,7 +69,7 @@ public class FakeClientPlayer {
             TextureManager textman = Minecraft.getMinecraft().getTextureManager();
             ITextureObject ito = textman.getTexture(location);
 
-            if (ito != null)
+            if (ito == null)
                 return;
 
             loaded = true;
