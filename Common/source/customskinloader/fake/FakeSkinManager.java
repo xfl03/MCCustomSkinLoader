@@ -50,6 +50,8 @@ public class FakeSkinManager{
         else{
             ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(),
                 new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture));
+            if(skinAvailableCallback instanceof FakeClientPlayer.LegacyBuffer)//Cache for client player
+                FakeClientPlayer.textureCache.put(resourcelocation,threaddownloadimagedata);
             this.textureManager.loadTexture(resourcelocation, threaddownloadimagedata);
         }
         return resourcelocation;

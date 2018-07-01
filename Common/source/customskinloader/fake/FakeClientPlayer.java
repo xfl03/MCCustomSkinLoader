@@ -1,7 +1,9 @@
 package customskinloader.fake;
 
+import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
@@ -52,7 +54,9 @@ public class FakeClientPlayer {
         return new ResourceLocation("skins/legacy-" + StringUtils.stripControlCodes(username));
     }
 
-    private static class LegacyBuffer implements SkinAvailableCallback {
+    public static Map<ResourceLocation, ITextureObject> textureCache = Maps.newHashMap();
+
+    public static class LegacyBuffer implements SkinAvailableCallback {
         ResourceLocation resourceLocationIn;
         boolean loaded = false;
 
@@ -68,7 +72,8 @@ public class FakeClientPlayer {
 
             TextureManager textman = Minecraft.getMinecraft().getTextureManager();
             ITextureObject ito = textman.getTexture(location);
-
+            if (ito == null)
+                ito = textureCache.get(location);
             if (ito == null)
                 return;
 
@@ -76,7 +81,6 @@ public class FakeClientPlayer {
             textman.loadTexture(resourceLocationIn, ito);
             CustomSkinLoader.logger.debug("Legacy Texture (" + resourceLocationIn + ") Loaded as " +
                     ito.toString() + " (" + location + ")");
-            //textman.bindTexture(resourceLocationIn);
         }
 
     }
