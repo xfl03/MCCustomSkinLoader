@@ -66,16 +66,16 @@ public class FakeClientPlayer {
             if (typeIn != Type.SKIN || loaded)
                 return;
 
-            loaded = true;
-
-
             TextureManager textman = Minecraft.getMinecraft().getTextureManager();
             ITextureObject ito = textman.getTexture(location);
 
             if (ito != null)
-                textman.loadTexture(resourceLocationIn, ito);
+                return;
+
+            loaded = true;
+            textman.loadTexture(resourceLocationIn, ito);
             CustomSkinLoader.logger.debug("Legacy Texture (" + resourceLocationIn + ") Loaded as " +
-                    (ito == null ? null : ito.toString()) + " (" + location + ")");
+                    ito.toString() + " (" + location + ")");
             //textman.bindTexture(resourceLocationIn);
         }
 
