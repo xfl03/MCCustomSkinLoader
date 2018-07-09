@@ -91,8 +91,10 @@ public class UserProfile {
     public void mix(UserProfile profile){
         if(profile==null)
             return;
-        if(StringUtils.isEmpty(this.skinUrl))
-            this.skinUrl=profile.skinUrl;
+        if(StringUtils.isEmpty(this.skinUrl)) {
+            this.skinUrl = profile.skinUrl;
+            this.model = profile.model;
+        }
         if(StringUtils.isEmpty(this.capeUrl))
             this.capeUrl=profile.capeUrl;
         if(StringUtils.isEmpty(this.elytraUrl))

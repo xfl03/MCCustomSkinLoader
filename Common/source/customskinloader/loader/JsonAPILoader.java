@@ -30,7 +30,10 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
         public String msg;
     }
     public enum Type{
-        CustomSkinAPI(new CustomSkinAPI()),CustomSkinAPIPlus(new CustomSkinAPIPlus()),UniSkinAPI(new UniSkinAPI());
+        CustomSkinAPI(new CustomSkinAPI()),
+        CustomSkinAPIPlus(new CustomSkinAPIPlus()),
+        UniSkinAPI(new UniSkinAPI()),
+        ElyByAPI(new ElyByAPI());
         public IJsonAPI jsonAPI;
         Type(IJsonAPI jsonAPI){
             this.jsonAPI=jsonAPI;
@@ -45,11 +48,11 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
         String username=gameProfile.getName();
-        boolean local=HttpUtil0.isLocal(ssp.root);
-        if(ssp.root==null||ssp.root.equals("")){
+        if(StringUtils.isEmpty(ssp.root) && type!=Type.ElyByAPI){
             CustomSkinLoader.logger.info("Root not defined.");
             return null;
         }
+        boolean local = HttpUtil0.isLocal(ssp.root);
         String jsonUrl=type.jsonAPI.toJsonUrl(ssp.root, username);
         String json;
         if(local){

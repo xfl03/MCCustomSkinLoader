@@ -12,8 +12,9 @@ public class ProfileLoader {
             new MojangAPILoader(),
             new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPI),
             new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPIPlus),
-            new LegacyLoader(),
-            new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI)};
+            new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI),
+            new JsonAPILoader(JsonAPILoader.Type.ElyByAPI),
+            new LegacyLoader()};
     
     public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
     

@@ -67,17 +67,17 @@ public class ModelManager0 {
      * @return profile - UserProfile instance
      * @since 13.1
      */
-    public static UserProfile toUserProfile(Map profile){
+    public static UserProfile toUserProfile(Map<Type, MinecraftProfileTexture> profile){
         UserProfile userProfile=new UserProfile();
         if(profile==null)
             return userProfile;
-        MinecraftProfileTexture skin=(MinecraftProfileTexture)profile.get(Type.SKIN);
+        MinecraftProfileTexture skin = profile.get(Type.SKIN);
         userProfile.skinUrl= skin==null?null:skin.getUrl();//Avoid NullPointerException
         userProfile.model= skin==null?null:skin.getMetadata("model");
         if(StringUtils.isEmpty(userProfile.model))
             userProfile.model="default";
         
-        MinecraftProfileTexture cape=(MinecraftProfileTexture)profile.get(Type.CAPE);
+        MinecraftProfileTexture cape = profile.get(Type.CAPE);
         userProfile.capeUrl= cape==null?null:cape.getUrl();
         return userProfile;
     }
