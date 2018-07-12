@@ -56,12 +56,12 @@ public class HttpTextureUtil {
             fakeUrl=fakeUrl.replace(LEGACY_MARK, "");
             info.url=fakeUrl;
             info.hash=DigestUtils.sha1Hex(info.url);
-            info.cacheFile=HttpTextureUtil.getCacheFile(info.hash);
+            info.cacheFile = HttpRequestUtil.getCacheFile(info.hash);
             return info;
         }
         return info;
     }
-    
+
     public static String getLegacyFakeUrl(String url){
         return LEGACY_MARK+url;
     }
