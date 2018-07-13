@@ -17,14 +17,14 @@ import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 
 public class LegacyLoader implements ProfileLoader.IProfileLoader {
-    public static final String USERNAME_REGEX="\\{USERNAME\\}";
+    public static final String USERNAME_PLACEHOLDER="{USERNAME}";
     
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
         String username=gameProfile.getName();
         UserProfile profile=new UserProfile();
         if(StringUtils.isNoneEmpty(ssp.skin)){
-            String skin=ssp.skin.replaceAll(USERNAME_REGEX, username);
+            String skin=ssp.skin.replace(USERNAME_PLACEHOLDER, username);
             if(HttpUtil0.isLocal(ssp.skin)){
                 File skinFile=new File(CustomSkinLoader.DATA_DIR,skin);
                 if(skinFile.exists()&&skinFile.isFile())
@@ -37,7 +37,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
             profile.model=profile.hasSkinUrl()?ssp.model:null;
         }
         if(StringUtils.isNoneEmpty(ssp.cape)){
-            String cape=ssp.cape.replaceAll(USERNAME_REGEX, username);
+            String cape=ssp.cape.replace(USERNAME_PLACEHOLDER, username);
             if(HttpUtil0.isLocal(ssp.cape)){
                 File capeFile=new File(CustomSkinLoader.DATA_DIR,cape);
                 if(capeFile.exists()&&capeFile.isFile())
@@ -49,7 +49,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
             }
         }
         if(ModelManager0.isElytraSupported()&&StringUtils.isNoneEmpty(ssp.elytra)){
-            String elytra=ssp.elytra.replaceAll(USERNAME_REGEX, username);
+            String elytra=ssp.elytra.replace(USERNAME_PLACEHOLDER, username);
             if(HttpUtil0.isLocal(ssp.elytra)){
                 File elytraFile=new File(CustomSkinLoader.DATA_DIR,elytra);
                 if(elytraFile.exists()&&elytraFile.isFile())
@@ -87,7 +87,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
     }
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void initFolder(String target){
-        String file=target.replaceAll(USERNAME_REGEX, "init");
+        String file=target.replace(USERNAME_PLACEHOLDER, "init");
         File folder=new File(CustomSkinLoader.DATA_DIR,file).getParentFile();
         if(folder!=null&&!folder.exists())
             folder.mkdirs();
