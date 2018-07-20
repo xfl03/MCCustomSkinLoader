@@ -51,6 +51,7 @@ The problem of rendering incorrect texture has been fixed.
 - [Mojang](http://www.minecraft.net/) (Mojang API)
 - [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
 - [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
+- [ElyBy](http://docs.ely.by/) (ElyByAPI)
 - SkinMe (UniSkinAPI)  
 - LocalSkin (Legacy)  
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  

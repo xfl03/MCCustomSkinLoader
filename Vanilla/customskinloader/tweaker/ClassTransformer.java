@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import customskinloader.utils.JavaUtil;
 import org.apache.commons.io.IOUtils;
 
 import customskinloader.utils.MinecraftUtil;
@@ -23,8 +23,7 @@ public class ClassTransformer implements IClassTransformer {
     public ClassTransformer() {
         ModSystemTweaker.logger.info("ClassTransformer Begin");
         try {
-            URLClassLoader ucl = (URLClassLoader)this.getClass().getClassLoader();
-            URL urls[] = ucl.getURLs();
+            URL urls[] = JavaUtil.getClasspath();
             for (URL url : urls) {
                 if(MinecraftUtil.isCoreFile(url)){
                     ModSystemTweaker.logger.debug(url.toString()+" : SKIP (core file).");

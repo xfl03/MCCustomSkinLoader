@@ -9,6 +9,7 @@ configFile.withReader {
 }
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         maven {
             name = "forge"

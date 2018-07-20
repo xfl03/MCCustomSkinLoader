@@ -2,7 +2,6 @@ package customskinloader.utils;
 
 import java.io.File;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -85,8 +84,7 @@ public class MinecraftUtil {
     private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");
     private static void testProbe(){
         minecraftVersion.clear();
-        URLClassLoader ucl = (URLClassLoader) MinecraftUtil.class.getClassLoader();
-        URL urls[] = ucl.getURLs();
+        URL urls[] = JavaUtil.getClasspath();
         for(URL url:urls){
             Matcher m = null;
             try{

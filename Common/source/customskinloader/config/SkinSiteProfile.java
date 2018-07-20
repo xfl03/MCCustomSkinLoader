@@ -55,4 +55,11 @@ public class SkinSiteProfile {
         ssp.elytra=elytra;
         return ssp;
     }
+
+    public static SkinSiteProfile createElyByAPI(String name) {
+        SkinSiteProfile ssp = new SkinSiteProfile();
+        ssp.name = name;
+        ssp.type = "ElyByAPI";
+        return ssp;
+    }
 }
