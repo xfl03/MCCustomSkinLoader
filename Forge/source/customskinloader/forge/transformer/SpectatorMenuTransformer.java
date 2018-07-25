@@ -28,8 +28,11 @@ public class SpectatorMenuTransformer {
                 AbstractInsnNode ain=li.next();
                 if(ain.getOpcode()!=Opcodes.INVOKESTATIC)
                     continue;
-                //MethodInsnNode min=(MethodInsnNode)nn;
-                //min.owner="customskinloader/fake/FakeClientPlayer";
+
+                MethodInsnNode min = (MethodInsnNode)ain;
+                if(min.owner.equals("net/minecraft/client/entity/AbstractClientPlayer"))//Fix 1.13
+                    continue;
+
                 if(!flag) {
                     //First InvokeStatic
                     il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,"customskinloader/fake/FakeClientPlayer","getLocationSkin",
