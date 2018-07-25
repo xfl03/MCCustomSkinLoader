@@ -3,6 +3,7 @@ package customskinloader.fake;
 import customskinloader.CustomSkinLoader;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
+import customskinloader.fake.texture.FakeNativeImage;
 
 import java.awt.image.BufferedImage;
 
@@ -11,6 +12,20 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
     private int ratio = 1;
     private FakeImage image = null;
 
+    //parseUserSkin for 1.13+
+    public net.minecraft.client.renderer.texture.NativeImage func_195786_a(net.minecraft.client.renderer.texture.NativeImage image) {
+        if (image == null)
+            return null;
+
+        FakeImage img = parseUserSkin(new FakeNativeImage(image));
+        if (img instanceof FakeNativeImage)
+            return ((FakeNativeImage) img).getImage();
+
+        CustomSkinLoader.logger.warning("Failed to parseUserSkin(func_195786_a).");
+        return null;
+    }
+
+    //parseUserSkin for 1.12.2-
     public BufferedImage parseUserSkin(BufferedImage image) {
         if (image == null)
             return null;
