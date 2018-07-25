@@ -95,7 +95,10 @@ public class FakeSkinManager{
             this.location=location;
             this.texture=texture;
         }
-        
+
+        public net.minecraft.client.renderer.texture.NativeImage func_195786_a(net.minecraft.client.renderer.texture.NativeImage image){
+            return buffer instanceof FakeSkinBuffer ? ((FakeSkinBuffer) buffer).func_195786_a(image) : image;
+        }
         public BufferedImage parseUserSkin(BufferedImage image){
             return buffer==null?image:buffer.parseUserSkin(image);
         }

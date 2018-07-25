@@ -33,6 +33,7 @@ jar {
         attributes 'FMLCorePlugin': 'customskinloader.forge.ForgePlugin'
         attributes 'FMLCorePluginContainsFMLMod': true
     }
+    exclude 'net/minecraft/client/renderer/texture/NativeImage.class'
 }
 sourceSets {
     main {

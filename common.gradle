@@ -50,6 +50,7 @@ jar {
         attributes 'TweakVersion': version
         attributes 'TweakOrder'  : '-10'
     }
+    exclude 'net/minecraft/client/renderer/texture/NativeImage.class'
 }
 
 sourceSets {
