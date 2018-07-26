@@ -2,6 +2,8 @@ package customskinloader.forge.transformer;
 
 import java.util.ListIterator;
 
+import customskinloader.forge.TransformerManager;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -22,7 +24,7 @@ public class SpectatorMenuTransformer {
         public void transform(ClassNode cn, MethodNode mn) {
             InsnList il=mn.instructions;
             ListIterator<AbstractInsnNode> li=il.iterator();
-            
+
             boolean flag=false;
             while(li.hasNext()) {
                 AbstractInsnNode ain=li.next();
@@ -30,8 +32,11 @@ public class SpectatorMenuTransformer {
                     continue;
 
                 MethodInsnNode min = (MethodInsnNode)ain;
-                if(min.owner.equals("net/minecraft/client/entity/AbstractClientPlayer"))//Fix 1.13
+                String deobfName = FMLDeobfuscatingRemapper.INSTANCE.map(min.owner);
+                if(!deobfName.equals("net/minecraft/client/entity/AbstractClientPlayer")) {//Fix 1.13
+                    TransformerManager.logger.info("InvokeStatic to " + deobfName + " in PlayerMenuObject will be ignored.");
                     continue;
+                }
 
                 if(!flag) {
                     //First InvokeStatic
@@ -46,6 +51,6 @@ public class SpectatorMenuTransformer {
                 }
             }
         }
-        
+
     }
 }

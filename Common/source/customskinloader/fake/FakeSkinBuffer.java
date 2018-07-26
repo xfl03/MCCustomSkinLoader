@@ -49,15 +49,15 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
             image.fillArea(0 * ratio, 32 * ratio, 64 * ratio, 32 * ratio);
 
             //Right Leg -> Left Leg
-            image.copyArea( 4 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Top
-            image.copyArea( 8 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Bottom
+            image.copyArea( 4 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Top
+            image.copyArea( 8 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Bottom
             image.copyArea( 0 * ratio, 20 * ratio, 24 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Right
             image.copyArea( 4 * ratio, 20 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Front
             image.copyArea( 8 * ratio, 20 * ratio,  8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Left
             image.copyArea(12 * ratio, 20 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Back
             //Right Arm -> Left Arm
-            image.copyArea(44 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Top
-            image.copyArea(48 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Bottom
+            image.copyArea(44 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Top
+            image.copyArea(48 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Bottom
             image.copyArea(40 * ratio, 20 * ratio,  0 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Right
             image.copyArea(44 * ratio, 20 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Front
             image.copyArea(48 * ratio, 20 * ratio,-16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Left

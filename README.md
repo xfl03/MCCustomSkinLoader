@@ -78,6 +78,7 @@ You could not earn money with this mod excluding modpack.
 Including some codes from 
 - [AsteriskTeam/TabIconHackForge](http://git.oschina.net/AsteriskTeam/TabIconHackForge) (GPLv3)
 - [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)  
+- [NekoCaffeine/Alchemy](https://github.com/NekoCaffeine/Alchemy) (WTFPL)  
   
 Copyright(C) 2013-2018 JLChnToZ xfl03  
 

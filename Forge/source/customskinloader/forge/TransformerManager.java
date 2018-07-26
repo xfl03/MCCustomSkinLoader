@@ -17,6 +17,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import customskinloader.forge.transformer.*;
 import customskinloader.forge.transformer.PlayerTabTransformer.ScoreObjectiveTransformer;
 import customskinloader.forge.transformer.SkinManagerTransformer.*;
 import customskinloader.forge.transformer.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
@@ -39,7 +40,9 @@ public class TransformerManager implements IClassTransformer {
             new LoadProfileTexturesTransformer(),
             new LoadSkinFromCacheTransformer(),
             new ScoreObjectiveTransformer(),
-            new PlayerMenuObjectTransformer()};
+            new PlayerMenuObjectTransformer(),
+            new FakeSkinManagerTransformer.InitTransformer()
+    };
     private Map<String, Map<String, IMethodTransformer>> map;
     public TransformerManager(){
         map = new HashMap<String, Map<String, IMethodTransformer>>();

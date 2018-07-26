@@ -3,7 +3,9 @@ package customskinloader.forge;
 import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 
+@Name("CustomSkinLoader")
 public class ForgePlugin implements IFMLLoadingPlugin {
 
     @Override
