@@ -14,7 +14,7 @@ Supported Skin Load APIs:
 - [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)  
 - CustomSkinAPIPlus (Test Only)  
 - [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)  
-- [ElfByAPI](http://docs.ely.by/api.html)  
+- [ElyByAPI](http://docs.ely.by/api.html)  
 - Legacy  
 
 You can use this feature to customize your skin load list so as to load your skins from any skin server you want.  

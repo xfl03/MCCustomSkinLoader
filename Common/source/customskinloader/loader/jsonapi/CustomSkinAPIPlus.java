@@ -42,9 +42,7 @@ public class CustomSkinAPIPlus implements IJsonAPI {
 
     @Override
     public String getPayload(SkinSiteProfile ssp) {
-        if(ssp.privacy==null)
-            ssp.privacy=new CustomSkinAPIPlusPrivacy();
-        return new Gson().toJson(new CustomSkinAPIPlusPayload(ssp.privacy));
+        return new Gson().toJson(new CustomSkinAPIPlusPayload());
     }
 
     @Override
@@ -58,25 +56,15 @@ public class CustomSkinAPIPlus implements IJsonAPI {
     }
 
     public static class CustomSkinAPIPlusPayload{
-        public String gameVersion;//minecraft version
-        public String modVersion;//mod version
-        public String serverAddress;//ip:port
-        public String clientID;//Minecraft Client ID
-        public CustomSkinAPIPlusPayload(CustomSkinAPIPlusPrivacy privacy){
-            if(privacy.gameVersion)
-                gameVersion=MinecraftUtil.getMinecraftMainVersion();
-            if(privacy.modVersion)
-                modVersion=CustomSkinLoader.CustomSkinLoader_VERSION;
-            if(privacy.serverAddress)
-                serverAddress=MinecraftUtil.isLanServer()?null:MinecraftUtil.getStandardServerAddress();
-            if(privacy.clientID)
-                clientID=CustomSkinAPIPlus.clientID;
+        String gameVersion;//minecraft version
+        String modVersion;//mod version
+        String serverAddress;//ip:port
+        String clientID;//Minecraft Client ID
+        CustomSkinAPIPlusPayload(){
+                gameVersion = MinecraftUtil.getMinecraftMainVersion();
+                modVersion = CustomSkinLoader.CustomSkinLoader_VERSION;
+                serverAddress = MinecraftUtil.isLanServer() ? null : MinecraftUtil.getStandardServerAddress();
+                clientID = CustomSkinAPIPlus.clientID;
         }
-    }
-    public static class CustomSkinAPIPlusPrivacy{
-        public boolean gameVersion=true;
-        public boolean modVersion=true;
-        public boolean serverAddress=true;
-        public boolean clientID=true;
     }
 }

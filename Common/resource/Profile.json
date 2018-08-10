@@ -1,0 +1,24 @@
+{
+  "id": "${mcVersion}-CSL-${modFullVersion}",
+  "inheritsFrom": "${mcVersion}",
+  "jar": "${mcVersion}",
+  "releaseTime": "2013-01-02T21:10:00+08:00",
+  "time": "2013-01-02T21:10:00+08:00",
+  "type": "release",
+  "arguments": {
+    "game": [
+      "--tweakClass",
+      "customskinloader.tweaker.Tweaker"
+    ]
+  },
+  "mainClass": "net.minecraft.launchwrapper.Launch",
+  "libraries": [
+    {
+      "name": "customskinloader:CustomSkinLoader_${mcVersion}:${modFullVersion}",
+      "url": "https://resource.littleskin.cn/"
+    },
+    {
+      "name": "net.minecraft:launchwrapper:1.12"
+    }
+  ]
+}

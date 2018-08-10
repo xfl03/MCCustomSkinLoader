@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.client.Minecraft;
 import org.apache.commons.lang3.StringUtils;
 
 import com.mojang.authlib.GameProfile;
@@ -21,7 +22,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
  */
 public class MinecraftUtil {
     public static File getMinecraftDataDir(){
-        return net.minecraft.client.Minecraft.getMinecraft().mcDataDir;
+        return Minecraft.getMinecraft().gameDir;
     }
     public static MinecraftSessionService getSessionService(){
         return net.minecraft.client.Minecraft.getMinecraft().getSessionService();
