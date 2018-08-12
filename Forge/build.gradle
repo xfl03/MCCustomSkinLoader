@@ -14,7 +14,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 ext.MINECRAFT_VERSION = "1.12.2"
-ext.FORGE_VERSION = "14.23.3.2655"
+ext.FORGE_VERSION = "14.23.4.2705"
 ext.MAPPING_VERSION = "snapshot_20180810"
 ext.MINECRAFT_FULL_VERSIONS = "1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2"
 
@@ -76,7 +76,7 @@ processResources {
     ])
 }
 task signJar(type: SignJar, dependsOn: reobfJar) {
-    onlyIf { System.getenv("KEYPASS") != null }
+    onlyIf { System.getenv("KEY_PASS") != null }
     doLast { System.out.println("Jar will be signed.") }
 
     inputFile = jar.archivePath
