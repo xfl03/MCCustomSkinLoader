@@ -75,6 +75,19 @@ processResources {
             buildUrl      : System.getenv("CIRCLE_BUILD_URL")
     ])
 }
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { System.getenv("KEYPASS") != null }
+    doLast { System.out.println("Jar will be signed.") }
+
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+
+    keyStore = 'CustomSkinLoader.jks'
+    alias = 'CustomSkinLoader'
+    storePass = System.getenv("KEY_PASS")
+    keyPass = System.getenv("KEY_PASS")
+}
+build.dependsOn signJar
 
 task afterBuild {
     doLast {
