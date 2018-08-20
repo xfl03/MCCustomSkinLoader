@@ -1,5 +1,6 @@
 package customskinloader.forge;
 
+import java.io.File;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import customskinloader.Logger;
+import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
@@ -23,7 +25,7 @@ import customskinloader.forge.transformer.SkinManagerTransformer.*;
 import customskinloader.forge.transformer.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
 
 public class TransformerManager implements IClassTransformer {
-    public static Logger logger = new Logger("CustomSkinLoader/ForgePlugin.log");
+    public static Logger logger = new Logger(new File(Launch.minecraftHome, "/CustomSkinLoader/ForgePlugin.log"));
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface TransformTarget{

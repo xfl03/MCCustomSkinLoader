@@ -1,5 +1,6 @@
 package customskinloader.forge.transformer;
 
+import customskinloader.forge.TransformerManager;
 import customskinloader.forge.remapper.ClassNameRemapper;
 import customskinloader.forge.TransformerManager.IMethodTransformer;
 import customskinloader.forge.TransformerManager.TransformTarget;
@@ -32,6 +33,7 @@ public class FakeSkinManagerTransformer {
         public void transform(ClassNode cn, MethodNode mn) {
             init();
             if (!needTransform) return;
+            TransformerManager.logger.info("1.13 detected, FakeSkinManager will be transformed.");
             ClassNameRemapper.remapClassName(cn, TARGET_CLASS, NEW_TARGET_CLASS);
             MethodNameRemapper.remapMethodName(cn, CALLBACK_CLASS, "func_180521_a", "onSkinTextureAvailable");
         }

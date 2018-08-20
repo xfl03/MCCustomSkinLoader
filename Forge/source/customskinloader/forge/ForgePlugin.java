@@ -10,7 +10,7 @@ public class ForgePlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] {TransformerManager.class.getName()};
+        return new String[]{TransformerManager.class.getName()};
     }
 
     @Override

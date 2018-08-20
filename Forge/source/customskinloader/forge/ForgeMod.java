@@ -25,6 +25,6 @@ public class ForgeMod {
         for (String s : event.getFingerprints())
             CustomSkinLoader.logger.warning(s);
 
-        throw new RuntimeException("Fingerprint ERROR");
+        throw new RuntimeException("Fingerprint ERROR, please **DO NOT MODIFY** any mod.");
     }
 }

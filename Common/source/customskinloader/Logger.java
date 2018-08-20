@@ -46,6 +46,8 @@ public class Logger {
             
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(logFile), "UTF-8"));
+
+            System.out.println("Log Path: " + logFile.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();
         }
