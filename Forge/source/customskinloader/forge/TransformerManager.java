@@ -25,7 +25,7 @@ import customskinloader.forge.transformer.SkinManagerTransformer.*;
 import customskinloader.forge.transformer.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
 
 public class TransformerManager implements IClassTransformer {
-    public static Logger logger = new Logger(new File(Launch.minecraftHome, "/CustomSkinLoader/ForgePlugin.log"));
+    public static Logger logger = new Logger(new File(Launch.minecraftHome, "./CustomSkinLoader/ForgePlugin.log"));
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface TransformTarget{

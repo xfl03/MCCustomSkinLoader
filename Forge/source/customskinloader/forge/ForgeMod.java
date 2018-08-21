@@ -20,10 +20,14 @@ public class ForgeMod {
 
         CustomSkinLoader.logger.warning("!!!Fingerprint ERROR!!!");
         CustomSkinLoader.logger.warning("Failed to check fingerprint in file '" + event.getSource().getAbsolutePath() + "'.");
-        CustomSkinLoader.logger.warning("Excepted fingerprint: " + event.getExpectedFingerprint());
-        CustomSkinLoader.logger.warning("Founded fingerprint: ");
-        for (String s : event.getFingerprints())
-            CustomSkinLoader.logger.warning(s);
+        CustomSkinLoader.logger.warning("Excepted Fingerprint: " + event.getExpectedFingerprint());
+        if (event.getFingerprints().isEmpty()) {
+            CustomSkinLoader.logger.warning("No Fingerprint Founded.");
+        } else {
+            CustomSkinLoader.logger.warning("Founded Fingerprint: ");
+            for (String s : event.getFingerprints())
+                CustomSkinLoader.logger.warning(s);
+        }
 
         throw new RuntimeException("Fingerprint ERROR, please **DO NOT MODIFY** any mod.");
     }

@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 ext.MINECRAFT_VERSION = "1.12.2"
 ext.FORGE_VERSION = "14.23.4.2705"
-ext.MAPPING_VERSION = "snapshot_20180810"
+ext.MAPPING_VERSION = "stable_39"
 ext.MINECRAFT_FULL_VERSIONS = "1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2"
 
 ext.snapshot = !(rootProject.ext.config.snapshot == "" || rootProject.ext.config.snapshot == "0" || rootProject.ext.config.snapshot == 0)
@@ -57,6 +57,7 @@ minecraft {
     version = MINECRAFT_VERSION + "-" + FORGE_VERSION
     runDir = "run"
     mappings = MAPPING_VERSION
+    clientJvmArgs += "-Dfml.coreMods.load=customskinloader.forge.ForgePlugin"
 
     replace '@MOD_VERSION@', rootProject.ext.config.version
     replace '@MOD_FULL_VERSION@', project.version
