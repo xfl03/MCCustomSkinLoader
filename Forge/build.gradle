@@ -76,6 +76,11 @@ processResources {
             buildUrl      : System.getenv("CIRCLE_BUILD_URL")
     ])
 }
+
+dependencies {
+    compileOnly "cpw.mods:modlauncher:0.1.0-rc.3"
+}
+
 task signJar(type: SignJar, dependsOn: reobfJar) {
     onlyIf { System.getenv("KEY_PASS") != null }
     doLast { System.out.println("Jar will be signed.") }

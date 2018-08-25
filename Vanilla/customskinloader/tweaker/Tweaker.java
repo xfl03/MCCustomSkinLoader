@@ -17,7 +17,7 @@ public class Tweaker implements ITweaker {
     public static Logger logger = new Logger();
 
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-        File tweakerLogFile = new File(gameDir,"CustomSkinLoader/Tweaker.log");
+        File tweakerLogFile = new File(gameDir,"./CustomSkinLoader/Tweaker.log");
         logger = new Logger(tweakerLogFile);
         
         logger.info("Using Tweaker");

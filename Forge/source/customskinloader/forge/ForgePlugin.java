@@ -2,6 +2,8 @@ package customskinloader.forge;
 
 import java.util.Map;
 
+import customskinloader.forge.transformer.LaunchWrapper;
+import customskinloader.forge.transformer.ModLauncher;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 
@@ -10,7 +12,12 @@ public class ForgePlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{TransformerManager.class.getName()};
+        try {
+            Class.forName("cpw.mods.modlauncher.api.ITransformer");
+            return new String[]{"customskinloader.forge.transformer.ModLauncher"};//ModLauncher
+        } catch (ClassNotFoundException ignored) {
+            return new String[]{"customskinloader.forge.transformer.LaunchWrapper"};//LaunchWrapper
+        }
     }
 
     @Override

@@ -46,7 +46,7 @@ public class SkinSiteProfile {
         ssp.type="Legacy";
         ssp.checkPNG=false;
         ssp.skin=skin;
-        ssp.model="default";
+        ssp.model="auto";
         ssp.cape=cape;
         ssp.elytra=elytra;
         return ssp;

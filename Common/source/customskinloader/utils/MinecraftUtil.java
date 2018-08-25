@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.minecraft.client.Minecraft;
 import org.apache.commons.lang3.StringUtils;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 /**
@@ -25,10 +25,10 @@ public class MinecraftUtil {
         return Minecraft.getMinecraft().gameDir;
     }
     public static MinecraftSessionService getSessionService(){
-        return net.minecraft.client.Minecraft.getMinecraft().getSessionService();
+        return Minecraft.getMinecraft().getSessionService();
     }
     public static TextureManager getTextureManager(){
-        return net.minecraft.client.Minecraft.getMinecraft().getTextureManager();
+        return Minecraft.getMinecraft().getTextureManager();
     }
     
     private static ArrayList<String> minecraftVersion=new ArrayList<String>();
@@ -66,7 +66,7 @@ public class MinecraftUtil {
     
     // (domain|ip)(:port)
     public static String getServerAddress(){
-        net.minecraft.client.multiplayer.ServerData data=net.minecraft.client.Minecraft.getMinecraft().getCurrentServerData();
+        net.minecraft.client.multiplayer.ServerData data = Minecraft.getMinecraft().getCurrentServerData();
         if(data==null)//Single Player
             return null;
         return data.serverIP;
@@ -79,7 +79,7 @@ public class MinecraftUtil {
         return HttpUtil0.isLanServer(getStandardServerAddress());
     }
     public static String getCurrentUsername(){
-        return net.minecraft.client.Minecraft.getMinecraft().getSession().getProfile().getName();
+        return Minecraft.getMinecraft().getSession().getProfile().getName();
     }
     
     private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");

@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 
@@ -31,7 +30,7 @@ public class FakeClientPlayer {
         if (ito == null || !(ito instanceof ThreadDownloadImageData)) {
             //if Legacy Skin for username not loaded yet
             SkinManager skinman = Minecraft.getMinecraft().getSkinManager();
-            UUID offlineUUID = EntityPlayer.getOfflineUUID(username);
+            UUID offlineUUID = getOfflineUUID(username);
             GameProfile offlineProfile = new GameProfile(offlineUUID, username);
 
             //Load Default Skin
@@ -52,6 +51,10 @@ public class FakeClientPlayer {
     public static ResourceLocation getLocationSkin(String username) {
         //CustomSkinLoader.logger.debug("FakeClientPlayer/getLocationSkin "+username);
         return new ResourceLocation("skins/legacy-" + StringUtils.stripControlCodes(username));
+    }
+    public static UUID getOfflineUUID(String username)
+    {
+        return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
     }
 
     public static Map<ResourceLocation, ITextureObject> textureCache = Maps.newHashMap();
@@ -82,6 +85,5 @@ public class FakeClientPlayer {
             CustomSkinLoader.logger.debug("Legacy Texture (" + resourceLocationIn + ") Loaded as " +
                     ito.toString() + " (" + location + ")");
         }
-
     }
 }
