@@ -2,8 +2,6 @@ package customskinloader.forge;
 
 import java.util.Map;
 
-import customskinloader.forge.transformer.LaunchWrapper;
-import customskinloader.forge.transformer.ModLauncher;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 
