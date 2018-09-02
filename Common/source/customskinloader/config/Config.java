@@ -1,10 +1,12 @@
 package customskinloader.config;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import customskinloader.utils.Version;
 import org.apache.commons.io.FileUtils;
 
 import customskinloader.CustomSkinLoader;
@@ -18,29 +20,29 @@ public class Config {
     //Program
     public String version;
     public List<SkinSiteProfile> loadlist;
-    
+
     //Function
     public boolean enableDynamicSkull=true;
     public boolean enableTransparentSkin=true;
     public boolean ignoreHttpsCertificate=false;
     public boolean forceLoadAllTextures=false;
-    
+    public boolean enableCape = true;
+
     //Cache
     public int cacheExpiry=30;
     public boolean enableUpdateSkull=false;
     public boolean enableLocalProfileCache=false;
     public boolean enableCacheAutoClean=false;
-    
-    
+
     //Init config
     public Config(SkinSiteProfile[] loadlist){
         this.version=CustomSkinLoader.CustomSkinLoader_VERSION;
         this.loadlist=Arrays.asList(loadlist);
     }
-    
+
     public static Config loadConfig0() {
         Config config=loadConfig();
-        
+
         //LoadList null checker
         if(config.loadlist==null){
             config.loadlist=new ArrayList<SkinSiteProfile>();
@@ -50,7 +52,7 @@ public class Config {
                     config.loadlist.remove(i--);
             }
         }
-        
+
         //Init program
         config.loadExtraList();
         config.initLocalFolder();
@@ -65,34 +67,29 @@ public class Config {
                 CustomSkinLoader.logger.warning("Exception occurs while cleaning cache: "+e.toString());
             }
         }
-        
-        //Output config
-        CustomSkinLoader.logger.info("EnableDynamicSkull:"+config.enableDynamicSkull+
-                ", EnableTranSkin:"+config.enableTransparentSkin+
-                ", IgnoreHttpsCertificate:"+config.ignoreHttpsCertificate+
-                ", CacheExpiry:"+config.cacheExpiry+
-                ", EnableUpdateSkull:"+config.enableUpdateSkull+
-                ", EnableLocalProfileCache:"+config.enableLocalProfileCache+
-                ", EnableCacheAutoClean:"+config.enableCacheAutoClean+
-                ", LoadList:"+(config.loadlist==null?0:config.loadlist.size()));
-        
+
         //Check config version
-        float floatVersion=0f;
-        float configVersion=0f;
-        try{
-            floatVersion=Float.parseFloat(CustomSkinLoader.CustomSkinLoader_VERSION);
-            configVersion=Float.parseFloat(config.version);
-            if(configVersion==15.1f)//To avoid some bug
-                configVersion=14.6f;
-        }catch (Exception e){
-            CustomSkinLoader.logger.warning("Exception occurs while parsing version: "+e.toString());
+        Version configVersion = Version.of(config.version);
+        if (configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0) {
+            CustomSkinLoader.logger.info("Config File is out of date: " + config.version);
+            config.version = CustomSkinLoader.CustomSkinLoader_VERSION;
+
+            //Update some config
+            if (configVersion.compareTo("14.10") < 0)//Lower than 14.10
+                config.enableCape = true;
+            writeConfig(config, true);
         }
-        if(floatVersion > configVersion){
-            CustomSkinLoader.logger.info("Config File is out of date: "+config.version);
-            config.version=CustomSkinLoader.CustomSkinLoader_VERSION;
-            writeConfig(config,true);
+
+        //Output config
+        for (Field field : config.getClass().getDeclaredFields()) {
+            try {
+                Object value = field.get(config);
+                if (value instanceof String || value instanceof Integer || value instanceof Boolean)
+                    CustomSkinLoader.logger.info(field.getName() + " : " + value);
+            } catch (Exception ignored) { }
         }
-        
+        CustomSkinLoader.logger.info("loadList : " + (config.loadlist == null ? 0 : config.loadlist.size()));
+
         return config;
     }
 
@@ -117,7 +114,7 @@ public class Config {
             return initConfig();
         }
     }
-    
+
     private void loadExtraList(){
         File listAddition=new File(CustomSkinLoader.DATA_DIR,"ExtraList");
         if(!listAddition.isDirectory()){
@@ -165,7 +162,7 @@ public class Config {
             writeConfig(this,true);
         }
     }
-    
+
     private void initLocalFolder(){
         for(SkinSiteProfile ssp:this.loadlist){
             ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
