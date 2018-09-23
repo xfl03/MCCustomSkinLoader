@@ -15,7 +15,7 @@
   "libraries": [
     {
       "name": "customskinloader:CustomSkinLoader_${mcVersion}:${modFullVersion}",
-      "url": "https://resource.littleskin.cn/"
+      "url": "https://lib.airweb.top/"
     },
     {
       "name": "net.minecraft:launchwrapper:1.12"
