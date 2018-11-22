@@ -1,5 +1,5 @@
 {
-  "id": "${mcVersion}-CSL-${modFullVersion}",
+  "id": "${mcVersion}-CSL-${modShortFullVersion}",
   "inheritsFrom": "${mcVersion}",
   "jar": "${mcVersion}",
   "releaseTime": "2013-01-02T21:10:00+08:00",

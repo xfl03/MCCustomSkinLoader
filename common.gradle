@@ -26,6 +26,7 @@ version = rootProject.ext.config.version + rootProject.ext.config.dev_version +
         (ext.release ? '' : ('-SNAPSHOT-' + System.getenv("CIRCLE_BUILD_NUM")))
 group = config.group
 archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
+ext.shortFullVersion = ((String) project.version).replace("SNAPSHOT", "S");
 
 sourceCompatibility = targetCompatibility = 1.6
 compileJava {
@@ -70,13 +71,14 @@ sourceSets {
 
 processResources {
     expand([
-            modVersion    : rootProject.ext.config.version,
-            modFullVersion: project.version,
-            mcVersion     : config.minecraft_version,
-            mcFullVersions: config.minecraft_full_versions,
-            forgeVersion  : config.forge_version,
-            gitVersion    : System.getenv("CIRCLE_SHA1"),
-            buildUrl      : System.getenv("CIRCLE_BUILD_URL")
+            modVersion         : rootProject.ext.config.version,
+            modFullVersion     : project.version,
+            modShortFullVersion: shortFullVersion,
+            mcVersion          : config.minecraft_version,
+            mcFullVersions     : config.minecraft_full_versions,
+            forgeVersion       : config.forge_version,
+            gitVersion         : System.getenv("CIRCLE_SHA1"),
+            buildUrl           : System.getenv("CIRCLE_BUILD_URL")
     ])
 }
 task copyResources << {
@@ -108,6 +110,13 @@ task afterBuild {
             exclude '**/*-dev.jar'
             exclude '**/*-sources.jar'
         }
+
+        //copyProfileJson
+        File f = project.file("build/resources/main/Profile.json")
+        String of = String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortFullVersion)
+        File off = rootProject.file(of)
+        off.parentFile.mkdirs()
+        f.renameTo(off)
     }
 }
 build.finalizedBy afterBuild

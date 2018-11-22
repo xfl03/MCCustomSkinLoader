@@ -35,22 +35,30 @@ import com.qcloud.cos.auth.COSCredentials
 import com.qcloud.cos.region.Region
 import com.qcloud.cos.model.PutObjectRequest
 
-static String getLibKey(String filename){
-    filename=filename.substring(0,filename.lastIndexOf('.'))
+static String getLibKey(String filename) {
+    String name = filename.substring(0, filename.lastIndexOf('.'))
     return String.format(
             "libraries/customskinloader/%s/%s/%s",
-            filename.substring(0, filename.indexOf('-')),
-            filename.substring(filename.indexOf('-') + 1),
+            name.substring(0, name.indexOf('-')),
+            name.substring(name.indexOf('-') + 1),
             filename
     )
 }
 
-static void uploadFileToCOS(File file) {
+static String getVersionKey(String filename) {
+    String name = filename.substring(0, filename.lastIndexOf('.'))
+    return String.format(
+            "versions/%s/%s",
+            name,
+            filename
+    )
+}
+
+static void uploadFileToCOS(String key, File file) {
     COSCredentials cred = new BasicCOSCredentials(System.getenv("COS_SECRET_ID"), System.getenv("COS_SECRET_KEY"))
     ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"))
     COSClient cosClient = new COSClient(cred, clientConfig)
     String bucketName = System.getenv("COS_BUCKET")
-    String key = getLibKey(file.getName())
 
     PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file)
     cosClient.putObject(putObjectRequest)
@@ -63,7 +71,11 @@ task upload {
         if (!dir.isDirectory()) return
         File[] files = dir.listFiles()
         for (file in files) {
-            uploadFileToCOS(file)
+            String name = file.getName()
+            uploadFileToCOS(
+                    name.endsWith("jar") ? getLibKey(name) : getVersionKey(name),
+                    file
+            )
         }
     }
 }
