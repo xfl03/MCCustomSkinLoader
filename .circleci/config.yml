@@ -25,7 +25,7 @@ jobs:
       
       # Gradle
       - run: gradle --version
-      - run: gradle clean build
+      - run: gradle clean build upload
 
       - store_artifacts:
           path: ./build/libs
