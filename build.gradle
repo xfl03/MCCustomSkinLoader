@@ -35,11 +35,12 @@ import com.qcloud.cos.auth.COSCredentials
 import com.qcloud.cos.region.Region
 import com.qcloud.cos.model.PutObjectRequest
 
-static String getLibKey(String filename) {
+static String getLibKey(String filename){
+    filename=filename.substring(0,filename.lastIndexOf('.'))
     return String.format(
             "libraries/customskinloader/%s/%s/%s",
-            filename.substring(0, filename.lastIndexOf('.')),
-            filename.substring(filename.lastIndexOf('.') + 1),
+            filename.substring(0, filename.indexOf('-')),
+            filename.substring(filename.indexOf('-') + 1),
             filename
     )
 }
