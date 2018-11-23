@@ -15,18 +15,16 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 ext.configFile = file "build.properties"
 configFile.withReader {
-    // read config.  it shall from now on be referenced as simply config or as project.config
     def prop = new Properties()
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
-ext.release = (rootProject.ext.config.snapshot == "" || rootProject.ext.config.snapshot == "0" || rootProject.ext.config.snapshot == 0)
-//Example: 14.4a-SNAPSHOT-20160820
-version = rootProject.ext.config.version + rootProject.ext.config.dev_version +
-        (ext.release ? '' : ('-SNAPSHOT-' + System.getenv("CIRCLE_BUILD_NUM")))
+apply from: rootProject.file("BuildScripts/version.gradle")
+
+version = getCSLVersion()
 group = config.group
 archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
-ext.shortFullVersion = ((String) project.version).replace("SNAPSHOT", "S");
+ext.shortVersion = getShortVersion()
 
 sourceCompatibility = targetCompatibility = 1.6
 compileJava {
@@ -73,7 +71,7 @@ processResources {
     expand([
             modVersion         : rootProject.ext.config.version,
             modFullVersion     : project.version,
-            modShortFullVersion: shortFullVersion,
+            modShortFullVersion: shortVersion,
             mcVersion          : config.minecraft_version,
             mcFullVersions     : config.minecraft_full_versions,
             forgeVersion       : config.forge_version,
@@ -81,16 +79,19 @@ processResources {
             buildUrl           : System.getenv("CIRCLE_BUILD_URL")
     ])
 }
-task copyResources << {
-    def outputFile = file("src/main/resources")
-    outputFile.deleteDir()
-    copy {
-        from '../Common/resource'
-        into 'src/main/resources'
+task copyResources {
+    doLast {
+        def outputFile = file("src/main/resources")
+        outputFile.deleteDir()
+        copy {
+            from '../Common/resource'
+            into 'src/main/resources'
+        }
     }
 }
 processResources.dependsOn copyResources
 
+apply from: rootProject.file("BuildScripts/remap.gradle")
 task afterBuild {
     doLast {
         //renameSrgJar
@@ -113,45 +114,10 @@ task afterBuild {
 
         //copyProfileJson
         File f = project.file("build/resources/main/Profile.json")
-        String of = String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortFullVersion)
+        String of = String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortVersion)
         File off = rootProject.file(of)
         off.parentFile.mkdirs()
         f.renameTo(off)
     }
 }
 build.finalizedBy afterBuild
-
-//notch pack
-void reobfSrgToNotch() {
-    def srgName = "${archivesBaseName}-${version}-srg.jar"
-    def notchName = srgName.replace('-srg', '')
-    if (config.srg_notch_map == null || !(config.srg_notch_map instanceof String) || config.srg_notch_map == "") {
-        //Default Map
-        def mcpName = srgName.replace('-srg', '-dev')
-        applySpecialSource(srgName, mcpName, getDefaultMap("srg-mcp"))
-        applySpecialSource(mcpName, notchName, getDefaultMap("mcp-notch"))
-    } else {
-        //Custom Map
-        applySpecialSource(srgName, notchName, config.srg_notch_map)
-    }
-}
-
-void applySpecialSource(String inputName, String outputName, String mapFile) {
-    def mapping = new net.md_5.specialsource.JarMapping()
-    def srgFile = file(mapFile)
-    def inputFile = file("build/libs/${inputName}")
-    def outputFile = file("build/libs/${outputName}")
-    def remapper = new net.md_5.specialsource.JarRemapper(null, mapping)
-    def inputJar = net.md_5.specialsource.Jar.init(inputFile)
-    def inheritanceProviders = new net.md_5.specialsource.provider.JointProvider()
-    def jarProvider = new net.md_5.specialsource.provider.JarProvider(inputJar)
-    inheritanceProviders.add(jarProvider)
-    mapping.loadMappings(srgFile)
-    mapping.setFallbackInheritanceProvider(inheritanceProviders)
-    remapper.remapJar(inputJar, outputFile)
-}
-
-String getDefaultMap(String srgType) {
-    def mcpVersion = minecraft.mappings.replace('_', "/")
-    return System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/${config.forge_mc_version}/srgs/${srgType}.srg"
-}
