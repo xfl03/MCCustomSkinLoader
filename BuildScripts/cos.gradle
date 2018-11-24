@@ -24,7 +24,7 @@ import com.qcloud.cos.region.Region
 String getMcVersion(String filename) {
     if (filename.endsWith(".json"))
         return filename.substring(0, filename.indexOf('-'))
-    return filename.substring(filename.indexOf('_'), filename.indexOf('-'))
+    return filename.substring(filename.indexOf('_') + 1, filename.indexOf('-'))
 }
 
 String getKey(String filename) {
@@ -76,8 +76,8 @@ void uploadArtifacts(String shortVersion) {
         uploadFile(key, file)
         String url = cosUrl + key
         String mcversion = getMcVersion(file.getName()).replace(".", "").toLowerCase()
-        String version = shortVersion.replace(".", "")
-        println(String.format("csl-%s-%s\t%s", mcversion, version, url))
+        String cslversion = shortVersion.replace(".", "")
+        println(String.format("csl-%s-%s\t%s", mcversion, cslversion, url))
     }
 }
 
