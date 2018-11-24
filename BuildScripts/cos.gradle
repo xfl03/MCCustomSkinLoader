@@ -45,9 +45,9 @@ String getKey(String filename) {
     return filename
 }
 
-bucketName = System.getenv("COS_BUCKET")
-cosUrl = "https://csl.littleservice.cn/"
-cosClient0 = null
+ext.bucketName = System.getenv("COS_BUCKET")
+ext.cosUrl = "https://csl.littleservice.cn/"
+ext.cosClient0 = null
 
 COSClient getCosClient() {
     if (cosClient0 != null) return cosClient0
