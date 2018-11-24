@@ -68,15 +68,16 @@ void downloadFile(String key, File file) {
 }
 
 void uploadArtifacts(String shortVersion) {
+    String cslversion = shortVersion.replace(".", "")
     File dir = rootProject.file("build/libs")
     if (!dir.isDirectory()) return
+
     File[] files = dir.listFiles()
     for (file in files) {
         String key = getKey(file.getName())
         uploadFile(key, file)
         String url = cosUrl + key
         String mcversion = getMcVersion(file.getName()).replace(".", "").toLowerCase()
-        String cslversion = shortVersion.replace(".", "")
         println(String.format("csl-%s-%s\t%s", mcversion, cslversion, url))
     }
 }

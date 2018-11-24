@@ -26,7 +26,7 @@ String getCSLVersion() {
 
 //Example: 14.10a-s33
 String getShortVersion() {
-    return getVersion().replace("SNAPSHOT-", "s")
+    return getCSLVersion().replace("SNAPSHOT-", "s")
 }
 
 ext {
