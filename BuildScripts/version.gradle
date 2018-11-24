@@ -18,15 +18,15 @@ String getBuildNum() {
     return "00"
 }
 
-//Example: 14.4a-SNAPSHOT-20160820
+//Example: 14.10a-SNAPSHOT-33
 String getCSLVersion() {
     return rootProject.ext.config.version + rootProject.ext.config.dev_version +
             (isRelease() ? '' : ('-SNAPSHOT-' + getBuildNum()))
 }
 
-//Example: 14.4a-S-20160820
+//Example: 14.10a-s33
 String getShortVersion() {
-    return getVersion().replace("SNAPSHOT", "S")
+    return getVersion().replace("SNAPSHOT-", "s")
 }
 
 ext {

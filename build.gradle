@@ -28,12 +28,8 @@ subprojects {
 apply from: rootProject.file('BuildScripts/cos.gradle')
 
 task upload {
+    onlyIf { System.getenv("COS_SECRET_KEY") != null }
     doLast {
-        File dir = rootProject.file("build/libs")
-        if (!dir.isDirectory()) return
-        File[] files = dir.listFiles()
-        for (file in files) {
-            uploadFileToCOS(file)
-        }
+        uploadArtifacts()
     }
 }
