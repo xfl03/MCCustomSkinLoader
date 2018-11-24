@@ -18,6 +18,7 @@ import com.qcloud.cos.ClientConfig
 import com.qcloud.cos.auth.BasicCOSCredentials
 import com.qcloud.cos.auth.COSCredentials
 import com.qcloud.cos.model.PutObjectRequest
+import com.qcloud.cos.model.GetObjectRequest
 import com.qcloud.cos.region.Region
 
 String getMcVersion(String filename) {
@@ -70,7 +71,7 @@ void downloadFile(String key, File file) {
     getCosClient().getObject(getObjectRequest, file)
 }
 
-void uploadArtifacts() {
+void uploadArtifacts(String shortVersion) {
     File dir = rootProject.file("build/libs")
     if (!dir.isDirectory()) return
     File[] files = dir.listFiles()
@@ -78,8 +79,9 @@ void uploadArtifacts() {
         String key = getKey(file.getName())
         uploadFile(key, file)
         String url = cosUrl + key
-        String version = getMcVersion(file.getName())
-        println(version + "\t" + url)
+        String mcversion = getMcVersion(file.getName()).replace(".", "").toLowerCase()
+        String version = shortVersion.replace(".", "")
+        println(String.format("csl-%s-%s\t%s", mcversion, version, url))
     }
 }
 

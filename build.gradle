@@ -26,10 +26,11 @@ subprojects {
 }
 
 apply from: rootProject.file('BuildScripts/cos.gradle')
+apply from: rootProject.file('BuildScripts/version.gradle')
 
 task upload {
     onlyIf { System.getenv("COS_SECRET_KEY") != null }
     doLast {
-        uploadArtifacts()
+        uploadArtifacts(getShortVersion())
     }
 }
