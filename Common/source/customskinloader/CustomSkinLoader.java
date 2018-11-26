@@ -123,6 +123,8 @@ public class CustomSkinLoader {
         }
         if(!profile0.isEmpty()){
             logger.info(username+"'s profile loaded.");
+            if(!config.enableCape)
+                profile0.capeUrl = null;
             profileCache.updateCache(credential, profile0);
             profileCache.setLoading(credential, false);
             logger.info(profile0.toString(profileCache.getExpiry(credential)));
