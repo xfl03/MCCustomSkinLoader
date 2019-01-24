@@ -29,7 +29,7 @@ public class CustomSkinLoader {
     public static final String CustomSkinLoader_FULL_VERSION="@MOD_FULL_VERSION@";
     
     public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader"),
-            LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
+            LOG_FILE=new File(DATA_DIR,"CustomSkinLoaderLog.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
     public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
             SkinSiteProfile.createMojangAPI("Mojang"),
