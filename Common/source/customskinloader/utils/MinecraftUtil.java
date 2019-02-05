@@ -99,23 +99,19 @@ public class MinecraftUtil {
         }
     }
     
-    public static boolean isCoreFile(URL url){
-        Matcher m;
-        try{
-            m=MINECRAFT_CORE_FILE_PATTERN.matcher(URLDecoder.decode(url.getPath(),"UTF-8"));
-        }catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return m.matches();
+    public static boolean isCoreFile(URL url) {
+        return regexMatch(url, MINECRAFT_CORE_FILE_PATTERN);
     }
     
     private final static Pattern LIBRARY_FILE_PATTERN = Pattern.compile("^(.*?)/libraries/(.*?)/([^\\/\\\\]*?).jar$");
-    public static boolean isLibraryFile(URL url){
+    public static boolean isLibraryFile(URL url) {
+        return regexMatch(url, LIBRARY_FILE_PATTERN);
+    }
+    private static boolean regexMatch(URL url, Pattern p) {
         Matcher m;
-        try{
-            m=LIBRARY_FILE_PATTERN.matcher(URLDecoder.decode(url.getPath(),"UTF-8"));
-        }catch(Exception e){
+        try {
+            m=p.matcher(URLDecoder.decode(url.getPath(), "UTF-8"));
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

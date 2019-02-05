@@ -138,6 +138,8 @@ public class HttpRequestUtil {
             CustomSkinLoader.logger.debug("Successfully request (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
             if(responce.responceCode==HttpURLConnection.HTTP_NOT_MODIFIED)
                 return loadFromCache(request,responce);
+            if (responce.responceCode == HttpURLConnection.HTTP_NO_CONTENT)
+                request.cacheTime = 3600;
             
             //Load Content
             InputStream is="gzip".equals(c.getContentEncoding())?new GZIPInputStream(c.getInputStream()):c.getInputStream();
