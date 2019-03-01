@@ -14,6 +14,9 @@ import org.objectweb.asm.tree.MethodNode;
 import customskinloader.forge.TransformerManager.IMethodTransformer;
 import customskinloader.forge.TransformerManager.TransformTarget;
 
+/**
+ * Transformer of Spectator Menu for 1.13-
+ */
 public class SpectatorMenuTransformer {
     @TransformTarget(className="net.minecraft.client.gui.spectator.PlayerMenuObject",
             methodNames={"<init>"},
@@ -31,12 +34,14 @@ public class SpectatorMenuTransformer {
                 if(ain.getOpcode()!=Opcodes.INVOKESTATIC)
                     continue;
 
+                /* No Need for Detecting 1.13
                 MethodInsnNode min = (MethodInsnNode)ain;
                 String deobfName = FMLDeobfuscatingRemapper.INSTANCE.map(min.owner);
                 if(!deobfName.equals("net/minecraft/client/entity/AbstractClientPlayer")) {//Fix 1.13
                     TransformerManager.logger.info("InvokeStatic to " + deobfName + " in PlayerMenuObject will be ignored.");
                     continue;
                 }
+                */
 
                 if(!flag) {
                     //First InvokeStatic

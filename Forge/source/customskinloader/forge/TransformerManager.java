@@ -10,13 +10,7 @@ import java.util.*;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-
 import customskinloader.Logger;
-import customskinloader.forge.transformer.*;
-import customskinloader.forge.transformer.PlayerTabTransformer.ScoreObjectiveTransformer;
-import customskinloader.forge.transformer.SkinManagerTransformer.*;
-import customskinloader.forge.transformer.SpectatorMenuTransformer.PlayerMenuObjectTransformer;
 
 public class TransformerManager {
     public static Logger logger = new Logger(new File("./CustomSkinLoader/ForgePlugin.log"));
@@ -35,20 +29,11 @@ public class TransformerManager {
         void transform(ClassNode cn, MethodNode mn);
     }
 
-    private static final IMethodTransformer[] TRANFORMERS = {
-            new InitTransformer(),
-            new LoadSkinTransformer(),
-            new LoadProfileTexturesTransformer(),
-            new LoadSkinFromCacheTransformer(),
-            new ScoreObjectiveTransformer(),
-            new PlayerMenuObjectTransformer(),
-            new FakeSkinManagerTransformer.InitTransformer()
-    };
     public Map<String, Map<String, IMethodTransformer>> map;
 
-    public TransformerManager() {
+    public TransformerManager(IMethodTransformer... transformers) {
         map = new HashMap<String, Map<String, IMethodTransformer>>();
-        for (IMethodTransformer t : TRANFORMERS) {
+        for (IMethodTransformer t : transformers) {
             logger.info("[CSL DEBUG] REGISTERING TRANSFORMER %s", t.getClass().getName());
             if (!t.getClass().isAnnotationPresent(TransformTarget.class)) {
                 logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
@@ -67,32 +52,18 @@ public class TransformerManager {
         }
     }
 
-    public ClassNode transform(ClassNode classNode) {
-        String obfClassName = classNode.name;
-        String className = FMLDeobfuscatingRemapper.INSTANCE.map(obfClassName);
-        return transform(classNode, className, obfClassName);
-    }
-
-    public ClassNode transform(ClassNode classNode, String className, String obfClassName) {
-        logger.info("[CSL DEBUG] CLASS %s will be transformed", className);
+    public MethodNode transform(ClassNode classNode, MethodNode methodNode, String className, String methodName, String methodDesc) {
         Map<String, IMethodTransformer> transMap = map.get(className);
-
-        // NOTE: `map` = convert obfuscated name to srgName;
-        List<MethodNode> ml = new ArrayList<MethodNode>(classNode.methods);
-        for (MethodNode mn : ml) {
-            String methodName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(obfClassName, mn.name, mn.desc);
-            String methodDesc = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(mn.desc);
-            String methodTarget = methodName + methodDesc;
-            if (transMap.containsKey(methodTarget)) {
-                try {
-                    transMap.get(methodTarget).transform(classNode, mn);
-                    logger.info("[CSL DEBUG] Successfully transformed method %s in class %s", methodName, className);
-                } catch (Exception e) {
-                    logger.warning("[CSL DEBUG] An error happened when transforming method %s in class %s.", methodTarget, className);
-                    logger.warning(e);
-                }
+        String methodTarget = methodName + methodDesc;
+        if (transMap.containsKey(methodTarget)) {
+            try {
+                transMap.get(methodTarget).transform(classNode, methodNode);
+                logger.info("[CSL DEBUG] Successfully transformed method %s in class %s", methodName, className);
+            } catch (Exception e) {
+                logger.warning("[CSL DEBUG] An error happened when transforming method %s in class %s.", methodTarget, className);
+                logger.warning(e);
             }
         }
-        return classNode;
+        return methodNode;
     }
 }

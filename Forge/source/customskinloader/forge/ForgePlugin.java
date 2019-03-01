@@ -10,12 +10,7 @@ public class ForgePlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        try {
-            Class.forName("cpw.mods.modlauncher.api.ITransformer");
-            return new String[]{"customskinloader.forge.transformer.ModLauncher"};//ModLauncher
-        } catch (ClassNotFoundException ignored) {
-            return new String[]{"customskinloader.forge.transformer.LaunchWrapper"};//LaunchWrapper
-        }
+        return new String[]{"customskinloader.forge.loader.LaunchWrapper"};//LaunchWrapper
     }
 
     @Override
