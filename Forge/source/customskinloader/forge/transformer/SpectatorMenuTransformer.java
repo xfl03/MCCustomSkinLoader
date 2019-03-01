@@ -18,40 +18,35 @@ import customskinloader.forge.TransformerManager.TransformTarget;
  * Transformer of Spectator Menu for 1.13-
  */
 public class SpectatorMenuTransformer {
-    @TransformTarget(className="net.minecraft.client.gui.spectator.PlayerMenuObject",
-            methodNames={"<init>"},
-            desc="(Lcom/mojang/authlib/GameProfile;)V")
-    public static class PlayerMenuObjectTransformer implements IMethodTransformer{
+    @TransformTarget(className = "net.minecraft.client.gui.spectator.PlayerMenuObject",
+            methodNames = {"<init>"},
+            desc = "(Lcom/mojang/authlib/GameProfile;)V")
+    public static class PlayerMenuObjectTransformer implements IMethodTransformer {
 
         @Override
         public void transform(ClassNode cn, MethodNode mn) {
-            InsnList il=mn.instructions;
-            ListIterator<AbstractInsnNode> li=il.iterator();
+            InsnList il = mn.instructions;
+            ListIterator<AbstractInsnNode> li = il.iterator();
 
-            boolean flag=false;
-            while(li.hasNext()) {
-                AbstractInsnNode ain=li.next();
-                if(ain.getOpcode()!=Opcodes.INVOKESTATIC)
+            boolean flag = false;
+            while (li.hasNext()) {
+                AbstractInsnNode ain = li.next();
+                if (ain.getOpcode() != Opcodes.INVOKESTATIC)
                     continue;
 
-                /* No Need for Detecting 1.13
-                MethodInsnNode min = (MethodInsnNode)ain;
-                String deobfName = FMLDeobfuscatingRemapper.INSTANCE.map(min.owner);
-                if(!deobfName.equals("net/minecraft/client/entity/AbstractClientPlayer")) {//Fix 1.13
-                    TransformerManager.logger.info("InvokeStatic to " + deobfName + " in PlayerMenuObject will be ignored.");
-                    continue;
-                }
-                */
-
-                if(!flag) {
+                if (!flag) {
                     //First InvokeStatic
-                    il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,"customskinloader/fake/FakeClientPlayer","getLocationSkin",
-                            "(Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation;",false));
-                    flag=true;
-                }else {
+                    il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                            "customskinloader/fake/FakeClientPlayer",
+                            "getLocationSkin",
+                            "(Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation;", false));
+                    flag = true;
+                } else {
                     //Second InvokeStatic
-                    il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,"customskinloader/fake/FakeClientPlayer","getDownloadImageSkin",
-                            "(Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData;",false));
+                    il.set(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                            "customskinloader/fake/FakeClientPlayer",
+                            "getDownloadImageSkin",
+                            "(Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData;", false));
                     break;
                 }
             }

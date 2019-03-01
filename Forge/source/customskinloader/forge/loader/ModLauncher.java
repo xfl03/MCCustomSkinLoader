@@ -8,7 +8,11 @@ import customskinloader.forge.transformer.SkinManagerTransformer;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-//ModLauncher for 1.13+
+/**
+ * ModLauncher for 1.13+
+ * @deprecated Use JavaScript Instead
+ */
+@Deprecated
 public class ModLauncher {
 
     private static final TransformerManager.IMethodTransformer[] TRANFORMERS = {
