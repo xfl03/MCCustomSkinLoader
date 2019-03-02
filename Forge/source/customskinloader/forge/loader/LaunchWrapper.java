@@ -15,7 +15,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 //LaunchWrapper for 1.13-
 public class LaunchWrapper implements IClassTransformer {
-
     private static final TransformerManager.IMethodTransformer[] TRANFORMERS = {
             new SkinManagerTransformer.InitTransformer(),
             new SkinManagerTransformer.LoadSkinTransformer(),

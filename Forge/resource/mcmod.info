@@ -6,7 +6,6 @@
     "version": "${modFullVersion}",
     "url": "https://github.com/xfl03/MCCustomSkinLoader",
     "authorList": ["xfl03", "JLChnToZ"],
-    "credits": "GPLv3",
-    "clientSideOnly": true
+    "credits": "GPLv3"
   }
 ]

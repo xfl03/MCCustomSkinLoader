@@ -144,8 +144,8 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (mn.name === '<init>')
-                        FakeSkinManagerTransformer(cn, mn);
+                    //if (mn.name === '<init>')
+                    FakeSkinManagerTransformer(cn, mn);
                 });
                 return cn;
             }
