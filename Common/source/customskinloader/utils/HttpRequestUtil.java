@@ -74,6 +74,10 @@ public class HttpRequestUtil {
     public static final File CACHE_DIR=new File(CustomSkinLoader.DATA_DIR,"caches");
     
     public static HttpResponce makeHttpRequest(HttpRequest request){
+        return makeHttpRequest(request, 0);
+    }
+
+    public static HttpResponce makeHttpRequest(HttpRequest request, int redirectTime){
         try{
             CustomSkinLoader.logger.debug("Try to request '"+request.url+(request.userAgent==null?"'.":"' with user agent '"+request.userAgent+"'."));
             //Check Cache
@@ -133,6 +137,23 @@ public class HttpRequestUtil {
             if(res==4||res==5){//Failed
                 CustomSkinLoader.logger.debug("Failed to request (Response Code: "+c.getResponseCode()+")");
                 return responce;
+            }
+            if (res == HttpURLConnection.HTTP_MOVED_PERM || res == HttpURLConnection.HTTP_MOVED_TEMP) {
+                //Redirect
+                if (redirectTime >= 4) {
+                    CustomSkinLoader.logger.debug("Failed to request (Too many redirection)");
+                   return responce;
+                }
+                request.url = c.getHeaderField("Location");//Get redirecting location
+                if (request.url == null) {
+                    request.url = c.getHeaderField("location");//Another way
+                }
+                if (request.url == null) {
+                    CustomSkinLoader.logger.debug("Failed to request (Redirecting location not found)");
+                    return responce;
+                }
+                CustomSkinLoader.logger.debug("Redirect to " + request.url);
+                return makeHttpRequest(request, redirectTime + 1);//Recursion
             }
             responce.success=true;
             CustomSkinLoader.logger.debug("Successfully request (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
