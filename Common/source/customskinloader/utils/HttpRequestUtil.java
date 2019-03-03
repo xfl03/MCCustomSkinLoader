@@ -133,9 +133,9 @@ public class HttpRequestUtil {
             //Check Connection
             HttpResponce responce=new HttpResponce();
             responce.responceCode=c.getResponseCode();
-            int res=c.getResponseCode()/100;
-            if(res==4||res==5){//Failed
-                CustomSkinLoader.logger.debug("Failed to request (Response Code: "+c.getResponseCode()+")");
+            int res = c.getResponseCode();
+            if (res / 100 == 4 || res / 100 == 5) {//Failed
+                CustomSkinLoader.logger.debug("Failed to request (Response Code: " + res + ")");
                 return responce;
             }
             if (res == HttpURLConnection.HTTP_MOVED_PERM || res == HttpURLConnection.HTTP_MOVED_TEMP) {
@@ -152,7 +152,7 @@ public class HttpRequestUtil {
                     CustomSkinLoader.logger.debug("Failed to request (Redirecting location not found)");
                     return responce;
                 }
-                CustomSkinLoader.logger.debug("Redirect to " + request.url);
+                CustomSkinLoader.logger.debug("Redirect to: " + request.url);
                 return makeHttpRequest(request, redirectTime + 1);//Recursion
             }
             responce.success=true;
