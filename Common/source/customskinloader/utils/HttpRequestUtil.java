@@ -146,9 +146,6 @@ public class HttpRequestUtil {
                 }
                 request.url = c.getHeaderField("Location");//Get redirecting location
                 if (request.url == null) {
-                    request.url = c.getHeaderField("location");//Another way
-                }
-                if (request.url == null) {
                     CustomSkinLoader.logger.debug("Failed to request (Redirecting location not found)");
                     return responce;
                 }
@@ -156,7 +153,7 @@ public class HttpRequestUtil {
                 return makeHttpRequest(request, redirectTime + 1);//Recursion
             }
             responce.success=true;
-            CustomSkinLoader.logger.debug("Successfully request (Response Code: "+c.getResponseCode()+" , Content Length: "+c.getContentLength()+")");
+            CustomSkinLoader.logger.debug("Successfully request (Response Code: " + res + " , Content Length: " + c.getContentLength() + ")");
             if(responce.responceCode==HttpURLConnection.HTTP_NOT_MODIFIED)
                 return loadFromCache(request,responce);
             if (responce.responceCode == HttpURLConnection.HTTP_NO_CONTENT)

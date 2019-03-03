@@ -81,6 +81,9 @@ public class Logger {
     public void debug(String msg){
         log(Level.DEBUG,msg);
     }
+    public void debug(String format, Object... objs) {
+        debug(String.format(format, objs));
+    }
     public void info(String msg){
         log(Level.INFO,msg);
     }
