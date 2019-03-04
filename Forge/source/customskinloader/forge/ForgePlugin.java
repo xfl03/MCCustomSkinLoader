@@ -2,19 +2,11 @@ package customskinloader.forge;
 
 import java.util.Map;
 
-import net.minecraftforge.fml.common.FMLModContainer;
-import net.minecraftforge.fml.common.ModContainerFactory;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 
-import org.objectweb.asm.Type;
-
 @Name("CustomSkinLoader")
 public class ForgePlugin implements IFMLLoadingPlugin {
-    static{
-        //Transform Annotation in 1.13-
-        ModContainerFactory.instance().registerContainerType(Type.getType(ModOld.class), FMLModContainer.class);
-    }
 
     @Override
     public String[] getASMTransformerClass() {

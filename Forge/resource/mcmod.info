@@ -5,7 +5,6 @@
     "description": "Custom Skin Loader for Minecraft",
     "version": "${modFullVersion}",
     "url": "https://github.com/xfl03/MCCustomSkinLoader",
-    "authorList": ["xfl03", "JLChnToZ"],
-    "credits": "GPLv3"
+    "authorList": ["xfl03", "JLChnToZ"]
   }
 ]
