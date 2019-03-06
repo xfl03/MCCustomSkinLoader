@@ -13,6 +13,8 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.*;
+import customskinloader.plugin.event.PluginEventManager;
+import customskinloader.plugin.event.ProfileLoadingEvent;
 import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
@@ -52,6 +54,7 @@ public class CustomSkinLoader {
     
     //For User Skin
     public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
+    	PluginEventManager.EVENT_BUS.post(new ProfileLoadingEvent.Pre(gameProfile));
         String username=gameProfile.getName();
         String credential=MinecraftUtil.getCredential(gameProfile);
         //Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
@@ -77,6 +80,7 @@ public class CustomSkinLoader {
             profile=loadProfile0(gameProfile);
         }
         Thread.currentThread().setName(tempName);
+        PluginEventManager.EVENT_BUS.post(new ProfileLoadingEvent.Post(gameProfile,profile));
         return ModelManager0.fromUserProfile(profile);
     }
     //Core
