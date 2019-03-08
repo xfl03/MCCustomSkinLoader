@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.mojang.authlib.GameProfile;
 
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.PluginLoader;
 import customskinloader.profile.UserProfile;
 
 public class ProfileLoader {
@@ -23,6 +24,7 @@ public class ProfileLoader {
         for(IProfileLoader loader:DEFAULT_LOADERS){
             loaders.put(loader.getName().toLowerCase(), loader);
         }
+        loaders.putAll(PluginLoader.loadPlugins());
         return loaders;
     }
     
