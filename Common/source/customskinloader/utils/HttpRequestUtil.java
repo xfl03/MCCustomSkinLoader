@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;

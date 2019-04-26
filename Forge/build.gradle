@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 ext.MINECRAFT_VERSION = "1.12.2"
 ext.FORGE_VERSION = "14.23.5.2768"
 ext.MAPPING_VERSION = "stable_39"
-ext.MINECRAFT_FULL_VERSIONS = "1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2"
+ext.MINECRAFT_FULL_VERSIONS = "1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2,1.13.2"
 
 apply from: rootProject.file("BuildScripts/version.gradle")
 
