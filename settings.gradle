@@ -1,5 +1,6 @@
 //Special Vanilla Edition
 include "1.13.2"
+include "1.14"
 
 //Universal Forge Edition for [1.8,)
 include "Forge"
