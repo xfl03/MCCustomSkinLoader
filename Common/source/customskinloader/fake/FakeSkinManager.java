@@ -41,7 +41,6 @@ public class FakeSkinManager {
     }
 
     public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final Type textureType, final SkinAvailableCallback skinAvailableCallback) {
-        org.apache.logging.log4j.LogManager.getLogger().warn("loadSkin");
         HttpTextureInfo info = HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
 
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + info.hash);
@@ -65,12 +64,11 @@ public class FakeSkinManager {
                 final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
                 map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile));
 
-                org.apache.logging.log4j.LogManager.getLogger().warn("Map size: " + map.size());
                 Minecraft.getMinecraft().addScheduledTask(new Runnable() {
                     public void run() {
                         for (Type type : Type.values()) {
                             if (map.containsKey(type)) {
-                                org.apache.logging.log4j.LogManager.getLogger().warn("Loading type:" + type);
+                                CustomSkinLoader.logger.debug("Loading type:" + type);
                                 FakeSkinManager.this.loadSkin(map.get(type), type, skinAvailableCallback);
                             }
                         }
@@ -85,7 +83,6 @@ public class FakeSkinManager {
     }
 
     private static void makeCallback(SkinAvailableCallback callback, Type type, ResourceLocation location, MinecraftProfileTexture texture) {
-        org.apache.logging.log4j.LogManager.getLogger().warn("makeCallback");
         if (callback != null)
             callback.skinAvailable(type, location, texture);
     }
@@ -108,7 +105,6 @@ public class FakeSkinManager {
         }
 
         public net.minecraft.client.renderer.texture.NativeImage func_195786_a(net.minecraft.client.renderer.texture.NativeImage image) {
-            org.apache.logging.log4j.LogManager.getLogger().warn("func_195786_a");
             return buffer instanceof FakeSkinBuffer ? ((FakeSkinBuffer) buffer).func_195786_a(image) : image;
         }
 
@@ -117,7 +113,6 @@ public class FakeSkinManager {
         }
 
         public void skinAvailable() {
-            org.apache.logging.log4j.LogManager.getLogger().warn("skinAvailable");
             if (buffer != null) {
                 buffer.skinAvailable();
                 if ("auto".equals(texture.getMetadata("model")) && buffer instanceof FakeSkinBuffer) {
