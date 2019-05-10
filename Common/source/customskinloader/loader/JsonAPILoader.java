@@ -33,7 +33,8 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
         CustomSkinAPI(new CustomSkinAPI()),
         CustomSkinAPIPlus(new CustomSkinAPIPlus()),
         UniSkinAPI(new UniSkinAPI()),
-        ElyByAPI(new ElyByAPI());
+        ElyByAPI(new ElyByAPI()),
+        GlitchlessAPI(new GlitchlessAPI());
         public IJsonAPI jsonAPI;
         Type(IJsonAPI jsonAPI){
             this.jsonAPI=jsonAPI;

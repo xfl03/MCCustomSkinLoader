@@ -15,6 +15,7 @@ public class ProfileLoader {
             new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPIPlus),
             new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI),
             new JsonAPILoader(JsonAPILoader.Type.ElyByAPI),
+            new JsonAPILoader(JsonAPILoader.Type.GlitchlessAPI),
             new LegacyLoader()};
     
     public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
