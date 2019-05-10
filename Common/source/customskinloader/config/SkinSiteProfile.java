@@ -33,11 +33,20 @@ public class SkinSiteProfile {
         ssp.root=root;
         return ssp;
     }
-    public static SkinSiteProfile createUniSkinAPI(String name,String root){
-        SkinSiteProfile ssp=new SkinSiteProfile();
-        ssp.name=name;
-        ssp.type="UniSkinAPI";
-        ssp.root=root;
+
+    public static SkinSiteProfile createGlitchlessAPI(String name, String root) {
+        SkinSiteProfile ssp = new SkinSiteProfile();
+        ssp.name = name;
+        ssp.type = "GlitchlessAPI";
+        ssp.root = root;
+        return ssp;
+    }
+
+    public static SkinSiteProfile createUniSkinAPI(String name, String root) {
+        SkinSiteProfile ssp = new SkinSiteProfile();
+        ssp.name = name;
+        ssp.type = "UniSkinAPI";
+        ssp.root = root;
         return ssp;
     }
     public static SkinSiteProfile createLegacy(String name,String skin,String cape,String elytra){

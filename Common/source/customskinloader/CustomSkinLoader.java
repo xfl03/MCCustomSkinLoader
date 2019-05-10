@@ -39,10 +39,10 @@ public class CustomSkinLoader {
             //SkinSiteProfile.createCustomSkinAPI("OneSkin","http://fleey.cn/skin/skin_user/skin_json.php/"),
             //Minecrack could not load skin correctly
             //SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png",null),
-            SkinSiteProfile.createGlitchlessAPI("GlitchlessAPI", "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname="),
             SkinSiteProfile.createElyByAPI("ElyBy"),
             SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
-            SkinSiteProfile.createLegacy("LocalSkin","LocalSkin/skins/{USERNAME}.png","LocalSkin/capes/{USERNAME}.png","LocalSkin/elytras/{USERNAME}.png")};
+            SkinSiteProfile.createLegacy("LocalSkin","LocalSkin/skins/{USERNAME}.png","LocalSkin/capes/{USERNAME}.png","LocalSkin/elytras/{USERNAME}.png"),
+            SkinSiteProfile.createGlitchlessAPI("GlitchlessGames","https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname=")};
     
     public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
     public static final Logger logger=initLogger();
