@@ -5,7 +5,6 @@
   "mixins": [
   ],
   "client": [
-    "MixinMinecraftUtil",
     "MixinPlayerSkinProvider"
   ],
   "injectors": {

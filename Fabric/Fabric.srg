@@ -1,0 +1,40 @@
+CL: net/minecraft/client/Minecraft net/minecraft/class_310
+CL: net/minecraft/client/multiplayer/ServerData net/minecraft/class_642
+CL: net/minecraft/client/renderer/IImageBuffer net/minecraft/class_760
+CL: net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_1046
+CL: net/minecraft/client/renderer/texture/ITextureObject net/minecraft/class_1062
+CL: net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
+CL: net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/class_1049
+CL: net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
+CL: net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/class_1068
+CL: net/minecraft/client/resources/SkinManager net/minecraft/class_1071
+CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
+CL: net/minecraft/util/ResourceLocation net/minecraft/class_2960
+CL: net/minecraft/util/Session net/minecraft/class_320
+CL: net/minecraft/util/StringUtils net/minecraft/class_3544
+FD: net/minecraft/client/Minecraft/field_71412_D net/minecraft/class_310/field_1697
+FD: net/minecraft/client/multiplayer/ServerData/field_78845_b net/minecraft/class_642/field_3761
+MD: net/minecraft/client/Minecraft/addScheduledTask (Ljava/lang/Runnable;)V net/minecraft/class_310/execute (Ljava/lang/Runnable;)V
+MD: net/minecraft/client/Minecraft/func_110432_I ()Lnet/minecraft/util/Session; net/minecraft/class_310/method_1548 ()Lnet/minecraft/class_320;
+MD: net/minecraft/client/Minecraft/func_110434_K ()Lnet/minecraft/client/renderer/texture/TextureManager; net/minecraft/class_310/method_1531 ()Lnet/minecraft/class_1060;
+MD: net/minecraft/client/Minecraft/func_147104_D ()Lnet/minecraft/client/multiplayer/ServerData; net/minecraft/class_310/method_1558 ()Lnet/minecraft/class_642;
+MD: net/minecraft/client/Minecraft/func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; net/minecraft/class_310/method_1582 ()Lnet/minecraft/class_1071;
+MD: net/minecraft/client/Minecraft/func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; net/minecraft/class_310/method_1495 ()Lcom/mojang/authlib/minecraft/MinecraftSessionService;
+MD: net/minecraft/client/Minecraft/func_71410_x ()Lnet/minecraft/client/Minecraft; net/minecraft/class_310/method_1551 ()Lnet/minecraft/class_310;
+MD: net/minecraft/client/renderer/IImageBuffer/func_152634_a ()V net/minecraft/class_760/method_3238 ()V
+MD: net/minecraft/client/renderer/IImageBuffer/func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_760/method_3237 (Lnet/minecraft/class_1011;)Lnet/minecraft/class_1011;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195699_a (IIIIIIZZ)V net/minecraft/class_1011/method_4304 (IIIIIIZZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195700_a (III)V net/minecraft/class_1011/method_4305 (III)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195702_a ()I net/minecraft/class_1011/method_4307 ()I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195703_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V net/minecraft/class_1011/method_4317 (Lnet/minecraft/class_1011;)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195709_a (II)I net/minecraft/class_1011/method_4315 (II)I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195714_b ()I net/minecraft/class_1011/method_4323 ()I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195715_a (IIIII)V net/minecraft/class_1011/method_4326 (IIIII)V
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110579_a (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z net/minecraft/class_1060/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1062;)Z
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110581_b (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; net/minecraft/class_1060/method_4619 (Lnet/minecraft/class_2960;)Lnet/minecraft/class_1062;
+MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177334_a (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; net/minecraft/class_1068/method_4648 (Ljava/util/UUID;)Lnet/minecraft/class_2960;
+MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177335_a ()Lnet/minecraft/util/ResourceLocation; net/minecraft/class_1068/method_4649 ()Lnet/minecraft/class_2960;
+MD: net/minecraft/client/resources/SkinManager/func_152790_a (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V net/minecraft/class_1071/method_4652 (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/class_1071$class_1072;Z)V
+MD: net/minecraft/client/resources/SkinManager$SkinAvailableCallback/func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V net/minecraft/class_1071$class_1072/onSkinTextureAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/class_2960;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V
+MD: net/minecraft/util/Session/func_148256_e ()Lcom/mojang/authlib/GameProfile; net/minecraft/class_320/method_1677 ()Lcom/mojang/authlib/GameProfile;
+MD: net/minecraft/util/StringUtils/func_76338_a (Ljava/lang/String;)Ljava/lang/String; net/minecraft/class_3544/method_15440 (Ljava/lang/String;)Ljava/lang/String;

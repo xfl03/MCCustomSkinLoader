@@ -23,9 +23,6 @@ sourceSets {
         java {
             //Common
             srcDir '../Common/source'
-            exclude 'customskinloader/fake/*.java'
-            exclude 'customskinloader/fake/texture/FakeNativeImage.java'
-            exclude 'net/minecraft/client/renderer/texture/NativeImage.java'
             //Fabric
             srcDir 'source'
         }
@@ -57,8 +54,6 @@ dependencies {
 }
 
 jar {
-    exclude 'customskinloader/fake/*.class'
-    exclude 'customskinloader/fake/texture/FakeNativeImage.class'
     exclude 'net/**'
 }
 
@@ -74,14 +69,30 @@ processResources {
     ])
 }
 
+apply from: rootProject.file("BuildScripts/remap.gradle")
+ext.configFile = file "gradle.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
 task afterBuild {
     doLast {
+        //renameSrgJar
+        def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
+        def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
+        file0.renameTo(file1)
+
+        //reobfSrgToNotch
+        reobfSrgToNotch()
+
         //copyBuildFile
         copy {
             from 'build/libs'
             into '../build/libs'
             include '**/*.jar'
             exclude '**/*-dev.jar'
+            exclude '**/*-srg.jar'
             exclude '**/*-sources.jar'
         }
     }
