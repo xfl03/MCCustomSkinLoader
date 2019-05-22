@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "customskinloader.fabric.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "MixinMinecraftUtil",
+    "MixinPlayerSkinProvider"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
