@@ -1,0 +1,100 @@
+//apply plugin: 'fabric-loom'
+apply from: project.file("fabric.compact.gradle")
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply from: rootProject.file("BuildScripts/version.gradle")
+
+archivesBaseName = project.archives_base_name
+version = getCSLVersion()
+group = project.maven_group
+project.extensions.getByName("minecraftfabric").refmapName = "customskinloader.refmap.json"
+
+ext.MINECRAFT_VERSION = "1.12.2"
+ext.FORGE_VERSION = "14.23.5.2768"
+ext.MAPPING_VERSION = "stable_39"
+ext.MINECRAFT_FULL_VERSIONS = "1.14,1.14.1"
+
+sourceCompatibility = targetCompatibility = 1.6
+compileJava {
+    sourceCompatibility = targetCompatibility = 1.6
+}
+
+sourceSets {
+    main {
+        java {
+            //Common
+            srcDir '../Common/source'
+            //Fabric
+            srcDir 'source'
+        }
+        resources {
+            //Common
+            srcDir '../Common/resource'
+            exclude 'Profile.json'
+            //Fabric
+            srcDir 'resource'
+        }
+    }
+}
+
+minecraft {
+    version = MINECRAFT_VERSION + "-" + FORGE_VERSION
+    runDir = "run"
+    mappings = MAPPING_VERSION
+
+    replace '@MOD_VERSION@', rootProject.ext.config.version
+    replace '@MOD_FULL_VERSION@', project.version
+    replaceIn 'CustomSkinLoader.java'
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+jar {
+    exclude 'net/**'
+}
+
+processResources {
+    expand([
+            modVersion    : rootProject.ext.config.version,
+            modFullVersion: project.version,
+            mcVersion     : MINECRAFT_VERSION,
+            mcFullVersions: MINECRAFT_FULL_VERSIONS,
+            forgeVersion  : FORGE_VERSION,
+            gitVersion    : System.getenv("CIRCLE_SHA1"),
+            buildUrl      : System.getenv("CIRCLE_BUILD_URL")
+    ])
+}
+
+apply from: rootProject.file("BuildScripts/remap.gradle")
+ext.configFile = file "gradle.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+task afterBuild {
+    doLast {
+        //renameSrgJar
+        def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
+        def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
+        file0.renameTo(file1)
+
+        //reobfSrgToNotch
+        reobfSrgToNotch()
+
+        //copyBuildFile
+        copy {
+            from 'build/libs'
+            into '../build/libs'
+            include '**/*.jar'
+            exclude '**/*-dev.jar'
+            exclude '**/*-srg.jar'
+            exclude '**/*-sources.jar'
+        }
+    }
+}
+build.finalizedBy afterBuild

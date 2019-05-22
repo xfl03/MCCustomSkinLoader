@@ -28,7 +28,7 @@ public class JavaUtil {
                 } catch (Exception ignored) {
                 }
             }
-            return (URL[]) urls.toArray();
+            return urls.toArray(new URL[0]);
         }
     }
 }

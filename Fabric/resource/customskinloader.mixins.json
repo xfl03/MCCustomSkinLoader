@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "customskinloader.fabric.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "MixinPlayerSkinProvider"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

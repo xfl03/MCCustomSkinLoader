@@ -21,10 +21,14 @@ hs_err_pid*
 */.project
 .project
 .settings/
+*.launch
 
 # gradle
 .gradle/
 build/
+gradle/
+gradlew*
+run/
 
 # IDEA
 .idea/

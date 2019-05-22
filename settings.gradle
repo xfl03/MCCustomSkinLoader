@@ -4,3 +4,6 @@ include "1.14"
 
 //Universal Forge Edition for [1.8,)
 include "Forge"
+
+//Fabric Edition for 1.14.x
+include "Fabric"

@@ -1,4 +1,5 @@
 apply plugin: 'base'
+apply plugin: 'java'
 
 ext.configFile = file "build.properties"
 configFile.withReader {
@@ -11,17 +12,22 @@ buildscript {
         mavenCentral()
         jcenter()
         maven {
+            name = "fabric"
+            url = "https://maven.fabricmc.net/"
+        }
+        maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
     }
     dependencies {
+        classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
 subprojects {
-    if (!project.name.toLowerCase().contains("forge"))
+    if (!project.name.toLowerCase().contains("forge") && !project.name.toLowerCase().contains("fabric"))
         apply from: rootProject.file('common.gradle')
 }
 
