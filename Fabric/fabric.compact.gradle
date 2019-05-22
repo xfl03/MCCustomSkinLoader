@@ -28,46 +28,46 @@ import net.fabricmc.loom.util.Constants;
 public class Fabric_Compact extends LoomGradlePlugin {
     @Override
     public void apply(Project target) {
-		// AbstractPlugin.java:
+        // AbstractPlugin.java:
         this.project = target;
 
-		project.getLogger().lifecycle("Fabric Loom: " + AbstractPlugin.class.getPackage().getImplementationVersion());
+        project.getLogger().lifecycle("Fabric Loom: " + AbstractPlugin.class.getPackage().getImplementationVersion());
 
-		// Apply default plugins
-		project.apply(ImmutableMap.of("plugin", "java"));
-		project.apply(ImmutableMap.of("plugin", "eclipse"));
-		project.apply(ImmutableMap.of("plugin", "idea"));
+        // Apply default plugins
+        project.apply(ImmutableMap.of("plugin", "java"));
+        project.apply(ImmutableMap.of("plugin", "eclipse"));
+        project.apply(ImmutableMap.of("plugin", "idea"));
 
-		//project.getExtensions().create("minecraft", LoomGradleExtension.class, project);
+        //project.getExtensions().create("minecraft", LoomGradleExtension.class, project);
         project.getExtensions().create("minecraftfabric", LoomGradleExtension.class, project);
 
-		LoomGradleExtension extension = project.getExtensions().getByType(LoomGradleExtension.class);
-		// Force add Mojang repository
-		addMavenRepo(target, "Mojang", "https://libraries.minecraft.net/");
+        LoomGradleExtension extension = project.getExtensions().getByType(LoomGradleExtension.class);
+        // Force add Mojang repository
+        addMavenRepo(target, "Mojang", "https://libraries.minecraft.net/");
 
-		Configuration compileModsConfig = project.getConfigurations().maybeCreate(Constants.COMPILE_MODS);
-		compileModsConfig.setTransitive(true);
-		Configuration compileModsMappedConfig = project.getConfigurations().maybeCreate(Constants.COMPILE_MODS_MAPPED);
-		compileModsMappedConfig.setTransitive(false); // Don't get transitive deps of already remapped mods
-		Configuration minecraftNamedConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT_NAMED);
-		minecraftNamedConfig.setTransitive(false); // The launchers do not recurse dependencies
-		Configuration minecraftIntermediaryConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT_INTERMEDIARY);
-		minecraftIntermediaryConfig.setTransitive(false);
-		Configuration minecraftDependenciesConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT_DEPENDENCIES);
-		minecraftDependenciesConfig.setTransitive(false);
-		Configuration minecraftConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT);
-		minecraftConfig.setTransitive(false);
+        Configuration compileModsConfig = project.getConfigurations().maybeCreate(Constants.COMPILE_MODS);
+        compileModsConfig.setTransitive(true);
+        Configuration compileModsMappedConfig = project.getConfigurations().maybeCreate(Constants.COMPILE_MODS_MAPPED);
+        compileModsMappedConfig.setTransitive(false); // Don't get transitive deps of already remapped mods
+        Configuration minecraftNamedConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT_NAMED);
+        minecraftNamedConfig.setTransitive(false); // The launchers do not recurse dependencies
+        Configuration minecraftIntermediaryConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT_INTERMEDIARY);
+        minecraftIntermediaryConfig.setTransitive(false);
+        Configuration minecraftDependenciesConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT_DEPENDENCIES);
+        minecraftDependenciesConfig.setTransitive(false);
+        Configuration minecraftConfig = project.getConfigurations().maybeCreate(Constants.MINECRAFT);
+        minecraftConfig.setTransitive(false);
 
-		Configuration includeConfig = project.getConfigurations().maybeCreate(Constants.INCLUDE);
-		includeConfig.setTransitive(false); // Dont get transitive deps
+        Configuration includeConfig = project.getConfigurations().maybeCreate(Constants.INCLUDE);
+        includeConfig.setTransitive(false); // Dont get transitive deps
 
-		project.getConfigurations().maybeCreate(Constants.MAPPINGS);
+        project.getConfigurations().maybeCreate(Constants.MAPPINGS);
 
-		configureIDEs();
-		configureCompile();
+        configureIDEs();
+        configureCompile();
 
-		extendsFrom(Constants.MINECRAFT_NAMED, Constants.MINECRAFT_DEPENDENCIES);
-		extendsFrom(Constants.MINECRAFT_INTERMEDIARY, Constants.MINECRAFT_DEPENDENCIES);
+        extendsFrom(Constants.MINECRAFT_NAMED, Constants.MINECRAFT_DEPENDENCIES);
+        extendsFrom(Constants.MINECRAFT_INTERMEDIARY, Constants.MINECRAFT_DEPENDENCIES);
 
         extendsFrom(Constants.COMPILE_MODS_MAPPED, Constants.MINECRAFT_NAMED);
         extendsFrom("compile", Constants.COMPILE_MODS_MAPPED);
@@ -75,142 +75,142 @@ public class Fabric_Compact extends LoomGradlePlugin {
         extendsFrom("annotationProcessor", Constants.COMPILE_MODS_MAPPED);
         extendsFrom("annotationProcessor", Constants.MAPPINGS);
 
-		Map<Project, Set<Task>> taskMap = project.getAllTasks(true);
-		for (Map.Entry<Project, Set<Task>> entry : taskMap.entrySet()) {
-			Project project = entry.getKey();
-			Set<Task> taskSet = entry.getValue();
-			for (Task task : taskSet) {
-				if (task instanceof JavaCompile && !(task.getName().contains("Test")) && !(task.getName().contains("test"))) {
-					JavaCompile javaCompileTask = (JavaCompile) task;
+        Map<Project, Set<Task>> taskMap = project.getAllTasks(true);
+        for (Map.Entry<Project, Set<Task>> entry : taskMap.entrySet()) {
+            Project project = entry.getKey();
+            Set<Task> taskSet = entry.getValue();
+            for (Task task : taskSet) {
+                if (task instanceof JavaCompile && !(task.getName().contains("Test")) && !(task.getName().contains("test"))) {
+                    JavaCompile javaCompileTask = (JavaCompile) task;
                     javaCompileTask.doFirst({ task1 ->
-						project.getLogger().lifecycle(":setting java compiler args");
-						try {
-							javaCompileTask.getOptions().getCompilerArgs().add("-AinMapFileNamedIntermediary=" + extension.getMappingsProvider().MAPPINGS_TINY.getCanonicalPath());
-							javaCompileTask.getOptions().getCompilerArgs().add("-AoutMapFileNamedIntermediary=" + extension.getMappingsProvider().MAPPINGS_MIXIN_EXPORT.getCanonicalPath());
-							javaCompileTask.getOptions().getCompilerArgs().add("-AoutRefMapFile=" + new File(javaCompileTask.getDestinationDir(), extension.getRefmapName()).getCanonicalPath());
-							javaCompileTask.getOptions().getCompilerArgs().add("-AdefaultObfuscationEnv=named:intermediary");
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+                        project.getLogger().lifecycle(":setting java compiler args");
+                        try {
+                            javaCompileTask.getOptions().getCompilerArgs().add("-AinMapFileNamedIntermediary=" + extension.getMappingsProvider().MAPPINGS_TINY.getCanonicalPath());
+                            javaCompileTask.getOptions().getCompilerArgs().add("-AoutMapFileNamedIntermediary=" + extension.getMappingsProvider().MAPPINGS_MIXIN_EXPORT.getCanonicalPath());
+                            javaCompileTask.getOptions().getCompilerArgs().add("-AoutRefMapFile=" + new File(javaCompileTask.getDestinationDir(), extension.getRefmapName()).getCanonicalPath());
+                            javaCompileTask.getOptions().getCompilerArgs().add("-AdefaultObfuscationEnv=named:intermediary");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
-				}
-			}
-		}
+                }
+            }
+        }
 
-		configureMaven();
+        configureMaven();
 
-		// LoomGradlePlugin.java:
-		TaskContainer tasks = target.getTasks();
-		
-		tasks.register("cleanLoomBinaries", CleanLoomBinaries.class);
-		tasks.register("cleanLoomMappings", CleanLoomMappings.class);
+        // LoomGradlePlugin.java:
+        TaskContainer tasks = target.getTasks();
+        
+        tasks.register("cleanLoomBinaries", CleanLoomBinaries.class);
+        tasks.register("cleanLoomMappings", CleanLoomMappings.class);
 
-		tasks.register("migrateMappings", MigrateMappingsTask.class, { t ->
-			t.getOutputs().upToDateWhen({ o -> false });
-		});
+        tasks.register("migrateMappings", MigrateMappingsTask.class, { t ->
+            t.getOutputs().upToDateWhen({ o -> false });
+        });
 
-		tasks.register("remapJar", RemapJar.class);
+        tasks.register("remapJar", RemapJar.class);
 
-		tasks.register("genSourcesDecompile", FernFlowerTask.class, { t ->
-			t.getOutputs().upToDateWhen({ o -> false });
-		});
+        tasks.register("genSourcesDecompile", FernFlowerTask.class, { t ->
+            t.getOutputs().upToDateWhen({ o -> false });
+        });
 
-		tasks.register("genSourcesRemapLineNumbers", RemapLineNumbersTask.class, { t ->
-			t.getOutputs().upToDateWhen({ o -> false });
-		});
+        tasks.register("genSourcesRemapLineNumbers", RemapLineNumbersTask.class, { t ->
+            t.getOutputs().upToDateWhen({ o -> false });
+        });
 
-		tasks.register("genSources", { t ->
-			t.getOutputs().upToDateWhen({ o -> false });
-		});
+        tasks.register("genSources", { t ->
+            t.getOutputs().upToDateWhen({ o -> false });
+        });
 
-		project.afterEvaluate({ p ->
-			AbstractDecompileTask decompileTask = (AbstractDecompileTask) p.getTasks().getByName("genSourcesDecompile");
-			RemapLineNumbersTask remapLineNumbersTask = (RemapLineNumbersTask) p.getTasks().getByName("genSourcesRemapLineNumbers");
-			Task genSourcesTask = p.getTasks().getByName("genSources");
+        project.afterEvaluate({ p ->
+            AbstractDecompileTask decompileTask = (AbstractDecompileTask) p.getTasks().getByName("genSourcesDecompile");
+            RemapLineNumbersTask remapLineNumbersTask = (RemapLineNumbersTask) p.getTasks().getByName("genSourcesRemapLineNumbers");
+            Task genSourcesTask = p.getTasks().getByName("genSources");
 
-			genSourcesTask.dependsOn(remapLineNumbersTask);
-			remapLineNumbersTask.dependsOn(decompileTask);
+            genSourcesTask.dependsOn(remapLineNumbersTask);
+            remapLineNumbersTask.dependsOn(decompileTask);
 
-			Project project = this.getProject();
-			LoomGradleExtension loomGradleExtension = project.getExtensions().getByType(LoomGradleExtension.class);
-			MinecraftLibraryProvider libraryProvider = loomGradleExtension.getMinecraftProvider().libraryProvider;
-			MappingsProvider mappingsProvider = loomGradleExtension.getMappingsProvider();
-			File mappedJar = mappingsProvider.mappedProvider.getMappedJar();
-			File linemappedJar = getMappedByproduct(project, "-linemapped.jar");
-			File sourcesJar = getMappedByproduct(project, "-sources.jar");
-			File linemapFile = getMappedByproduct(project, "-sources.lmap");
+            Project project = this.getProject();
+            LoomGradleExtension loomGradleExtension = project.getExtensions().getByType(LoomGradleExtension.class);
+            MinecraftLibraryProvider libraryProvider = loomGradleExtension.getMinecraftProvider().libraryProvider;
+            MappingsProvider mappingsProvider = loomGradleExtension.getMappingsProvider();
+            File mappedJar = mappingsProvider.mappedProvider.getMappedJar();
+            File linemappedJar = getMappedByproduct(project, "-linemapped.jar");
+            File sourcesJar = getMappedByproduct(project, "-sources.jar");
+            File linemapFile = getMappedByproduct(project, "-sources.lmap");
 
-			decompileTask.setInput(mappedJar);
-			decompileTask.setOutput(sourcesJar);
-			decompileTask.setLineMapFile(linemapFile);
-			decompileTask.setLibraries(libraryProvider.getLibraries());
+            decompileTask.setInput(mappedJar);
+            decompileTask.setOutput(sourcesJar);
+            decompileTask.setLineMapFile(linemapFile);
+            decompileTask.setLibraries(libraryProvider.getLibraries());
 
-			remapLineNumbersTask.setInput(mappedJar);
-			remapLineNumbersTask.setLineMapFile(linemapFile);
-			remapLineNumbersTask.setOutput(linemappedJar);
+            remapLineNumbersTask.setInput(mappedJar);
+            remapLineNumbersTask.setLineMapFile(linemapFile);
+            remapLineNumbersTask.setOutput(linemappedJar);
 
-			Path mappedJarPath = mappedJar.toPath();
-			Path linemappedJarPath = linemappedJar.toPath();
+            Path mappedJarPath = mappedJar.toPath();
+            Path linemappedJarPath = linemappedJar.toPath();
 
-			genSourcesTask.doLast({ tt ->
-				if (Files.exists(linemappedJarPath)) {
-					try {
-						Files.deleteIfExists(mappedJarPath);
-						Files.copy(linemappedJarPath, mappedJarPath);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			});
-		});
+            genSourcesTask.doLast({ tt ->
+                if (Files.exists(linemappedJarPath)) {
+                    try {
+                        Files.deleteIfExists(mappedJarPath);
+                        Files.copy(linemappedJarPath, mappedJarPath);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        });
 
-		tasks.register("downloadAssets", DownloadAssetsTask.class);
+        tasks.register("downloadAssets", DownloadAssetsTask.class);
 
-		tasks.register("genIdeaWorkspace", GenIdeaProjectTask.class, { t ->
-			t.dependsOn("idea", "downloadAssets");
-			t.setGroup("ide");
-		});
+        tasks.register("genIdeaWorkspace", GenIdeaProjectTask.class, { t ->
+            t.dependsOn("idea", "downloadAssets");
+            t.setGroup("ide");
+        });
 
-		tasks.register("genEclipseRuns", GenEclipseRunsTask.class, { t ->
-			t.dependsOn("downloadAssets");
-			t.setGroup("ide");
-		});
+        tasks.register("genEclipseRuns", GenEclipseRunsTask.class, { t ->
+            t.dependsOn("downloadAssets");
+            t.setGroup("ide");
+        });
 
-		tasks.register("vscode", GenVsCodeProjectTask.class, { t ->
-			t.dependsOn("downloadAssets");
-			t.setGroup("ide");
-		});
+        tasks.register("vscode", GenVsCodeProjectTask.class, { t ->
+            t.dependsOn("downloadAssets");
+            t.setGroup("ide");
+        });
 
-		tasks.register("remapSourcesJar", RemapSourcesJar.class);
+        tasks.register("remapSourcesJar", RemapSourcesJar.class);
 
-		// runClient
-		tasks.register("runFabricClient", RunClientTask.class, { t ->
-			t.dependsOn("buildNeeded", "downloadAssets");
-			t.setGroup("minecraftMapped");
-		});
+        // runClient
+        tasks.register("runFabricClient", RunClientTask.class, { t ->
+            t.dependsOn("buildNeeded", "downloadAssets");
+            t.setGroup("minecraftMapped");
+        });
 
-		// runServer
-		tasks.register("runFabricServer", RunServerTask.class, { t ->
-			t.dependsOn("buildNeeded");
-			t.setGroup("minecraftMapped");
-		});
+        // runServer
+        tasks.register("runFabricServer", RunServerTask.class, { t ->
+            t.dependsOn("buildNeeded");
+            t.setGroup("minecraftMapped");
+        });
     }
 
-	private void extendsFrom(String a, String b) {
-		project.getConfigurations().getByName(a).extendsFrom(project.getConfigurations().getByName(b));
-	}
+    private void extendsFrom(String a, String b) {
+        project.getConfigurations().getByName(a).extendsFrom(project.getConfigurations().getByName(b));
+    }
 
-	private static File getMappedByproduct(Project project, String suffix) {
-		LoomGradleExtension extension = project.getExtensions().getByType(LoomGradleExtension.class);
-		MappingsProvider mappingsProvider = extension.getMappingsProvider();
-		File mappedJar = mappingsProvider.mappedProvider.getMappedJar();
-		String path = mappedJar.getAbsolutePath();
-		if (!path.toLowerCase(Locale.ROOT).endsWith(".jar")) {
-			throw new RuntimeException("Invalid mapped JAR path: " + path);
-		}
+    private static File getMappedByproduct(Project project, String suffix) {
+        LoomGradleExtension extension = project.getExtensions().getByType(LoomGradleExtension.class);
+        MappingsProvider mappingsProvider = extension.getMappingsProvider();
+        File mappedJar = mappingsProvider.mappedProvider.getMappedJar();
+        String path = mappedJar.getAbsolutePath();
+        if (!path.toLowerCase(Locale.ROOT).endsWith(".jar")) {
+            throw new RuntimeException("Invalid mapped JAR path: " + path);
+        }
 
-		return new File(path.substring(0, path.length() - 4) + suffix);
-	}
+        return new File(path.substring(0, path.length() - 4) + suffix);
+    }
 }
 
 apply plugin: Fabric_Compact

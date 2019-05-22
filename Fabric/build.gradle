@@ -26,14 +26,14 @@ sourceSets {
             exclude 'customskinloader/fake/*.java'
             exclude 'customskinloader/fake/texture/FakeNativeImage.java'
             exclude 'net/minecraft/client/renderer/texture/NativeImage.java'
-			//Fabric
+            //Fabric
             srcDir 'source'
         }
         resources {
             //Common
             srcDir '../Common/resource'
-			exclude 'Profile.json'
-			//Fabric
+            exclude 'Profile.json'
+            //Fabric
             srcDir 'resource'
         }
     }
@@ -50,20 +50,20 @@ minecraft {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 jar {
-	exclude 'customskinloader/fake/*.class'
-	exclude 'customskinloader/fake/texture/FakeNativeImage.class'
-	exclude 'net/**'
+    exclude 'customskinloader/fake/*.class'
+    exclude 'customskinloader/fake/texture/FakeNativeImage.class'
+    exclude 'net/**'
 }
 
 processResources {
-	expand([
+    expand([
             modVersion    : rootProject.ext.config.version,
             modFullVersion: project.version,
             mcVersion     : MINECRAFT_VERSION,
@@ -81,7 +81,7 @@ task afterBuild {
             from 'build/libs'
             into '../build/libs'
             include '**/*.jar'
-			exclude '**/*-dev.jar'
+            exclude '**/*-dev.jar'
             exclude '**/*-sources.jar'
         }
     }
