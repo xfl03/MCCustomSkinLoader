@@ -13,11 +13,12 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-ext.MINECRAFT_VERSION = "1.12.2"
-ext.FORGE_VERSION = "14.23.5.2768"
-ext.MAPPING_VERSION = "stable_39"
-ext.MINECRAFT_FULL_VERSIONS = "1.8,1.8.8,1.8.9,1.9,1.9.4,1.10,1.10.2,1.11,1.11.2,1.12,1.12.1,1.12.2,1.13.2"
-
+ext.configFile = file "build.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
 apply from: rootProject.file("BuildScripts/version.gradle")
 
 archivesBaseName = "CustomSkinLoader_Forge"
@@ -64,9 +65,9 @@ sourceSets {
 }
 
 minecraft {
-    version = MINECRAFT_VERSION + "-" + FORGE_VERSION
+    version = config.forge_mc_version + "-" + config.forge_version
     runDir = "run"
-    mappings = MAPPING_VERSION
+    mappings = config.mappings_version
     clientJvmArgs += "-Dfml.coreMods.load=customskinloader.forge.ForgePlugin"
 
     replace '@MOD_VERSION@', rootProject.ext.config.version
@@ -80,9 +81,9 @@ processResources {
     expand([
             modVersion    : rootProject.ext.config.version,
             modFullVersion: project.version,
-            mcVersion     : MINECRAFT_VERSION,
-            mcFullVersions: MINECRAFT_FULL_VERSIONS,
-            forgeVersion  : FORGE_VERSION,
+            mcVersion     : config.minecraft_version,
+            mcFullVersions: config.minecraft_full_versions,
+            forgeVersion  : config.forge_version,
             gitVersion    : System.getenv("CIRCLE_SHA1"),
             buildUrl      : System.getenv("CIRCLE_BUILD_URL")
     ])}

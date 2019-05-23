@@ -10,8 +10,8 @@ configFile.withReader {
 apply from: rootProject.file("BuildScripts/version.gradle")
 
 version = getCSLVersion()
-group = config.group
-archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
+group = "customskinloader"
+archivesBaseName = "CustomSkinLoader_Fabric"
 ext.shortVersion = getShortVersion()
 
 sourceCompatibility = targetCompatibility = 1.6
