@@ -12,17 +12,17 @@ buildscript {
         mavenCentral()
         jcenter()
         maven {
-            name = "fabric"
-            url = "https://maven.fabricmc.net/"
-        }
-        maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = "sponge"
+            url = "https://repo.spongepowered.org/maven"
+        }
     }
     dependencies {
-        classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
 

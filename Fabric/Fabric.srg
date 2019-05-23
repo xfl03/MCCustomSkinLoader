@@ -9,6 +9,7 @@ CL: net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_106
 CL: net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/class_1068
 CL: net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
+CL: net/minecraft/client/texture/PlayerSkinProvider net/minecraft/class_1071
 CL: net/minecraft/util/ResourceLocation net/minecraft/class_2960
 CL: net/minecraft/util/Session net/minecraft/class_320
 CL: net/minecraft/util/StringUtils net/minecraft/class_3544
@@ -36,5 +37,8 @@ MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177334_a (Ljava/util/U
 MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177335_a ()Lnet/minecraft/util/ResourceLocation; net/minecraft/class_1068/method_4649 ()Lnet/minecraft/class_2960;
 MD: net/minecraft/client/resources/SkinManager/func_152790_a (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V net/minecraft/class_1071/method_4652 (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/class_1071$class_1072;Z)V
 MD: net/minecraft/client/resources/SkinManager$SkinAvailableCallback/func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V net/minecraft/class_1071$class_1072/onSkinTextureAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/class_2960;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V
+MD: net/minecraft/client/texture/PlayerSkinProvider/loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; net/minecraft/class_1071/method_4651 (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/class_1071$class_1072;)Lnet/minecraft/class_2960;
+MD: net/minecraft/client/texture/PlayerSkinProvider/loadSkin (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V net/minecraft/class_1071/method_4652 (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/class_1071$class_1072;Z)V
+MD: net/minecraft/client/texture/PlayerSkinProvider/getTextures (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; net/minecraft/class_1071/method_4654 (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;
 MD: net/minecraft/util/Session/func_148256_e ()Lcom/mojang/authlib/GameProfile; net/minecraft/class_320/method_1677 ()Lcom/mojang/authlib/GameProfile;
 MD: net/minecraft/util/StringUtils/func_76338_a (Ljava/lang/String;)Ljava/lang/String; net/minecraft/class_3544/method_15440 (Ljava/lang/String;)Ljava/lang/String;
