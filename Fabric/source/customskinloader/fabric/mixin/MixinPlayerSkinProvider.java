@@ -7,10 +7,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import customskinloader.fake.FakeSkinManager;
-import net.minecraft.client.texture.PlayerSkinProvider;
-import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.texture.PlayerSkinProvider;
+import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,22 +23,17 @@ public abstract class MixinPlayerSkinProvider {
     
     @Inject(method = "<init>", at = @At("RETURN"))
     private void initFakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService, CallbackInfo callbackInfo) {
-        this.fakeManager = new FakeSkinManager((net.minecraft.client.renderer.texture.TextureManager) (Object) textureManagerInstance, skinCacheDirectory, sessionService);
+        this.fakeManager = new FakeSkinManager(textureManagerInstance, skinCacheDirectory, sessionService);
     }
     
     @Overwrite
-    public Identifier loadSkin(MinecraftProfileTexture profileTexture, MinecraftProfileTexture.Type textureType) {
-        return this.loadSkin(profileTexture, textureType, null);
+    public ResourceLocation loadSkin(MinecraftProfileTexture profileTexture, MinecraftProfileTexture.Type textureType, SkinManager.SkinAvailableCallback skinAvailableCallback) {
+        return this.fakeManager.loadSkin(profileTexture, textureType, skinAvailableCallback);
     }
     
     @Overwrite
-    public Identifier loadSkin(MinecraftProfileTexture profileTexture, MinecraftProfileTexture.Type textureType, PlayerSkinProvider.SkinTextureAvailableCallback skinAvailableCallback) {
-        return (Identifier) (Object) this.fakeManager.loadSkin(profileTexture, textureType, (SkinManager.SkinAvailableCallback) skinAvailableCallback);
-    }
-    
-    @Overwrite
-    public void loadSkin(GameProfile profile, PlayerSkinProvider.SkinTextureAvailableCallback skinAvailableCallback, boolean requireSecure) {
-        this.fakeManager.loadProfileTextures(profile, (SkinManager.SkinAvailableCallback) skinAvailableCallback, requireSecure);
+    public void loadSkin(GameProfile profile, SkinManager.SkinAvailableCallback skinAvailableCallback, boolean requireSecure) {
+        this.fakeManager.loadProfileTextures(profile, skinAvailableCallback, requireSecure);
     }
     
     @Overwrite
