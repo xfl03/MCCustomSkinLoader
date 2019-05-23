@@ -92,7 +92,7 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
     public String judgeType() {
         if (this.image == null)
             return null;
-        if (((image.getRGBA(55, 20) & B) >>> 24) == 0)//if (55,20) is transparent
+        if (((image.getRGBA(55 * ratio, 20 * ratio) & B) >>> 24) == 0)//if (55,20) is transparent
             return "slim";
         return "default";
     }

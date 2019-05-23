@@ -1,5 +1,4 @@
 apply plugin: 'base'
-apply plugin: 'java'
 
 ext.configFile = file "build.properties"
 configFile.withReader {

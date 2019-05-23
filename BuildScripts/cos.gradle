@@ -29,6 +29,7 @@ String getMcVersion(String filename) {
 
 String getKey(String filename) {
     String name = filename.substring(0, filename.lastIndexOf('.'))
+    if (name.indexOf('-') == -1) return null;
     if (filename.endsWith(".json"))
         return String.format(
                 "versions/%s/%s",
@@ -75,6 +76,7 @@ void uploadArtifacts(String shortVersion) {
     File[] files = dir.listFiles()
     for (file in files) {
         String key = getKey(file.getName())
+        if (key == null) continue;
         uploadFile(key, file)
         String url = cosUrl + key
         String mcversion = getMcVersion(file.getName()).replace(".", "").toLowerCase()
