@@ -24,7 +24,7 @@ public class JavaUtil {
             LinkedList<URL> urls = new LinkedList<URL>();
             for (String ele : elements) {
                 try {
-                    urls.add(new URL(ele));
+                    urls.add(new File(ele).toURI().toURL());
                 } catch (Exception ignored) {
                 }
             }
