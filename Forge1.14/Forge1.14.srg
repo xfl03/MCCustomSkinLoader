@@ -3,3 +3,4 @@ CL: net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/client/r
 CL: net/minecraft/client/renderer/ThreadDownloadImageData$1 net/minecraft/client/renderer/texture/DownloadingTexture$1
 CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/client/resources/SkinManager$ISkinAvailableCallback
 MD: net/minecraft/client/resources/SkinManager$SkinAvailableCallback/func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V net/minecraft/client/resources/SkinManager$SkinAvailableCallback/onSkinTextureAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lqs;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V
+MD: net/minecraft/client/Minecraft/addScheduledTask (Ljava/lang/Runnable;)V net/minecraft/client/Minecraft/execute (Ljava/lang/Runnable;)V
