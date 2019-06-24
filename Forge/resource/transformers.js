@@ -3,6 +3,7 @@ var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 var FieldNode = Java.type('org.objectweb.asm.tree.FieldNode');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
+var MethodNode = Java.type('org.objectweb.asm.tree.MethodNode');
 var TypeInsnNode = Java.type('org.objectweb.asm.tree.TypeInsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
@@ -73,9 +74,10 @@ function PlayerTabTransformer(cn, mn) {
     }
 }
 
+var hasDownloadingTexture = false;
 function FakeSkinManagerTransformer(cn, mn) {
     var TARGET_CLASS = "net/minecraft/client/renderer/ThreadDownloadImageData";
-    var NEW_TARGET_CLASS = "net/minecraft/client/renderer/texture/ThreadDownloadImageData";
+    var NEW_TARGET_CLASS = hasDownloadingTexture ? "net/minecraft/client/renderer/texture/DownloadingTexture" : "net/minecraft/client/renderer/texture/ThreadDownloadImageData";
     var CALLBACK_CLASS = "net/minecraft/client/resources/SkinManager$SkinAvailableCallback";
 
     var il = mn.instructions;
@@ -146,6 +148,63 @@ function initializeCoreMod() {
                 cn.methods.forEach(function (mn) {
                     //if (mn.name === '<init>')
                     FakeSkinManagerTransformer(cn, mn);
+                });
+                return cn;
+            }
+        },
+
+        // For 1.14+
+        'MinecraftTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/Minecraft'
+            },
+            'transformer': function (cn) {
+                if (!cn.methods.stream().anyMatch(function(mn) {
+                    return mn.name.equals("func_152344_a");
+                })) {
+                    var methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "func_152344_a", "(Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture;", "(Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture<Ljava/lang/Object;>;", null);
+                    methodNode.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                    methodNode.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                    methodNode.instructions.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/util/concurrent/ThreadTaskExecutor", "execute", "(Ljava/lang/Runnable;)V", false));
+                    methodNode.instructions.add(new InsnNode(Opcodes.ACONST_NULL));
+                    methodNode.instructions.add(new InsnNode(Opcodes.ARETURN));
+                    cn.methods.add(methodNode);
+                }
+                return cn;
+            }
+        },
+        'DownloadingTextureTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/renderer/texture/DownloadingTexture'
+            },
+            'transformer': function (cn) {
+                hasDownloadingTexture = true;
+                return cn;
+            }
+        },
+        'ISkinAvailableCallbackTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/resources/SkinManager$ISkinAvailableCallback'
+            },
+            'transformer': function (cn) {
+                if (!cn.interfaces.contains("net/minecraft/client/resources/SkinManager$SkinAvailableCallback"))
+                    cn.interfaces.add("net/minecraft/client/resources/SkinManager$SkinAvailableCallback");
+                return cn;
+            }
+        },
+        'SkinAvailableCallbackTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/resources/SkinManager$SkinAvailableCallback'
+            },
+            'transformer': function (cn) {
+                cn.methods.forEach(function (mn) {
+                    if (mn.name.equals("func_180521_a")) {
+                        mn.name = "onSkinTextureAvailable";
+                    }
                 });
                 return cn;
             }
