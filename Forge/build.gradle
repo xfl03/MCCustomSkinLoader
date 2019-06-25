@@ -43,8 +43,8 @@ jar {
                 "Implementation-Timestamp"   : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    exclude 'net/minecraft/client/renderer/texture/NativeImage.class'
-    exclude 'net/minecraftforge/fml/common/Mod.class'
+    exclude 'net/minecraft/client/renderer/**'
+    exclude 'net/minecraftforge/**'
 }
 sourceSets {
     main {
