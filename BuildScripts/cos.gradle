@@ -36,13 +36,21 @@ String getKey(String filename) {
                 name,
                 filename
         )
-    if (filename.endsWith(".jar"))
-        return String.format(
-                "libraries/customskinloader/%s/%s/%s",
-                name.substring(0, name.indexOf('-')),
-                name.substring(name.indexOf('-') + 1),
-                filename
-        )
+    if (filename.endsWith(".jar")){
+        if (filename.contains("Fabric") || filename.contains("Forge")){
+            return String.format(
+                    "mods/%s",
+                    filename
+            )
+        }else{
+            return String.format(
+                    "libraries/customskinloader/%s/%s/%s",
+                    name.substring(0, name.indexOf('-')),
+                    name.substring(name.indexOf('-') + 1),
+                    filename
+            )
+        }
+    }
     return filename
 }
 
