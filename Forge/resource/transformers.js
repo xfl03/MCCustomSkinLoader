@@ -184,17 +184,6 @@ function initializeCoreMod() {
                 return cn;
             }
         },
-        'ISkinAvailableCallbackTransformer': {
-            'target': {
-                'type': 'CLASS',
-                'name': 'net/minecraft/client/resources/SkinManager$ISkinAvailableCallback'
-            },
-            'transformer': function (cn) {
-                if (!cn.interfaces.contains("net/minecraft/client/resources/SkinManager$SkinAvailableCallback"))
-                    cn.interfaces.add("net/minecraft/client/resources/SkinManager$SkinAvailableCallback");
-                return cn;
-            }
-        },
         'SkinAvailableCallbackTransformer': {
             'target': {
                 'type': 'CLASS',
