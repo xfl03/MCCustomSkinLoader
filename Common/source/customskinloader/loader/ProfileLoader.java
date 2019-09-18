@@ -33,6 +33,6 @@ public class ProfileLoader {
         UserProfile loadProfile(SkinSiteProfile ssp,GameProfile gameProfile) throws Exception;
         boolean compare(SkinSiteProfile ssp0,SkinSiteProfile ssp1);
         String getName();
-        void initLocalFolder(SkinSiteProfile ssp);
+        void init(SkinSiteProfile ssp);
     }
 }

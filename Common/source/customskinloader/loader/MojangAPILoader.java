@@ -1,5 +1,7 @@
 package customskinloader.loader;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,91 +33,107 @@ import customskinloader.utils.MinecraftUtil;
 
 public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
-    public static final MinecraftSessionService defaultSessionService=MinecraftUtil.getSessionService();
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
-        Map<MinecraftProfileTexture.Type,MinecraftProfileTexture> map=getTextures(gameProfile);
-        if(!map.isEmpty()){
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = getTextures(gameProfile);
+        if (!map.isEmpty()) {
             CustomSkinLoader.logger.info("Default profile will be used.");
             return ModelManager0.toUserProfile(map);
         }
-        String username=gameProfile.getName();
-        GameProfile newGameProfile=loadGameProfile(username);
-        if(newGameProfile==null){
-            CustomSkinLoader.logger.info("Profile not found.("+username+"'s profile not found.)");
+        String username = gameProfile.getName();
+        GameProfile newGameProfile = loadGameProfile(ssp.apiRoot, username);
+        if (newGameProfile == null) {
+            CustomSkinLoader.logger.info("Profile not found.(" + username + "'s profile not found.)");
             return null;
         }
-        newGameProfile=fillGameProfile(newGameProfile);
-        map=getTextures(newGameProfile);
-        if(!map.isEmpty()){
+        newGameProfile = fillGameProfile(ssp.seesionRoot, newGameProfile);
+        map = getTextures(newGameProfile);
+        if (!map.isEmpty()) {
             gameProfile.getProperties().putAll(newGameProfile.getProperties());
             return ModelManager0.toUserProfile(map);
         }
-        CustomSkinLoader.logger.info("Profile not found.("+username+" doesn't have skin/cape.)");
+        CustomSkinLoader.logger.info("Profile not found.(" + username + " doesn't have skin/cape.)");
         return null;
     }
-    
+
     //Username -> UUID
-    public static GameProfile loadGameProfile(String username) {
-        //Doc (http://wiki.vg/Mojang_API#Username_-.3E_UUID_at_time)
-        HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest("https://api.mojang.com/users/profiles/minecraft/"+username).setCacheTime(0));
-        if(StringUtils.isEmpty(responce.content))
+    public static GameProfile loadGameProfile(String apiRoot, String username) {
+        //Doc (https://wiki.vg/Mojang_API#Playernames_-.3E_UUIDs)
+        Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
+
+        HttpResponce responce = HttpRequestUtil.makeHttpRequest(
+                new HttpRequest(apiRoot + "profiles/minecraft")
+                        .setCacheTime(-1).setPayload(gson.toJson(Collections.singletonList(username)))
+        );
+        if (StringUtils.isEmpty(responce.content))
             return null;
-        
-        Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-        GameProfile gameProfile=gson.fromJson(responce.content, GameProfile.class);
-        
-        if(gameProfile.getId()==null)
+
+
+        GameProfile[] profiles = gson.fromJson(responce.content, GameProfile[].class);
+        if (profiles.length == 0) return null;
+        GameProfile gameProfile = profiles[0];
+
+        if (gameProfile.getId() == null)
             return null;
-        return new GameProfile(gameProfile.getId(),gameProfile.getName());
+        return new GameProfile(gameProfile.getId(), gameProfile.getName());
     }
+
     //UUID -> Profile
-    public static GameProfile fillGameProfile(GameProfile profile) {
+    public static GameProfile fillGameProfile(String sessionRoot, GameProfile profile) {
         //Doc (http://wiki.vg/Mojang_API#UUID_-.3E_Profile_.2B_Skin.2FCape)
         HttpResponce responce = HttpRequestUtil.makeHttpRequest(
-                new HttpRequest("https://sessionserver.mojang.com/session/minecraft/profile/"
+                new HttpRequest(sessionRoot + "session/minecraft/profile/"
                         + UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
-        if(StringUtils.isEmpty(responce.content))
+        if (StringUtils.isEmpty(responce.content))
             return profile;
-        
-        Gson gson=new GsonBuilder()
+
+        Gson gson = new GsonBuilder()
                 .registerTypeAdapter(UUID.class, new UUIDTypeAdapter())
                 .registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer())
                 .create();
-        MinecraftProfilePropertiesResponse propertiesResponce=gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
-        GameProfile newGameProfile=new GameProfile(propertiesResponce.getId(),propertiesResponce.getName());
+        MinecraftProfilePropertiesResponse propertiesResponce = gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
+        GameProfile newGameProfile = new GameProfile(propertiesResponce.getId(), propertiesResponce.getName());
         newGameProfile.getProperties().putAll(propertiesResponce.getProperties());
-        
+
         return newGameProfile;
     }
-    
-    public static Map<MinecraftProfileTexture.Type,MinecraftProfileTexture> getTextures(GameProfile gameProfile) {
-        if(gameProfile==null)
+
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getTextures(GameProfile gameProfile) {
+        if (gameProfile == null)
             return Maps.newHashMap();
-        Property textureProperty=Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
-        if (textureProperty==null)
+        Property textureProperty = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
+        if (textureProperty == null)
             return Maps.newHashMap();
-        String value=textureProperty.getValue();
-        if(StringUtils.isBlank(value))
+        String value = textureProperty.getValue();
+        if (StringUtils.isBlank(value))
             return Maps.newHashMap();
         @SuppressWarnings("deprecation") String json = new String(Base64.decodeBase64(value), Charsets.UTF_8);
-        Gson gson=new GsonBuilder().registerTypeAdapter(UUID.class,new UUIDTypeAdapter()).create();
-        MinecraftTexturesPayload result=gson.fromJson(json,MinecraftTexturesPayload.class);
-        if (result==null||result.getTextures()==null)
+        Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
+        MinecraftTexturesPayload result = gson.fromJson(json, MinecraftTexturesPayload.class);
+        if (result == null || result.getTextures() == null)
             return Maps.newHashMap();
         return result.getTextures();
     }
-    
+
     @Override
     public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
         return true;
     }
+
     @Override
     public String getName() {
         return "MojangAPI";
     }
 
     @Override
-    public void initLocalFolder(SkinSiteProfile ssp) {
+    public void init(SkinSiteProfile ssp) {
+        //Init api & session root for custom ygg root
+        if (ssp.root != null) {
+            ssp.apiRoot = ssp.root + "api/";
+            ssp.seesionRoot = ssp.root + "sessionserver/";
+        } else {
+            ssp.apiRoot = "https://api.mojang.com/";
+            ssp.seesionRoot = "https://sessionserver.mojang.com/";
+        }
     }
 }

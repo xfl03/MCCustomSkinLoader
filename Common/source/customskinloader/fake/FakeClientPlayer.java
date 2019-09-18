@@ -9,7 +9,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import customskinloader.CustomSkinLoader;
-import net.minecraft.client.Minecraft;
+import customskinloader.utils.MinecraftUtil;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -24,12 +24,12 @@ public class FakeClientPlayer {
     //For Legacy Skin
     public static ThreadDownloadImageData getDownloadImageSkin(ResourceLocation resourceLocationIn, String username) {
         //CustomSkinLoader.logger.debug("FakeClientPlayer/getDownloadImageSkin "+username);
-        TextureManager textman = Minecraft.getMinecraft().getTextureManager();
+        TextureManager textman = MinecraftUtil.getTextureManager();
         ITextureObject ito = textman.getTexture(resourceLocationIn);
 
         if (ito == null || !(ito instanceof ThreadDownloadImageData)) {
             //if Legacy Skin for username not loaded yet
-            SkinManager skinman = Minecraft.getMinecraft().getSkinManager();
+            SkinManager skinman = MinecraftUtil.getSkinManager();
             UUID offlineUUID = getOfflineUUID(username);
             GameProfile offlineProfile = new GameProfile(offlineUUID, username);
 
@@ -52,8 +52,8 @@ public class FakeClientPlayer {
         //CustomSkinLoader.logger.debug("FakeClientPlayer/getLocationSkin "+username);
         return new ResourceLocation("skins/legacy-" + StringUtils.stripControlCodes(username));
     }
-    public static UUID getOfflineUUID(String username)
-    {
+
+    public static UUID getOfflineUUID(String username) {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
     }
 
@@ -73,7 +73,7 @@ public class FakeClientPlayer {
             if (typeIn != Type.SKIN || loaded)
                 return;
 
-            TextureManager textman = Minecraft.getMinecraft().getTextureManager();
+            TextureManager textman = MinecraftUtil.getTextureManager();
             ITextureObject ito = textman.getTexture(location);
             if (ito == null)
                 ito = textureCache.get(location);

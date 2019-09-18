@@ -96,7 +96,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     }
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
-    public void initLocalFolder(SkinSiteProfile ssp) {
+    public void init(SkinSiteProfile ssp) {
         if(HttpUtil0.isLocal(ssp.root)){
             File f=new File(ssp.root);
             if(!f.exists())

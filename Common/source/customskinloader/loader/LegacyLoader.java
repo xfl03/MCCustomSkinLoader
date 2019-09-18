@@ -77,7 +77,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
     }
 
     @Override
-    public void initLocalFolder(SkinSiteProfile ssp) {
+    public void init(SkinSiteProfile ssp) {
         if(HttpUtil0.isLocal(ssp.skin))
             initFolder(ssp.skin);
         if(HttpUtil0.isLocal(ssp.cape))

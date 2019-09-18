@@ -168,7 +168,7 @@ public class Config {
             ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
             if(loader==null)
                 continue;
-            loader.initLocalFolder(ssp);
+            loader.init(ssp);
         }
     }
 
