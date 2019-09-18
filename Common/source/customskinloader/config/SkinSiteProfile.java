@@ -6,11 +6,11 @@ public class SkinSiteProfile {
     public String type;
     public String userAgent;
 
-    //Mojang API - invisible in config
+    //Mojang API
     public String apiRoot;
     public String seesionRoot;
 
-    //Json API & Mojang API
+    //Json API
     public String root;
 
     //Legacy

@@ -1,6 +1,5 @@
 package customskinloader.loader;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -15,7 +14,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
@@ -29,7 +27,6 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpRequestUtil.HttpRequest;
 import customskinloader.utils.HttpRequestUtil.HttpResponce;
-import customskinloader.utils.MinecraftUtil;
 
 public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
@@ -127,13 +124,11 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
     @Override
     public void init(SkinSiteProfile ssp) {
-        //Init api & session root for custom ygg root
-        if (ssp.root != null) {
-            ssp.apiRoot = ssp.root + "api/";
-            ssp.seesionRoot = ssp.root + "sessionserver/";
-        } else {
+        //Init default api & session root for Mojang
+        if (ssp.apiRoot == null)
             ssp.apiRoot = "https://api.mojang.com/";
+        if (ssp.seesionRoot == null)
             ssp.seesionRoot = "https://sessionserver.mojang.com/";
-        }
+
     }
 }
