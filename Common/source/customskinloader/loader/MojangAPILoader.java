@@ -124,7 +124,7 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
     @Override
     public void init(SkinSiteProfile ssp) {
-        //Init default api & session root for Mojang
+        //Init default api & session root for Mojang API
         if (ssp.apiRoot == null)
             ssp.apiRoot = "https://api.mojang.com/";
         if (ssp.seesionRoot == null)
