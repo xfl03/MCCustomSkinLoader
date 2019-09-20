@@ -1,0 +1,497 @@
+CL: net/minecraft/util/ResourceLocation qv
+CL: net/minecraft/util/ResourceLocation$Serializer qv$a
+CL: net/minecraft/util/StringUtils aae
+CL: net/minecraft/client/renderer/texture/NativeImage cuj
+CL: net/minecraft/client/renderer/texture/NativeImage$1 cuj$1
+CL: net/minecraft/client/renderer/texture/NativeImage$PixelFormat cuj$a
+CL: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode cuj$b
+CL: net/minecraft/client/renderer/texture/NativeImage$WriteCallback cuj$c
+CL: net/minecraft/client/Minecraft cyc
+CL: net/minecraft/client/Minecraft$1 cyc$1
+CL: net/minecraft/client/Minecraft$2 cyc$2
+CL: net/minecraft/client/multiplayer/ServerData dki
+CL: net/minecraft/client/multiplayer/ServerData$ServerResourceMode dki$a
+CL: net/minecraft/client/renderer/IImageBuffer dnd
+CL: net/minecraft/client/renderer/ImageBufferDownload dni
+CL: net/minecraft/client/renderer/ThreadDownloadImageData dws
+CL: net/minecraft/client/renderer/ThreadDownloadImageData$1 dws$1
+CL: net/minecraft/client/renderer/texture/SimpleTexture dwx
+CL: net/minecraft/client/renderer/texture/SimpleTexture$TextureData dwx$a
+CL: net/minecraft/client/renderer/texture/TextureManager dxc
+CL: net/minecraft/client/renderer/texture/ITextureObject dxd
+CL: net/minecraft/client/resources/DefaultPlayerSkin dxl
+CL: net/minecraft/client/resources/SkinManager dxt
+CL: net/minecraft/client/resources/SkinManager$1 dxt$1
+CL: net/minecraft/client/resources/SkinManager$2 dxt$2
+CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback dxt$a
+FD: net/minecraft/util/ResourceLocation/field_110626_a qv/a
+FD: net/minecraft/util/ResourceLocation/field_110625_b qv/b
+FD: net/minecraft/util/ResourceLocation/field_200118_c qv/c
+FD: net/minecraft/util/StringUtils/field_76339_a aae/a
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/RGBA cuj$a/a
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/RGB cuj$a/b
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/LUMINANCE_ALPHA cuj$a/c
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/LUMINANCE cuj$a/d
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211659_e cuj$a/e
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211660_f cuj$a/f
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211661_g cuj$a/g
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211662_h cuj$a/h
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211663_i cuj$a/i
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211664_j cuj$a/j
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211665_k cuj$a/k
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211666_l cuj$a/l
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211667_m cuj$a/m
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211668_n cuj$a/n
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211669_o cuj$a/o
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211670_p cuj$a/p
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/field_211671_q cuj$a/q
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/$VALUES cuj$a/r
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/RGBA cuj$b/a
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/RGB cuj$b/b
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/LUMINANCE_ALPHA cuj$b/c
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/LUMINANCE cuj$b/d
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/INTENSITY cuj$b/e
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/field_211673_f cuj$b/f
+FD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/$VALUES cuj$b/g
+FD: net/minecraft/client/renderer/texture/NativeImage$WriteCallback/field_209268_a cuj$c/a
+FD: net/minecraft/client/renderer/texture/NativeImage$WriteCallback/field_209269_b cuj$c/b
+FD: net/minecraft/client/renderer/texture/NativeImage/field_209272_a cuj/a
+FD: net/minecraft/client/renderer/texture/NativeImage/field_211680_b cuj/b
+FD: net/minecraft/client/renderer/texture/NativeImage/field_195719_a cuj/c
+FD: net/minecraft/client/renderer/texture/NativeImage/field_195720_b cuj/d
+FD: net/minecraft/client/renderer/texture/NativeImage/field_195721_c cuj/e
+FD: net/minecraft/client/renderer/texture/NativeImage/field_195722_d cuj/f
+FD: net/minecraft/client/renderer/texture/NativeImage/field_195723_e cuj/g
+FD: net/minecraft/client/Minecraft$1/field_74532_a cyc$1/a
+FD: net/minecraft/client/Minecraft$2/field_210222_a cyc$2/a
+FD: net/minecraft/client/Minecraft$2/field_210223_b cyc$2/b
+FD: net/minecraft/client/Minecraft/field_71426_K cyc/A
+FD: net/minecraft/client/Minecraft/field_175612_E cyc/E
+FD: net/minecraft/client/Minecraft/field_147123_G cyc/F
+FD: net/minecraft/client/Minecraft/field_223714_G cyc/G
+FD: net/minecraft/client/Minecraft/field_211120_F cyc/H
+FD: net/minecraft/client/Minecraft/field_130070_K cyc/I
+FD: net/minecraft/client/Minecraft/field_181038_N cyc/J
+FD: net/minecraft/client/Minecraft/field_195556_O cyc/K
+FD: net/minecraft/client/Minecraft/field_71422_O cyc/L
+FD: net/minecraft/client/Minecraft/field_71446_o cyc/M
+FD: net/minecraft/client/Minecraft/field_71432_P cyc/N
+FD: net/minecraft/client/Minecraft/field_184131_U cyc/O
+FD: net/minecraft/client/Minecraft/field_195557_T cyc/P
+FD: net/minecraft/client/Minecraft/field_71434_R cyc/Q
+FD: net/minecraft/client/Minecraft/field_71433_S cyc/R
+FD: net/minecraft/client/Minecraft/field_181541_X cyc/S
+FD: net/minecraft/client/Minecraft/field_71428_T cyc/T
+FD: net/minecraft/client/Minecraft/field_71427_U cyc/U
+FD: net/minecraft/client/Minecraft/field_175616_W cyc/V
+FD: net/minecraft/client/Minecraft/field_175621_X cyc/W
+FD: net/minecraft/client/Minecraft/field_175620_Y cyc/X
+FD: net/minecraft/client/Minecraft/field_193995_ae cyc/Y
+FD: net/minecraft/client/Minecraft/field_71449_j cyc/Z
+FD: net/minecraft/client/Minecraft/field_142025_a cyc/a
+FD: net/minecraft/client/Minecraft/field_211502_b cyc/b
+FD: net/minecraft/client/Minecraft/field_71464_q cyc/c
+FD: net/minecraft/client/Minecraft/field_71444_a cyc/d
+FD: net/minecraft/client/Minecraft/field_71442_b cyc/e
+FD: net/minecraft/client/Minecraft/field_195558_d cyc/f
+FD: net/minecraft/client/Minecraft/field_71441_e cyc/g
+FD: net/minecraft/client/Minecraft/field_71438_f cyc/h
+FD: net/minecraft/client/Minecraft/field_71439_g cyc/i
+FD: net/minecraft/client/Minecraft/field_175622_Z cyc/j
+FD: net/minecraft/client/Minecraft/field_147125_j cyc/k
+FD: net/minecraft/client/Minecraft/field_71452_i cyc/l
+FD: net/minecraft/client/Minecraft/field_71466_p cyc/m
+FD: net/minecraft/client/Minecraft/field_71462_r cyc/n
+FD: net/minecraft/client/Minecraft/field_213279_p cyc/o
+FD: net/minecraft/client/Minecraft/field_71460_t cyc/p
+FD: net/minecraft/client/Minecraft/field_184132_p cyc/q
+FD: net/minecraft/client/Minecraft/field_71429_W cyc/r
+FD: net/minecraft/client/Minecraft/field_71456_v cyc/s
+FD: net/minecraft/client/Minecraft/field_71454_w cyc/t
+FD: net/minecraft/client/Minecraft/field_71476_x cyc/u
+FD: net/minecraft/client/Minecraft/field_71474_y cyc/v
+FD: net/minecraft/client/Minecraft/field_71417_B cyc/w
+FD: net/minecraft/client/Minecraft/field_195559_v cyc/x
+FD: net/minecraft/client/Minecraft/field_71412_D cyc/y
+FD: net/minecraft/client/Minecraft/field_181542_y cyc/z
+FD: net/minecraft/client/Minecraft/field_147124_at cyc/aA
+FD: net/minecraft/client/Minecraft/field_147128_au cyc/aB
+FD: net/minecraft/client/Minecraft/field_147127_av cyc/aC
+FD: net/minecraft/client/Minecraft/field_147126_aw cyc/aD
+FD: net/minecraft/client/Minecraft/field_211501_aD cyc/aE
+FD: net/minecraft/client/Minecraft/field_213271_aF cyc/aF
+FD: net/minecraft/client/Minecraft/field_152355_az cyc/aG
+FD: net/minecraft/client/Minecraft/field_152350_aA cyc/aH
+FD: net/minecraft/client/Minecraft/field_152352_aC cyc/aI
+FD: net/minecraft/client/Minecraft/field_175617_aL cyc/aJ
+FD: net/minecraft/client/Minecraft/field_175618_aM cyc/aK
+FD: net/minecraft/client/Minecraft/field_213272_aL cyc/aL
+FD: net/minecraft/client/Minecraft/field_213273_aM cyc/aM
+FD: net/minecraft/client/Minecraft/field_193034_aS cyc/aN
+FD: net/minecraft/client/Minecraft/field_213274_aO cyc/aO
+FD: net/minecraft/client/Minecraft/field_71425_J cyc/aP
+FD: net/minecraft/client/Minecraft/field_71419_L cyc/aQ
+FD: net/minecraft/client/Minecraft/field_71420_M cyc/aR
+FD: net/minecraft/client/Minecraft/field_193035_aW cyc/aS
+FD: net/minecraft/client/Minecraft/field_195555_I cyc/aT
+FD: net/minecraft/client/Minecraft/field_213275_aU cyc/aU
+FD: net/minecraft/client/Minecraft/field_213276_aV cyc/aV
+FD: net/minecraft/client/Minecraft/field_71465_an cyc/aW
+FD: net/minecraft/client/Minecraft/field_71445_n cyc/aa
+FD: net/minecraft/client/Minecraft/field_193996_ah cyc/ab
+FD: net/minecraft/client/Minecraft/field_71437_Z cyc/ac
+FD: net/minecraft/client/Minecraft/field_213277_ad cyc/ad
+FD: net/minecraft/client/Minecraft/field_191950_u cyc/ae
+FD: net/minecraft/client/Minecraft/field_110446_Y cyc/af
+FD: net/minecraft/client/Minecraft/field_110447_Z cyc/ag
+FD: net/minecraft/client/Minecraft/field_184130_ao cyc/ah
+FD: net/minecraft/client/Minecraft/field_110453_aa cyc/ai
+FD: net/minecraft/client/Minecraft/field_71469_aa cyc/aj
+FD: net/minecraft/client/Minecraft/field_71470_ab cyc/ak
+FD: net/minecraft/client/Minecraft/field_71467_ac cyc/al
+FD: net/minecraft/client/Minecraft/field_71475_ae cyc/am
+FD: net/minecraft/client/Minecraft/field_71477_af cyc/an
+FD: net/minecraft/client/Minecraft/field_181543_z cyc/ao
+FD: net/minecraft/client/Minecraft/field_147129_ai cyc/ap
+FD: net/minecraft/client/Minecraft/field_71459_aj cyc/aq
+FD: net/minecraft/client/Minecraft/field_71453_ak cyc/ar
+FD: net/minecraft/client/Minecraft/field_71455_al cyc/as
+FD: net/minecraft/client/Minecraft/field_71424_I cyc/at
+FD: net/minecraft/client/Minecraft/field_110451_am cyc/au
+FD: net/minecraft/client/Minecraft/field_195554_ax cyc/av
+FD: net/minecraft/client/Minecraft/field_110448_aq cyc/aw
+FD: net/minecraft/client/Minecraft/field_135017_as cyc/ax
+FD: net/minecraft/client/Minecraft/field_184127_aH cyc/ay
+FD: net/minecraft/client/Minecraft/field_184128_aI cyc/az
+FD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/ENABLED dki$a/a
+FD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/DISABLED dki$a/b
+FD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/PROMPT dki$a/c
+FD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/field_152594_d dki$a/d
+FD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/$VALUES dki$a/e
+FD: net/minecraft/client/multiplayer/ServerData/field_78847_a dki/a
+FD: net/minecraft/client/multiplayer/ServerData/field_78845_b dki/b
+FD: net/minecraft/client/multiplayer/ServerData/field_78846_c dki/c
+FD: net/minecraft/client/multiplayer/ServerData/field_78843_d dki/d
+FD: net/minecraft/client/multiplayer/ServerData/field_78844_e dki/e
+FD: net/minecraft/client/multiplayer/ServerData/field_82821_f dki/f
+FD: net/minecraft/client/multiplayer/ServerData/field_82822_g dki/g
+FD: net/minecraft/client/multiplayer/ServerData/field_78841_f dki/h
+FD: net/minecraft/client/multiplayer/ServerData/field_147412_i dki/i
+FD: net/minecraft/client/multiplayer/ServerData/field_152587_j dki/j
+FD: net/minecraft/client/multiplayer/ServerData/field_147411_m dki/k
+FD: net/minecraft/client/multiplayer/ServerData/field_181042_l dki/l
+FD: net/minecraft/client/renderer/ThreadDownloadImageData$1/field_110932_a dws$1/a
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_147644_c dws/g
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_147643_d dws/h
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_152434_e dws/i
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_110562_b dws/j
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_110563_c dws/k
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_110561_e dws/l
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/field_110559_g dws/m
+FD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/field_217802_a dwx$a/a
+FD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/field_217803_b dwx$a/b
+FD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/field_217804_c dwx$a/c
+FD: net/minecraft/client/renderer/texture/SimpleTexture/field_110568_b dwx/f
+FD: net/minecraft/client/renderer/texture/SimpleTexture/field_147639_c dwx/g
+FD: net/minecraft/client/renderer/texture/TextureManager/field_194008_a dxc/a
+FD: net/minecraft/client/renderer/texture/TextureManager/field_147646_a dxc/b
+FD: net/minecraft/client/renderer/texture/TextureManager/field_110585_a dxc/c
+FD: net/minecraft/client/renderer/texture/TextureManager/field_110583_b dxc/d
+FD: net/minecraft/client/renderer/texture/TextureManager/field_110584_c dxc/e
+FD: net/minecraft/client/renderer/texture/TextureManager/field_110582_d dxc/f
+FD: net/minecraft/client/resources/DefaultPlayerSkin/field_177337_a dxl/a
+FD: net/minecraft/client/resources/DefaultPlayerSkin/field_177336_b dxl/b
+FD: net/minecraft/client/resources/SkinManager$1/field_152787_a dxt$1/a
+FD: net/minecraft/client/resources/SkinManager$2/field_152635_a dxt$2/a
+FD: net/minecraft/client/resources/SkinManager$2/field_152636_b dxt$2/b
+FD: net/minecraft/client/resources/SkinManager$2/field_152637_c dxt$2/c
+FD: net/minecraft/client/resources/SkinManager$2/field_152638_d dxt$2/d
+FD: net/minecraft/client/resources/SkinManager$2/field_177249_e dxt$2/e
+FD: net/minecraft/client/resources/SkinManager$2/field_152639_e dxt$2/f
+FD: net/minecraft/client/resources/SkinManager/field_152794_b dxt/a
+FD: net/minecraft/client/resources/SkinManager/field_152795_c dxt/b
+FD: net/minecraft/client/resources/SkinManager/field_152796_d dxt/c
+FD: net/minecraft/client/resources/SkinManager/field_152797_e dxt/d
+FD: net/minecraft/client/resources/SkinManager/field_152798_f dxt/e
+MD: net/minecraft/util/ResourceLocation$Serializer/deserialize (Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Lnet/minecraft/util/ResourceLocation; qv$a/a (Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Lqv;
+MD: net/minecraft/util/ResourceLocation$Serializer/serialize (Lnet/minecraft/util/ResourceLocation;Ljava/lang/reflect/Type;Lcom/google/gson/JsonSerializationContext;)Lcom/google/gson/JsonElement; qv$a/a (Lqv;Ljava/lang/reflect/Type;Lcom/google/gson/JsonSerializationContext;)Lcom/google/gson/JsonElement;
+MD: net/minecraft/util/ResourceLocation$Serializer/serialize (Ljava/lang/Object;Ljava/lang/reflect/Type;Lcom/google/gson/JsonSerializationContext;)Lcom/google/gson/JsonElement; qv$a/serialize (Ljava/lang/Object;Ljava/lang/reflect/Type;Lcom/google/gson/JsonSerializationContext;)Lcom/google/gson/JsonElement;
+MD: net/minecraft/util/ResourceLocation$Serializer/deserialize (Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Ljava/lang/Object; qv$a/deserialize (Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Ljava/lang/Object;
+MD: net/minecraft/util/ResourceLocation/func_110623_a ()Ljava/lang/String; qv/a ()Ljava/lang/String;
+MD: net/minecraft/util/ResourceLocation/func_195824_a (C)Z qv/a (C)Z
+MD: net/minecraft/util/ResourceLocation/func_217859_a (I)Z qv/a (I)Z
+MD: net/minecraft/util/ResourceLocation/func_195826_a (Lcom/mojang/brigadier/StringReader;)Lnet/minecraft/util/ResourceLocation; qv/a (Lcom/mojang/brigadier/StringReader;)Lqv;
+MD: net/minecraft/util/ResourceLocation/func_208304_a (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; qv/a (Ljava/lang/String;)Lqv;
+MD: net/minecraft/util/ResourceLocation/func_195828_a (Ljava/lang/String;C)Lnet/minecraft/util/ResourceLocation; qv/a (Ljava/lang/String;C)Lqv;
+MD: net/minecraft/util/ResourceLocation/compareTo (Lnet/minecraft/util/ResourceLocation;)I qv/a (Lqv;)I
+MD: net/minecraft/util/ResourceLocation/func_110624_b ()Ljava/lang/String; qv/b ()Ljava/lang/String;
+MD: net/minecraft/util/ResourceLocation/func_217857_b (I)Z qv/b (I)Z
+MD: net/minecraft/util/ResourceLocation/func_217855_b (Ljava/lang/String;)Z qv/b (Ljava/lang/String;)Z
+MD: net/minecraft/util/ResourceLocation/func_195823_b (Ljava/lang/String;C)[Ljava/lang/String; qv/b (Ljava/lang/String;C)[Ljava/lang/String;
+MD: net/minecraft/util/ResourceLocation/func_217856_c (Ljava/lang/String;)Z qv/c (Ljava/lang/String;)Z
+MD: net/minecraft/util/ResourceLocation/func_217858_d (Ljava/lang/String;)Z qv/d (Ljava/lang/String;)Z
+MD: net/minecraft/util/ResourceLocation/equals (Ljava/lang/Object;)Z qv/equals (Ljava/lang/Object;)Z
+MD: net/minecraft/util/ResourceLocation/hashCode ()I qv/hashCode ()I
+MD: net/minecraft/util/ResourceLocation/toString ()Ljava/lang/String; qv/toString ()Ljava/lang/String;
+MD: net/minecraft/util/ResourceLocation/compareTo (Ljava/lang/Object;)I qv/compareTo (Ljava/lang/Object;)I
+MD: net/minecraft/util/StringUtils/func_76337_a (I)Ljava/lang/String; aae/a (I)Ljava/lang/String;
+MD: net/minecraft/util/StringUtils/func_76338_a (Ljava/lang/String;)Ljava/lang/String; aae/a (Ljava/lang/String;)Ljava/lang/String;
+MD: net/minecraft/util/StringUtils/func_151246_b (Ljava/lang/String;)Z aae/b (Ljava/lang/String;)Z
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211651_a ()I cuj$a/a ()I
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211652_a (I)Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat; cuj$a/a (I)Lcuj$a;
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211655_a (Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat;)I cuj$a/a (Lcuj$a;)I
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211656_b ()V cuj$a/b ()V
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211646_b (I)Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat; cuj$a/b (I)Lcuj$a;
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211658_c ()V cuj$a/c ()V
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211650_d ()I cuj$a/d ()I
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211645_i ()Z cuj$a/e ()Z
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211648_n ()I cuj$a/f ()I
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211653_r ()Z cuj$a/g ()Z
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211647_v ()I cuj$a/h ()I
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/func_211654_w ()Z cuj$a/i ()Z
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/values ()[Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat; cuj$a/values ()[Lcuj$a;
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormat/valueOf (Ljava/lang/String;)Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat; cuj$a/valueOf (Ljava/lang/String;)Lcuj$a;
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/func_211672_a ()I cuj$b/a ()I
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/values ()[Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode; cuj$b/values ()[Lcuj$b;
+MD: net/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode/valueOf (Ljava/lang/String;)Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormatGLCode; cuj$b/valueOf (Ljava/lang/String;)Lcuj$b;
+MD: net/minecraft/client/renderer/texture/NativeImage$WriteCallback/func_209267_a ()V cuj$c/a ()V
+MD: net/minecraft/client/renderer/texture/NativeImage$WriteCallback/invoke (JJI)V cuj$c/invoke (JJI)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195702_a ()I cuj/a ()I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195709_a (II)I cuj/a (II)I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195700_a (III)V cuj/a (III)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195715_a (IIIII)V cuj/a (IIIII)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195706_a (IIIIIIIZ)V cuj/a (IIIIIIIZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195712_a (IIIIIIIZZZ)V cuj/a (IIIIIIIZZZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195699_a (IIIIIIZZ)V cuj/a (IIIIIIZZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195708_a (IIIILnet/minecraft/client/renderer/texture/NativeImage;)V cuj/a (IIIILcuj;)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195697_a (IIIZ)V cuj/a (IIIZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195717_a (IZ)V cuj/a (IZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_211679_a (Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat;Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; cuj/a (Lcuj$a;Ljava/io/InputStream;)Lcuj;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_211677_a (Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat;Ljava/nio/ByteBuffer;)Lnet/minecraft/client/renderer/texture/NativeImage; cuj/a (Lcuj$a;Ljava/nio/ByteBuffer;)Lcuj;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195703_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V cuj/a (Lcuj;)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_209271_a (Ljava/io/File;)V cuj/a (Ljava/io/File;)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195713_a (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; cuj/a (Ljava/io/InputStream;)Lcuj;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_216510_a (Ljava/lang/String;)V cuj/a (Ljava/lang/String;)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195704_a (Ljava/nio/ByteBuffer;)Lnet/minecraft/client/renderer/texture/NativeImage; cuj/a (Ljava/nio/ByteBuffer;)Lcuj;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_209270_a (Ljava/nio/file/Path;)V cuj/a (Ljava/nio/file/Path;)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_211676_a (Lorg/lwjgl/stb/STBTTFontinfo;IIIFFFFII)V cuj/a (Lorg/lwjgl/stb/STBTTFontinfo;IIIFFFFII)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195701_a (Z)V cuj/a (Z)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195705_a (ZZ)V cuj/a (ZZ)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195714_b ()I cuj/b ()I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_211675_e (II)B cuj/b (II)B
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195718_b (III)V cuj/b (III)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_216511_b (Ljava/lang/String;)Lnet/minecraft/client/renderer/texture/NativeImage; cuj/b (Ljava/lang/String;)Lcuj;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195707_b (Z)V cuj/b (Z)V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_211678_c ()Lnet/minecraft/client/renderer/texture/NativeImage$PixelFormat; cuj/c ()Lcuj$a;
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195716_c ()[I cuj/d ()[I
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195710_e ()V cuj/e ()V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195711_f ()V cuj/f ()V
+MD: net/minecraft/client/renderer/texture/NativeImage/func_195696_g ()V cuj/g ()V
+MD: net/minecraft/client/renderer/texture/NativeImage/close ()V cuj/close ()V
+MD: net/minecraft/client/renderer/texture/NativeImage/toString ()Ljava/lang/String; cuj/toString ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft$1/run ()V cyc$1/run ()V
+MD: net/minecraft/client/Minecraft/func_71401_C ()Lnet/minecraft/server/integrated/IntegratedServer; cyc/A ()Leac;
+MD: net/minecraft/client/Minecraft/func_71378_E ()Lnet/minecraft/profiler/Snooper; cyc/B ()Lahq;
+MD: net/minecraft/client/Minecraft/func_110432_I ()Lnet/minecraft/util/Session; cyc/C ()Lcyn;
+MD: net/minecraft/client/Minecraft/func_181037_M ()Lcom/mojang/authlib/properties/PropertyMap; cyc/D ()Lcom/mojang/authlib/properties/PropertyMap;
+MD: net/minecraft/client/Minecraft/func_110437_J ()Ljava/net/Proxy; cyc/E ()Ljava/net/Proxy;
+MD: net/minecraft/client/Minecraft/func_110434_K ()Lnet/minecraft/client/renderer/texture/TextureManager; cyc/F ()Ldxc;
+MD: net/minecraft/client/Minecraft/func_195551_G ()Lnet/minecraft/resources/IResourceManager; cyc/G ()Lxi;
+MD: net/minecraft/client/Minecraft/func_195548_H ()Lnet/minecraft/resources/ResourcePackList; cyc/H ()Lwx;
+MD: net/minecraft/client/Minecraft/func_195541_I ()Lnet/minecraft/client/resources/DownloadingPackFinder; cyc/I ()Ldxj;
+MD: net/minecraft/client/Minecraft/func_195549_J ()Ljava/io/File; cyc/J ()Ljava/io/File;
+MD: net/minecraft/client/Minecraft/func_135016_M ()Lnet/minecraft/client/resources/LanguageManager; cyc/K ()Ldxz;
+MD: net/minecraft/client/Minecraft/func_147117_R ()Lnet/minecraft/client/renderer/texture/AtlasTexture; cyc/L ()Ldxa;
+MD: net/minecraft/client/Minecraft/func_147111_S ()Z cyc/M ()Z
+MD: net/minecraft/client/Minecraft/func_147113_T ()Z cyc/N ()Z
+MD: net/minecraft/client/Minecraft/func_147118_V ()Lnet/minecraft/client/audio/SoundHandler; cyc/O ()Leap;
+MD: net/minecraft/client/Minecraft/func_147109_W ()Lnet/minecraft/client/audio/MusicTicker$MusicType; cyc/P ()Leak$a;
+MD: net/minecraft/client/Minecraft/func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; cyc/Q ()Lcom/mojang/authlib/minecraft/MinecraftSessionService;
+MD: net/minecraft/client/Minecraft/func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; cyc/S ()Ldxt;
+MD: net/minecraft/client/Minecraft/func_175606_aa ()Lnet/minecraft/entity/Entity; cyc/T ()Laio;
+MD: net/minecraft/client/Minecraft/func_175602_ab ()Lnet/minecraft/client/renderer/BlockRendererDispatcher; cyc/U ()Ldnw;
+MD: net/minecraft/client/Minecraft/func_175598_ae ()Lnet/minecraft/client/renderer/entity/EntityRendererManager; cyc/V ()Ldsa;
+MD: net/minecraft/client/Minecraft/func_175599_af ()Lnet/minecraft/client/renderer/ItemRenderer; cyc/W ()Ldsv;
+MD: net/minecraft/client/Minecraft/func_175597_ag ()Lnet/minecraft/client/renderer/FirstPersonRenderer; cyc/X ()Ldne;
+MD: net/minecraft/client/Minecraft/func_175610_ah ()I cyc/Y ()I
+MD: net/minecraft/client/Minecraft/func_181539_aj ()Lnet/minecraft/util/FrameTimer; cyc/Z ()Lzr;
+MD: net/minecraft/client/Minecraft/func_213226_a ()V cyc/a ()V
+MD: net/minecraft/client/Minecraft/func_71383_b (I)V cyc/a (I)V
+MD: net/minecraft/client/Minecraft/func_195545_a (IJ)V cyc/a (IJ)V
+MD: net/minecraft/client/Minecraft/func_70000_a (Lnet/minecraft/profiler/Snooper;)V cyc/a (Lahq;)V
+MD: net/minecraft/client/Minecraft/func_175607_a (Lnet/minecraft/entity/Entity;)V cyc/a (Laio;)V
+MD: net/minecraft/client/Minecraft/func_213235_a (Lnet/minecraft/item/ItemStack;)Ljava/util/stream/Stream; cyc/a (Lbcj;)Ljava/util/stream/Stream;
+MD: net/minecraft/client/Minecraft/func_184119_a (Lnet/minecraft/item/ItemStack;Lnet/minecraft/tileentity/TileEntity;)Lnet/minecraft/item/ItemStack; cyc/a (Lbcj;Lbtw;)Lbcj;
+MD: net/minecraft/client/Minecraft/func_213244_a (Lnet/minecraft/item/crafting/IRecipe;)Lnet/minecraft/util/ResourceLocation; cyc/a (Lber;)Lqv;
+MD: net/minecraft/client/Minecraft/access$000 (Lnet/minecraft/client/Minecraft;)Z cyc/a (Lcyc;)Z
+MD: net/minecraft/client/Minecraft/func_71404_a (Lnet/minecraft/crash/CrashReport;)V cyc/a (Ld;)V
+MD: net/minecraft/client/Minecraft/func_213268_a (Lnet/minecraft/client/gui/LoadingGui;)V cyc/a (Ldcg;)V
+MD: net/minecraft/client/Minecraft/func_147108_a (Lnet/minecraft/client/gui/screen/Screen;)V cyc/a (Ldcl;)V
+MD: net/minecraft/client/Minecraft/func_213258_a (Lnet/minecraft/client/gui/recipebook/RecipeList;)Ljava/util/stream/Stream; cyc/a (Ldfc;)Ljava/util/stream/Stream;
+MD: net/minecraft/client/Minecraft/func_71403_a (Lnet/minecraft/client/world/ClientWorld;)V cyc/a (Ldkf;)V
+MD: net/minecraft/client/Minecraft/func_71351_a (Lnet/minecraft/client/multiplayer/ServerData;)V cyc/a (Ldki;)V
+MD: net/minecraft/client/Minecraft/func_213232_a (Lnet/minecraft/client/util/SearchTree;Lnet/minecraft/client/util/SearchTreeReloadable;Lnet/minecraft/item/ItemStack;)V cyc/a (Ldzw;Ldzv;Lbcj;)V
+MD: net/minecraft/client/Minecraft/func_213253_a (Lnet/minecraft/client/util/SearchTreeManager$Key;)Lnet/minecraft/client/util/IMutableSearchTree; cyc/a (Ldzx$a;)Ldzu;
+MD: net/minecraft/client/Minecraft/func_213238_a (Ljava/lang/String;)Z cyc/a (Ljava/lang/String;)Z
+MD: net/minecraft/client/Minecraft/func_71371_a (Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/world/WorldSettings;)V cyc/a (Ljava/lang/String;Ljava/lang/String;Lbhv;)V
+MD: net/minecraft/client/Minecraft/func_213262_a (Ljava/lang/String;ZLjava/util/function/Supplier;Lnet/minecraft/resources/IResourcePack;Lnet/minecraft/resources/data/PackMetadataSection;Lnet/minecraft/resources/ResourcePackInfo$Priority;)Lnet/minecraft/client/resources/ClientResourcePackInfo; cyc/a (Ljava/lang/String;ZLjava/util/function/Supplier;Lwl;Lwq;Lxa$a;)Ldxw;
+MD: net/minecraft/client/Minecraft/func_213236_a (Ljava/util/List;Ljava/util/concurrent/CompletableFuture;)V cyc/a (Ljava/util/List;Ljava/util/concurrent/CompletableFuture;)V
+MD: net/minecraft/client/Minecraft/func_213240_a (Ljava/util/concurrent/CompletableFuture;)Ljava/util/concurrent/CompletionStage; cyc/a (Ljava/util/concurrent/CompletableFuture;)Ljava/util/concurrent/CompletionStage;
+MD: net/minecraft/client/Minecraft/func_213228_a (Z)V cyc/a (Z)V
+MD: net/minecraft/client/Minecraft/func_99999_d ()V cyc/b ()V
+MD: net/minecraft/client/Minecraft/func_213246_b (I)Lnet/minecraft/world/chunk/listener/IChunkStatusListener; cyc/b (I)Lvt;
+MD: net/minecraft/client/Minecraft/func_213251_b (Lnet/minecraft/item/ItemStack;)Ljava/util/stream/Stream; cyc/b (Lbcj;)Ljava/util/stream/Stream;
+MD: net/minecraft/client/Minecraft/func_213234_b (Lnet/minecraft/item/crafting/IRecipe;)Ljava/util/stream/Stream; cyc/b (Lber;)Ljava/util/stream/Stream;
+MD: net/minecraft/client/Minecraft/func_71396_d (Lnet/minecraft/crash/CrashReport;)Lnet/minecraft/crash/CrashReport; cyc/b (Ld;)Ld;
+MD: net/minecraft/client/Minecraft/func_213231_b (Lnet/minecraft/client/gui/screen/Screen;)V cyc/b (Ldcl;)V
+MD: net/minecraft/client/Minecraft/func_213252_b (Lnet/minecraft/client/gui/recipebook/RecipeList;)Ljava/util/stream/Stream; cyc/b (Ldfc;)Ljava/util/stream/Stream;
+MD: net/minecraft/client/Minecraft/func_213257_b (Lnet/minecraft/client/world/ClientWorld;)V cyc/b (Ldkf;)V
+MD: net/minecraft/client/Minecraft/func_213267_b (Ljava/lang/String;)Z cyc/b (Ljava/lang/String;)Z
+MD: net/minecraft/client/Minecraft/func_213265_b (Ljava/util/concurrent/CompletableFuture;)V cyc/b (Ljava/util/concurrent/CompletableFuture;)V
+MD: net/minecraft/client/Minecraft/func_213270_b (Ljava/util/function/Supplier;)Lnet/minecraft/resources/IResourcePack; cyc/b (Ljava/util/function/Supplier;)Lwl;
+MD: net/minecraft/client/Minecraft/func_213261_b (Lnet/minecraft/util/text/ITextComponent;)V cyc/b (Ljo;)V
+MD: net/minecraft/client/Minecraft/func_213227_b (Z)V cyc/b (Z)V
+MD: net/minecraft/client/Minecraft/func_147110_a ()Lnet/minecraft/client/shader/Framebuffer; cyc/c ()Lctz;
+MD: net/minecraft/client/Minecraft/func_213242_c (Lnet/minecraft/item/ItemStack;)Ljava/util/stream/Stream; cyc/c (Lbcj;)Ljava/util/stream/Stream;
+MD: net/minecraft/client/Minecraft/func_71377_b (Lnet/minecraft/crash/CrashReport;)V cyc/c (Ld;)V
+MD: net/minecraft/client/Minecraft/func_213241_c (Lnet/minecraft/client/gui/screen/Screen;)V cyc/c (Ldcl;)V
+MD: net/minecraft/client/Minecraft/func_212874_c_ (Ljava/lang/Runnable;)Z cyc/c (Ljava/lang/Runnable;)Z
+MD: net/minecraft/client/Minecraft/func_213264_c (Lnet/minecraft/util/text/ITextComponent;)Ljava/lang/String; cyc/c (Ljo;)Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_71385_j (Z)V cyc/c (Z)V
+MD: net/minecraft/client/Minecraft/func_175600_c ()Ljava/lang/String; cyc/d ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_212875_d_ (Ljava/lang/Runnable;)Ljava/lang/Runnable; cyc/d (Ljava/lang/Runnable;)Ljava/lang/Runnable;
+MD: net/minecraft/client/Minecraft/func_213230_d (Lnet/minecraft/util/text/ITextComponent;)Ljava/lang/String; cyc/d (Ljo;)Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_181537_a (Z)V cyc/d (Z)V
+MD: net/minecraft/client/Minecraft/func_184123_d ()Ljava/lang/String; cyc/e ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_195542_b (Z)V cyc/e (Z)V
+MD: net/minecraft/client/Minecraft/func_211821_e ()Z cyc/f ()Z
+MD: net/minecraft/client/Minecraft/func_147115_a (Z)V cyc/f (Z)V
+MD: net/minecraft/client/Minecraft/func_213237_g ()Ljava/util/concurrent/CompletableFuture; cyc/g ()Ljava/util/concurrent/CompletableFuture;
+MD: net/minecraft/client/Minecraft/func_71359_d ()Lnet/minecraft/world/storage/SaveFormat; cyc/h ()Lcoq;
+MD: net/minecraft/client/Minecraft/func_71405_e ()V cyc/i ()V
+MD: net/minecraft/client/Minecraft/func_71398_f ()V cyc/j ()V
+MD: net/minecraft/client/Minecraft/func_71400_g ()V cyc/k ()V
+MD: net/minecraft/client/Minecraft/func_181535_r ()Lnet/minecraft/client/audio/MusicTicker; cyc/l ()Leak;
+MD: net/minecraft/client/Minecraft/func_71407_l ()V cyc/m ()V
+MD: net/minecraft/client/Minecraft/func_213254_o ()V cyc/n ()V
+MD: net/minecraft/client/Minecraft/func_71355_q ()Z cyc/o ()Z
+MD: net/minecraft/client/Minecraft/func_147114_u ()Lnet/minecraft/client/network/play/ClientPlayNetHandler; cyc/p ()Ldkc;
+MD: net/minecraft/client/Minecraft/func_71382_s ()Z cyc/r ()Z
+MD: net/minecraft/client/Minecraft/func_71375_t ()Z cyc/s ()Z
+MD: net/minecraft/client/Minecraft/func_71379_u ()Z cyc/t ()Z
+MD: net/minecraft/client/Minecraft/func_71410_x ()Lnet/minecraft/client/Minecraft; cyc/u ()Lcyc;
+MD: net/minecraft/client/Minecraft/func_213245_w ()Ljava/util/concurrent/CompletableFuture; cyc/v ()Ljava/util/concurrent/CompletableFuture;
+MD: net/minecraft/client/Minecraft/func_71369_N ()I cyc/w ()I
+MD: net/minecraft/client/Minecraft/func_147104_D ()Lnet/minecraft/client/multiplayer/ServerData; cyc/x ()Ldki;
+MD: net/minecraft/client/Minecraft/func_71387_A ()Z cyc/y ()Z
+MD: net/minecraft/client/Minecraft/func_71356_B ()Z cyc/z ()Z
+MD: net/minecraft/client/Minecraft/func_213256_aB ()V cyc/aA ()V
+MD: net/minecraft/client/Minecraft/func_213243_aC ()I cyc/aB ()I
+MD: net/minecraft/client/Minecraft/func_213266_aD ()Z cyc/aC ()Z
+MD: net/minecraft/client/Minecraft/func_203410_as ()V cyc/aD ()V
+MD: net/minecraft/client/Minecraft/func_147116_af ()V cyc/aE ()V
+MD: net/minecraft/client/Minecraft/func_147121_ag ()V cyc/aF ()V
+MD: net/minecraft/client/Minecraft/func_184117_aA ()V cyc/aG ()V
+MD: net/minecraft/client/Minecraft/func_147112_ai ()V cyc/aH ()V
+MD: net/minecraft/client/Minecraft/func_181538_aA ()Ljava/lang/String; cyc/aI ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_213255_aK ()Ljava/lang/String; cyc/aJ ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_213259_aL ()Ljava/lang/String; cyc/aK ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_211822_az ()Ljava/lang/String; cyc/aL ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_211816_aA ()Ljava/lang/String; cyc/aM ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_211112_aw ()Ljava/lang/String; cyc/aN ()Ljava/lang/String;
+MD: net/minecraft/client/Minecraft/func_213249_aP ()Z cyc/aO ()Z
+MD: net/minecraft/client/Minecraft/func_213233_aQ ()V cyc/aP ()V
+MD: net/minecraft/client/Minecraft/func_213260_aR ()V cyc/aQ ()V
+MD: net/minecraft/client/Minecraft/func_213247_aS ()I cyc/aR ()I
+MD: net/minecraft/client/Minecraft/func_181540_al ()Z cyc/aa ()Z
+MD: net/minecraft/client/Minecraft/func_184126_aj ()Lcom/mojang/datafixers/DataFixer; cyc/ab ()Lcom/mojang/datafixers/DataFixer;
+MD: net/minecraft/client/Minecraft/func_184121_ak ()F cyc/ac ()F
+MD: net/minecraft/client/Minecraft/func_193989_ak ()F cyc/ad ()F
+MD: net/minecraft/client/Minecraft/func_184125_al ()Lnet/minecraft/client/renderer/color/BlockColors; cyc/ae ()Lcyp;
+MD: net/minecraft/client/Minecraft/func_189648_am ()Z cyc/ag ()Z
+MD: net/minecraft/client/Minecraft/func_193033_an ()Lnet/minecraft/client/gui/toasts/ToastGui; cyc/ah ()Ldan;
+MD: net/minecraft/client/Minecraft/func_193032_ao ()Lnet/minecraft/client/tutorial/Tutorial; cyc/ai ()Leaz;
+MD: net/minecraft/client/Minecraft/func_195544_aj ()Z cyc/aj ()Z
+MD: net/minecraft/client/Minecraft/func_199403_al ()Lnet/minecraft/client/settings/CreativeSettings; cyc/ak ()Lcxy;
+MD: net/minecraft/client/Minecraft/func_209506_al ()Lnet/minecraft/client/renderer/model/ModelManager; cyc/al ()Ldyt;
+MD: net/minecraft/client/Minecraft/func_211500_ak ()Lnet/minecraft/client/gui/fonts/FontResourceManager; cyc/am ()Ldar;
+MD: net/minecraft/client/Minecraft/func_213263_ao ()Lnet/minecraft/client/renderer/texture/PaintingSpriteUploader; cyc/an ()Ldxs;
+MD: net/minecraft/client/Minecraft/func_213248_ap ()Lnet/minecraft/client/renderer/texture/PotionSpriteUploader; cyc/ao ()Ldxr;
+MD: net/minecraft/client/Minecraft/func_213239_aq ()Lnet/minecraft/profiler/IProfiler; cyc/ap ()Lagn;
+MD: net/minecraft/client/Minecraft/func_213229_ar ()Lnet/minecraft/client/MinecraftGame; cyc/aq ()Lcxw;
+MD: net/minecraft/client/Minecraft/func_213269_at ()Lnet/minecraft/client/util/Splashes; cyc/as ()Ldxu;
+MD: net/minecraft/client/Minecraft/func_213250_au ()Lnet/minecraft/client/gui/LoadingGui; cyc/at ()Ldcg;
+MD: net/minecraft/client/Minecraft/func_71384_a ()V cyc/au ()V
+MD: net/minecraft/client/Minecraft/func_193986_ar ()V cyc/av ()V
+MD: net/minecraft/client/Minecraft/func_147122_X ()Z cyc/aw ()Z
+MD: net/minecraft/client/Minecraft/func_213170_ax ()Ljava/lang/Thread; cyc/ay ()Ljava/lang/Thread;
+MD: net/minecraft/client/Minecraft/func_71389_H ()V cyc/az ()V
+MD: net/minecraft/client/Minecraft/close ()V cyc/close ()V
+MD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/func_152589_a ()Lnet/minecraft/util/text/ITextComponent; dki$a/a ()Ljo;
+MD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/values ()[Lnet/minecraft/client/multiplayer/ServerData$ServerResourceMode; dki$a/values ()[Ldki$a;
+MD: net/minecraft/client/multiplayer/ServerData$ServerResourceMode/valueOf (Ljava/lang/String;)Lnet/minecraft/client/multiplayer/ServerData$ServerResourceMode; dki$a/valueOf (Ljava/lang/String;)Ldki$a;
+MD: net/minecraft/client/multiplayer/ServerData/func_78836_a ()Lnet/minecraft/nbt/CompoundNBT; dki/a ()Lid;
+MD: net/minecraft/client/multiplayer/ServerData/func_152584_a (Lnet/minecraft/client/multiplayer/ServerData$ServerResourceMode;)V dki/a (Ldki$a;)V
+MD: net/minecraft/client/multiplayer/ServerData/func_152583_a (Lnet/minecraft/client/multiplayer/ServerData;)V dki/a (Ldki;)V
+MD: net/minecraft/client/multiplayer/ServerData/func_78837_a (Lnet/minecraft/nbt/CompoundNBT;)Lnet/minecraft/client/multiplayer/ServerData; dki/a (Lid;)Ldki;
+MD: net/minecraft/client/multiplayer/ServerData/func_147407_a (Ljava/lang/String;)V dki/a (Ljava/lang/String;)V
+MD: net/minecraft/client/multiplayer/ServerData/func_152586_b ()Lnet/minecraft/client/multiplayer/ServerData$ServerResourceMode; dki/b ()Ldki$a;
+MD: net/minecraft/client/multiplayer/ServerData/func_147409_e ()Ljava/lang/String; dki/c ()Ljava/lang/String;
+MD: net/minecraft/client/multiplayer/ServerData/func_181041_d ()Z dki/d ()Z
+MD: net/minecraft/client/renderer/IImageBuffer/func_152634_a ()V dnd/a ()V
+MD: net/minecraft/client/renderer/IImageBuffer/func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; dnd/a (Lcuj;)Lcuj;
+MD: net/minecraft/client/renderer/ImageBufferDownload/func_152634_a ()V dni/a ()V
+MD: net/minecraft/client/renderer/ImageBufferDownload/func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; dni/a (Lcuj;)Lcuj;
+MD: net/minecraft/client/renderer/ImageBufferDownload/func_195788_a (Lnet/minecraft/client/renderer/texture/NativeImage;IIII)V dni/a (Lcuj;IIII)V
+MD: net/minecraft/client/renderer/ImageBufferDownload/func_195787_b (Lnet/minecraft/client/renderer/texture/NativeImage;IIII)V dni/b (Lcuj;IIII)V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData$1/func_217786_a (Ljava/io/InputStream;)V dws$1/a (Ljava/io/InputStream;)V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData$1/run ()V dws$1/run ()V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/func_152433_a ()V dws/a ()V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/func_195417_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V dws/a (Lcuj;)V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/access$000 (Lnet/minecraft/client/renderer/ThreadDownloadImageData;)Ljava/lang/String; dws/a (Ldws;)Ljava/lang/String;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/func_195413_a (Lnet/minecraft/resources/IResourceManager;)V dws/a (Lxi;)V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/func_195416_b (Lnet/minecraft/client/renderer/texture/NativeImage;)V dws/b (Lcuj;)V
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/access$100 (Lnet/minecraft/client/renderer/ThreadDownloadImageData;)Ljava/io/File; dws/b (Ldws;)Ljava/io/File;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/access$300 (Lnet/minecraft/client/renderer/ThreadDownloadImageData;)Lnet/minecraft/client/renderer/IImageBuffer; dws/c (Ldws;)Ldnd;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/access$200 ()Lorg/apache/logging/log4j/Logger; dws/e ()Lorg/apache/logging/log4j/Logger;
+MD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/func_217798_a ()Lnet/minecraft/client/resources/data/TextureMetadataSection; dwx$a/a ()Ldym;
+MD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/func_217799_a (Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/SimpleTexture$TextureData; dwx$a/a (Lxi;Lqv;)Ldwx$a;
+MD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/func_217800_b ()Lnet/minecraft/client/renderer/texture/NativeImage; dwx$a/b ()Lcuj;
+MD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/func_217801_c ()V dwx$a/c ()V
+MD: net/minecraft/client/renderer/texture/SimpleTexture$TextureData/close ()V dwx$a/close ()V
+MD: net/minecraft/client/renderer/texture/SimpleTexture/func_195413_a (Lnet/minecraft/resources/IResourceManager;)V dwx/a (Lxi;)V
+MD: net/minecraft/client/renderer/texture/SimpleTexture/func_215246_b (Lnet/minecraft/resources/IResourceManager;)Lnet/minecraft/client/renderer/texture/SimpleTexture$TextureData; dwx/b (Lxi;)Ldwx$a;
+MD: net/minecraft/client/renderer/texture/SimpleTexture/func_215245_f ()Lorg/apache/logging/log4j/Logger; dwx/f ()Lorg/apache/logging/log4j/Logger;
+MD: net/minecraft/client/renderer/texture/TextureManager/func_210123_a (Lnet/minecraft/client/renderer/texture/ITextureObject;)Ljava/lang/String; dxc/a (Ldxd;)Ljava/lang/String;
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110578_a (Ljava/lang/String;Lnet/minecraft/client/renderer/texture/DynamicTexture;)Lnet/minecraft/util/ResourceLocation; dxc/a (Ljava/lang/String;Ldwr;)Lqv;
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110577_a (Lnet/minecraft/util/ResourceLocation;)V dxc/a (Lqv;)V
+MD: net/minecraft/client/renderer/texture/TextureManager/func_215267_a (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/PreloadedTexture;)V dxc/a (Lqv;Ldww;)V
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110579_a (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z dxc/a (Lqv;Ldxd;)Z
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110580_a (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITickableTextureObject;)Z dxc/a (Lqv;Ldxf;)Z
+MD: net/minecraft/client/renderer/texture/TextureManager/func_215268_a (Lnet/minecraft/util/ResourceLocation;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture; dxc/a (Lqv;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;
+MD: net/minecraft/client/renderer/texture/TextureManager/func_215226_a (Lnet/minecraft/resources/IFutureReloadListener$IStage;Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/profiler/IProfiler;Lnet/minecraft/profiler/IProfiler;Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture; dxc/a (Lxd$a;Lxi;Lagn;Lagn;Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;
+MD: net/minecraft/client/renderer/texture/TextureManager/func_215266_a (Lnet/minecraft/resources/IResourceManager;Ljava/util/concurrent/Executor;Ljava/lang/Void;)V dxc/a (Lxi;Ljava/util/concurrent/Executor;Ljava/lang/Void;)V
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110581_b (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; dxc/b (Lqv;)Ldxd;
+MD: net/minecraft/client/renderer/texture/TextureManager/func_147645_c (Lnet/minecraft/util/ResourceLocation;)V dxc/c (Lqv;)V
+MD: net/minecraft/client/renderer/texture/TextureManager/func_110550_d ()V dxc/e ()V
+MD: net/minecraft/client/renderer/texture/ITextureObject/func_215244_a (Lnet/minecraft/client/renderer/texture/TextureManager;Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/util/ResourceLocation;Ljava/util/concurrent/Executor;)V dxd/a (Ldxc;Lxi;Lqv;Ljava/util/concurrent/Executor;)V
+MD: net/minecraft/client/renderer/texture/ITextureObject/func_195413_a (Lnet/minecraft/resources/IResourceManager;)V dxd/a (Lxi;)V
+MD: net/minecraft/client/renderer/texture/ITextureObject/func_174935_a ()V dxd/b ()V
+MD: net/minecraft/client/renderer/texture/ITextureObject/func_174936_b (ZZ)V dxd/b (ZZ)V
+MD: net/minecraft/client/renderer/texture/ITextureObject/func_110552_b ()I dxd/c ()I
+MD: net/minecraft/client/renderer/texture/ITextureObject/func_195412_h ()V dxd/h ()V
+MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177335_a ()Lnet/minecraft/util/ResourceLocation; dxl/a ()Lqv;
+MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177334_a (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; dxl/a (Ljava/util/UUID;)Lqv;
+MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177332_b (Ljava/util/UUID;)Ljava/lang/String; dxl/b (Ljava/util/UUID;)Ljava/lang/String;
+MD: net/minecraft/client/resources/DefaultPlayerSkin/func_177333_c (Ljava/util/UUID;)Z dxl/c (Ljava/util/UUID;)Z
+MD: net/minecraft/client/resources/SkinManager$1/load (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; dxt$1/a (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;
+MD: net/minecraft/client/resources/SkinManager$1/load (Ljava/lang/Object;)Ljava/lang/Object; dxt$1/load (Ljava/lang/Object;)Ljava/lang/Object;
+MD: net/minecraft/client/resources/SkinManager$2/func_152634_a ()V dxt$2/a ()V
+MD: net/minecraft/client/resources/SkinManager$2/func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; dxt$2/a (Lcuj;)Lcuj;
+MD: net/minecraft/client/resources/SkinManager$SkinAvailableCallback/onSkinTextureAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V dxt$a/onSkinTextureAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lqv;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V
+MD: net/minecraft/client/resources/SkinManager/func_152788_a (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; dxt/a (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;
+MD: net/minecraft/client/resources/SkinManager/func_152790_a (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V dxt/a (Lcom/mojang/authlib/GameProfile;Ldxt$a;Z)V
+MD: net/minecraft/client/resources/SkinManager/func_210275_a (Lcom/mojang/authlib/GameProfile;ZLnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V dxt/a (Lcom/mojang/authlib/GameProfile;ZLdxt$a;)V
+MD: net/minecraft/client/resources/SkinManager/func_152792_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; dxt/a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lqv;
+MD: net/minecraft/client/resources/SkinManager/func_152789_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; dxt/a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Ldxt$a;)Lqv;
+MD: net/minecraft/client/resources/SkinManager/func_210276_a (Ljava/util/Map;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V dxt/a (Ljava/util/Map;Ldxt$a;)V
