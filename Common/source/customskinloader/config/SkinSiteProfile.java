@@ -8,7 +8,7 @@ public class SkinSiteProfile {
 
     //Mojang API
     public String apiRoot;
-    public String seesionRoot;
+    public String sessionRoot;
 
     //Json API
     public String root;

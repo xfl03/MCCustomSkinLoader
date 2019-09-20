@@ -43,7 +43,7 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
             CustomSkinLoader.logger.info("Profile not found.(" + username + "'s profile not found.)");
             return null;
         }
-        newGameProfile = fillGameProfile(ssp.seesionRoot, newGameProfile);
+        newGameProfile = fillGameProfile(ssp.sessionRoot, newGameProfile);
         map = getTextures(newGameProfile);
         if (!map.isEmpty()) {
             gameProfile.getProperties().putAll(newGameProfile.getProperties());
@@ -127,8 +127,8 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
         //Init default api & session root for Mojang API
         if (ssp.apiRoot == null)
             ssp.apiRoot = "https://api.mojang.com/";
-        if (ssp.seesionRoot == null)
-            ssp.seesionRoot = "https://sessionserver.mojang.com/";
+        if (ssp.sessionRoot == null)
+            ssp.sessionRoot = "https://sessionserver.mojang.com/";
 
     }
 }
