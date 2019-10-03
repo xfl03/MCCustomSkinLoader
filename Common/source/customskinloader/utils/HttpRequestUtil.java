@@ -87,6 +87,10 @@ public class HttpRequestUtil {
 
     public static HttpResponce makeHttpRequest(HttpRequest request, int redirectTime) {
         try {
+            if(request.url.contains("{ABORT}")){
+                CustomSkinLoader.logger.info("ABORT tag found in url, request has been aborted.");
+                return new HttpResponce();
+            }
             CustomSkinLoader.logger.debug("Try to request '" + request.url + (request.userAgent == null ? "'." : "' with user agent '" + request.userAgent + "'."));
             //Check Cache
             if (StringUtils.isNotEmpty(request.payload))

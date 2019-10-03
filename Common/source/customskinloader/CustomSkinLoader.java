@@ -21,7 +21,7 @@ import customskinloader.utils.MinecraftUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
- * @author (C) Jeremy Lam [JLChnToZ] 2013 & Alexander Xia [xfl03] 2014-2018
+ * @author (C) Jeremy Lam [JLChnToZ] 2013-2014 & Alexander Xia [xfl03] 2014-2019
  * @version @MOD_FULL_VERSION@
  */
 public class CustomSkinLoader {

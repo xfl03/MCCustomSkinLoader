@@ -80,7 +80,8 @@ Including some codes from
 - [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)  
 - [NekoCaffeine/Alchemy](https://github.com/NekoCaffeine/Alchemy) (GPLv3)  
   
-Copyright(C) 2013-2018 JLChnToZ xfl03  
+Copyright © 2013-2014 Jeremy Lam "JLChnToZ".  
+Copyright © 2014-2019 Alexander Xia "xfl03".
 
     This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
     

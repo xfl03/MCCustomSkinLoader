@@ -129,6 +129,11 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
             ssp.apiRoot = "https://api.mojang.com/";
         if (ssp.sessionRoot == null)
             ssp.sessionRoot = "https://sessionserver.mojang.com/";
+    }
 
+    private static final String MOJANG_API_ROOT = "https://api{DO_NOT_MODIFY}.mojang.com/";
+
+    public static String getMojangApiRoot() {
+        return MOJANG_API_ROOT.replace("{DO_NOT_MODIFY}", "");
     }
 }
