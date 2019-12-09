@@ -34,6 +34,9 @@ public class FakeSkinManager {
     public FakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
         this.textureManager = textureManagerInstance;
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory;
+
+        //Init CustomSkinLoader earlier
+        CustomSkinLoader.initStatic();
     }
 
     public ResourceLocation loadSkin(MinecraftProfileTexture profileTexture, Type textureType) {

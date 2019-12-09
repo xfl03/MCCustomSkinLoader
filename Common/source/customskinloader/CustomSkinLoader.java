@@ -178,4 +178,8 @@ public class CustomSkinLoader {
         logger.info("Minecraft: "+MinecraftUtil.getMinecraftMainVersion()+"("+MinecraftUtil.getMinecraftVersionText()+")");
         return logger;
     }
+
+    public static void initStatic(){
+        //Do nothing
+    }
 }
