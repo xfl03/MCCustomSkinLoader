@@ -12,13 +12,17 @@ import org.objectweb.asm.tree.MethodNode;
 
 import customskinloader.Logger;
 
+import javax.annotation.Nullable;
+
 public class TransformerManager {
     public static Logger logger = new Logger(new File("./CustomSkinLoader/ForgePlugin.log"));
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface TransformTarget {
-        String className();
+        String className() default "";
+
+        String[] classNames() default {};
 
         String[] methodNames();
 
@@ -39,16 +43,24 @@ public class TransformerManager {
                 logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
                 continue;
             }
-            addMethodTransformer(t.getClass().getAnnotation(TransformTarget.class), t);
+            
+            TransformTarget tt = t.getClass().getAnnotation(TransformTarget.class);
+            if (!"".equals(tt.className())) {
+                addMethodTransformer(tt, tt.className(), t);
+            } else {
+                for (String name : tt.classNames()) {
+                    addMethodTransformer(tt, name, t);
+                }
+            }
         }
     }
 
-    private void addMethodTransformer(TransformTarget target, IMethodTransformer transformer) {
-        if (!map.containsKey(target.className()))
-            map.put(target.className(), new HashMap<String, IMethodTransformer>());
+    private void addMethodTransformer(TransformTarget target, String className, IMethodTransformer transformer) {
+        if (!map.containsKey(className))
+            map.put(className, new HashMap<String, IMethodTransformer>());
         for (String methodName : target.methodNames()) {
-            map.get(target.className()).put(methodName + target.desc(), transformer);
-            logger.info("[CSL DEBUG] REGISTERING METHOD %s(%s)", target.className(), methodName + target.desc());
+            map.get(className).put(methodName + target.desc(), transformer);
+            logger.info("[CSL DEBUG] REGISTERING METHOD %s(%s)", className, methodName + target.desc());
         }
     }
 

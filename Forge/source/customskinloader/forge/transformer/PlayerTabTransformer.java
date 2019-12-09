@@ -13,7 +13,7 @@ import customskinloader.forge.TransformerManager.IMethodTransformer;
 import customskinloader.forge.TransformerManager.TransformTarget;
 
 public class PlayerTabTransformer {
-    @TransformTarget(className = "net.minecraft.client.gui.GuiPlayerTabOverlay",
+    @TransformTarget(classNames = {"net.minecraft.client.gui.GuiPlayerTabOverlay","net.minecraft.client.gui.overlay.PlayerTabOverlayGui"},
             methodNames = {"func_175249_a", "renderPlayerlist"},
             desc = "(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V")
     public static class ScoreObjectiveTransformer implements IMethodTransformer {
