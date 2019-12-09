@@ -139,6 +139,19 @@ function initializeCoreMod() {
                 return cn;
             }
         },
+        'PlayerTabTransformer2': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/gui/overlay/PlayerTabOverlayGui'
+            },
+            'transformer': function (cn) {
+                cn.methods.forEach(function (mn) {
+                    if (mn.name === 'func_175249_a')
+                        PlayerTabTransformer(cn, mn);
+                });
+                return cn;
+            }
+        },
         'FakeSkinManagerTransformer': {
             'target': {
                 'type': 'CLASS',

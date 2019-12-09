@@ -20,9 +20,7 @@ public class TransformerManager {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface TransformTarget {
-        String className() default "";
-
-        String[] classNames() default {};
+        String className();
 
         String[] methodNames();
 
@@ -43,15 +41,9 @@ public class TransformerManager {
                 logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
                 continue;
             }
-            
+
             TransformTarget tt = t.getClass().getAnnotation(TransformTarget.class);
-            if (!"".equals(tt.className())) {
-                addMethodTransformer(tt, tt.className(), t);
-            } else {
-                for (String name : tt.classNames()) {
-                    addMethodTransformer(tt, name, t);
-                }
-            }
+            addMethodTransformer(tt, tt.className(), t);
         }
     }
 
