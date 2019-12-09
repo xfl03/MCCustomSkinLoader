@@ -29,20 +29,20 @@ String getMcVersion(String filename) {
 
 String getKey(String filename) {
     String name = filename.substring(0, filename.lastIndexOf('.'))
-    if (name.indexOf('-') == -1) return null;
+    if (name.indexOf('-') == -1) return null
     if (filename.endsWith(".json"))
         return String.format(
                 "versions/%s/%s",
                 name,
                 filename
         )
-    if (filename.endsWith(".jar")){
-        if (filename.contains("Fabric") || filename.contains("Forge")){
+    if (filename.endsWith(".jar")) {
+        if (filename.contains("Fabric") || filename.contains("Forge")) {
             return String.format(
                     "mods/%s",
                     filename
             )
-        }else{
+        } else {
             return String.format(
                     "libraries/customskinloader/%s/%s/%s",
                     name.substring(0, name.indexOf('-')),
@@ -76,20 +76,72 @@ void downloadFile(String key, File file) {
     getCosClient().getObject(getObjectRequest, file)
 }
 
+String toJson(Map<String, Object> map, int d) {
+    StringBuilder sb = new StringBuilder("{\n")
+    Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator()
+    while (it.hasNext()) {
+        Map.Entry<String, Object> e = it.next()
+        String k = e.key
+        String v = null
+        if (e.value instanceof String) {
+            v = "\"" + e.value + "\""
+        } else if (e.value instanceof Map) {
+            v = toJson((Map) e.value, d + 1)
+        }
+        for (int i = 0; i < d * 2; i++) {
+            sb.append(' ')
+        }
+        if (it.hasNext()) {
+            sb.append(String.format("\"%s\" : %s,\n", k, v))
+        } else {
+            sb.append(String.format("\"%s\" : %s\n", k, v))
+        }
+    }
+    for (int i = 0; i < (d - 1) * 2; i++) {
+        sb.append(' ')
+    }
+    sb.append("}")
+    return sb.toString()
+}
+
+String toJson(Map<String, Object> map) {
+    return toJson(map, 1)
+}
+
+void writeToFile(File f, String s) {
+    FileWriter fw = new FileWriter(f)
+    fw.write(s)
+    fw.flush()
+    fw.close()
+}
+
 void uploadArtifacts(String shortVersion) {
-    String cslversion = shortVersion.replace(".", "")
     File dir = rootProject.file("build/libs")
     if (!dir.isDirectory()) return
+
+    String cslversion = shortVersion.replace(".", "")
+    LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>()
+    LinkedHashMap<String, String> map2 = new LinkedHashMap<String, String>()
+    map.put("version", shortVersion)
+    map.put("downloads", map2)
 
     File[] files = dir.listFiles()
     for (file in files) {
         String key = getKey(file.getName())
-        if (key == null) continue;
+        if (key == null) continue
         uploadFile(key, file)
         String url = cosUrl + key
-        String mcversion = getMcVersion(file.getName()).replace(".", "").toLowerCase()
-        println(String.format("csl-%s-%s\t%s", mcversion, cslversion, url))
+        String mcversion = getMcVersion(file.getName())
+        println(String.format("csl-%s-%s\t%s", mcversion.replace(".", "").toLowerCase(), cslversion, url))
+
+        if (key.endsWith(".jar")) {
+            map2.put(mcversion, url)
+        }
     }
+
+    File latest = new File("build/libs/latest.json")
+    writeToFile(latest, toJson(map))
+    uploadFile("latest.json", latest)
 }
 
 ext {
