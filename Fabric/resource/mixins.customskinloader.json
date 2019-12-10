@@ -1,0 +1,13 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "package": "customskinloader.fabric.mixin",
+  "client": [
+    "MixinGuiPlayerTabOverlay",
+    "MixinMinecraft",
+    "MixinSkinManager"
+  ],
+  "refmap": "mixins.customskinloader.refmap.json",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

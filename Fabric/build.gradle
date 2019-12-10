@@ -45,8 +45,9 @@ dependencies {
 }
 
 mixin {
-    add sourceSets.main, "customskinloader.refmap.json"
+    add sourceSets.main, "mixins.customskinloader.refmap.json"
     reobfSrgFile = config.srg_notch_map
+    reobfNotchSrgFile = config.srg_notch_map
 }
 
 sourceSets {
