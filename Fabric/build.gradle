@@ -30,7 +30,7 @@ minecraft {
 }
 
 jar {
-    exclude 'net/**'
+    exclude 'net/minecraft/client/renderer/texture/**'
 }
 
 repositories {
@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    implementation 'org.spongepowered:mixin:0.8-SNAPSHOT'
 }
 
 mixin {

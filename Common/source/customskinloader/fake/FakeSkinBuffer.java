@@ -145,6 +145,10 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
         //A callback when skin loaded, nothing to do
     }
 
+    public void run() {
+        this.skinAvailable();
+    }
+
     private static int getARGB(int a, int r, int g, int b) {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
