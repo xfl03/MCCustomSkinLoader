@@ -13,15 +13,13 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpTextureUtil.HttpTextureInfo;
-
+import customskinloader.utils.MinecraftUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
@@ -47,13 +45,11 @@ public class FakeSkinManager {
         HttpTextureInfo info = HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
 
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + info.hash);
-        ITextureObject itextureobject = this.textureManager.getTexture(resourcelocation);
 
-        if (itextureobject != null)//Have already loaded
+        if (this.textureManager.getTexture(resourcelocation) != null)//Have already loaded
             makeCallback(skinAvailableCallback, textureType, resourcelocation, profileTexture);
         else {
-            ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(),
-                    new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture));
+            ThreadDownloadImageData threaddownloadimagedata = MinecraftUtil.createThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture), textureType);
             if (skinAvailableCallback instanceof FakeClientPlayer.LegacyBuffer)//Cache for client player
                 FakeClientPlayer.textureCache.put(resourcelocation, threaddownloadimagedata);
             this.textureManager.loadTexture(resourcelocation, threaddownloadimagedata);
@@ -62,7 +58,7 @@ public class FakeSkinManager {
     }
 
     public void loadProfileTextures(final GameProfile profile, final SkinAvailableCallback skinAvailableCallback, final boolean requireSecure) {
-        THREAD_POOL.submit(new Runnable() {
+        THREAD_POOL.execute(new Runnable() {
             public void run() {
                 final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
                 map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile));
@@ -127,6 +123,10 @@ public class FakeSkinManager {
             }
 
             FakeSkinManager.makeCallback(callback, type, location, texture);
+        }
+
+        public void run() {
+            this.skinAvailable();
         }
     }
 }

@@ -24,11 +24,7 @@
     "mixins.customskinloader.json"
   ],
 
-  "requires": {
-    "fabricloader": ">=0.4.0",
-    "fabric": "*"
-  },
-  "suggests": {
-    "flamingo": "*"
+  "depends": {
+    "fabricloader": ">=0.7.0"
   }
 }
