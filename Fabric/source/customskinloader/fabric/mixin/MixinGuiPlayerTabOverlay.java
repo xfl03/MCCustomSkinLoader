@@ -15,7 +15,7 @@ public abstract class MixinGuiPlayerTabOverlay {
             target = "Lnet/minecraft/client/Minecraft;isIntegratedServerRunning()Z"
         )
     )
-    private boolean modifyVariable_renderPlayerlist(Minecraft mc) {
+    private boolean redirect_renderPlayerlist(Minecraft mc) {
         return true;
     }
 }

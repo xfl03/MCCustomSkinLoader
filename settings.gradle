@@ -3,7 +3,6 @@ include "1.14.4"
 
 //Universal Forge Edition for [1.8,)
 include "Forge"
-include "Forge1.14"
 
 //Fabric Edition for [1.14,)
 include "Fabric"

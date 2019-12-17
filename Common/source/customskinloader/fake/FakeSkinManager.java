@@ -19,7 +19,7 @@ import customskinloader.utils.HttpTextureUtil.HttpTextureInfo;
 import customskinloader.utils.MinecraftUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
@@ -49,7 +49,7 @@ public class FakeSkinManager {
         if (this.textureManager.getTexture(resourcelocation) != null)//Have already loaded
             makeCallback(skinAvailableCallback, textureType, resourcelocation, profileTexture);
         else {
-            ThreadDownloadImageData threaddownloadimagedata = MinecraftUtil.createThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture), textureType);
+            SimpleTexture threaddownloadimagedata = MinecraftUtil.createThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture), textureType);
             if (skinAvailableCallback instanceof FakeClientPlayer.LegacyBuffer)//Cache for client player
                 FakeClientPlayer.textureCache.put(resourcelocation, threaddownloadimagedata);
             this.textureManager.loadTexture(resourcelocation, threaddownloadimagedata);
