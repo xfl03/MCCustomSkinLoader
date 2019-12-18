@@ -13,6 +13,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
@@ -36,15 +37,25 @@ public class MinecraftUtil {
     }
 
     private static boolean is_1_15_plus = false;
-    private static Constructor<ThreadDownloadImageData> constructor = null;
-    public static ThreadDownloadImageData createThreadDownloadImageData(File cacheFileIn, String imageUrlIn, ResourceLocation textureResourceLocation, IImageBuffer imageBufferIn, MinecraftProfileTexture.Type textureType) {
+    private static Constructor<?> constructor = null;
+    public static SimpleTexture createThreadDownloadImageData(File cacheFileIn, String imageUrlIn, ResourceLocation textureResourceLocation, IImageBuffer imageBufferIn, MinecraftProfileTexture.Type textureType) {
         if (constructor == null) {
+            Class<?> c;
             try {
-                constructor = ThreadDownloadImageData.class.getConstructor(File.class, String.class, ResourceLocation.class, boolean.class, Runnable.class); // For 1.15+
+                c = Class.forName("net.minecraft.client.renderer.texture.ThreadDownloadImageData", false, MinecraftUtil.class.getClassLoader()); // Forge 1.13
+            } catch (ClassNotFoundException e1) {
+                try {
+                    c = Class.forName("net.minecraft.client.renderer.texture.DownloadingTexture", false, MinecraftUtil.class.getClassLoader()); // Forge 1.14+
+                } catch (ClassNotFoundException e2) {
+                    c = ThreadDownloadImageData.class; // Forge 1.12- or Fabric or Vanilla
+                }
+            }
+            try {
+                constructor = c.getConstructor(File.class, String.class, ResourceLocation.class, boolean.class, Runnable.class); // For 1.15+
                 is_1_15_plus = true;
             } catch (NoSuchMethodException e1) {
                 try {
-                    constructor = ThreadDownloadImageData.class.getConstructor(File.class, String.class, ResourceLocation.class, IImageBuffer.class); // For 1.15-
+                    constructor = c.getConstructor(File.class, String.class, ResourceLocation.class, IImageBuffer.class); // For 1.15-
                 } catch (NoSuchMethodException e2) {
                     throw new RuntimeException(e2);
                 }
@@ -52,9 +63,9 @@ public class MinecraftUtil {
         }
         try {
             if (is_1_15_plus) {
-                return constructor.newInstance(cacheFileIn, imageUrlIn, textureResourceLocation, textureType == MinecraftProfileTexture.Type.SKIN, imageBufferIn);
+                return (SimpleTexture) constructor.newInstance(cacheFileIn, imageUrlIn, textureResourceLocation, textureType == MinecraftProfileTexture.Type.SKIN, imageBufferIn);
             } else {
-                return constructor.newInstance(cacheFileIn, imageUrlIn, textureResourceLocation, imageBufferIn);
+                return (SimpleTexture) constructor.newInstance(cacheFileIn, imageUrlIn, textureResourceLocation, imageBufferIn);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
