@@ -34,6 +34,11 @@ public class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
         return "GlitchlessAPI";
     }
 
+    @Override
+    public boolean checkRoot() {
+        return true;
+    }
+
     public static class GlitchlessApiResponse {
         protected Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures;
     }

@@ -3,17 +3,17 @@ package customskinloader.config;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import customskinloader.utils.Version;
-import org.apache.commons.io.FileUtils;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
+import customskinloader.plugin.PluginLoader;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
+import customskinloader.utils.Version;
+import org.apache.commons.io.FileUtils;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class Config {
@@ -41,9 +41,9 @@ public class Config {
     public boolean forceDisableCache = false;
 
     //Init config
-    public Config(SkinSiteProfile[] loadlist){
+    public Config(List<SkinSiteProfile> loadlist){
         this.version=CustomSkinLoader.CustomSkinLoader_VERSION;
-        this.loadlist=Arrays.asList(loadlist);
+        this.loadlist=loadlist;
     }
 
     public static Config loadConfig0() {
@@ -181,7 +181,11 @@ public class Config {
     }
 
     private static Config initConfig() {
-        Config config=new Config(CustomSkinLoader.DEFAULT_LOAD_LIST);
+        List<SkinSiteProfile> loadlist = new ArrayList<SkinSiteProfile>();
+        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
+            loadlist.add(plugin.getSkinSiteProfile());
+        }
+        Config config=new Config(loadlist);
         writeConfig(config,false);
         return config;
     }

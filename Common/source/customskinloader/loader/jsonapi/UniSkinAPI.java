@@ -77,4 +77,8 @@ public class UniSkinAPI implements IJsonAPI {
     public String getName() {
         return "UniSkinAPI";
     }
+    @Override
+    public boolean checkRoot() {
+        return true;
+    }
 }

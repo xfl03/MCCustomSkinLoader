@@ -87,4 +87,9 @@ public class CustomSkinAPI implements IJsonAPI {
     public String getName() {
         return "CustomSkinAPI";
     }
+
+    @Override
+    public boolean checkRoot() {
+        return true;
+    }
 }

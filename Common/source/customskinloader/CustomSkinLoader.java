@@ -32,18 +32,6 @@ public class CustomSkinLoader {
     public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
-    public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
-            SkinSiteProfile.createMojangAPI("Mojang"),
-            SkinSiteProfile.createCustomSkinAPI("LittleSkin","https://littlesk.in/csl/"),
-            SkinSiteProfile.createCustomSkinAPI("BlessingSkin","http://skin.prinzeugen.net/"),
-            //OneSkin has been removed temporarily
-            //SkinSiteProfile.createCustomSkinAPI("OneSkin","http://fleey.cn/skin/skin_user/skin_json.php/"),
-            //Minecrack could not load skin correctly
-            //SkinSiteProfile.creatLegacy("Minecrack","http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png","http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png",null),
-            SkinSiteProfile.createElyByAPI("ElyBy"),
-            SkinSiteProfile.createUniSkinAPI("SkinMe","http://www.skinme.cc/uniskin/"),
-            SkinSiteProfile.createLegacy("LocalSkin","LocalSkin/skins/{USERNAME}.png","LocalSkin/capes/{USERNAME}.png","LocalSkin/elytras/{USERNAME}.png"),
-            SkinSiteProfile.createGlitchlessAPI("GlitchlessGames","https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname=")};
     
     public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
     public static final Logger logger=initLogger();
@@ -66,7 +54,7 @@ public class CustomSkinLoader {
             config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES,
             new LinkedBlockingQueue<>(333), customFactory, new ThreadPoolExecutor.DiscardOldestPolicy()
     );
-    
+
     //For User Skin
     public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
         String username=gameProfile.getName();

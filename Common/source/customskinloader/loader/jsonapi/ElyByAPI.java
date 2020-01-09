@@ -47,4 +47,9 @@ public class ElyByAPI implements JsonAPILoader.IJsonAPI {
     public String getName() {
         return "ElyByAPI";
     }
+
+    @Override
+    public boolean checkRoot() {
+        return false;
+    }
 }

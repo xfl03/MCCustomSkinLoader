@@ -4,29 +4,25 @@ import java.util.HashMap;
 
 import com.mojang.authlib.GameProfile;
 
+import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.plugin.PluginLoader;
 import customskinloader.profile.UserProfile;
 
 public class ProfileLoader {
-    private static final IProfileLoader[] DEFAULT_LOADERS={
-            new MojangAPILoader(),
-            new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPI),
-            new JsonAPILoader(JsonAPILoader.Type.CustomSkinAPIPlus),
-            new JsonAPILoader(JsonAPILoader.Type.UniSkinAPI),
-            new JsonAPILoader(JsonAPILoader.Type.ElyByAPI),
-            new JsonAPILoader(JsonAPILoader.Type.GlitchlessAPI),
-            new LegacyLoader()};
-    
     public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
     
     private static HashMap<String, IProfileLoader> initLoaders() {
-        HashMap<String, IProfileLoader> loaders=new HashMap<String, IProfileLoader>();
-        for(IProfileLoader loader:DEFAULT_LOADERS){
-            loaders.put(loader.getName().toLowerCase(), loader);
+        HashMap<String, ProfileLoader.IProfileLoader> profileLoaders = new HashMap<String, ProfileLoader.IProfileLoader>();
+        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
+            ProfileLoader.IProfileLoader profileLoader = plugin.getProfileLoader();
+            if (profileLoader != null) {
+                profileLoaders.put(profileLoader.getName().toLowerCase(), profileLoader);
+                CustomSkinLoader.logger.info("Add a profile loader: " + profileLoader.getName());
+            }
         }
-        loaders.putAll(PluginLoader.loadPlugins());
-        return loaders;
+        return profileLoaders;
     }
     
     public interface IProfileLoader {

@@ -9,12 +9,9 @@ import com.google.gson.Gson;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.JsonAPILoader;
-import customskinloader.loader.JsonAPILoader.IJsonAPI;
-import customskinloader.profile.UserProfile;
 import customskinloader.utils.MinecraftUtil;
 
-public class CustomSkinAPIPlus implements IJsonAPI {
+public class CustomSkinAPIPlus extends CustomSkinAPI {
 
     private static String clientID=null;
     public CustomSkinAPIPlus(){
@@ -35,10 +32,6 @@ public class CustomSkinAPIPlus implements IJsonAPI {
             }
         }
     }
-    @Override
-    public String toJsonUrl(String root, String username) {
-        return JsonAPILoader.Type.CustomSkinAPI.jsonAPI.toJsonUrl(root, username);
-    }
 
     @Override
     public String getPayload(SkinSiteProfile ssp) {
@@ -46,13 +39,13 @@ public class CustomSkinAPIPlus implements IJsonAPI {
     }
 
     @Override
-    public UserProfile toUserProfile(String root, String json, boolean local) {
-        return JsonAPILoader.Type.CustomSkinAPI.jsonAPI.toUserProfile(root, json, local);
+    public String getName() {
+        return "CustomSKinAPIPlus";
     }
 
     @Override
-    public String getName() {
-        return "CustomSKinAPIPlus";
+    public boolean checkRoot() {
+        return true;
     }
 
     public static class CustomSkinAPIPlusPayload{
