@@ -14,9 +14,9 @@ group = "customskinloader"
 archivesBaseName = "CustomSkinLoader_Fabric"
 ext.shortVersion = getShortVersion()
 
-sourceCompatibility = targetCompatibility = 1.6
+sourceCompatibility = targetCompatibility = 1.8
 compileJava {
-    sourceCompatibility = targetCompatibility = 1.6
+    sourceCompatibility = targetCompatibility = 1.8
 }
 
 minecraft {

@@ -25,9 +25,9 @@ archivesBaseName = "CustomSkinLoader_Forge"
 version = getCSLVersion()
 group = "customskinloader"
 
-sourceCompatibility = targetCompatibility = 1.6
+sourceCompatibility = targetCompatibility = 1.8
 compileJava {
-    sourceCompatibility = targetCompatibility = 1.6
+    sourceCompatibility = targetCompatibility = 1.8
 }
 jar {
     manifest {
