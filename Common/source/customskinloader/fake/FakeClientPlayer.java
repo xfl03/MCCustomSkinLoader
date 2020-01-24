@@ -85,9 +85,5 @@ public class FakeClientPlayer {
             CustomSkinLoader.logger.debug("Legacy Texture (" + resourceLocationIn + ") Loaded as " +
                     ito.toString() + " (" + location + ")");
         }
-
-        public void onSkinTextureAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
-            this.skinAvailable(typeIn, location, profileTexture);
-        }
     }
 }

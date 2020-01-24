@@ -6,6 +6,7 @@ CL: net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_10
 CL: net/minecraft/client/renderer/texture/ITextureObject net/minecraft/class_1062
 CL: net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
 CL: net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/class_1049
+CL: net/minecraft/client/renderer/texture/Texture net/minecraft/class_1044
 CL: net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
 CL: net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/class_1068
 CL: net/minecraft/client/resources/SkinManager net/minecraft/class_1071
@@ -17,6 +18,9 @@ CL: net/minecraft/util/Session net/minecraft/class_320
 CL: net/minecraft/util/StringUtils net/minecraft/class_3544
 FD: net/minecraft/client/Minecraft/field_71412_D net/minecraft/class_310/field_1697
 FD: net/minecraft/client/multiplayer/ServerData/field_78845_b net/minecraft/class_642/field_3761
+MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z customskinloader/fake/itf/IFakeTextureManager_1/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)Z
+MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; net/minecraft/class_1060/method_4619 (Lnet/minecraft/class_2960;)Lnet/minecraft/class_1044;
+MD: customskinloader/fake/itf/IFakeTextureManager_2/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V customskinloader/fake/itf/IFakeTextureManager_1/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)V
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/func_175249_a (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V net/minecraft/class_355/method_1919 (ILnet/minecraft/class_269;Lnet/minecraft/class_266;)V
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V net/minecraft/class_355/method_1919 (ILnet/minecraft/class_269;Lnet/minecraft/class_266;)V
 MD: net/minecraft/client/Minecraft/func_110432_I ()Lnet/minecraft/util/Session; net/minecraft/class_310/method_1548 ()Lnet/minecraft/class_320;
@@ -29,6 +33,7 @@ MD: net/minecraft/client/Minecraft/func_71410_x ()Lnet/minecraft/client/Minecraf
 MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z net/minecraft/class_310/method_1542 ()Z
 MD: net/minecraft/client/renderer/IImageBuffer/func_152634_a ()V net/minecraft/class_760/method_3238 ()V
 MD: net/minecraft/client/renderer/IImageBuffer/func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_760/method_3237 (Lnet/minecraft/class_1011;)Lnet/minecraft/class_1011;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_1046/method_22798 (Lnet/minecraft/class_1011;)Lnet/minecraft/class_1011;
 MD: net/minecraft/client/renderer/texture/NativeImage/func_195699_a (IIIIIIZZ)V net/minecraft/class_1011/method_4304 (IIIIIIZZ)V
 MD: net/minecraft/client/renderer/texture/NativeImage/func_195700_a (III)V net/minecraft/class_1011/method_4305 (III)V
 MD: net/minecraft/client/renderer/texture/NativeImage/func_195702_a ()I net/minecraft/class_1011/method_4307 ()I

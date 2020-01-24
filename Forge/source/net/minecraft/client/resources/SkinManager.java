@@ -14,9 +14,6 @@ public class SkinManager {
     private FakeSkinManager fakeManager;
 
     public SkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
-        try {
-            Class.forName("net.minecraft.client.renderer.texture.ITextureObject", false, SkinManager.class.getClassLoader());
-        } catch (ClassNotFoundException ignore) {}
         this.fakeManager = new FakeSkinManager(textureManagerInstance, skinCacheDirectory, sessionService);
     }
 
@@ -47,9 +44,13 @@ public class SkinManager {
     }
 
     public interface SkinAvailableCallback {
-        void skinAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture);
+        default void skinAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
+            this.onSkinTextureAvailable(typeIn, location, profileTexture);
+        }
 
-        void onSkinTextureAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture);
+        default void onSkinTextureAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
+            this.skinAvailable(typeIn, location, profileTexture);
+        }
     }
 
     public interface ISkinAvailableCallback extends SkinAvailableCallback {

@@ -6,7 +6,6 @@ import java.util.Map;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
-import customskinloader.fabric.MixinConfigPlugin;
 import customskinloader.fake.FakeSkinManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
@@ -26,11 +25,6 @@ public abstract class MixinSkinManager {
         at = @At("RETURN")
     )
     private void inject_init(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService, CallbackInfo callbackInfo) {
-        try {
-            Class.forName("net.minecraft.class_1062", false, SkinManager.class.getClassLoader()); // net.minecraft.client.texture.Texture
-        } catch (ClassNotFoundException e) {
-            MixinConfigPlugin.hasITextureObject = false;
-        }
         this.fakeManager = new FakeSkinManager(textureManagerInstance, skinCacheDirectory, sessionService);
     }
 

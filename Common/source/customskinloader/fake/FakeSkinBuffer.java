@@ -1,19 +1,25 @@
 package customskinloader.fake;
 
+import java.awt.image.BufferedImage;
+
 import customskinloader.CustomSkinLoader;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
 import customskinloader.fake.texture.FakeNativeImage;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.texture.NativeImage;
 
-import java.awt.image.BufferedImage;
-
-public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffer {
-
+public class FakeSkinBuffer implements IImageBuffer {
     private int ratio = 1;
     private FakeImage image = null;
 
+    //parseUserSkin for 1.15+
+    public static NativeImage processLegacySkin(NativeImage image) {
+        return new FakeSkinBuffer().func_195786_a(image);
+    }
+
     //parseUserSkin for 1.13+
-    public net.minecraft.client.renderer.texture.NativeImage func_195786_a(net.minecraft.client.renderer.texture.NativeImage image) {
+    public NativeImage func_195786_a(NativeImage image) {
         if (image == null)
             return null;
 
@@ -143,10 +149,6 @@ public class FakeSkinBuffer implements net.minecraft.client.renderer.IImageBuffe
 
     public void skinAvailable() {
         //A callback when skin loaded, nothing to do
-    }
-
-    public void run() {
-        this.skinAvailable();
     }
 
     private static int getARGB(int a, int r, int g, int b) {
