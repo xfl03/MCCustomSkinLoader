@@ -5,14 +5,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.*;
-
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
+import java.util.HashMap;
+import java.util.Map;
 
 import customskinloader.Logger;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
 public class TransformerManager {
     public static Logger logger = new Logger(new File("./CustomSkinLoader/ForgePlugin.log"));
@@ -22,28 +21,54 @@ public class TransformerManager {
     public @interface TransformTarget {
         String className();
 
-        String[] methodNames();
+        String[] methodNames() default {};
 
-        String desc();
+        String desc() default "";
+    }
+
+    public interface IClassTransformer {
+        void transform(ClassNode cn);
     }
 
     public interface IMethodTransformer {
         void transform(ClassNode cn, MethodNode mn);
     }
 
-    public Map<String, Map<String, IMethodTransformer>> map;
+    public Map<String, IClassTransformer> classMap = new HashMap<>();
+    public Map<String, Map<String, IMethodTransformer>> map = new HashMap<>();
 
-    public TransformerManager(IMethodTransformer... transformers) {
-        map = new HashMap<String, Map<String, IMethodTransformer>>();
-        for (IMethodTransformer t : transformers) {
-            logger.info("[CSL DEBUG] REGISTERING TRANSFORMER %s", t.getClass().getName());
-            if (!t.getClass().isAnnotationPresent(TransformTarget.class)) {
-                logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
-                continue;
+    public TransformerManager(IMethodTransformer... methodTransformers) {
+        this(new IClassTransformer[0], methodTransformers);
+    }
+
+    public TransformerManager(IClassTransformer[] classTransformers, IMethodTransformer[] methodTransformers) {
+        for (IClassTransformer t : classTransformers) {
+            TransformTarget tt = this.getTransformTarget(t.getClass());
+            if (tt != null) {
+                addClassTransformer(tt.className(), t);
             }
+        }
+        for (IMethodTransformer t : methodTransformers) {
+            TransformTarget tt = this.getTransformTarget(t.getClass());
+            if (tt != null) {
+                addMethodTransformer(tt, tt.className(), t);
+            }
+        }
+    }
 
-            TransformTarget tt = t.getClass().getAnnotation(TransformTarget.class);
-            addMethodTransformer(tt, tt.className(), t);
+    private TransformTarget getTransformTarget(Class<?> cl) {
+        logger.info("[CSL DEBUG] REGISTERING TRANSFORMER %s", cl.getName());
+        if (!cl.isAnnotationPresent(TransformTarget.class)) {
+            logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
+            return null;
+        }
+        return cl.getAnnotation(TransformTarget.class);
+    }
+
+    private void addClassTransformer(String className, IClassTransformer transformer) {
+        if (!classMap.containsKey(className)) {
+            classMap.put(className, transformer);
+            logger.info("[CSL DEBUG] REGISTERING CLASS %s", className);
         }
     }
 
@@ -56,10 +81,24 @@ public class TransformerManager {
         }
     }
 
+    public ClassNode transform(ClassNode classNode) {
+        IClassTransformer transformer = classMap.get(FMLDeobfuscatingRemapper.INSTANCE.map(classNode.name).replace("/", "."));
+        if (transformer != null) {
+            try {
+                transformer.transform(classNode);
+                logger.info("[CSL DEBUG] Successfully transformed class %s", classNode.name);
+            } catch (Exception e) {
+                logger.warning("[CSL DEBUG] An error happened when transforming class %s.", classNode.name);
+                logger.warning(e);
+            }
+        }
+        return classNode;
+    }
+
     public MethodNode transform(ClassNode classNode, MethodNode methodNode, String className, String methodName, String methodDesc) {
         Map<String, IMethodTransformer> transMap = map.get(className);
         String methodTarget = methodName + methodDesc;
-        if (transMap.containsKey(methodTarget)) {
+        if (transMap != null && transMap.containsKey(methodTarget)) {
             try {
                 transMap.get(methodTarget).transform(classNode, methodNode);
                 logger.info("[CSL DEBUG] Successfully transformed method %s in class %s", methodName, className);

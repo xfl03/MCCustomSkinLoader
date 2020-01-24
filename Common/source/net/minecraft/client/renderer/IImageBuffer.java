@@ -10,4 +10,9 @@ public interface IImageBuffer extends Runnable {
     NativeImage func_195786_a(NativeImage image);
 
     void skinAvailable();
+
+    @Override
+    default void run() {
+        this.skinAvailable();
+    }
 }

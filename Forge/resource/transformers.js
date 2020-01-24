@@ -1,11 +1,9 @@
+var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
-var MethodNode = Java.type('org.objectweb.asm.tree.MethodNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
-
-var hasITextureObject = true;
 
 function PlayerTabTransformer(cn, mn) {
     var iterator = mn.instructions.iterator();
@@ -37,21 +35,27 @@ function initializeCoreMod() {
                 return cn;
             }
         },
-        'SkinAvailableCallbackTransformer': {
+
+        // For 1.13+
+        'AbstractTextureTransformer': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net/minecraft/client/resources/SkinManager$SkinAvailableCallback'
+                'name': 'net/minecraft/client/renderer/texture/AbstractTexture'
             },
             'transformer': function (cn) {
-                cn.version = Opcodes.V1_8;
-                cn.methods.forEach(function (mn) {
-                    mn.access -= Opcodes.ACC_ABSTRACT;
-                    for (var j = 0; j < 4; j++) {
-                        mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, j));
-                    }
-                    mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, cn.name, mn.name.equals("func_180521_a") ? "onSkinTextureAvailable" : "func_180521_a", mn.desc, true));
-                    mn.instructions.add(new InsnNode(Opcodes.RETURN));
-                });
+                cn.interfaces.add("net/minecraft/client/renderer/texture/Texture");
+                return cn;
+            }
+        },
+        'TextureTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/renderer/texture/Texture'
+            },
+            'transformer': function (cn) {
+                if (cn.access === 0) {
+                    cn.access = Opcodes.ACC_PUBLIC | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT;
+                }
                 return cn;
             }
         },
@@ -63,51 +67,38 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/client/Minecraft'
             },
             'transformer': function (cn) {
-                if (!cn.methods.stream().anyMatch(function(mn) {
-                    return mn.name.equals("func_152344_a");
-                })) {
-                    var methodNode = new MethodNode(Opcodes.ACC_PUBLIC, "func_152344_a", "(Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture;", "(Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture<Ljava/lang/Object;>;", null);
-                    methodNode.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                    methodNode.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                    methodNode.instructions.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/util/concurrent/ThreadTaskExecutor", "execute", "(Ljava/lang/Runnable;)V", false));
-                    methodNode.instructions.add(new InsnNode(Opcodes.ACONST_NULL));
-                    methodNode.instructions.add(new InsnNode(Opcodes.ARETURN));
-                    cn.methods.add(methodNode);
-                }
+                cn.interfaces.add("customskinloader/fake/itf/IFakeMinecraft");
                 return cn;
             }
         },
 
         // For 1.15+
-        'ITextureObjectTransformer': {
+        'TextureManagerTransformer': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net/minecraft/client/renderer/texture/ITextureObject'
+                'name': 'net/minecraft/client/renderer/texture/TextureManager'
             },
             'transformer': function (cn) {
-                hasITextureObject = !cn.methods.isEmpty();
+                cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_1");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_2");
                 return cn;
             }
         },
-        'FakeSkinManagerTransformer': {
+        'DownloadingTextureTransformer': {
             'target': {
                 'type': 'CLASS',
-                'name': 'customskinloader/fake/FakeSkinManager'
+                'name': 'net/minecraft/client/renderer/texture/DownloadingTexture'
             },
             'transformer': function (cn) {
-                if (!hasITextureObject) {
-                    cn.methods.stream().filter(function (mn) {
-                        return mn.name.equals("loadSkin") && mn.desc.equals("(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation;");
-                    }).forEach(function (mn) {
-                        mn.instructions.iterator().forEachRemaining(function (ain) {
-                            if (ain instanceof MethodInsnNode && ain.owner.equals("net/minecraft/client/renderer/texture/TextureManager")) {
-                                if (ain.name.equals("func_110579_a")) ain.name = "func_229263_a_";
-                                if (ain.name.equals("func_110581_b")) ain.name = "func_229267_b_";
-                                ain.desc = ain.desc.replace("Lnet/minecraft/client/renderer/texture/ITextureObject;", "Lnet/minecraft/client/renderer/texture/Texture;");
-                            }
-                        });
-                    });
-                }
+                cn.methods.forEach(function (mn) {
+                    if (mn.name.equals("func_229163_c_")) {
+                        var il = new InsnList();
+                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                        il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
+                        il.add(new InsnNode(Opcodes.ARETURN));
+                        mn.instructions.insert(il);
+                    }
+                });
                 return cn;
             }
         }
