@@ -20,7 +20,16 @@ public class SkinManagerTransformer {
     public static class InitTransformer implements IMethodTransformer{
         @Override
         public void transform(ClassNode cn,MethodNode mn) {
-            cn.fields.add(new FieldNode(Opcodes.ACC_PRIVATE, "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;", null, null));
+            boolean hasField = false;
+            for (FieldNode fn : cn.fields) {
+                if (fn.name.equals("fakeManager")) {
+                    hasField = true;
+                    break;
+                }
+            }
+            if (!hasField) {
+                cn.fields.add(new FieldNode(Opcodes.ACC_PRIVATE, "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;", null, null));
+            }
             mn.instructions.clear();
             mn.instructions.add(new VarInsnNode(Opcodes.ALOAD,0));
             mn.instructions.add(new MethodInsnNode(Opcodes.INVOKESPECIAL,"java/lang/Object","<init>","()V", false));
