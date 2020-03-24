@@ -2,6 +2,10 @@ package customskinloader;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -21,7 +25,7 @@ import customskinloader.utils.MinecraftUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
- * @author (C) Jeremy Lam [JLChnToZ] 2013-2014 & Alexander Xia [xfl03] 2014-2019
+ * @author (C) Jeremy Lam [JLChnToZ] 2013-2014 & Alexander Xia [xfl03] 2014-2020
  * @version @MOD_FULL_VERSION@
  */
 public class CustomSkinLoader {
@@ -50,6 +54,8 @@ public class CustomSkinLoader {
     
     private static final ProfileCache profileCache=new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
+
+    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(3, 3333, 3, TimeUnit.MINUTES, new LinkedBlockingDeque<>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
     
     //For User Skin
     public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
@@ -161,13 +167,11 @@ public class CustomSkinLoader {
             return ModelManager0.fromUserProfile(profile);
         }
         //profileCache.setLoading(username, true);
-        Thread loadThread=new Thread(){
-            public void run(){
-                loadProfile0(gameProfile);//Load in thread
-            }
-        };
-        loadThread.setName(username+"'s skull");
-        loadThread.start();
+        Thread loadThread= new Thread(() -> {
+            loadProfile0(gameProfile);//Load in thread
+        });
+        loadThread.setName(username + "'s skull");
+        threadPool.execute(loadThread);
         return Maps.newHashMap();
     }
     
