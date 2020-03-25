@@ -6,7 +6,8 @@
     "MixinMinecraft",
     "MixinSkinManager",
     "MixinTextureManager",
-    "MixinThreadDownloadImageData"
+    "MixinThreadDownloadImageData",
+    "MixinTileEntitySkull"
   ],
   "refmap": "mixins.customskinloader.refmap.json",
   "injectors": {

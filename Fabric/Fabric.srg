@@ -13,14 +13,15 @@ CL: net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
 CL: net/minecraft/scoreboard/ScoreObjective net/minecraft/class_266
 CL: net/minecraft/scoreboard/Scoreboard net/minecraft/class_269
+CL: net/minecraft/tileentity/TileEntitySkull net/minecraft/class_2631
 CL: net/minecraft/util/ResourceLocation net/minecraft/class_2960
 CL: net/minecraft/util/Session net/minecraft/class_320
 CL: net/minecraft/util/StringUtils net/minecraft/class_3544
 FD: net/minecraft/client/Minecraft/field_71412_D net/minecraft/class_310/field_1697
 FD: net/minecraft/client/multiplayer/ServerData/field_78845_b net/minecraft/class_642/field_3761
 MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z customskinloader/fake/itf/IFakeTextureManager_1/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)Z
-MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; net/minecraft/class_1060/method_4619 (Lnet/minecraft/class_2960;)Lnet/minecraft/class_1044;
-MD: customskinloader/fake/itf/IFakeTextureManager_2/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V customskinloader/fake/itf/IFakeTextureManager_1/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)V
+MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; customskinloader/fake/itf/IFakeTextureManager_1/method_4619 (Lnet/minecraft/class_2960;)Lnet/minecraft/class_1044;
+MD: customskinloader/fake/itf/IFakeTextureManager_2/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V customskinloader/fake/itf/IFakeTextureManager_2/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)V
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/func_175249_a (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V net/minecraft/class_355/method_1919 (ILnet/minecraft/class_269;Lnet/minecraft/class_266;)V
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V net/minecraft/class_355/method_1919 (ILnet/minecraft/class_269;Lnet/minecraft/class_266;)V
 MD: net/minecraft/client/Minecraft/func_110432_I ()Lnet/minecraft/util/Session; net/minecraft/class_310/method_1548 ()Lnet/minecraft/class_320;
@@ -53,5 +54,6 @@ MD: net/minecraft/client/resources/SkinManager/loadProfileTextures (Lcom/mojang/
 MD: net/minecraft/client/resources/SkinManager/loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; net/minecraft/class_1071/method_4651 (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/class_1071$class_1072;)Lnet/minecraft/class_2960;
 MD: net/minecraft/client/resources/SkinManager/loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; net/minecraft/class_1071/method_4654 (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;
 MD: net/minecraft/client/resources/SkinManager$SkinAvailableCallback/func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V net/minecraft/class_1071$class_1072/onSkinTextureAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/class_2960;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V
+MD: net/minecraft/tileentity/TileEntitySkull/updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; net/minecraft/class_2631/method_11335 (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile;
 MD: net/minecraft/util/Session/func_148256_e ()Lcom/mojang/authlib/GameProfile; net/minecraft/class_320/method_1677 ()Lcom/mojang/authlib/GameProfile;
 MD: net/minecraft/util/StringUtils/func_76338_a (Ljava/lang/String;)Ljava/lang/String; net/minecraft/class_3544/method_15440 (Ljava/lang/String;)Ljava/lang/String;
