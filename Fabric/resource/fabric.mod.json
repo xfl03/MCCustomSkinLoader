@@ -11,20 +11,13 @@
     "issues": "https://github.com/xfl03/MCCustomSkinLoader/issues",
     "sources": "https://github.com/xfl03/MCCustomSkinLoader"
   },
-
-  "license": "GPLv3",
+  "license": "GPL-3.0-only",
   
   "environment": "client",
-  "entrypoints": {
-    "main": [
-      
-    ]
-  },
   "mixins": [
-    "mixins.customskinloader.json"
-  ],
-
-  "depends": {
-    "fabricloader": ">=0.7.0"
-  }
+    {
+      "config": "mixins.customskinloader.json",
+      "environment": "client"
+    }
+  ]
 }
