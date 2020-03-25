@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ThreadDownloadImageData.class)
-public class MixinThreadDownloadImageData {
+public abstract class MixinThreadDownloadImageData {
     @Dynamic
     @Inject(
         method = "Lnet/minecraft/client/renderer/ThreadDownloadImageData;processLegacySkin(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;",

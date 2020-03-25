@@ -105,7 +105,7 @@ function initializeCoreMod() {
         'SkullTileEntityTransformer': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net.minecraft.tileentity/SkullTileEntity'
+                'name': 'net/minecraft/tileentity/SkullTileEntity'
             },
             'transformer': function (cn) {
                 cn.methods.foreach(function (mn) {
