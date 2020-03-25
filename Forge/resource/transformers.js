@@ -91,7 +91,7 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (mn.name.equals("func_229163_c_")) {
+                    if (mn.name === 'func_229163_c_') {
                         var il = new InsnList();
                         il.add(new VarInsnNode(Opcodes.ALOAD, 0));
                         il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
@@ -100,6 +100,22 @@ function initializeCoreMod() {
                     }
                 });
                 return cn;
+            }
+        },
+        'SkullTileEntityTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/tileentity/SkullTileEntity'
+            },
+            'transformer': function (cn) {
+                cn.methods.foreach(function (mn) {
+                    if (mn.name === 'func_174884_b') {
+                        var il = new InsnList();
+                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                        il.add(new InsnNode(Opcodes.ARETURN));
+                        mn.instructions.insert(il);
+                    }
+                })
             }
         }
     };
