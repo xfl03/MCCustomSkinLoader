@@ -2,6 +2,7 @@ package customskinloader.profile;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.codec.Charsets;
@@ -38,8 +39,8 @@ public class DynamicSkullManager {
         public long startTime;
         public int period;
     }
-    private Map<GameProfile,SkullTexture> dynamicTextures=new HashMap<GameProfile,SkullTexture>();
-    private Map<GameProfile,Map<Type,MinecraftProfileTexture>> staticTextures=new HashMap<GameProfile,Map<Type,MinecraftProfileTexture>>();
+    private Map<GameProfile, SkullTexture> dynamicTextures = new ConcurrentHashMap<>();
+    private Map<GameProfile, Map<Type, MinecraftProfileTexture>> staticTextures = new ConcurrentHashMap<>();
     private List<GameProfile> loadingList=new ArrayList<GameProfile>();
     
     private void parseGameProfile(GameProfile profile){
