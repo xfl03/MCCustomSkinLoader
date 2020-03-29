@@ -108,7 +108,7 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/tileentity/SkullTileEntity'
             },
             'transformer': function (cn) {
-                cn.methods.foreach(function (mn) {
+                cn.methods.forEach(function (mn) {
                     if (mn.name === 'func_174884_b') {
                         var il = new InsnList();
                         il.add(new VarInsnNode(Opcodes.ALOAD, 0));
