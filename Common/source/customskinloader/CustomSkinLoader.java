@@ -170,7 +170,11 @@ public class CustomSkinLoader {
             Thread.currentThread().setName(username + "'s skull");
             loadProfile0(gameProfile);//Load in thread
         };
-        threadPool.execute(loadThread);
+        if (config.enableUpdateSkull) {
+            new Thread(loadThread).start();
+        } else {
+            threadPool.execute(loadThread);
+        }
         return Maps.newHashMap();
     }
     
