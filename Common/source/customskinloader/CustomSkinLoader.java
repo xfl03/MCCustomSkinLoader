@@ -2,8 +2,7 @@ package customskinloader;
 
 import java.io.File;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +54,7 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache=new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
 
-    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(3, 33, 3, TimeUnit.MINUTES, new LinkedBlockingDeque<>(333), Executors.defaultThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
+    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     
     //For User Skin
     public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
@@ -167,10 +166,10 @@ public class CustomSkinLoader {
             return ModelManager0.fromUserProfile(profile);
         }
         //profileCache.setLoading(username, true);
-        Thread loadThread= new Thread(() -> {
+        Runnable loadThread = () -> {
+            Thread.currentThread().setName(username + "'s skull");
             loadProfile0(gameProfile);//Load in thread
-        });
-        loadThread.setName(username + "'s skull");
+        };
         threadPool.execute(loadThread);
         return Maps.newHashMap();
     }
@@ -181,9 +180,5 @@ public class CustomSkinLoader {
         logger.info("DataDir: "+DATA_DIR.getAbsolutePath());
         logger.info("Minecraft: "+MinecraftUtil.getMinecraftMainVersion()+"("+MinecraftUtil.getMinecraftVersionText()+")");
         return logger;
-    }
-
-    public static void initStatic(){
-        //Do nothing
     }
 }
