@@ -55,7 +55,7 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache=new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
 
-    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(3, 3333, 3, TimeUnit.MINUTES, new LinkedBlockingDeque<>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
+    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(3, 33, 3, TimeUnit.MINUTES, new LinkedBlockingDeque<>(333), Executors.defaultThreadFactory(), new ThreadPoolExecutor.DiscardOldestPolicy());
     
     //For User Skin
     public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){

@@ -137,3 +137,6 @@ publishing {
         }
     }
 }
+tasks.withType(PublishToMavenRepository) {
+    onlyIf { System.getenv("GITHUB_TOKEN") != null }
+}

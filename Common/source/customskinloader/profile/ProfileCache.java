@@ -2,6 +2,7 @@ package customskinloader.profile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.io.FileUtils;
@@ -12,8 +13,8 @@ import customskinloader.utils.TimeUtil;
 public class ProfileCache {
     public static File PROFILE_CACHE_DIR=new File(CustomSkinLoader.DATA_DIR,"ProfileCache");
     
-    private ConcurrentHashMap<String,CachedProfile> cachedProfiles = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String,UserProfile> localProfiles = new ConcurrentHashMap<>();
+    private Map<String, CachedProfile> cachedProfiles = new ConcurrentHashMap<>();
+    private Map<String, UserProfile> localProfiles = new ConcurrentHashMap<>();
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ProfileCache(){
