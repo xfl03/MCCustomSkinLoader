@@ -115,7 +115,8 @@ function initializeCoreMod() {
                         il.add(new InsnNode(Opcodes.ARETURN));
                         mn.instructions.insert(il);
                     }
-                })
+                });
+                return cn;
             }
         }
     };
