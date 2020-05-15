@@ -25,6 +25,10 @@ public class ProfileCache {
     public boolean isExist(String username){
         return cachedProfiles.containsKey(username.toLowerCase());
     }
+    public boolean isLoading(String username) {
+        CachedProfile cp=cachedProfiles.get(username.toLowerCase());
+        return cp != null && cp.loading;
+    }
     public boolean isReady(String username){
         CachedProfile cp=cachedProfiles.get(username.toLowerCase());
         return cp != null && (cp.loading || cp.expiryTime > TimeUtil.getCurrentUnixTimestamp());

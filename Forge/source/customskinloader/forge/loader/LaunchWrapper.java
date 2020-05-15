@@ -5,10 +5,9 @@ import customskinloader.forge.transformer.FakeInterfacesTransformer;
 import customskinloader.forge.transformer.PlayerTabTransformer;
 import customskinloader.forge.transformer.SkinManagerTransformer;
 import customskinloader.forge.transformer.SpectatorMenuTransformer;
-
+import customskinloader.forge.transformer.TileEntitySkullTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -29,7 +28,8 @@ public class LaunchWrapper implements IClassTransformer {
         new SkinManagerTransformer.LoadProfileTexturesTransformer(),
         new SkinManagerTransformer.LoadSkinFromCacheTransformer(),
         new PlayerTabTransformer.ScoreObjectiveTransformer(),
-        new SpectatorMenuTransformer.PlayerMenuObjectTransformer()
+        new SpectatorMenuTransformer.PlayerMenuObjectTransformer(),
+        new TileEntitySkullTransformer.UpdateGameProfileTransformer()
     };
     private TransformerManager transformerManager = new TransformerManager(CLASS_TRANSFORMERS, TRANFORMERS);
 
