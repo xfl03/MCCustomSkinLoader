@@ -35,6 +35,25 @@ function initializeCoreMod() {
                 return cn;
             }
         },
+        'TileEntitySkullTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'names': function (target) {
+                    return ['net/minecraft/tileentity/TileEntitySkull', 'net/minecraft/tileentity/SkullTileEntity'];
+                }
+            },
+            'transformer': function (cn) {
+                cn.methods.forEach(function (mn) {
+                    if (mn.name === 'func_174884_b') {
+                        var il = new InsnList();
+                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                        il.add(new InsnNode(Opcodes.ARETURN));
+                        mn.instructions.insert(il);
+                    }
+                });
+                return cn;
+            }
+        },
 
         // For 1.13+
         'AbstractTextureTransformer': {
@@ -95,23 +114,6 @@ function initializeCoreMod() {
                         var il = new InsnList();
                         il.add(new VarInsnNode(Opcodes.ALOAD, 0));
                         il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
-                        il.add(new InsnNode(Opcodes.ARETURN));
-                        mn.instructions.insert(il);
-                    }
-                });
-                return cn;
-            }
-        },
-        'SkullTileEntityTransformer': {
-            'target': {
-                'type': 'CLASS',
-                'name': 'net/minecraft/tileentity/SkullTileEntity'
-            },
-            'transformer': function (cn) {
-                cn.methods.forEach(function (mn) {
-                    if (mn.name === 'func_174884_b') {
-                        var il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
                         il.add(new InsnNode(Opcodes.ARETURN));
                         mn.instructions.insert(il);
                     }
