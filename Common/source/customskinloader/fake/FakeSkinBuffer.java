@@ -100,7 +100,7 @@ public class FakeSkinBuffer implements IImageBuffer {
      */
     public String judgeType() {
         if (this.image == null)
-            return null;
+            return "default";
         int bgColor = image.getRGBA(63 * ratio, 20 * ratio);
         /*
          * If background is transparent, all the pixels in ((54, 20), (55, 31)) areas is transparent,
@@ -113,7 +113,8 @@ public class FakeSkinBuffer implements IImageBuffer {
                 getA(bgColor) == 0 ? (c) -> getA(c) == 0 : (c) -> c == bgColor;
         for (int x = 54 * ratio; x <= 55 * ratio; ++x) {
             for (int y = 20 * ratio; y <= 31 * ratio; ++y) {
-                if (!predicate.test(image.getRGBA(x, y))) {
+                int color = image.getRGBA(x, y);
+                if (!predicate.test(color)) {
                     return "default";
                 }
             }
