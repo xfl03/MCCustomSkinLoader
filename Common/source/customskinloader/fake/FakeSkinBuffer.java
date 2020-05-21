@@ -1,6 +1,7 @@
 package customskinloader.fake;
 
 import java.awt.image.BufferedImage;
+import java.util.function.Predicate;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.fake.texture.FakeBufferedImage;
@@ -14,7 +15,10 @@ public class FakeSkinBuffer implements IImageBuffer {
     private FakeImage image = null;
 
     //parseUserSkin for 1.15+
-    public static NativeImage processLegacySkin(NativeImage image) {
+    public static NativeImage processLegacySkin(NativeImage image, Runnable processTask) {
+        if (processTask instanceof IImageBuffer) {
+            return ((IImageBuffer) processTask).func_195786_a(image);
+        }
         return new FakeSkinBuffer().func_195786_a(image);
     }
 
@@ -51,40 +55,42 @@ public class FakeSkinBuffer implements IImageBuffer {
         if (image.getHeight() != image.getWidth()) {//Single Layer
             //Create a new image and copy origin image data
             FakeImage img = image.createImage(64 * ratio, 64 * ratio);
-            img.copyImageData(image); image.close(); image = img;
+            img.copyImageData(image);
+            image.close();
+            image = img;
             image.fillArea(0 * ratio, 32 * ratio, 64 * ratio, 32 * ratio);
 
             //Right Leg -> Left Leg
-            image.copyArea( 4 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Top
-            image.copyArea( 8 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Bottom
-            image.copyArea( 0 * ratio, 20 * ratio, 24 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Right
-            image.copyArea( 4 * ratio, 20 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Front
-            image.copyArea( 8 * ratio, 20 * ratio,  8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Left
+            image.copyArea(4 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Top
+            image.copyArea(8 * ratio, 16 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Bottom
+            image.copyArea(0 * ratio, 20 * ratio, 24 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Right
+            image.copyArea(4 * ratio, 20 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Front
+            image.copyArea(8 * ratio, 20 * ratio, 8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Left
             image.copyArea(12 * ratio, 20 * ratio, 16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Back
             //Right Arm -> Left Arm
-            image.copyArea(44 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Top
-            image.copyArea(48 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio,  4 * ratio, true, false);//Bottom
-            image.copyArea(40 * ratio, 20 * ratio,  0 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Right
+            image.copyArea(44 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Top
+            image.copyArea(48 * ratio, 16 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 4 * ratio, true, false);//Bottom
+            image.copyArea(40 * ratio, 20 * ratio, 0 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Right
             image.copyArea(44 * ratio, 20 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Front
-            image.copyArea(48 * ratio, 20 * ratio,-16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Left
+            image.copyArea(48 * ratio, 20 * ratio, -16 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Left
             image.copyArea(52 * ratio, 20 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Back
         }
 
         this.image = image;
-        setAreaDueToConfig( 0 * ratio,  0 * ratio, 32 * ratio, 16 * ratio);//Head - 1
-        setAreaTransparent(32 * ratio,  0 * ratio, 64 * ratio, 16 * ratio);//Head - 2
+        setAreaDueToConfig(0 * ratio, 0 * ratio, 32 * ratio, 16 * ratio);//Head - 1
+        setAreaTransparent(32 * ratio, 0 * ratio, 64 * ratio, 16 * ratio);//Head - 2
         setAreaDueToConfig(16 * ratio, 16 * ratio, 40 * ratio, 32 * ratio);//Body - 1
         setAreaTransparent(16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);//Body - 2
 
         setAreaDueToConfig(40 * ratio, 16 * ratio, 56 * ratio, 32 * ratio);//Right Arm - 1
         setAreaTransparent(40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);//Right Arm - 2
-        setAreaDueToConfig( 0 * ratio, 16 * ratio, 16 * ratio, 32 * ratio);//Right Leg - 1
-        setAreaTransparent( 0 * ratio, 32 * ratio, 16 * ratio, 48 * ratio);//Right Leg - 2
+        setAreaDueToConfig(0 * ratio, 16 * ratio, 16 * ratio, 32 * ratio);//Right Leg - 1
+        setAreaTransparent(0 * ratio, 32 * ratio, 16 * ratio, 48 * ratio);//Right Leg - 2
 
         setAreaDueToConfig(32 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);//Left Arm - 1
         setAreaTransparent(48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);//Left Arm - 2
         setAreaDueToConfig(16 * ratio, 48 * ratio, 32 * ratio, 64 * ratio);//Left Leg - 1
-        setAreaTransparent( 0 * ratio, 48 * ratio, 16 * ratio, 64 * ratio);//Left Leg - 2
+        setAreaTransparent(0 * ratio, 48 * ratio, 16 * ratio, 64 * ratio);//Left Leg - 2
         return image;
     }
 
@@ -97,10 +103,26 @@ public class FakeSkinBuffer implements IImageBuffer {
      */
     public String judgeType() {
         if (this.image == null)
-            return null;
-        if (((image.getRGBA(55 * ratio, 20 * ratio) & B) >>> 24) == 0)//if (55,20) is transparent
-            return "slim";
-        return "default";
+            return "default";
+        int bgColor = image.getRGBA(63 * ratio, 20 * ratio);
+        /*
+         * If background is transparent, all the pixels in ((54, 20), (55, 31)) areas is transparent,
+         * which means it is Alex model.
+         * If background is opaque, all the pixels in ((54, 20), (55, 31)) areas is same with background,
+         * which means it is Alex model.
+         * Otherwise, it is Steve model.
+         * */
+        Predicate<Integer> predicate =
+                getA(bgColor) == 0 ? (c) -> getA(c) == 0 : (c) -> c == bgColor;
+        for (int x = 54 * ratio; x <= 55 * ratio; ++x) {
+            for (int y = 20 * ratio; y <= 31 * ratio; ++y) {
+                int color = image.getRGBA(x, y);
+                if (!predicate.test(color)) {
+                    return "default";
+                }
+            }
+        }
+        return "slim";
     }
 
     /* 2^24-1
@@ -125,7 +147,7 @@ public class FakeSkinBuffer implements IImageBuffer {
             return;
         for (int x = x0; x < x1; ++x)
             for (int y = y0; y < y1; ++y)
-                image.setRGBA(x, y, image.getRGBA(x,y) & A);
+                image.setRGBA(x, y, image.getRGBA(x, y) & A);
     }
 
     /* -2^24
@@ -137,7 +159,7 @@ public class FakeSkinBuffer implements IImageBuffer {
     private void setAreaOpaque(int x0, int y0, int x1, int y1) {
         for (int x = x0; x < x1; ++x)
             for (int y = y0; y < y1; ++y)
-                image.setRGBA(x, y, image.getRGBA(x,y) | B);
+                image.setRGBA(x, y, image.getRGBA(x, y) | B);
     }
 
     private void setAreaDueToConfig(int x0, int y0, int x1, int y1) {
@@ -153,5 +175,9 @@ public class FakeSkinBuffer implements IImageBuffer {
 
     private static int getARGB(int a, int r, int g, int b) {
         return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
+    private static int getA(int argb) {
+        return (argb & B) >>> 24;
     }
 }

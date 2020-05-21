@@ -1,3 +1,4 @@
+var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -31,6 +32,25 @@ function initializeCoreMod() {
                 cn.methods.forEach(function (mn) {
                     if (mn.name === 'func_175249_a')
                         PlayerTabTransformer(cn, mn);
+                });
+                return cn;
+            }
+        },
+        'TileEntitySkullTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'names': function (target) {
+                    return ['net/minecraft/tileentity/TileEntitySkull', 'net/minecraft/tileentity/SkullTileEntity'];
+                }
+            },
+            'transformer': function (cn) {
+                cn.methods.forEach(function (mn) {
+                    if (mn.name === 'func_174884_b') {
+                        var il = new InsnList();
+                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                        il.add(new InsnNode(Opcodes.ARETURN));
+                        mn.instructions.insert(il);
+                    }
                 });
                 return cn;
             }
@@ -91,29 +111,15 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (mn.name === 'func_229163_c_') {
-                        var il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                        il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
-                        il.add(new InsnNode(Opcodes.ARETURN));
-                        mn.instructions.insert(il);
-                    }
-                });
-                return cn;
-            }
-        },
-        'SkullTileEntityTransformer': {
-            'target': {
-                'type': 'CLASS',
-                'name': 'net/minecraft/tileentity/SkullTileEntity'
-            },
-            'transformer': function (cn) {
-                cn.methods.forEach(function (mn) {
-                    if (mn.name === 'func_174884_b') {
-                        var il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                        il.add(new InsnNode(Opcodes.ARETURN));
-                        mn.instructions.insert(il);
+                    if (mn.name === 'func_229159_a_') {
+                        for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
+                            var node = iterator.next();
+                            if (node.getOpcode() === Opcodes.INVOKESTATIC && node.name === "func_229163_c_") {
+                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
+                                mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/texture/DownloadingTexture", "field_229155_i_", "Ljava/lang/Runnable;"));
+                                iterator.set(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;Ljava/lang/Runnable;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
+                            }
+                        }
                     }
                 });
                 return cn;

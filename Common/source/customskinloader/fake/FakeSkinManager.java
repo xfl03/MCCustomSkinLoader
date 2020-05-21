@@ -2,6 +2,7 @@ package customskinloader.fake;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -33,6 +34,8 @@ public class FakeSkinManager {
     private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(CustomSkinLoader.config.threadPoolSize, CustomSkinLoader.config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     private final TextureManager textureManager;
 
+    private final Map<ResourceLocation, MinecraftProfileTexture> modelCache = new HashMap<>();
+
     public FakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
         this.textureManager = textureManagerInstance;
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory;
@@ -47,9 +50,9 @@ public class FakeSkinManager {
 
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + info.hash);
 
-        if (((IFakeTextureManager_1) this.textureManager).func_229267_b_(resourcelocation) != null)//Have already loaded
-            makeCallback(skinAvailableCallback, textureType, resourcelocation, profileTexture);
-        else {
+        if (((IFakeTextureManager_1) this.textureManager).func_229267_b_(resourcelocation) != null) {//Have already loaded
+            makeCallback(skinAvailableCallback, textureType, resourcelocation, modelCache.getOrDefault(resourcelocation, profileTexture));
+        } else {
             SimpleTexture threaddownloadimagedata = MinecraftUtil.createThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture), textureType);
             if (skinAvailableCallback instanceof FakeClientPlayer.LegacyBuffer)//Cache for client player
                 FakeClientPlayer.textureCache.put(resourcelocation, threaddownloadimagedata);
@@ -64,13 +67,11 @@ public class FakeSkinManager {
                 final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
                 map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile));
 
-                ((IFakeMinecraft) Minecraft.getMinecraft()).execute(new Runnable() {
-                    public void run() {
-                        for (Type type : Type.values()) {
-                            if (map.containsKey(type)) {
-                                CustomSkinLoader.logger.debug("Loading type:" + type);
-                                FakeSkinManager.this.loadSkin(map.get(type), type, skinAvailableCallback);
-                            }
+                ((IFakeMinecraft) Minecraft.getMinecraft()).execute(() -> {
+                    for (Type type : Type.values()) {
+                        if (map.containsKey(type)) {
+                            CustomSkinLoader.logger.debug("Loading type:" + type);
+                            FakeSkinManager.this.loadSkin(map.get(type), type, skinAvailableCallback);
                         }
                     }
                 });
@@ -118,8 +119,10 @@ public class FakeSkinManager {
                 if ("auto".equals(texture.getMetadata("model")) && buffer instanceof FakeSkinBuffer) {
                     //Auto judge skin type
                     Map<String, String> metadata = Maps.newHashMap();
-                    metadata.put("model", ((FakeSkinBuffer) buffer).judgeType());
+                    String type = ((FakeSkinBuffer) buffer).judgeType();
+                    metadata.put("model", type);
                     texture = new MinecraftProfileTexture(texture.getUrl(), metadata);
+                    FakeSkinManager.this.modelCache.put(location, texture);
                 }
             }
 
