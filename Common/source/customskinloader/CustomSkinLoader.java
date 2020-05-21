@@ -165,15 +165,19 @@ public class CustomSkinLoader {
             UserProfile profile=profileCache.getProfile(credential);
             return ModelManager0.fromUserProfile(profile);
         }
-        //profileCache.setLoading(username, true);
-        Runnable loadThread = () -> {
-            Thread.currentThread().setName(username + "'s skull");
-            loadProfile0(gameProfile);//Load in thread
-        };
-        if (config.enableUpdateSkull) {
-            new Thread(loadThread).start();
-        } else {
-            threadPool.execute(loadThread);
+        if (!profileCache.isLoading(credential)) {
+            profileCache.setLoading(credential, true);
+            Runnable loadThread = () -> {
+                String tempName = Thread.currentThread().getName();
+                Thread.currentThread().setName(username + "'s skull");
+                loadProfile0(gameProfile);//Load in thread
+                Thread.currentThread().setName(tempName);
+            };
+            if (config.enableUpdateSkull) {
+                new Thread(loadThread).start();
+            } else {
+                threadPool.execute(loadThread);
+            }
         }
         return Maps.newHashMap();
     }
