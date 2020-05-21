@@ -20,6 +20,7 @@ CL: net/minecraft/util/Session net/minecraft/class_320
 CL: net/minecraft/util/StringUtils net/minecraft/class_3544
 FD: net/minecraft/client/Minecraft/field_71412_D net/minecraft/class_310/field_1697
 FD: net/minecraft/client/multiplayer/ServerData/field_78845_b net/minecraft/class_642/field_3761
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/processTask net/minecraft/class_1046/field_20843
 MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z customskinloader/fake/itf/IFakeTextureManager_1/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)Z
 MD: customskinloader/fake/itf/IFakeTextureManager_1/func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; customskinloader/fake/itf/IFakeTextureManager_1/method_4619 (Lnet/minecraft/class_2960;)Lnet/minecraft/class_1044;
 MD: customskinloader/fake/itf/IFakeTextureManager_2/func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V customskinloader/fake/itf/IFakeTextureManager_2/method_4616 (Lnet/minecraft/class_2960;Lnet/minecraft/class_1044;)V
@@ -34,6 +35,7 @@ MD: net/minecraft/client/Minecraft/func_71410_x ()Lnet/minecraft/client/Minecraf
 MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z net/minecraft/class_310/method_1542 ()Z
 MD: net/minecraft/client/renderer/IImageBuffer/func_152634_a ()V net/minecraft/class_760/method_3238 ()V
 MD: net/minecraft/client/renderer/IImageBuffer/func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_760/method_3237 (Lnet/minecraft/class_1011;)Lnet/minecraft/class_1011;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_1046/method_22795 (Ljava/io/InputStream;)Lnet/minecraft/class_1011;
 MD: net/minecraft/client/renderer/ThreadDownloadImageData/processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_1046/method_22798 (Lnet/minecraft/class_1011;)Lnet/minecraft/class_1011;
 MD: net/minecraft/client/renderer/texture/NativeImage/func_195699_a (IIIIIIZZ)V net/minecraft/class_1011/method_4304 (IIIIIIZZ)V
 MD: net/minecraft/client/renderer/texture/NativeImage/func_195700_a (III)V net/minecraft/class_1011/method_4305 (III)V

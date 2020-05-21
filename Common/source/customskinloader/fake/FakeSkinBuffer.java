@@ -15,7 +15,10 @@ public class FakeSkinBuffer implements IImageBuffer {
     private FakeImage image = null;
 
     //parseUserSkin for 1.15+
-    public static NativeImage processLegacySkin(NativeImage image) {
+    public static NativeImage processLegacySkin(NativeImage image, Runnable processTask) {
+        if (processTask instanceof IImageBuffer) {
+            return ((IImageBuffer) processTask).func_195786_a(image);
+        }
         return new FakeSkinBuffer().func_195786_a(image);
     }
 
