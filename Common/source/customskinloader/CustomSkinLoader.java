@@ -37,7 +37,7 @@ public class CustomSkinLoader {
             CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
     public static final SkinSiteProfile[] DEFAULT_LOAD_LIST={
             SkinSiteProfile.createMojangAPI("Mojang"),
-            SkinSiteProfile.createCustomSkinAPI("LittleSkin","https://mcskin.littleservice.cn/csl/"),
+            SkinSiteProfile.createCustomSkinAPI("LittleSkin","https://littlesk.in/csl/"),
             SkinSiteProfile.createCustomSkinAPI("BlessingSkin","http://skin.prinzeugen.net/"),
             //OneSkin has been removed temporarily
             //SkinSiteProfile.createCustomSkinAPI("OneSkin","http://fleey.cn/skin/skin_user/skin_json.php/"),
