@@ -6,19 +6,6 @@ var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
-function PlayerTabTransformer(cn, mn) {
-    var iterator = mn.instructions.iterator();
-    while (iterator.hasNext()) {
-        var node = iterator.next();
-        if (node instanceof VarInsnNode) {
-            var varNode = node;
-            if (varNode.getOpcode() === Opcodes.ISTORE && varNode.var === 11) {
-                mn.instructions.set(varNode.getPrevious(), new InsnNode(Opcodes.ICONST_1));
-            }
-        }
-    }
-}
-
 function initializeCoreMod() {
     return {
         'PlayerTabTransformer': {
@@ -30,8 +17,15 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (mn.name === 'func_175249_a')
-                        PlayerTabTransformer(cn, mn);
+                    if (mn.name === 'func_175249_a' || mn.name === 'func_238523_a_') {
+                        for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
+                            var node = iterator.next();
+                            if (node.getOpcode() === Opcodes.INVOKEVIRTUAL && node.name === "func_71387_A") {
+                                mn.instructions.insertBefore(node, new InsnNode(Opcodes.POP));
+                                mn.instructions.set(node, new InsnNode(Opcodes.ICONST_1));
+                            }
+                        }
+                    }
                 });
                 return cn;
             }
