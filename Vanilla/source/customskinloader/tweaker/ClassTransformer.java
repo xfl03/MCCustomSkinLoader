@@ -49,7 +49,7 @@ public class ClassTransformer implements IClassTransformer {
                     continue;
                 }
                 zipFile = tempZipFile;
-                Enumeration<ZipEntry> entries=(Enumeration<ZipEntry>) zipFile.entries();
+                Enumeration<? extends ZipEntry> entries=zipFile.entries();
                 StringBuilder sb=new StringBuilder();
                 while(entries.hasMoreElements()){
                     ZipEntry entry=entries.nextElement();

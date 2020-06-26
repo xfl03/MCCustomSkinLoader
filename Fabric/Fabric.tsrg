@@ -1,0 +1,50 @@
+customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeTextureManager_1
+	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z method_4616
+	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; method_4619
+customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
+	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V method_4616
+net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
+net/minecraft/client/gui/spectator/PlayerMenuObject net/minecraft/class_530
+net/minecraft/client/Minecraft net/minecraft/class_310
+	field_71412_D field_1697
+	func_110432_I ()Lnet/minecraft/util/Session; method_1548
+	func_110434_K ()Lnet/minecraft/client/renderer/texture/TextureManager; method_1531
+	func_147104_D ()Lnet/minecraft/client/multiplayer/ServerData; method_1558
+	func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; method_1582
+	func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; method_1495
+	func_71410_x ()Lnet/minecraft/client/Minecraft; method_1551
+net/minecraft/client/multiplayer/ServerData net/minecraft/class_642
+	field_78845_b field_3761
+net/minecraft/client/renderer/IImageBuffer net/minecraft/class_760
+	func_152634_a ()V method_3238
+	func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; method_3237
+net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_1046
+net/minecraft/client/renderer/texture/DownloadingTexture net/minecraft/class_1046
+net/minecraft/client/renderer/texture/ITextureObject net/minecraft/class_1062
+net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
+	func_195699_a (IIIIIIZZ)V method_4304
+	func_195700_a (III)V method_4305
+	func_195702_a ()I method_4307
+	func_195703_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V method_4317
+	func_195709_a (II)I method_4315
+	func_195714_b ()I method_4323
+	func_195715_a (IIIII)V method_4326
+net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/class_1049
+net/minecraft/client/renderer/texture/Texture net/minecraft/class_1044
+net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
+	func_110579_a (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z method_4616
+	func_110581_b (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; method_4619
+net/minecraft/client/renderer/texture/ThreadDownloadImageData net/minecraft/class_1046
+net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/class_1068
+	func_177334_a (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; method_4648
+	func_177335_a ()Lnet/minecraft/util/ResourceLocation; method_4649
+net/minecraft/client/resources/SkinManager net/minecraft/class_1071
+	func_152790_a (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
+net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
+	func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
+net/minecraft/tileentity/TileEntitySkull net/minecraft/class_2631
+net/minecraft/util/ResourceLocation net/minecraft/class_2960
+net/minecraft/util/Session net/minecraft/class_320
+	func_148256_e ()Lcom/mojang/authlib/GameProfile; method_1677
+net/minecraft/util/StringUtils net/minecraft/class_3544
+	func_76338_a (Ljava/lang/String;)Ljava/lang/String; method_15440

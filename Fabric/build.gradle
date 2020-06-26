@@ -41,13 +41,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.spongepowered:mixin:0.8-SNAPSHOT'
+    implementation 'org.spongepowered:mixin:0.8'
 }
 
 mixin {
     add sourceSets.main, "mixins.customskinloader.refmap.json"
-    reobfSrgFile = config.srg_notch_map
-    reobfNotchSrgFile = config.srg_notch_map
+    reobfSrgFile = 'mixin.srg'
+    reobfNotchSrgFile = 'mixin.srg'
 }
 
 sourceSets {

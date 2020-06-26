@@ -1,0 +1,25 @@
+CL: com/mojang/blaze3d/matrix/MatrixStack net/minecraft/class_4587
+CL: net/minecraft/client/entity/AbstractClientPlayer net/minecraft/class_742
+CL: net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
+CL: net/minecraft/client/Minecraft net/minecraft/class_310
+CL: net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_1046
+CL: net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
+CL: net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
+CL: net/minecraft/client/resources/SkinManager net/minecraft/class_1071
+CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
+CL: net/minecraft/scoreboard/ScoreObjective net/minecraft/class_266
+CL: net/minecraft/scoreboard/Scoreboard net/minecraft/class_269
+CL: net/minecraft/tileentity/TileEntitySkull net/minecraft/class_2631
+CL: net/minecraft/util/ResourceLocation net/minecraft/class_2960
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/processTask net/minecraft/class_1046/field_20843
+MD: net/minecraft/client/entity/AbstractClientPlayer/getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; net/minecraft/class_742/method_3120 (Lnet/minecraft/class_2960;Ljava/lang/String;)Lnet/minecraft/class_1046;
+MD: net/minecraft/client/entity/AbstractClientPlayer/getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; net/minecraft/class_742/method_3124 (Ljava/lang/String;)Lnet/minecraft/class_2960;
+MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V net/minecraft/class_355/method_1919 (ILnet/minecraft/class_269;Lnet/minecraft/class_266;)V
+MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V net/minecraft/class_355/method_1919 (Lnet/minecraft/class_4587;ILnet/minecraft/class_269;Lnet/minecraft/class_266;)V
+MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z net/minecraft/class_310/method_1542 ()Z
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_1046/method_22795 (Ljava/io/InputStream;)Lnet/minecraft/class_1011;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; net/minecraft/class_1046/method_22798 (Lnet/minecraft/class_1011;)Lnet/minecraft/class_1011;
+MD: net/minecraft/client/resources/SkinManager/loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V net/minecraft/class_1071/method_4652 (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/class_1071$class_1072;Z)V
+MD: net/minecraft/client/resources/SkinManager/loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; net/minecraft/class_1071/method_4651 (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/class_1071$class_1072;)Lnet/minecraft/class_2960;
+MD: net/minecraft/client/resources/SkinManager/loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; net/minecraft/class_1071/method_4654 (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;
+MD: net/minecraft/tileentity/TileEntitySkull/updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; net/minecraft/class_2631/method_11335 (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile;

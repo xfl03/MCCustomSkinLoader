@@ -1,17 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
-}
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
 
 ext.configFile = file "build.properties"
 configFile.withReader {
@@ -49,8 +37,30 @@ jar {
         attributes 'TweakVersion': version
         attributes 'TweakOrder'  : '-10'
     }
-    exclude 'net/minecraft/client/renderer/texture/NativeImage.class'
-    exclude 'net/minecraft/client/Minecraft.class'
+    from {
+        configurations.provided.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'net/minecraft/client/renderer/texture/**'
+}
+
+repositories {
+    maven {
+        name = "sponge"
+        url = "https://repo.spongepowered.org/maven"
+    }
+}
+
+dependencies {
+    implementation 'org.spongepowered:mixin:0.8'
+    provided fileTree(dir: '../Vanilla/libs', include: '*.jar')
+}
+
+mixin {
+    add sourceSets.main, "mixins.customskinloader.refmap.json"
+    reobfSrgFile = 'mixin.srg'
+    reobfNotchSrgFile = 'mixin.srg'
 }
 
 sourceSets {
@@ -58,14 +68,18 @@ sourceSets {
         java {
             //Common
             srcDir '../Common/source'
+            //Fabric, we need mixin classes
+            srcDir '../Fabric/source'
             //Vanilla
-            srcDir '../Vanilla'
+            srcDir '../Vanilla/source'
             //Special
             srcDir 'source'
         }
         resources {
             //Common
             srcDir '../Common/resource'
+            //Special
+            srcDir 'resource'
         }
     }
 }

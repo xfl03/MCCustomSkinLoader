@@ -1,0 +1,38 @@
+net/minecraft/client/gui/GuiPlayerTabOverlay awh
+net/minecraft/client/gui/spectator/PlayerMenuObject bad
+net/minecraft/client/Minecraft ave
+	field_71412_D v
+	func_110432_I ()Lnet/minecraft/util/Session; L
+	func_110434_K ()Lnet/minecraft/client/renderer/texture/TextureManager; P
+	func_147104_D ()Lnet/minecraft/client/multiplayer/ServerData; D
+	func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; ab
+	func_152344_a (Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture; a
+	func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; aa
+	func_71410_x ()Lnet/minecraft/client/Minecraft; A
+net/minecraft/client/multiplayer/ServerData bde
+	field_78845_b b
+net/minecraft/client/renderer/IImageBuffer bfm
+	func_152634_a ()V a
+	func_78432_a (Ljava/awt/image/BufferedImage;)Ljava/awt/image/BufferedImage; a
+net/minecraft/client/renderer/ThreadDownloadImageData bma
+net/minecraft/client/renderer/texture/DownloadingTexture bma
+net/minecraft/client/renderer/texture/ITextureObject bmk
+net/minecraft/client/renderer/texture/SimpleTexture bme
+net/minecraft/client/renderer/texture/Texture bly
+net/minecraft/client/renderer/texture/TextureManager bmj
+	func_110579_a (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z a
+	func_110581_b (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; b
+net/minecraft/client/renderer/texture/ThreadDownloadImageData bma
+net/minecraft/client/resources/DefaultPlayerSkin bmz
+	func_177334_a (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; a
+	func_177335_a ()Lnet/minecraft/util/ResourceLocation; a
+net/minecraft/client/resources/SkinManager bnp
+	func_152790_a (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
+net/minecraft/client/resources/SkinManager$SkinAvailableCallback bnp$a
+	func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V a
+net/minecraft/tileentity/TileEntitySkull alo
+net/minecraft/util/ResourceLocation jy
+net/minecraft/util/Session avm
+	func_148256_e ()Lcom/mojang/authlib/GameProfile; e
+net/minecraft/util/StringUtils nx
+	func_76338_a (Ljava/lang/String;)Ljava/lang/String; a

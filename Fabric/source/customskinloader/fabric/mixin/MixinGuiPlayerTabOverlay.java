@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(GuiPlayerTabOverlay.class)
+@SuppressWarnings("target")
 public abstract class MixinGuiPlayerTabOverlay {
     @Redirect(
         method = {
