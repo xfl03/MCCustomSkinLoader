@@ -54,7 +54,7 @@ repositories {
 
 dependencies {
     implementation 'org.spongepowered:mixin:0.8'
-    provided fileTree(dir: '../Vanilla/libs', include: '*.jar')
+    provided fileTree(dir: "${rootDir}/Vanilla/libs", include: "*.jar")
 }
 
 mixin {
