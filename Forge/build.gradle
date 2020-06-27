@@ -50,16 +50,16 @@ sourceSets {
     main {
         java {
             //Common
-            srcDir '../Common/source'
+            srcDir "${rootDir}/Common/source"
             //Forge
-            srcDir 'source'
+            srcDir "source"
         }
         resources {
             //Common
-            srcDir '../Common/resource'
-            exclude 'Profile.json'
+            srcDir "${rootDir}/Common/resource"
+            exclude "Profile.json"
             //Forge
-            srcDir 'resource'
+            srcDir "resource"
         }
     }
 }
@@ -107,10 +107,10 @@ task afterBuild {
     doLast {
         //copyBuildFile
         copy {
-            from 'build/libs'
-            into '../build/libs'
-            include '**/*.jar'
-            exclude '**/*-sources.jar'
+            from "build/libs"
+            into "${rootDir}/build/libs"
+            include "**/*.jar"
+            exclude "**/*-sources.jar"
         }
     }
 }

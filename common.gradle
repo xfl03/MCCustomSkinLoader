@@ -59,27 +59,27 @@ dependencies {
 
 mixin {
     add sourceSets.main, "mixins.customskinloader.refmap.json"
-    reobfSrgFile = 'mixin.srg'
-    reobfNotchSrgFile = 'mixin.srg'
+    reobfSrgFile = "mixin.srg"
+    reobfNotchSrgFile = "mixin.srg"
 }
 
 sourceSets {
     main {
         java {
             //Common
-            srcDir '../Common/source'
+            srcDir "${rootDir}/Common/source"
             //Fabric, we need mixin classes
-            srcDir '../Fabric/source'
+            srcDir "${rootDir}/Fabric/source"
             //Vanilla
-            srcDir '../Vanilla/source'
+            srcDir "${rootDir}/Vanilla/source"
             //Special
-            srcDir 'source'
+            srcDir "source"
         }
         resources {
             //Common
-            srcDir '../Common/resource'
+            srcDir "${rootDir}/Common/resource"
             //Special
-            srcDir 'resource'
+            srcDir "resource"
         }
     }
 }
@@ -110,12 +110,12 @@ task afterBuild {
 
         //copyBuildFile
         copy {
-            from 'build/libs'
-            into '../build/libs'
-            include '**/*.jar'
-            exclude '**/*-srg.jar'
-            exclude '**/*-dev.jar'
-            exclude '**/*-sources.jar'
+            from "build/libs"
+            into "${rootDir}/build/libs"
+            include "**/*.jar"
+            exclude "**/*-srg.jar"
+            exclude "**/*-dev.jar"
+            exclude "**/*-sources.jar"
         }
 
         //copyProfileJson
