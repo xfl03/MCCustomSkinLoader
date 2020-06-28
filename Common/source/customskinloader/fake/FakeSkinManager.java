@@ -31,7 +31,7 @@ import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager {
-    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
+    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(CustomSkinLoader.config.threadPoolSize, CustomSkinLoader.config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     private final TextureManager textureManager;
 
     private final Map<ResourceLocation, MinecraftProfileTexture> modelCache = new HashMap<>();
@@ -39,9 +39,6 @@ public class FakeSkinManager {
     public FakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
         this.textureManager = textureManagerInstance;
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory;
-
-        //Init CustomSkinLoader earlier
-        CustomSkinLoader.initStatic();
     }
 
     public ResourceLocation loadSkin(MinecraftProfileTexture profileTexture, Type textureType) {
