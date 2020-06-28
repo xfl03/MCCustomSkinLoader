@@ -6,5 +6,6 @@
   "mcFullVersions": "${mcFullVersions}",
   "forgeVersion": "${forgeVersion}",
   "gitVersion": "${gitVersion}",
-  "buildUrl": "${buildUrl}"
+  "buildUrl": "${buildUrl}",
+  "buildTime": "${releaseTime}"
 }
