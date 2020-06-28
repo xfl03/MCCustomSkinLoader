@@ -1,24 +1,93 @@
 {
-  "id": "${mcVersion}-CSL-${modShortFullVersion}",
-  "inheritsFrom": "${mcVersion}",
-  "jar": "${mcVersion}",
-  "releaseTime": "2013-01-02T21:10:00+08:00",
-  "time": "2013-01-02T21:10:00+08:00",
-  "type": "release",
   "arguments": {
     "game": [
       "--tweakClass",
       "customskinloader.tweaker.Tweaker"
     ]
   },
-  "mainClass": "net.minecraft.launchwrapper.Launch",
+  "id": "${mcVersion}-CSL-${modShortFullVersion}",
+  "inheritsFrom": "${mcVersion}",
   "libraries": [
     {
-      "name": "customskinloader:CustomSkinLoader_${mcVersion}:${modFullVersion}",
-      "url": "https://csl.littleservice.cn/libraries/"
+      "downloads": {
+        "artifact": {
+          "path": "customskinloader/CustomSkinLoader_${mcVersion}/${modFullVersion}/CustomSkinLoader_${mcVersion}-${modFullVersion}.jar",
+          "sha1": "{SHA1}",
+          "size": -1,
+          "url": "https://csl.littleservice.cn/libraries/customskinloader/CustomSkinLoader_${mcVersion}/${modFullVersion}/CustomSkinLoader_${mcVersion}-${modFullVersion}.jar"
+        }
+      },
+      "name": "customskinloader:CustomSkinLoader_${mcVersion}:${modFullVersion}"
     },
     {
-      "name": "net.minecraft:launchwrapper:1.12"
+      "downloads": {
+        "artifact": {
+          "path": "org/ow2/asm/asm/8.0.1/asm-8.0.1.jar",
+          "sha1": "3f5199523fb95304b44563f5d56d9f5a07270669",
+          "size": 121772,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/8.0.1/asm-8.0.1.jar"
+        }
+      },
+      "name": "org.ow2.asm:asm:8.0.1"
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "org/ow2/asm/asm-analysis/8.0.1/asm-analysis-8.0.1.jar",
+          "sha1": "6c2c7b3006b3a54dd63467a020263c0756fd5e80",
+          "size": 33438,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/8.0.1/asm-analysis-8.0.1.jar"
+        }
+      },
+      "name": "org.ow2.asm:asm-analysis:8.0.1"
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "org/ow2/asm/asm-commons/8.0.1/asm-commons-8.0.1.jar",
+          "sha1": "019c7ba355f0737815205518e332a8dc08b417c6",
+          "size": 71563,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/8.0.1/asm-commons-8.0.1.jar"
+        }
+      },
+      "name": "org.ow2.asm:asm-commons:8.0.1"
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "org/ow2/asm/asm-tree/8.0.1/asm-tree-8.0.1.jar",
+          "sha1": "dfcad5abbcff36f8bdad5647fe6f4972e958ad59",
+          "size": 52628,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/8.0.1/asm-tree-8.0.1.jar"
+        }
+      },
+      "name": "org.ow2.asm:asm-tree:8.0.1"
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "org/ow2/asm/asm-util/8.0.1/asm-util-8.0.1.jar",
+          "sha1": "a8f978fbad00c565210bebedb28e5d6f73327134",
+          "size": 84795,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/8.0.1/asm-util-8.0.1.jar"
+        }
+      },
+      "name": "org.ow2.asm:asm-util:8.0.1"
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "org/spongepowered/mixin/0.8.1-SNAPSHOT/mixin-0.8.1-20200124.185151-1.jar",
+          "sha1": "c7c000c209a33783cf80f7105032b8d89e1f65d2",
+          "size": 934746,
+          "url": "https://repo.spongepowered.org/maven/org/spongepowered/mixin/0.8.1-SNAPSHOT/mixin-0.8.1-20200124.185151-1.jar"
+        }
+      },
+      "name": "org.spongepowered:mixin:0.8.1-SNAPSHOT"
     }
-  ]
+  ],
+  "mainClass": "net.minecraft.launchwrapper.Launch",
+  "releaseTime": "${releaseTime}",
+  "time": "${releaseTime}",
+  "type": "release"
 }

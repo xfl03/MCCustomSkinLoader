@@ -1,17 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
-}
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
 
 ext.configFile = file "build.properties"
 configFile.withReader {
@@ -49,23 +37,48 @@ jar {
         attributes 'TweakVersion': version
         attributes 'TweakOrder'  : '-10'
     }
-    exclude 'net/minecraft/client/renderer/texture/NativeImage.class'
-    exclude 'net/minecraft/client/Minecraft.class'
+    from {
+        configurations.provided.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'net/minecraft/client/renderer/texture/**'
+    exclude 'Profile.json'
+}
+
+repositories {
+    maven {
+        name = "sponge"
+        url = "https://repo.spongepowered.org/maven"
+    }
+}
+
+dependencies {
+    implementation 'org.spongepowered:mixin:0.8'
+    provided fileTree(dir: "${rootDir}/Vanilla/libs", include: "*.jar")
+}
+
+mixin {
+    add sourceSets.main, "mixins.customskinloader.refmap.json"
+    reobfSrgFile = "mixin.srg"
+    reobfNotchSrgFile = "mixin.srg"
 }
 
 sourceSets {
     main {
         java {
             //Common
-            srcDir '../Common/source'
+            srcDir "${rootDir}/Common/source"
             //Vanilla
-            srcDir '../Vanilla'
+            srcDir "${rootDir}/Vanilla/source"
             //Special
-            srcDir 'source'
+            srcDir "source"
         }
         resources {
             //Common
-            srcDir '../Common/resource'
+            srcDir "${rootDir}/Common/resource"
+            //Special
+            srcDir "resource"
         }
     }
 }
@@ -79,9 +92,12 @@ processResources {
             mcFullVersions     : config.minecraft_full_versions,
             forgeVersion       : config.forge_version,
             gitVersion         : System.getenv("CIRCLE_SHA1"),
-            buildUrl           : System.getenv("CIRCLE_BUILD_URL")
+            buildUrl           : System.getenv("CIRCLE_BUILD_URL"),
+            releaseTime        : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
     ])
 }
+
+import java.security.MessageDigest
 
 apply from: rootProject.file("BuildScripts/remap.gradle")
 task afterBuild {
@@ -96,12 +112,12 @@ task afterBuild {
 
         //copyBuildFile
         copy {
-            from 'build/libs'
-            into '../build/libs'
-            include '**/*.jar'
-            exclude '**/*-srg.jar'
-            exclude '**/*-dev.jar'
-            exclude '**/*-sources.jar'
+            from "build/libs"
+            into "${rootDir}/build/libs"
+            include "**/*.jar"
+            exclude "**/*-srg.jar"
+            exclude "**/*-dev.jar"
+            exclude "**/*-sources.jar"
         }
 
         //copyProfileJson
@@ -109,7 +125,15 @@ task afterBuild {
         String of = String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortVersion)
         File off = rootProject.file(of)
         off.parentFile.mkdirs()
-        f.renameTo(off)
+
+        def digest = MessageDigest.getInstance "SHA1"
+        digest.update file0.getBytes()
+        def sha1 = new BigInteger(1, digest.digest()).toString 16 padLeft 40, "0"
+        off.withWriter "UTF-8", { w ->
+            f.eachLine "UTF-8", { str ->
+                w << "${-> str.contains("{SHA1}") ? str.replace("{SHA1}", sha1) : (!(str =~ $/"size":\s*-1/$) ? str : str.replace("-1", file0.size().toString()))}\n"
+            }
+        }
     }
 }
 build.finalizedBy afterBuild

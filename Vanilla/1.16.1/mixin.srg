@@ -1,0 +1,25 @@
+CL: com/mojang/blaze3d/matrix/MatrixStack dhl
+CL: net/minecraft/client/entity/AbstractClientPlayer ebc
+CL: net/minecraft/client/gui/GuiPlayerTabOverlay dnw
+CL: net/minecraft/client/Minecraft dlx
+CL: net/minecraft/client/renderer/ThreadDownloadImageData elm
+CL: net/minecraft/client/renderer/texture/NativeImage dgs
+CL: net/minecraft/client/renderer/texture/TextureManager elw
+CL: net/minecraft/client/resources/SkinManager emm
+CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback emm$a
+CL: net/minecraft/scoreboard/ScoreObjective dfj
+CL: net/minecraft/scoreboard/Scoreboard dfm
+CL: net/minecraft/tileentity/TileEntitySkull cei
+CL: net/minecraft/util/ResourceLocation uh
+FD: net/minecraft/client/renderer/ThreadDownloadImageData/processTask elm/i
+MD: net/minecraft/client/entity/AbstractClientPlayer/getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; ebc/a (Luh;Ljava/lang/String;)Lelm;
+MD: net/minecraft/client/entity/AbstractClientPlayer/getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; ebc/d (Ljava/lang/String;)Luh;
+MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V dnw/func_175249_a (ILcwl;Lcwi;)V
+MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V dnw/a (Ldhl;ILdfm;Ldfj;)V
+MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z dlx/E ()Z
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; elm/a (Ljava/io/InputStream;)Ldgs;
+MD: net/minecraft/client/renderer/ThreadDownloadImageData/processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; elm/c (Ldgs;)Ldgs;
+MD: net/minecraft/client/resources/SkinManager/loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V emm/a (Lcom/mojang/authlib/GameProfile;Lemm$a;Z)V
+MD: net/minecraft/client/resources/SkinManager/loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; emm/a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lemm$a;)Luh;
+MD: net/minecraft/client/resources/SkinManager/loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; emm/a (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;
+MD: net/minecraft/tileentity/TileEntitySkull/updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; cei/b (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile;

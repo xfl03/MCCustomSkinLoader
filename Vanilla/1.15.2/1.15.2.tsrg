@@ -1,0 +1,43 @@
+customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeTextureManager_1
+	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; b
+customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
+	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V a
+net/minecraft/client/gui/GuiPlayerTabOverlay ddj
+net/minecraft/client/gui/spectator/PlayerMenuObject djn
+net/minecraft/client/Minecraft dbn
+	field_71412_D m
+	func_110432_I ()Lnet/minecraft/util/Session; E
+	func_110434_K ()Lnet/minecraft/client/renderer/texture/TextureManager; H
+	func_147104_D ()Lnet/minecraft/client/multiplayer/ServerData; z
+	func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; S
+	func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; R
+	func_71410_x ()Lnet/minecraft/client/Minecraft; x
+net/minecraft/client/multiplayer/ServerData dnu
+	field_78845_b b
+net/minecraft/client/renderer/ThreadDownloadImageData dzz
+net/minecraft/client/renderer/texture/DownloadingTexture dzz
+net/minecraft/client/renderer/texture/NativeImage cxr
+	func_195699_a (IIIIIIZZ)V a
+	func_195700_a (III)V a
+	func_195702_a ()I a
+	func_195703_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V a
+	func_195709_a (II)I a
+	func_195714_b ()I b
+	func_195715_a (IIIII)V a
+net/minecraft/client/renderer/texture/SimpleTexture eaf
+net/minecraft/client/renderer/texture/Texture dzw
+net/minecraft/client/renderer/texture/TextureManager eak
+net/minecraft/client/renderer/texture/ThreadDownloadImageData dzz
+net/minecraft/client/resources/DefaultPlayerSkin eaq
+	func_177334_a (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; a
+	func_177335_a ()Lnet/minecraft/util/ResourceLocation; a
+net/minecraft/client/resources/SkinManager eaz
+	func_152790_a (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
+net/minecraft/client/resources/SkinManager$SkinAvailableCallback eaz$a
+	func_180521_a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
+net/minecraft/tileentity/TileEntitySkull bxi
+net/minecraft/util/ResourceLocation sm
+net/minecraft/util/Session dbz
+	func_148256_e ()Lcom/mojang/authlib/GameProfile; e
+net/minecraft/util/StringUtils aby
+	func_76338_a (Ljava/lang/String;)Ljava/lang/String; a

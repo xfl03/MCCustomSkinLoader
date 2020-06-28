@@ -4,9 +4,9 @@
   "client": [
     "MixinGuiPlayerTabOverlay",
     "MixinMinecraft",
+    "MixinPlayerMenuObject",
     "MixinSkinManager",
     "MixinTextureManager",
-    "MixinThreadDownloadImageData",
     "MixinTileEntitySkull"
   ],
   "refmap": "mixins.customskinloader.refmap.json",

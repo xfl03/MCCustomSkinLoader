@@ -1,0 +1,38 @@
+{
+  "arguments": {
+    "game": [
+      "--tweakClass",
+      "customskinloader.tweaker.Tweaker"
+    ]
+  },
+  "id": "${mcVersion}-CSL-${modShortFullVersion}",
+  "inheritsFrom": "${mcVersion}",
+  "libraries": [
+    {
+      "downloads": {
+        "artifact": {
+          "path": "customskinloader/CustomSkinLoader_${mcVersion}/${modFullVersion}/CustomSkinLoader_${mcVersion}-${modFullVersion}.jar",
+          "sha1": "{SHA1}",
+          "size": -1,
+          "url": "https://csl.littleservice.cn/libraries/customskinloader/CustomSkinLoader_${mcVersion}/${modFullVersion}/CustomSkinLoader_${mcVersion}-${modFullVersion}.jar"
+        }
+      },
+      "name": "customskinloader:CustomSkinLoader_${mcVersion}:${modFullVersion}"
+    },
+    {
+      "downloads": {
+        "artifact": {
+          "path": "org/spongepowered/mixin/0.7.11-SNAPSHOT/mixin-0.7.11-20180703.121122-1.jar",
+          "sha1": "7a670207bdb97db418118ad1e9bb42424ff3776d",
+          "size": 1017668,
+          "url": "https://repo.spongepowered.org/maven/org/spongepowered/mixin/0.7.11-SNAPSHOT/mixin-0.7.11-20180703.121122-1.jar"
+        }
+      },
+      "name": "org.spongepowered:mixin:0.7.11-SNAPSHOT"
+    }
+  ],
+  "mainClass": "net.minecraft.launchwrapper.Launch",
+  "releaseTime": "${releaseTime}",
+  "time": "${releaseTime}",
+  "type": "release"
+}
