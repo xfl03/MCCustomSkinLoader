@@ -30,6 +30,7 @@ minecraft {
 }
 
 jar {
+    exclude 'customskinloader/tweaker/**'
     exclude 'net/minecraft/client/renderer/texture/**'
 }
 
@@ -55,6 +56,8 @@ sourceSets {
         java {
             //Common
             srcDir "${rootDir}/Common/source"
+            //Vanilla
+            srcDir "${rootDir}/Vanilla/source"
             //Fabric
             srcDir "source"
         }

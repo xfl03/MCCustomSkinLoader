@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;

@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.tileentity.TileEntitySkull;

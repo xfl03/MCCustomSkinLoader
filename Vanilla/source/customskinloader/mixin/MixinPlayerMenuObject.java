@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import customskinloader.fake.FakeClientPlayer;
 import net.minecraft.client.gui.spectator.PlayerMenuObject;

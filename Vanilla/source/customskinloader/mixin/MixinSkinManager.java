@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import java.io.File;
 import java.util.Map;

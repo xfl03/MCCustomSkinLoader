@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import customskinloader.fake.itf.IFakeTextureManager_1;
 import customskinloader.fake.itf.IFakeTextureManager_2;

@@ -1,6 +1,6 @@
 {
   "compatibilityLevel": "JAVA_8",
-  "package": "customskinloader.fabric.mixin",
+  "package": "customskinloader.mixin",
   "client": [
     "MixinGuiPlayerTabOverlay",
     "MixinMinecraft",

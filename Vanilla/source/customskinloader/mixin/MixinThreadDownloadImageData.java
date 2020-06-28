@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import customskinloader.fake.FakeSkinBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;

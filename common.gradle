@@ -69,8 +69,6 @@ sourceSets {
         java {
             //Common
             srcDir "${rootDir}/Common/source"
-            //Fabric, we need mixin classes
-            srcDir "${rootDir}/Fabric/source"
             //Vanilla
             srcDir "${rootDir}/Vanilla/source"
             //Special

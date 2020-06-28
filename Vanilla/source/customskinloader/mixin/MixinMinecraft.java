@@ -1,4 +1,4 @@
-package customskinloader.fabric.mixin;
+package customskinloader.mixin;
 
 import customskinloader.fake.itf.IFakeMinecraft;
 import net.minecraft.client.Minecraft;
