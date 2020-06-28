@@ -22,6 +22,8 @@ public @interface Mod {
 
     String acceptedMinecraftVersions() default "";
 
+    String acceptableRemoteVersions() default "";
+
     String certificateFingerprint() default "";
 
     @Retention(RetentionPolicy.RUNTIME)

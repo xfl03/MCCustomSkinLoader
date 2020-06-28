@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
         version = "@MOD_FULL_VERSION@",
         clientSideOnly = true,
         acceptedMinecraftVersions = "[1.8,)",
+        acceptableRemoteVersions = "*",
         certificateFingerprint = "52885f395e68f42e9b3b629ba56ecf606f7d4269"
 )//1.13-
 public class ForgeMod {
