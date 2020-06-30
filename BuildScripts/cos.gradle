@@ -122,8 +122,10 @@ void uploadArtifacts(String shortVersion) {
     String cslversion = shortVersion.replace(".", "")
     LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>()
     LinkedHashMap<String, String> map2 = new LinkedHashMap<String, String>()
+    LinkedHashMap<String, String> map3 = new LinkedHashMap<String, String>()
     map.put("version", shortVersion)
     map.put("downloads", map2)
+    map.put("launchermeta", map3)
 
     File[] files = dir.listFiles()
     for (file in files) {
@@ -136,6 +138,8 @@ void uploadArtifacts(String shortVersion) {
 
         if (key.endsWith(".jar")) {
             map2.put(mcversion, url)
+        } else if (key.endsWith(".json")) {
+            map3.put(mcversion, url)
         }
     }
 
