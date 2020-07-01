@@ -115,7 +115,17 @@ public class HttpRequestUtil {
             }
 
             //Init Connection
-            String url = new URI(request.url).toASCIIString();
+            URL rawUrl = new URL(request.url);
+            URI uri = new URI(
+                rawUrl.getProtocol(),
+                rawUrl.getUserInfo(),
+                rawUrl.getHost(),
+                rawUrl.getPort(),
+                rawUrl.getPath(),
+                rawUrl.getQuery(),
+                rawUrl.getRef()
+            );
+            String url = uri.toASCIIString();
             if (!url.equalsIgnoreCase(request.url))
                 CustomSkinLoader.logger.debug("Encoded URL: " + url);
             HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
