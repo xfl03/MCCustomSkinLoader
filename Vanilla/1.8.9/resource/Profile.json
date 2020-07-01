@@ -22,6 +22,17 @@
     {
       "downloads": {
         "artifact": {
+          "path": "net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar",
+          "sha1": "111e7bea9c968cdb3d06ef4632bf7ff0824d0f36",
+          "size": 32999,
+          "url": "https://libraries.minecraft.net/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
+        }
+      },
+      "name": "net.minecraft:launchwrapper:1.12"
+    },
+    {
+      "downloads": {
+        "artifact": {
           "path": "org/spongepowered/mixin/0.7.11-SNAPSHOT/mixin-0.7.11-20180703.121122-1.jar",
           "sha1": "7a670207bdb97db418118ad1e9bb42424ff3776d",
           "size": 1017668,
