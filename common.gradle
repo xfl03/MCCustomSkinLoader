@@ -37,11 +37,6 @@ jar {
         attributes 'TweakVersion': version
         attributes 'TweakOrder'  : '-10'
     }
-    from {
-        configurations.provided.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
     exclude 'net/minecraft/client/renderer/texture/**'
     exclude 'Profile.json'
 }
@@ -55,7 +50,6 @@ repositories {
 
 dependencies {
     implementation 'org.spongepowered:mixin:0.8'
-    provided fileTree(dir: "${rootDir}/Vanilla/libs", include: "*.jar")
 }
 
 mixin {
@@ -77,6 +71,8 @@ sourceSets {
         resources {
             //Common
             srcDir "${rootDir}/Common/resource"
+            //Vanilla
+            srcDir "${rootDir}/Vanilla/resource"
             //Special
             srcDir "resource"
         }
