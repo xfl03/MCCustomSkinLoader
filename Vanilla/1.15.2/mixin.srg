@@ -15,7 +15,7 @@ FD: net/minecraft/client/renderer/ThreadDownloadImageData/processTask dzz/i
 MD: net/minecraft/client/entity/AbstractClientPlayer/getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; dpy/a (Lsm;Ljava/lang/String;)Ldzz;
 MD: net/minecraft/client/entity/AbstractClientPlayer/getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; dpy/d (Ljava/lang/String;)Lsm;
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V ddj/a (ILcwl;Lcwi;)V
-MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V ddj/func_238523_a_ (Lcyl;ILbhk;Lbhg;)V
+MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V ddj/func_238523_a_ (Lcyl;ILcwl;Lcwi;)V
 MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z dbn/A ()Z
 MD: net/minecraft/client/renderer/ThreadDownloadImageData/loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; dzz/a (Ljava/io/InputStream;)Lcxr;
 MD: net/minecraft/client/renderer/ThreadDownloadImageData/processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; dzz/c (Lcxr;)Lcxr;

@@ -1,5 +1,7 @@
 modLoader="javafml"
 loaderVersion="[25,)"
+license="GPL-3.0-only"
+issueTrackerURL="https://github.com/xfl03/MCCustomSkinLoader/issues"
 [[mods]]
 modId="customskinloader"
 version="${modFullVersion}"
@@ -7,7 +9,6 @@ displayName="CustomSkinLoader"
 description='''
 Custom Skin Loader for Minecraft
 '''
-issueTrackerURL="https://github.com/xfl03/MCCustomSkinLoader/issues"
 displayURL="https://github.com/xfl03/MCCustomSkinLoader"
 authors=["xfl03", "JLChnToZ"]
 [[dependencies.customskinloader]]

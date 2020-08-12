@@ -44,65 +44,65 @@
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm/8.0.1/asm-8.0.1.jar",
-          "sha1": "3f5199523fb95304b44563f5d56d9f5a07270669",
-          "size": 121772,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/8.0.1/asm-8.0.1.jar"
+          "path": "org/ow2/asm/asm/9.0-beta/asm-9.0-beta.jar",
+          "sha1": "a0f58cad836a410f6ba133aaa209aea7e54aaf8a",
+          "size": 121792,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.0-beta/asm-9.0-beta.jar"
         }
       },
-      "name": "org.ow2.asm:asm:8.0.1"
+      "name": "org.ow2.asm:asm:9.0-beta"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-analysis/8.0.1/asm-analysis-8.0.1.jar",
-          "sha1": "6c2c7b3006b3a54dd63467a020263c0756fd5e80",
-          "size": 33438,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/8.0.1/asm-analysis-8.0.1.jar"
+          "path": "org/ow2/asm/asm-analysis/9.0-beta/asm-analysis-9.0-beta.jar",
+          "sha1": "9b2089525d568178cdbf8d7682dc65a995399adc",
+          "size": 33449,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.0-beta/asm-analysis-9.0-beta.jar"
         }
       },
-      "name": "org.ow2.asm:asm-analysis:8.0.1"
+      "name": "org.ow2.asm:asm-analysis:9.0-beta"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-commons/8.0.1/asm-commons-8.0.1.jar",
-          "sha1": "019c7ba355f0737815205518e332a8dc08b417c6",
-          "size": 71563,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/8.0.1/asm-commons-8.0.1.jar"
+          "path": "org/ow2/asm/asm-commons/9.0-beta/asm-commons-9.0-beta.jar",
+          "sha1": "70822fba45de318e51f6d6d297db294f44bd826e",
+          "size": 71597,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.0-beta/asm-commons-9.0-beta.jar"
         }
       },
-      "name": "org.ow2.asm:asm-commons:8.0.1"
+      "name": "org.ow2.asm:asm-commons:9.0-beta"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-tree/8.0.1/asm-tree-8.0.1.jar",
-          "sha1": "dfcad5abbcff36f8bdad5647fe6f4972e958ad59",
-          "size": 52628,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/8.0.1/asm-tree-8.0.1.jar"
+          "path": "org/ow2/asm/asm-tree/9.0-beta/asm-tree-9.0-beta.jar",
+          "sha1": "c781acc4a83b6f4c953cbb1d9649e4f8c51cc2f2",
+          "size": 52684,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.0-beta/asm-tree-9.0-beta.jar"
         }
       },
-      "name": "org.ow2.asm:asm-tree:8.0.1"
+      "name": "org.ow2.asm:asm-tree:9.0-beta"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-util/8.0.1/asm-util-8.0.1.jar",
-          "sha1": "a8f978fbad00c565210bebedb28e5d6f73327134",
-          "size": 84795,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/8.0.1/asm-util-8.0.1.jar"
+          "path": "org/ow2/asm/asm-util/9.0-beta/asm-util-9.0-beta.jar",
+          "sha1": "f6ce2fde6333772aa0f13058997ec92fdd12c89d",
+          "size": 84868,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.0-beta/asm-util-9.0-beta.jar"
         }
       },
-      "name": "org.ow2.asm:asm-util:8.0.1"
+      "name": "org.ow2.asm:asm-util:9.0-beta"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/spongepowered/mixin/0.8.1-SNAPSHOT/mixin-0.8.1-20200124.185151-1.jar",
-          "sha1": "c7c000c209a33783cf80f7105032b8d89e1f65d2",
-          "size": 934746,
-          "url": "https://repo.spongepowered.org/maven/org/spongepowered/mixin/0.8.1-SNAPSHOT/mixin-0.8.1-20200124.185151-1.jar"
+          "path": "org/spongepowered/mixin/0.8.1-SNAPSHOT/mixin-0.8.1-20200722.172507-2.jar",
+          "sha1": "c18aed9fc9d0aff8186004a5c504da897190ed81",
+          "size": 933612,
+          "url": "https://repo.spongepowered.org/maven/org/spongepowered/mixin/0.8.1-SNAPSHOT/mixin-0.8.1-20200722.172507-2.jar"
         }
       },
       "name": "org.spongepowered:mixin:0.8.1-SNAPSHOT"
