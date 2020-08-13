@@ -11,6 +11,7 @@ hs_err_pid*
 .vscode/
 
 # eclipse
+bin/
 */.classpath
 .classpath
 */.project
