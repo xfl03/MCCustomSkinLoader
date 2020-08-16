@@ -2,9 +2,7 @@ package customskinloader;
 
 import java.io.File;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -54,7 +52,20 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache=new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
 
-    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+    //Correct thread name in thread pool
+    private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
+    private static final ThreadFactory customFactory = r -> {
+        Thread t = defaultFactory.newThread(r);
+        if(r instanceof Thread) {
+            t.setName(((Thread) r).getName());
+        }
+        return t;
+    };
+    //Thread pool will discard oldest task when queue reaches 333 tasks
+    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+            config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES,
+            new LinkedBlockingQueue<>(333), customFactory, new ThreadPoolExecutor.DiscardOldestPolicy()
+    );
     
     //For User Skin
     public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){

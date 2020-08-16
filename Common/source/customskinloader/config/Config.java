@@ -27,8 +27,8 @@ public class Config {
     public boolean forceIgnoreHttpsCertificate = false;
     public boolean forceLoadAllTextures=false;
     public boolean enableCape = true;
-    public int threadPoolSize = 1;
-    public int retryTime = 3;
+    public int threadPoolSize = 3;
+    public int retryTime = 1;
 
     //Cache
     public int cacheExpiry=30;

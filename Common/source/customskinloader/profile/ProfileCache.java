@@ -59,7 +59,7 @@ public class ProfileCache {
     public void updateCache(String username,UserProfile profile,boolean saveLocalProfile){
         CachedProfile cp=getCachedProfile(username);
         cp.profile=profile;
-        cp.expiryTime=TimeUtil.getUnixTimestampRandomDelay(CustomSkinLoader.config.cacheExpiry);
+        cp.expiryTime=TimeUtil.getUnixTimestamp(CustomSkinLoader.config.cacheExpiry);
         if(!saveLocalProfile)
             return;
         saveLocalProfile(username,profile);
