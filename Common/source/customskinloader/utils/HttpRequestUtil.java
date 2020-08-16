@@ -208,7 +208,7 @@ public class HttpRequestUtil {
             return responce;
 
         } catch (Exception e) {
-            CustomSkinLoader.logger.debug("Failed to request (Exception: " + e.toString() + ")");
+            CustomSkinLoader.logger.debug("Failed to request " + request.url + " (Exception: " + e.toString() + ")");
             return loadFromCache(request, new HttpResponce());
         }
     }
@@ -224,7 +224,7 @@ public class HttpRequestUtil {
     private static HttpResponce loadFromCache(HttpRequest request, HttpResponce responce, long expireTime) {
         if (request.cacheFile == null || !request.cacheFile.isFile())
             return responce;
-        CustomSkinLoader.logger.debug("Cache file found (Length: " + request.cacheFile.length() + " , Path: '" + request.cacheFile.getAbsolutePath() + "' , Expire: " + expireTime + "')");
+        CustomSkinLoader.logger.debug("Cache file found (Length: " + request.cacheFile.length() + " , Path: '" + request.cacheFile.getAbsolutePath() + "' , Expire: " + expireTime + ")");
         responce.fromCache = true;
         responce.success = true;
         if (!request.loadContent)

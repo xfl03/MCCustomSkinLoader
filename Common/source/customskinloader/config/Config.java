@@ -28,6 +28,7 @@ public class Config {
     public boolean forceLoadAllTextures=false;
     public boolean enableCape = true;
     public int threadPoolSize = 1;
+    public int retryTime = 3;
 
     //Cache
     public int cacheExpiry=30;
@@ -58,6 +59,7 @@ public class Config {
         config.loadExtraList();
         config.initLocalFolder();
         config.threadPoolSize = Math.max(config.threadPoolSize, 1);
+        config.retryTime = Math.max(config.retryTime, 0);
         if(config.ignoreHttpsCertificate)
             HttpUtil0.ignoreHttpsCertificate();
         if(config.enableCacheAutoClean && !config.enableLocalProfileCache){
