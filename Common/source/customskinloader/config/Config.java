@@ -30,10 +30,12 @@ public class Config {
     public int threadPoolSize = 3;
     public int retryTime = 1;
 
-    //Cache
+    //Profile Cache
     public int cacheExpiry=30;
     public boolean forceUpdateSkull = false;
     public boolean enableLocalProfileCache=false;
+
+    //Network Cache
     public boolean enableCacheAutoClean=false;
     public boolean forceDisableCache = false;
 
