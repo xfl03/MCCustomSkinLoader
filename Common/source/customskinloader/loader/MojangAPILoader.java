@@ -60,7 +60,7 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
 
         HttpResponce responce = HttpRequestUtil.makeHttpRequest(
                 new HttpRequest(apiRoot + "profiles/minecraft")
-                        .setCacheTime(-1).setPayload(gson.toJson(Collections.singletonList(username)))
+                        .setCacheTime(600).setPayload(gson.toJson(Collections.singletonList(username)))
         );
         if (StringUtils.isEmpty(responce.content))
             return null;

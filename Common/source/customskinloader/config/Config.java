@@ -24,7 +24,7 @@ public class Config {
     //Function
     public boolean enableDynamicSkull=true;
     public boolean enableTransparentSkin=true;
-    public boolean ignoreHttpsCertificate=false;
+    public boolean forceIgnoreHttpsCertificate = false;
     public boolean forceLoadAllTextures=false;
     public boolean enableCape = true;
     public int threadPoolSize = 1;
@@ -32,9 +32,10 @@ public class Config {
 
     //Cache
     public int cacheExpiry=30;
-    public boolean enableUpdateSkull=false;
+    public boolean forceUpdateSkull = false;
     public boolean enableLocalProfileCache=false;
     public boolean enableCacheAutoClean=false;
+    public boolean forceDisableCache = false;
 
     //Init config
     public Config(SkinSiteProfile[] loadlist){
@@ -60,7 +61,7 @@ public class Config {
         config.initLocalFolder();
         config.threadPoolSize = Math.max(config.threadPoolSize, 1);
         config.retryTime = Math.max(config.retryTime, 0);
-        if(config.ignoreHttpsCertificate)
+        if(config.forceIgnoreHttpsCertificate)
             HttpUtil0.ignoreHttpsCertificate();
         if(config.enableCacheAutoClean && !config.enableLocalProfileCache){
             try{

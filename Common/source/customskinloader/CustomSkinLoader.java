@@ -161,7 +161,7 @@ public class CustomSkinLoader {
         
         if(username == null || credential == null)
             return dynamicSkullManager.getTexture(gameProfile);
-        if(config.enableUpdateSkull?profileCache.isReady(credential):profileCache.isExist(credential)){
+        if(config.forceUpdateSkull ?profileCache.isReady(credential):profileCache.isExist(credential)){
             UserProfile profile=profileCache.getProfile(credential);
             return ModelManager0.fromUserProfile(profile);
         }
@@ -173,7 +173,7 @@ public class CustomSkinLoader {
                 loadProfile0(gameProfile);//Load in thread
                 Thread.currentThread().setName(tempName);
             };
-            if (config.enableUpdateSkull) {
+            if (config.forceUpdateSkull) {
                 new Thread(loadThread).start();
             } else {
                 threadPool.execute(loadThread);
