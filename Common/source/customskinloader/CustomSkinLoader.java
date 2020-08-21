@@ -194,10 +194,13 @@ public class CustomSkinLoader {
     }
     
     private static Logger initLogger() {
-        Logger logger=new Logger(LOG_FILE);
-        logger.info("CustomSkinLoader "+CustomSkinLoader_FULL_VERSION);
-        logger.info("DataDir: "+DATA_DIR.getAbsolutePath());
-        logger.info("Minecraft: "+MinecraftUtil.getMinecraftMainVersion()+"("+MinecraftUtil.getMinecraftVersionText()+")");
+        Logger logger = new Logger(LOG_FILE);
+        logger.info("CustomSkinLoader " + CustomSkinLoader_FULL_VERSION);
+        logger.info("DataDir: " + DATA_DIR.getAbsolutePath());
+        logger.info("Operating System: " + System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version"));
+        logger.info("Java Version: " + System.getProperty("java.version") + ", " + System.getProperty("java.vendor"));
+        logger.info("Java VM Version: " + System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor"));
+        logger.info("Minecraft: " + MinecraftUtil.getMinecraftMainVersion() + "(" + MinecraftUtil.getMinecraftVersionText() + ")");
         return logger;
     }
 }
