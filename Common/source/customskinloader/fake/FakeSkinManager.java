@@ -63,22 +63,24 @@ public class FakeSkinManager {
     }
 
     public void loadProfileTextures(final GameProfile profile, final SkinAvailableCallback skinAvailableCallback, final boolean requireSecure) {
-        THREAD_POOL.execute(new Runnable() {
-            public void run() {
-                final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
-                map.putAll(customskinloader.CustomSkinLoader.loadProfile(profile));
+        THREAD_POOL.execute(() -> {
+            final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
+            map.putAll(CustomSkinLoader.loadProfile(profile));
 
-                for (MinecraftProfileTexture.Type type : MinecraftProfileTexture.Type.values()) {
-                    MinecraftProfileTexture profileTexture = map.get(type);
-                    if (profileTexture != null) {
-                        HttpTextureInfo info = HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
-                        FakeThreadDownloadImageData.downloadTexture(info.cacheFile, info.url);
+            for (MinecraftProfileTexture.Type type : MinecraftProfileTexture.Type.values()) {
+                MinecraftProfileTexture profileTexture = map.get(type);
+                if (profileTexture != null) {
+                    HttpTextureInfo info = HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
+                    FakeThreadDownloadImageData.downloadTexture(info.cacheFile, info.url);
 
-                        ((IFakeMinecraft) Minecraft.getMinecraft()).execute(() -> {
-                            CustomSkinLoader.logger.debug("Loading type:" + type);
-                            FakeSkinManager.this.loadSkin(profileTexture, info, type, skinAvailableCallback);
-                        });
-                    }
+                    ((IFakeMinecraft) Minecraft.getMinecraft()).execute(() -> {
+                        CustomSkinLoader.logger.debug("Loading type: " + type);
+                        try {
+                            this.loadSkin(profileTexture, info, type, skinAvailableCallback);
+                        } catch (Throwable t) {
+                            CustomSkinLoader.logger.warning(t);
+                        }
+                    });
                 }
             }
         });
