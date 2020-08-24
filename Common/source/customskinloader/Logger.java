@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -97,10 +99,8 @@ public class Logger {
         warning(String.format(format, objs));
     }
     public void warning(Throwable e){
-        log(Level.WARNING,"Exception: "+e.toString());
-        StackTraceElement[] stes=e.getStackTrace();
-        for(StackTraceElement ste : stes){
-            log(Level.WARNING,ste.toString());
-        }
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        log(Level.WARNING,"Exception: "+sw.toString());
     }
 }
