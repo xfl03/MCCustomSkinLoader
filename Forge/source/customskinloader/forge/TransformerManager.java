@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import customskinloader.Logger;
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -82,7 +81,7 @@ public class TransformerManager {
     }
 
     public ClassNode transform(ClassNode classNode) {
-        IClassTransformer transformer = classMap.get(FMLDeobfuscatingRemapper.INSTANCE.map(classNode.name).replace("/", "."));
+        IClassTransformer transformer = classMap.get(classNode.name.replace("/", "."));
         if (transformer != null) {
             try {
                 transformer.transform(classNode);
