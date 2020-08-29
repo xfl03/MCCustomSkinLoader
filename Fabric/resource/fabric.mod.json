@@ -15,9 +15,6 @@
   
   "environment": "client",
   "mixins": [
-    {
-      "config": "mixins.customskinloader.json",
-      "environment": "client"
-    }
+    "mixins.customskinloader.json"
   ]
 }
