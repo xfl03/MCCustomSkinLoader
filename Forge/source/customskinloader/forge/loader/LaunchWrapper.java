@@ -7,7 +7,6 @@ import customskinloader.forge.transformer.SkinManagerTransformer;
 import customskinloader.forge.transformer.SpectatorMenuTransformer;
 import customskinloader.forge.transformer.TileEntitySkullTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -51,9 +50,7 @@ public class LaunchWrapper implements IClassTransformer {
         //Transform ClassNode
         transformerManager.transform(cn);
         for (MethodNode mn : cn.methods) {
-            String methodName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(obfClassName, mn.name, mn.desc);
-            String methodDesc = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(mn.desc);
-            transformerManager.transform(cn, mn, className, methodName, methodDesc);
+            transformerManager.transform(cn, mn, className, mn.name, mn.desc);
         }
 
         //Parse Class Node to bytes

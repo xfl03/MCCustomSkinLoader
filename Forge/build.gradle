@@ -32,15 +32,15 @@ compileJava {
 jar {
     manifest {
         attributes([
-                "FMLCorePlugin"              : "customskinloader.forge.ForgePlugin",
-                "FMLCorePluginContainsFMLMod": true,
-                "Specification-Title"        : "CustomSkinLoader",
-                "Specification-Vendor"       : "xfl03",
-                "Specification-Version"      : "1",
-                "Implementation-Title"       : "CustomSkinLoader",
-                "Implementation-Version"     : "${version}",
-                "Implementation-Vendor"      : "xfl03",
-                "Implementation-Timestamp"   : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "TweakClass"              : "customskinloader.forge.ForgeTweaker",
+                "TweakOrder"              : -10,
+                "Specification-Title"     : "CustomSkinLoader",
+                "Specification-Vendor"    : "xfl03",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : "CustomSkinLoader",
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "xfl03",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
     exclude 'net/minecraft/client/renderer/texture/**'
