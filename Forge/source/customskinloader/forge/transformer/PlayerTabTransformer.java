@@ -6,8 +6,8 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 import customskinloader.forge.TransformerManager.IMethodTransformer;
 import customskinloader.forge.TransformerManager.TransformTarget;
@@ -20,14 +20,11 @@ public class PlayerTabTransformer {
         //From: http://git.oschina.net/AsteriskTeam/TabIconHackForge/blob/master/src/main/java/kengxxiao/tabiconhack/coremod/TabIconHackForgeClassTransformer.java#L30-L43
         @Override
         public void transform(ClassNode cn, MethodNode mn) {
-            ListIterator<AbstractInsnNode> iterator = mn.instructions.iterator();
-            while (iterator.hasNext()) {
+            for (ListIterator<AbstractInsnNode> iterator = mn.instructions.iterator(); iterator.hasNext();) {
                 AbstractInsnNode node = iterator.next();
-                if (node instanceof VarInsnNode) {
-                    VarInsnNode varNode = (VarInsnNode) node;
-                    if (varNode.getOpcode() == Opcodes.ISTORE && varNode.var == 11) {
-                        mn.instructions.set(varNode.getPrevious(), new InsnNode(Opcodes.ICONST_1));
-                    }
+                if (node.getOpcode() == Opcodes.INVOKEVIRTUAL && ((MethodInsnNode) node).name.equals("func_71387_A")) {
+                    mn.instructions.insertBefore(node, new InsnNode(Opcodes.POP));
+                    mn.instructions.set(node, new InsnNode(Opcodes.ICONST_1));
                 }
             }
         }

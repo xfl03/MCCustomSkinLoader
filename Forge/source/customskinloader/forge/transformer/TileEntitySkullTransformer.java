@@ -3,6 +3,7 @@ package customskinloader.forge.transformer;
 import customskinloader.forge.TransformerManager;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -20,6 +21,7 @@ public class TileEntitySkullTransformer {
             InsnList il = new InsnList();
             il.add(new VarInsnNode(Opcodes.ALOAD, 0));
             il.add(new InsnNode(Opcodes.ARETURN));
+            il.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             mn.instructions.insert(il);
         }
     }
