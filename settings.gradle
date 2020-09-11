@@ -2,7 +2,7 @@
 include "Vanilla/1.8.9"
 include "Vanilla/1.12.2"
 include "Vanilla/1.15.2"
-include "Vanilla/1.16.2"
+include "Vanilla/1.16.3"
 
 //Universal Forge Edition for [1.8,)
 include "Forge"
