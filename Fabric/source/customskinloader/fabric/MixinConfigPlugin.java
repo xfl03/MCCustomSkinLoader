@@ -1,22 +1,41 @@
 package customskinloader.fabric;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Type;
+import com.google.gson.Gson;
+import customskinloader.Logger;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public class MixinConfigPlugin implements IMixinConfigPlugin {
+    public static Logger logger = new Logger(new File("./CustomSkinLoader/FabricPlugin.log"));
+
+    private MinecraftVersion version = null;
+
     @Override
     public void onLoad(String mixinPackage) {
-
+        URL versionJson = this.getClass().getResource("/version.json");
+        if (versionJson != null) {
+            logger.info("\"version.json\": " + versionJson.toString());
+            try (
+                InputStream is = versionJson.openStream();
+                InputStreamReader isr = new InputStreamReader(is)
+            ) {
+                this.version = new Gson().fromJson(isr, MinecraftVersion.class);
+                logger.info(this.version.toString());
+            } catch (Throwable t) {
+                logger.warning("An exception occurred when reading \"version.json\"!");
+                logger.warning(t);
+            }
+        } else {
+            logger.warning("Can't read \"version.json\"! Ignore this message if the version you start is earlier than 18w47b.");
+        }
     }
 
     @Override
@@ -26,27 +45,14 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!mixinClassName.equals("customskinloader.mixin.MixinThreadDownloadImageData")) {
-            return true;
+        boolean result = true;
+        if (mixinClassName.endsWith(".MixinThreadDownloadImageData")) {
+            result = this.version != null && this.version.world_version >= 2205 && this.version.protocol_version >= 554; // 19w38a+
+        } else if (mixinClassName.endsWith(".MixinLayerCape") || mixinClassName.endsWith(".MixinRenderPlayer")) {
+            result = this.version != null && this.version.world_version >= 2210 && this.version.protocol_version >= 558; // 19w41a+
         }
-
-        // ProcessTask didn't exist in ThreadDownloadImageData before 1.15-snapshot, Mixin shouldn't apply this.
-        try (InputStream is = this.getClass().getResourceAsStream("/" + targetClassName.replace(".", "/") + ".class")) {
-            if (is == null) {
-                return true;
-            }
-            ClassNode cn = new ClassNode();
-            new ClassReader(IOUtils.toByteArray(is)).accept(cn, 0);
-            for (FieldNode fn : cn.fields) {
-                if (fn.desc.equals(Type.getDescriptor(Runnable.class))) {
-                    return true;
-                }
-            }
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
+        logger.info("target: " + targetClassName + ", mixin: " + mixinClassName + ", result: " + result);
+        return result;
     }
 
     @Override
