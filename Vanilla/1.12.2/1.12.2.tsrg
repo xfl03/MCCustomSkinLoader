@@ -1,5 +1,3 @@
-net/minecraft/client/gui/GuiPlayerTabOverlay bjq
-net/minecraft/client/gui/spectator/PlayerMenuObject boo
 net/minecraft/client/Minecraft bib
 	field_71412_D w
 	func_110432_I ()Lnet/minecraft/util/Session; K
@@ -9,12 +7,16 @@ net/minecraft/client/Minecraft bib
 	func_152344_a (Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture; a
 	func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; X
 	func_71410_x ()Lnet/minecraft/client/Minecraft; z
+net/minecraft/client/gui/GuiPlayerTabOverlay bjq
+net/minecraft/client/gui/spectator/PlayerMenuObject boo
 net/minecraft/client/multiplayer/ServerData bse
 	field_78845_b b
 net/minecraft/client/renderer/IImageBuffer but
 	func_152634_a ()V a
 	func_78432_a (Ljava/awt/image/BufferedImage;)Ljava/awt/image/BufferedImage; a
 net/minecraft/client/renderer/ThreadDownloadImageData cdh
+net/minecraft/client/renderer/entity/RenderPlayer cct
+net/minecraft/client/renderer/entity/layers/LayerCape cbr
 net/minecraft/client/renderer/texture/DownloadingTexture cdh
 net/minecraft/client/renderer/texture/ITextureObject cds
 net/minecraft/client/renderer/texture/SimpleTexture cdm

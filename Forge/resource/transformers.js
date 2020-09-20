@@ -118,6 +118,27 @@ function initializeCoreMod() {
                 });
                 return cn;
             }
+        },
+        'RenderPlayer_LayerCapeTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'names': function (target) {
+                    return ['net/minecraft/client/renderer/entity/PlayerRenderer', 'net/minecraft/client/renderer/entity/layers/CapeLayer'];
+                }
+            },
+            'transformer': function (cn) {
+                cn.methods.forEach(function (mn) {
+                    if (mn.name === 'func_229145_a_' || mn.name === 'func_229159_a_') { // PlayerRenderer.renderItem || CapeLayer.render
+                        for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
+                            var node = iterator.next();
+                            if (node.getOpcode() === Opcodes.INVOKESTATIC && node.name === "func_228634_a_") { // RenderType.getEntitySolid
+                                node.name = "func_228644_e_" // RenderType.getEntityTranslucent
+                            }
+                        }
+                    }
+                });
+                return cn;
+            }
         }
     };
 }

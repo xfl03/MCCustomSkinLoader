@@ -1,8 +1,11 @@
+CL: net/minecraft/client/Minecraft bib
 CL: net/minecraft/client/entity/AbstractClientPlayer bua
 CL: net/minecraft/client/gui/GuiPlayerTabOverlay bjq
 CL: net/minecraft/client/gui/spectator/PlayerMenuObject boo
-CL: net/minecraft/client/Minecraft bib
+CL: net/minecraft/client/model/ModelRenderer brs
 CL: net/minecraft/client/renderer/ThreadDownloadImageData cdh
+CL: net/minecraft/client/renderer/entity/RenderPlayer cct
+CL: net/minecraft/client/renderer/entity/layers/LayerCape cbr
 CL: net/minecraft/client/renderer/texture/TextureManager cdr
 CL: net/minecraft/client/resources/SkinManager cex
 CL: net/minecraft/client/resources/SkinManager$SkinAvailableCallback cex$a
@@ -11,13 +14,18 @@ CL: net/minecraft/scoreboard/Scoreboard bhk
 CL: net/minecraft/tileentity/TileEntitySkull awd
 CL: net/minecraft/util/ResourceLocation nf
 FD: net/minecraft/client/renderer/ThreadDownloadImageData/processTask cdh/field_229155_i_
+MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z bib/D ()Z
 MD: net/minecraft/client/entity/AbstractClientPlayer/getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; bua/a (Lnf;Ljava/lang/String;)Lcdh;
 MD: net/minecraft/client/entity/AbstractClientPlayer/getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; bua/e (Ljava/lang/String;)Lnf;
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V bjq/a (ILbhk;Lbhg;)V
 MD: net/minecraft/client/gui/GuiPlayerTabOverlay/renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V bjq/func_238523_a_ (Lcom/mojang/blaze3d/matrix/MatrixStack;ILbhk;Lbhg;)V
-MD: net/minecraft/client/Minecraft/isIntegratedServerRunning ()Z bib/D ()Z
+MD: net/minecraft/client/renderer/RenderType/getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; net/minecraft/client/renderer/RenderType/func_228634_a_ (Lnf;)Lnet/minecraft/net/minecraft/client/renderer/RenderType;
 MD: net/minecraft/client/renderer/ThreadDownloadImageData/loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; cdh/func_229159_a_ (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage;
 MD: net/minecraft/client/renderer/ThreadDownloadImageData/processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; cdh/func_229163_c_ (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;
+MD: net/minecraft/client/renderer/entity/RenderPlayer/renderItem (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V cct/func_229145_a_ (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILbua;Lbrs;Lbrs;)V
+MD: net/minecraft/client/renderer/entity/RenderPlayer/renderItem (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;Lnet/minecraft/client/entity/player/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V cct/func_229145_a_ (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;Lbua;Lbrs;Lbrs;)V
+MD: net/minecraft/client/renderer/entity/layers/LayerCape/doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayer;FFFFFF)V cbr/func_225628_a_ (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILbua;FFFFFF)V
+MD: net/minecraft/client/renderer/entity/layers/LayerCape/doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayer;FFFFFFF)V cbr/func_225628_a_ (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILbua;FFFFFFF)V
 MD: net/minecraft/client/resources/SkinManager/loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V cex/a (Lcom/mojang/authlib/GameProfile;Lcex$a;Z)V
 MD: net/minecraft/client/resources/SkinManager/loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; cex/a (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lcex$a;)Lnf;
 MD: net/minecraft/client/resources/SkinManager/loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; cex/a (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;

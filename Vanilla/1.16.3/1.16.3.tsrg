@@ -2,8 +2,6 @@ customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeT
 	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; b
 customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V a
-net/minecraft/client/gui/GuiPlayerTabOverlay dlv
-net/minecraft/client/gui/spectator/PlayerMenuObject dsg
 net/minecraft/client/Minecraft djw
 	field_71412_D n
 	func_110432_I ()Lnet/minecraft/util/Session; I
@@ -12,9 +10,15 @@ net/minecraft/client/Minecraft djw
 	func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; Y
 	func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; X
 	func_71410_x ()Lnet/minecraft/client/Minecraft; B
+net/minecraft/client/gui/GuiPlayerTabOverlay dlv
+net/minecraft/client/gui/spectator/PlayerMenuObject dsg
 net/minecraft/client/multiplayer/ServerData dwr
 	field_78845_b b
+net/minecraft/client/renderer/RenderType eag
+	func_228644_e_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; h
 net/minecraft/client/renderer/ThreadDownloadImageData ejl
+net/minecraft/client/renderer/entity/RenderPlayer ejc
+net/minecraft/client/renderer/entity/layers/LayerCape ehm
 net/minecraft/client/renderer/texture/DownloadingTexture ejl
 net/minecraft/client/renderer/texture/NativeImage deq
 	func_195699_a (IIIIIIZZ)V a

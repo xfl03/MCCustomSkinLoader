@@ -3,8 +3,6 @@ customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeT
 	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; method_4619
 customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V method_4616
-net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
-net/minecraft/client/gui/spectator/PlayerMenuObject net/minecraft/class_530
 net/minecraft/client/Minecraft net/minecraft/class_310
 	field_71412_D field_1697
 	func_110432_I ()Lnet/minecraft/util/Session; method_1548
@@ -13,12 +11,18 @@ net/minecraft/client/Minecraft net/minecraft/class_310
 	func_152342_ad ()Lnet/minecraft/client/resources/SkinManager; method_1582
 	func_152347_ac ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; method_1495
 	func_71410_x ()Lnet/minecraft/client/Minecraft; method_1551
+net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
+net/minecraft/client/gui/spectator/PlayerMenuObject net/minecraft/class_530
 net/minecraft/client/multiplayer/ServerData net/minecraft/class_642
 	field_78845_b field_3761
+net/minecraft/client/renderer/RenderType net/minecraft/class_1921
+	func_228644_e_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; method_23580
 net/minecraft/client/renderer/IImageBuffer net/minecraft/class_760
 	func_152634_a ()V method_3238
 	func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; method_3237
 net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_1046
+net/minecraft/client/renderer/entity/RenderPlayer net/minecraft/class_1007
+net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/class_972
 net/minecraft/client/renderer/texture/DownloadingTexture net/minecraft/class_1046
 net/minecraft/client/renderer/texture/ITextureObject net/minecraft/class_1062
 net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
