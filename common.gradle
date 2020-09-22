@@ -55,8 +55,8 @@ dependencies {
 
 mixin {
     add sourceSets.main, "mixins.customskinloader.refmap.json"
-    reobfSrgFile = "mixin.srg"
-    reobfNotchSrgFile = "mixin.srg"
+    reobfSrgFile = "build/mixin.srg"
+    reobfNotchSrgFile = "build/mixin.srg"
 }
 
 sourceSets {
@@ -97,15 +97,43 @@ processResources {
 import java.security.MessageDigest
 
 apply from: rootProject.file("BuildScripts/remap.gradle")
+reobf {
+    jar {
+        if (config.srg_notch_map != null) {
+            mappings = file("build/reobf.srg")
+        }
+    }
+}
+
+task genSrgMap {
+    doLast {
+        if (config.srg_notch_map != null) {
+            // convert mappings
+            tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
+            tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
+        }
+    }
+}
+clean.finalizedBy genSrgMap
+build.dependsOn genSrgMap
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { System.getenv("KEY_PASS") != null }
+    doLast { System.out.println("Jar will be signed.") }
+
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+
+    keyStore = "${rootDir}/Common/CustomSkinLoader.jks"
+    alias = 'CustomSkinLoader'
+    storePass = System.getenv("KEY_PASS")
+    keyPass = System.getenv("KEY_PASS")
+}
+build.dependsOn signJar
+
 task afterBuild {
     doLast {
-        //renameSrgJar
         def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
-        def file1 = file("build/libs/${archivesBaseName}-${version}-srg.jar")
-        file0.renameTo(file1)
-
-        //reobfSrgToNotch
-        reobfSrgToNotch()
 
         //copyBuildFile
         copy {

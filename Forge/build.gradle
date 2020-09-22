@@ -97,7 +97,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     inputFile = jar.archivePath
     outputFile = jar.archivePath
 
-    keyStore = 'CustomSkinLoader.jks'
+    keyStore = "${rootDir}/Common/CustomSkinLoader.jks"
     alias = 'CustomSkinLoader'
     storePass = System.getenv("KEY_PASS")
     keyPass = System.getenv("KEY_PASS")

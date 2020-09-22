@@ -58,6 +58,48 @@ String getDefaultMap(String srgType) {
     return System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/${config.forge_mc_version}/srgs/${srgType}.srg"
 }
 
+static void tsrg2srg(File tsrg, File srg) {
+    if (!tsrg.exists()) {
+        return
+    }
+    if (!srg.getParentFile().exists()) {
+        srg.getParentFile().mkdirs()
+    }
+    srg.deleteOnExit()
+
+    String mcpClass = "", obfClass = ""
+    Map<String, String> map = new HashMap<>()
+    for (String line : tsrg.readLines("UTF-8")) {
+        String[] strs = line.split($/\s/$)
+        if (!line.startsWith("\t")) {
+            mcpClass = strs[0]
+            obfClass = strs[1]
+            map.put "L" + mcpClass + ";", "L" + obfClass + ";"
+        }
+    }
+
+    String srgStr = "";
+    for (String line : tsrg.readLines("UTF-8")) {
+        String[] strs = line.split($/\s/$)
+        if (!line.startsWith("\t")) {
+            mcpClass = strs[0]
+            obfClass = strs[1]
+            srgStr += "CL: ${-> mcpClass} ${-> obfClass}\n"
+        } else if (strs.length == 3) {
+            srgStr += "FD: ${-> mcpClass}/${-> strs[1]} ${-> obfClass}/${-> strs[2]}\n"
+        } else if (strs.length == 4) {
+            String mcpDesc = strs[2]
+            String obfDesc = mcpDesc
+            map.forEach {k, v ->
+                obfDesc = obfDesc.replace(k, v)
+            }
+            srgStr += "MD: ${-> mcpClass}/${-> strs[1]} ${-> strs[2]} ${-> obfClass}/${-> strs[3]} ${-> obfDesc}\n"
+        }
+    }
+    srg.write srgStr, "UTF-8"
+}
+
 ext {
     reobfSrgToNotch = this.&reobfSrgToNotch
+    tsrg2srg = this.&tsrg2srg
 }
