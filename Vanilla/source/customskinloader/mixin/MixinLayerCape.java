@@ -12,15 +12,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinLayerCape {
     @Redirect(
         method = {
-            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayer;FFFFFFF)V", // 19w39a~19w44a
-            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayer;FFFFFF)V" // 19w45a+
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", // 19w39a~19w44a
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V" // 19w45a+
         },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/renderer/RenderType;getEntitySolid(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;"
         )
     )
-    private RenderType redirect_renderItem_render(ResourceLocation locationIn) {
+    private RenderType redirect_doRenderLayer(ResourceLocation locationIn) {
         return RenderType.func_228644_e_(locationIn);
     }
 }
