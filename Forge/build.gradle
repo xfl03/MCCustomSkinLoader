@@ -97,6 +97,9 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     inputFile = jar.archivePath
     outputFile = jar.archivePath
 
+    // To prevent modlauncher from checking signer information about Minecraft classes in CustomSkinLoader jar after forge-1.16.3-34.1.27.
+    exclude "net/minecraft/client/**"
+
     keyStore = "${rootDir}/Common/CustomSkinLoader.jks"
     alias = 'CustomSkinLoader'
     storePass = System.getenv("KEY_PASS")
