@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Maps;
+import com.google.common.hash.Hashing;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
@@ -49,7 +50,7 @@ public class FakeSkinManager {
     }
 
     private ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final HttpTextureInfo info, final Type textureType, final SkinAvailableCallback skinAvailableCallback) {
-        final ResourceLocation resourcelocation = new ResourceLocation("skins/" + info.hash);
+        final ResourceLocation resourcelocation = new ResourceLocation("skins/" + Hashing.sha1().hashUnencodedChars(info.hash).toString());
 
         if (((IFakeTextureManager_1) this.textureManager).func_229267_b_(resourcelocation) != null) {//Have already loaded
             makeCallback(skinAvailableCallback, textureType, resourcelocation, modelCache.getOrDefault(resourcelocation, profileTexture));
