@@ -1,5 +1,4 @@
 var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
-var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
@@ -40,10 +39,8 @@ function initializeCoreMod() {
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
                     if (mn.name === 'func_174884_b') {
-                        var il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                        il.add(new InsnNode(Opcodes.ARETURN));
-                        mn.instructions.insert(il);
+                        mn.instructions.insert(new InsnNode(Opcodes.ARETURN));
+                        mn.instructions.insert(new VarInsnNode(Opcodes.ALOAD, 0));
                     }
                 });
                 return cn;
