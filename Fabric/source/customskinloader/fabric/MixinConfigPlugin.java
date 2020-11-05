@@ -7,7 +7,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import customskinloader.Logger;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -16,7 +17,8 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 public class MixinConfigPlugin implements IMixinConfigPlugin {
     public static Logger logger = new Logger(new File("./CustomSkinLoader/FabricPlugin.log"));
 
-    private MinecraftVersion version = null;
+    private long world_version;
+    private long protocol_version;
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -27,8 +29,11 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
                 InputStream is = versionJson.openStream();
                 InputStreamReader isr = new InputStreamReader(is)
             ) {
-                this.version = new Gson().fromJson(isr, MinecraftVersion.class);
-                logger.info(this.version.toString());
+                JsonObject object = new JsonParser().parse(isr).getAsJsonObject();
+                String name = object.get("name").getAsString();
+                this.world_version = object.get("world_version").getAsLong();
+                this.protocol_version = object.get("protocol_version").getAsLong();
+                logger.info("MinecraftVersion: {name='" + name + "', world_version='" + this.world_version + "', protocol_version='" + this.protocol_version + "'}");
             } catch (Throwable t) {
                 logger.warning("An exception occurred when reading \"version.json\"!");
                 logger.warning(t);
@@ -47,9 +52,9 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         boolean result = true;
         if (mixinClassName.endsWith(".MixinThreadDownloadImageData")) {
-            result = this.version != null && this.version.world_version >= 2205 && this.version.protocol_version >= 554; // 19w38a+
+            result = this.world_version >= 2205 && this.protocol_version >= 554; // 19w38a+
         } else if (mixinClassName.endsWith(".MixinLayerCape") || mixinClassName.endsWith(".MixinRenderPlayer")) {
-            result = this.version != null && this.version.world_version >= 2210 && this.version.protocol_version >= 558; // 19w41a+
+            result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+
         }
         logger.info("target: " + targetClassName + ", mixin: " + mixinClassName + ", result: " + result);
         return result;
