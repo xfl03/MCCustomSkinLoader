@@ -27,7 +27,7 @@ jobs:
       - run: gradle --version
       - run: gradle clean build
       - run: gradle upload
-      - run: gradle publishGprPublicationToGitHubPackagesRepository
+      # - run: gradle publishGprPublicationToGitHubPackagesRepository
 
       - store_artifacts:
           path: ./build/libs
