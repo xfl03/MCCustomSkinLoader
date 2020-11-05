@@ -31,11 +31,18 @@ minecraft {
 
 jar {
     manifest {
-        attributes 'TweakClass'  : 'customskinloader.tweaker.ModSystemTweaker'
-        attributes 'TweakName'   : rootProject.ext.config.name
-        attributes 'TweakAuthor' : 'xfl03,JLChnToZ'
-        attributes 'TweakVersion': version
-        attributes 'TweakOrder'  : '-10'
+        attributes 'TweakClass'              : 'customskinloader.tweaker.ModSystemTweaker'
+        attributes 'TweakName'               : rootProject.ext.config.name
+        attributes 'TweakAuthor'             : 'xfl03,JLChnToZ'
+        attributes 'TweakVersion'            : version
+        attributes 'TweakOrder'              : '-10'
+        attributes 'Specification-Title'     : 'CustomSkinLoader'
+        attributes 'Specification-Vendor'    : 'xfl03'
+        attributes 'Specification-Version'   : '1'
+        attributes 'Implementation-Title'    : 'CustomSkinLoader'
+        attributes 'Implementation-Version'  : "${version}"
+        attributes 'Implementation-Vendor'   : 'xfl03'
+        attributes 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
     }
     exclude 'net/minecraft/client/renderer/RenderType.class'
     exclude 'net/minecraft/client/renderer/texture/**'
