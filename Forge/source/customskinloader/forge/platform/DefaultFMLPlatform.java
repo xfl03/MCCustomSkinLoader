@@ -10,9 +10,11 @@ import java.util.Set;
 import com.google.common.base.Strings;
 import customskinloader.forge.ForgePlugin;
 import net.minecraft.launchwrapper.ITweaker;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.objectweb.asm.commons.Remapper;
 
 public class DefaultFMLPlatform implements IFMLPlatform {
     private final static String FML_PLUGIN_WRAPPER = "net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper";
@@ -65,6 +67,11 @@ public class DefaultFMLPlatform implements IFMLPlatform {
         Field field = CoreModManager.class.getDeclaredField("loadPlugins");
         field.setAccessible(true);
         ((List<ITweaker>) field.get(null)).add(tweaker);
+    }
+
+    @Override
+    public Remapper getRemapper() {
+        return FMLDeobfuscatingRemapper.INSTANCE;
     }
 
     protected Class<?> getFMLLoadingPluginClass() {

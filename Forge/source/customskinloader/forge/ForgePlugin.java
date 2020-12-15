@@ -5,7 +5,7 @@ import java.util.Map;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.Name("CustomSkinLoader")
-@IFMLLoadingPlugin.SortingIndex(1100)
+@IFMLLoadingPlugin.SortingIndex(-10)
 public class ForgePlugin implements IFMLLoadingPlugin {
 
     @Override

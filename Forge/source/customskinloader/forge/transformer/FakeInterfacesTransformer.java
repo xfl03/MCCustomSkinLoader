@@ -10,8 +10,9 @@ public class FakeInterfacesTransformer {
     )
     public static class MinecraftTransformer implements TransformerManager.IClassTransformer {
         @Override
-        public void transform(ClassNode cn) {
+        public ClassNode transform(ClassNode cn) {
             cn.interfaces.add("customskinloader/fake/itf/IFakeMinecraft");
+            return cn;
         }
     }
 
@@ -20,8 +21,9 @@ public class FakeInterfacesTransformer {
     )
     public static class AbstractTextureTransfomer implements TransformerManager.IClassTransformer {
         @Override
-        public void transform(ClassNode cn) {
+        public ClassNode transform(ClassNode cn) {
             cn.interfaces.add("net/minecraft/client/renderer/texture/Texture");
+            return cn;
         }
     }
 
@@ -30,10 +32,11 @@ public class FakeInterfacesTransformer {
     )
     public static class TextureTransformer implements TransformerManager.IClassTransformer {
         @Override
-        public void transform(ClassNode cn) {
+        public ClassNode transform(ClassNode cn) {
             if (cn.access == 0) {
                 cn.access = Opcodes.ACC_PUBLIC | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT;
             }
+            return cn;
         }
     }
 
@@ -42,9 +45,10 @@ public class FakeInterfacesTransformer {
     )
     public static class TextureManagerTransformer implements TransformerManager.IClassTransformer {
         @Override
-        public void transform(ClassNode cn) {
+        public ClassNode transform(ClassNode cn) {
             cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_1");
             cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_2");
+            return cn;
         }
     }
 }

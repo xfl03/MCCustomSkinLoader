@@ -1,6 +1,9 @@
 package customskinloader.forge.loader;
 
+import java.util.ArrayList;
+
 import customskinloader.forge.TransformerManager;
+import customskinloader.forge.platform.IFMLPlatform;
 import customskinloader.forge.transformer.FakeInterfacesTransformer;
 import customskinloader.forge.transformer.PlayerTabTransformer;
 import customskinloader.forge.transformer.SkinManagerTransformer;
@@ -48,10 +51,15 @@ public class LaunchWrapper implements IClassTransformer {
         }
 
         //Transform ClassNode
-        transformerManager.transform(cn);
+        cn = transformerManager.transform(cn, className);
+        ArrayList<MethodNode> methods = new ArrayList<>();
         for (MethodNode mn : cn.methods) {
-            transformerManager.transform(cn, mn, className, mn.name, mn.desc);
+            String mappedMethodName = IFMLPlatform.FMLPlatformInitializer.platform.getRemapper().mapMethodName(cn.name, mn.name, mn.desc);
+            String mappedMethodDesc = IFMLPlatform.FMLPlatformInitializer.platform.getRemapper().mapMethodDesc(mn.desc);
+            methods.add(transformerManager.transform(cn, mn, className, mappedMethodName, mappedMethodDesc));
         }
+        cn.methods.clear();
+        cn.methods.addAll(methods);
 
         //Parse Class Node to bytes
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);

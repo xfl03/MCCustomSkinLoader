@@ -26,11 +26,11 @@ public class TransformerManager {
     }
 
     public interface IClassTransformer {
-        void transform(ClassNode cn);
+        ClassNode transform(ClassNode cn);
     }
 
     public interface IMethodTransformer {
-        void transform(ClassNode cn, MethodNode mn);
+        MethodNode transform(ClassNode cn, MethodNode mn);
     }
 
     public Map<String, IClassTransformer> classMap = new HashMap<>();
@@ -58,7 +58,7 @@ public class TransformerManager {
     private TransformTarget getTransformTarget(Class<?> cl) {
         logger.info("[CSL DEBUG] REGISTERING TRANSFORMER %s", cl.getName());
         if (!cl.isAnnotationPresent(TransformTarget.class)) {
-            logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation.");
+            logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation");
             return null;
         }
         return cl.getAnnotation(TransformTarget.class);
@@ -76,18 +76,18 @@ public class TransformerManager {
             map.put(className, new HashMap<String, IMethodTransformer>());
         for (String methodName : target.methodNames()) {
             map.get(className).put(methodName + target.desc(), transformer);
-            logger.info("[CSL DEBUG] REGISTERING METHOD %s(%s)", className, methodName + target.desc());
+            logger.info("[CSL DEBUG] REGISTERING METHOD %s::%s", className, methodName + target.desc());
         }
     }
 
-    public ClassNode transform(ClassNode classNode) {
-        IClassTransformer transformer = classMap.get(classNode.name.replace("/", "."));
+    public ClassNode transform(ClassNode classNode, String className) {
+        IClassTransformer transformer = classMap.get(className);
         if (transformer != null) {
             try {
-                transformer.transform(classNode);
-                logger.info("[CSL DEBUG] Successfully transformed class %s", classNode.name);
+                classNode = transformer.transform(classNode);
+                logger.info("[CSL DEBUG] Successfully transformed class %s", className);
             } catch (Exception e) {
-                logger.warning("[CSL DEBUG] An error happened when transforming class %s.", classNode.name);
+                logger.warning("[CSL DEBUG] An error happened when transforming class %s", className);
                 logger.warning(e);
             }
         }
@@ -99,10 +99,10 @@ public class TransformerManager {
         String methodTarget = methodName + methodDesc;
         if (transMap != null && transMap.containsKey(methodTarget)) {
             try {
-                transMap.get(methodTarget).transform(classNode, methodNode);
+                methodNode = transMap.get(methodTarget).transform(classNode, methodNode);
                 logger.info("[CSL DEBUG] Successfully transformed method %s in class %s", methodName, className);
             } catch (Exception e) {
-                logger.warning("[CSL DEBUG] An error happened when transforming method %s in class %s.", methodTarget, className);
+                logger.warning("[CSL DEBUG] An error happened when transforming method %s in class %s", methodTarget, className);
                 logger.warning(e);
             }
         }

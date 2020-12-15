@@ -19,7 +19,7 @@ public class PlayerTabTransformer {
     public static class ScoreObjectiveTransformer implements IMethodTransformer {
         //From: http://git.oschina.net/AsteriskTeam/TabIconHackForge/blob/master/src/main/java/kengxxiao/tabiconhack/coremod/TabIconHackForgeClassTransformer.java#L30-L43
         @Override
-        public void transform(ClassNode cn, MethodNode mn) {
+        public MethodNode transform(ClassNode cn, MethodNode mn) {
             for (ListIterator<AbstractInsnNode> iterator = mn.instructions.iterator(); iterator.hasNext();) {
                 AbstractInsnNode node = iterator.next();
                 if (node.getOpcode() == Opcodes.INVOKEVIRTUAL && ((MethodInsnNode) node).name.equals("func_71387_A")) {
@@ -27,6 +27,7 @@ public class PlayerTabTransformer {
                     mn.instructions.set(node, new InsnNode(Opcodes.ICONST_1));
                 }
             }
+            return mn;
         }
     }
 }
