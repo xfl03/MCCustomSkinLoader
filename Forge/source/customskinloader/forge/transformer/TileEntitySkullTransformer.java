@@ -17,12 +17,13 @@ public class TileEntitySkullTransformer {
     )
     public static class UpdateGameProfileTransformer implements TransformerManager.IMethodTransformer {
         @Override
-        public void transform(ClassNode cn, MethodNode mn) {
+        public MethodNode transform(ClassNode cn, MethodNode mn) {
             InsnList il = new InsnList();
             il.add(new VarInsnNode(Opcodes.ALOAD, 0));
             il.add(new InsnNode(Opcodes.ARETURN));
             il.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             mn.instructions.insert(il);
+            return mn;
         }
     }
 }

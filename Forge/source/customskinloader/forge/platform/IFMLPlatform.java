@@ -11,6 +11,7 @@ import java.util.Set;
 import customskinloader.forge.TransformerManager;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.Launch;
+import org.objectweb.asm.commons.Remapper;
 
 public interface IFMLPlatform {
     enum Result {
@@ -26,6 +27,8 @@ public interface IFMLPlatform {
     }
 
     class FMLPlatformInitializer {
+        public static IFMLPlatform platform;
+
         private final static ServiceLoader<IFMLPlatform> platformsLoader = ServiceLoader.load(IFMLPlatform.class);
         private final static Set<IFMLPlatform> platforms = new HashSet<>();
 
@@ -37,7 +40,6 @@ public interface IFMLPlatform {
 
         @SuppressWarnings("unchecked")
         public static void initFMLPlatform() throws Exception {
-            IFMLPlatform platform = null;
             for (IFMLPlatform platform0 : platforms) {
                 Set<IFMLPlatform> otherPlatforms = new HashSet<>(platforms);
                 otherPlatforms.remove(platform0);
@@ -90,4 +92,6 @@ public interface IFMLPlatform {
     ITweaker createFMLPluginWrapper(String name, File location, int sortIndex) throws Exception;
 
     void addLoadPlugins(ITweaker tweaker) throws Exception;
+
+    Remapper getRemapper();
 }

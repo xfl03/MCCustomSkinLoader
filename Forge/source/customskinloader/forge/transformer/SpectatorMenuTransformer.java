@@ -24,7 +24,7 @@ public class SpectatorMenuTransformer {
     public static class PlayerMenuObjectTransformer implements IMethodTransformer {
 
         @Override
-        public void transform(ClassNode cn, MethodNode mn) {
+        public MethodNode transform(ClassNode cn, MethodNode mn) {
             InsnList il = mn.instructions;
             ListIterator<AbstractInsnNode> li = il.iterator();
 
@@ -50,6 +50,7 @@ public class SpectatorMenuTransformer {
                     break;
                 }
             }
+            return mn;
         }
 
     }
