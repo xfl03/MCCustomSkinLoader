@@ -54,8 +54,8 @@ public class LaunchWrapper implements IClassTransformer {
         cn = transformerManager.transform(cn, className);
         ArrayList<MethodNode> methods = new ArrayList<>();
         for (MethodNode mn : cn.methods) {
-            String mappedMethodName = IFMLPlatform.FMLPlatformInitializer.platform.getRemapper().mapMethodName(cn.name, mn.name, mn.desc);
-            String mappedMethodDesc = IFMLPlatform.FMLPlatformInitializer.platform.getRemapper().mapMethodDesc(mn.desc);
+            String mappedMethodName = IFMLPlatform.FMLPlatformInitializer.getPlatform().getRemapper().mapMethodName(cn.name, mn.name, mn.desc);
+            String mappedMethodDesc = IFMLPlatform.FMLPlatformInitializer.getPlatform().getRemapper().mapMethodDesc(mn.desc);
             methods.add(transformerManager.transform(cn, mn, className, mappedMethodName, mappedMethodDesc));
         }
         cn.methods.clear();

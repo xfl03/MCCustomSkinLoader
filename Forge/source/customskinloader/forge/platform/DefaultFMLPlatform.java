@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.google.common.base.Strings;
 import customskinloader.forge.ForgePlugin;
@@ -71,7 +72,13 @@ public class DefaultFMLPlatform implements IFMLPlatform {
 
     @Override
     public Remapper getRemapper() {
-        return FMLDeobfuscatingRemapper.INSTANCE;
+        // DO NOT replace with lambda or replace call with method body.
+        return new Supplier<Remapper>() {
+            @Override
+            public Remapper get() {
+                return FMLDeobfuscatingRemapper.INSTANCE;
+            }
+        }.get();
     }
 
     protected Class<?> getFMLLoadingPluginClass() {
@@ -83,7 +90,6 @@ public class DefaultFMLPlatform implements IFMLPlatform {
     }
 
     protected String getNameValue(Annotation annotationIn) {
-        assert annotationIn instanceof IFMLLoadingPlugin.Name;
         return ((IFMLLoadingPlugin.Name) annotationIn).value();
     }
 
@@ -92,7 +98,6 @@ public class DefaultFMLPlatform implements IFMLPlatform {
     }
 
     protected int getSortingIndexValue(Annotation annotationIn) {
-        assert annotationIn instanceof IFMLLoadingPlugin.SortingIndex;
         return ((IFMLLoadingPlugin.SortingIndex) annotationIn).value();
     }
 }

@@ -1,6 +1,5 @@
 package customskinloader.forge;
 
-import java.io.File;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,12 +7,10 @@ import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.Map;
 
-import customskinloader.Logger;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public class TransformerManager {
-    public static Logger logger = new Logger(new File("./CustomSkinLoader/ForgePlugin.log"));
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
@@ -56,9 +53,9 @@ public class TransformerManager {
     }
 
     private TransformTarget getTransformTarget(Class<?> cl) {
-        logger.info("[CSL DEBUG] REGISTERING TRANSFORMER %s", cl.getName());
+        ForgeTweaker.logger.info("[CSL DEBUG] REGISTERING TRANSFORMER %s", cl.getName());
         if (!cl.isAnnotationPresent(TransformTarget.class)) {
-            logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation");
+            ForgeTweaker.logger.info("[CSL DEBUG] ERROR occurs while parsing Annotation");
             return null;
         }
         return cl.getAnnotation(TransformTarget.class);
@@ -67,7 +64,7 @@ public class TransformerManager {
     private void addClassTransformer(String className, IClassTransformer transformer) {
         if (!classMap.containsKey(className)) {
             classMap.put(className, transformer);
-            logger.info("[CSL DEBUG] REGISTERING CLASS %s", className);
+            ForgeTweaker.logger.info("[CSL DEBUG] REGISTERING CLASS %s", className);
         }
     }
 
@@ -76,7 +73,7 @@ public class TransformerManager {
             map.put(className, new HashMap<String, IMethodTransformer>());
         for (String methodName : target.methodNames()) {
             map.get(className).put(methodName + target.desc(), transformer);
-            logger.info("[CSL DEBUG] REGISTERING METHOD %s::%s", className, methodName + target.desc());
+            ForgeTweaker.logger.info("[CSL DEBUG] REGISTERING METHOD %s::%s", className, methodName + target.desc());
         }
     }
 
@@ -85,10 +82,10 @@ public class TransformerManager {
         if (transformer != null) {
             try {
                 classNode = transformer.transform(classNode);
-                logger.info("[CSL DEBUG] Successfully transformed class %s", className);
+                ForgeTweaker.logger.info("[CSL DEBUG] Successfully transformed class %s", className);
             } catch (Exception e) {
-                logger.warning("[CSL DEBUG] An error happened when transforming class %s", className);
-                logger.warning(e);
+                ForgeTweaker.logger.warning("[CSL DEBUG] An error happened when transforming class %s", className);
+                ForgeTweaker.logger.warning(e);
             }
         }
         return classNode;
@@ -100,10 +97,10 @@ public class TransformerManager {
         if (transMap != null && transMap.containsKey(methodTarget)) {
             try {
                 methodNode = transMap.get(methodTarget).transform(classNode, methodNode);
-                logger.info("[CSL DEBUG] Successfully transformed method %s in class %s", methodName, className);
+                ForgeTweaker.logger.info("[CSL DEBUG] Successfully transformed method %s in class %s", methodName, className);
             } catch (Exception e) {
-                logger.warning("[CSL DEBUG] An error happened when transforming method %s in class %s", methodTarget, className);
-                logger.warning(e);
+                ForgeTweaker.logger.warning("[CSL DEBUG] An error happened when transforming method %s in class %s", methodTarget, className);
+                ForgeTweaker.logger.warning(e);
             }
         }
         return methodNode;
