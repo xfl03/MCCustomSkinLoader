@@ -3,12 +3,14 @@ package customskinloader.forge.platform;
 import java.io.File;
 import java.net.URL;
 import java.security.CodeSource;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import customskinloader.forge.TransformerManager;
+import customskinloader.forge.ForgeTweaker;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.commons.Remapper;
@@ -27,19 +29,21 @@ public interface IFMLPlatform {
     }
 
     class FMLPlatformInitializer {
-        public static IFMLPlatform platform;
-
-        private final static ServiceLoader<IFMLPlatform> platformsLoader = ServiceLoader.load(IFMLPlatform.class);
-        private final static Set<IFMLPlatform> platforms = new HashSet<>();
-
-        static {
-            for (IFMLPlatform platform : platformsLoader) {
-                platforms.add(platform);
-            }
-        }
+        private static IFMLPlatform platform;
 
         @SuppressWarnings("unchecked")
         public static void initFMLPlatform() throws Exception {
+            Set<IFMLPlatform> platforms = new HashSet<>();
+            List<Throwable> throwables = new ArrayList<>();
+
+            for (Iterator<IFMLPlatform> iterator = ServiceLoader.load(IFMLPlatform.class).iterator(); iterator.hasNext(); ) {
+                try {
+                    platforms.add(iterator.next());
+                } catch (Throwable t) {
+                    throwables.add(t);
+                }
+            }
+
             for (IFMLPlatform platform0 : platforms) {
                 Set<IFMLPlatform> otherPlatforms = new HashSet<>(platforms);
                 otherPlatforms.remove(platform0);
@@ -52,7 +56,12 @@ public interface IFMLPlatform {
                 }
             }
             if (platform == null) {
-                throw new RuntimeException("No platform!");
+                for (int i = 0, len = throwables.size(); i < len; i++) {
+                    Throwable throwable = throwables.get(i);
+                    ForgeTweaker.logger.warning("Platform - %s :", i);
+                    ForgeTweaker.logger.warning(throwable);
+                }
+                throw new RuntimeException("No available platform!");
             }
 
             // CustomSkinLoader is a client side mod
@@ -73,9 +82,13 @@ public interface IFMLPlatform {
                 platform.addLoadPlugins(tweaker);
                 ((List<ITweaker>) Launch.blackboard.get("Tweaks")).add(tweaker);
             } else {
-                TransformerManager.logger.warning("No CodeSource, if this is not a development environment we might run into problems!");
-                TransformerManager.logger.warning(FMLPlatformInitializer.class.getProtectionDomain().toString());
+                ForgeTweaker.logger.warning("No CodeSource, if this is not a development environment we might run into problems!");
+                ForgeTweaker.logger.warning(FMLPlatformInitializer.class.getProtectionDomain().toString());
             }
+        }
+
+        public static IFMLPlatform getPlatform() {
+            return platform;
         }
     }
 
