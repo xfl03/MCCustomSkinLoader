@@ -1,3 +1,9 @@
+//Base Project
+include "Common"
+
+//Vanilla Base Project
+include "Vanilla"
+
 //Special Vanilla Edition
 include "Vanilla/1.8.9"
 include "Vanilla/1.12.2"

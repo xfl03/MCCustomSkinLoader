@@ -2,7 +2,9 @@
   "arguments": {
     "game": [
       "--tweakClass",
-      "customskinloader.tweaker.Tweaker"
+      "customskinloader.tweaker.Tweaker",
+      "--tweakClass",
+      "org.spongepowered.asm.launch.MixinTweaker"
     ]
   },
   "id": "${mcVersion}-CSL-${modShortFullVersion}",

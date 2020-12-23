@@ -1,0 +1,46 @@
+
+// If you want to add dependent project sources for annotation processors in current project,
+// use `projectImplementation project(":xxx")` instead of `dependencies { implementation project(":xxx") }`
+
+class ProjectContainer {
+    static def implementationProjects = [:]
+}
+
+void projectImplementation(Project otherProject) {
+    dependencies {
+        implementation otherProject, {
+            transitive = false
+        }
+    }
+
+    ProjectContainer.implementationProjects.putIfAbsent project, []
+    ProjectContainer.implementationProjects.get project add otherProject
+}
+
+ext {
+    projectImplementation = this.&projectImplementation
+}
+
+// We need to add sourceSets at compile time to avoid IntelliJ IDEA from removing duplicated source roots and to avoid Eclipse add source dirs twice.
+// The reason of that we don't just dependent other subprojects is to let Mixin AP work correctly.
+task setupSourceSets {
+    doLast {
+        sourceSets.main {
+            java {
+                ProjectContainer.implementationProjects.get(project).forEach({
+                    it.sourceSets.main.java.srcDirs.forEach({ targetDir ->
+                        srcDir targetDir
+                    })
+                })
+            }
+            resources {
+                ProjectContainer.implementationProjects.get(project).forEach({
+                    it.sourceSets.main.resources.srcDirs.forEach({ targetDir ->
+                        srcDir targetDir
+                    })
+                })
+            }
+        }
+    }
+}
+deobfCompileDummyTask.dependsOn setupSourceSets

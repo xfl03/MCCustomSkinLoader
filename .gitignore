@@ -24,6 +24,7 @@ bin/
 build/
 gradle/
 gradlew*
+logs/
 run/
 
 # IDEA

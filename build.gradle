@@ -26,8 +26,184 @@ buildscript {
 }
 
 subprojects {
-    if (!project.name.toLowerCase().contains("forge") && !project.name.toLowerCase().contains("fabric"))
-        apply from: rootProject.file('common.gradle')
+    apply plugin: 'net.minecraftforge.gradle.forge'
+
+    ext.configFile = file "build.properties"
+    configFile.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        project.ext.config = new ConfigSlurper().parse prop
+    }
+
+    apply from: rootProject.file("BuildScripts/version.gradle")
+
+    version = getCSLVersion()
+    group = "customskinloader"
+    ext.shortVersion = getShortVersion()
+
+    sourceCompatibility = targetCompatibility = 1.8
+    compileJava {
+        sourceCompatibility = targetCompatibility = 1.8
+    }
+
+    minecraft {
+        version = config.forge_mc_version + "-" + config.forge_version
+        runDir = "run"
+        mappings = config.mappings_version
+
+        replace '@MOD_VERSION@', rootProject.ext.config.version
+        replace '@MOD_FULL_VERSION@', project.version
+        replaceIn 'CustomSkinLoader.java'
+    }
+
+    repositories {
+        maven {
+            name = "sponge"
+            url = "https://repo.spongepowered.org/maven"
+        }
+    }
+
+    // We need to change source dirs for inherited problems.
+    sourceSets.main {
+        java {
+            srcDir "source"
+        }
+        resources {
+            srcDir "resource"
+        }
+    }
+
+    jar {
+        manifest {
+            attributes([
+                    "Specification-Title"     : "CustomSkinLoader",
+                    "Specification-Vendor"    : "xfl03",
+                    "Specification-Version"   : "1",
+                    "Implementation-Title"    : "CustomSkinLoader",
+                    "Implementation-Version"  : "${version}",
+                    "Implementation-Vendor"   : "xfl03",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            ])
+        }
+    }
+
+    // For real subprojects
+    if (!config.is_real_project || Boolean.parseBoolean(config.is_real_project.toString())) {
+        apply from: rootProject.file("BuildScripts/sources.gradle")
+
+        processResources {
+            filesNotMatching("**/*.js") {
+                expand([
+                        modVersion         : rootProject.ext.config.version,
+                        modFullVersion     : project.version,
+                        modShortFullVersion: shortVersion,
+                        mcVersion          : config.minecraft_version,
+                        mcFullVersions     : config.minecraft_full_versions,
+                        forgeVersion       : config.forge_version,
+                        gitVersion         : System.getenv("CIRCLE_SHA1"),
+                        buildUrl           : System.getenv("CIRCLE_BUILD_URL"),
+                        releaseTime        : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                ])
+            }
+        }
+
+        // Mixin stuffs
+        if (!project.name.toLowerCase().contains("forge")) {
+            apply plugin: 'org.spongepowered.mixin'
+
+            dependencies {
+                implementation 'org.spongepowered:mixin:0.8.2'
+            }
+
+            apply from: rootProject.file("BuildScripts/remap.gradle")
+            task genSrgMap {
+                doLast {
+                    if (config.srg_notch_map != null) {
+                        // convert mappings
+                        tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
+                        tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
+                    }
+                }
+            }
+            deobfCompileDummyTask.dependsOn genSrgMap
+
+            mixin {
+                add sourceSets.main, "mixins.customskinloader.refmap.json"
+                reobfSrgFile = "build/mixin.srg"
+                reobfNotchSrgFile = "build/mixin.srg"
+            }
+
+            reobf {
+                jar {
+                    if (config.srg_notch_map != null) {
+                        mappings = file("build/reobf.srg")
+                    }
+                }
+            }
+        }
+
+        task signJar(type: SignJar, dependsOn: reobfJar) {
+            onlyIf { System.getenv("KEY_PASS") != null }
+            doLast { System.out.println("Jar will be signed.") }
+
+            inputFile = jar.archivePath
+            outputFile = jar.archivePath
+
+            // To prevent modlauncher from checking signer information about Minecraft classes in CustomSkinLoader jar after forge-1.16.3-34.1.27.
+            if (project.name.toLowerCase().contains("forge")) {
+                exclude "net/minecraft/client/**"
+            }
+
+            keyStore = "${rootDir}/Common/CustomSkinLoader.jks"
+            alias = 'CustomSkinLoader'
+            storePass = System.getenv("KEY_PASS")
+            keyPass = System.getenv("KEY_PASS")
+        }
+        build.dependsOn signJar
+
+        task afterBuild {
+            doLast {
+                //copyBuildFile
+                copy {
+                    from "build/libs"
+                    into "${rootDir}/build/libs"
+                    include "**/*.jar"
+                    exclude "**/*-srg.jar"
+                    exclude "**/*-dev.jar"
+                    exclude "**/*-sources.jar"
+                }
+            }
+        }
+        build.finalizedBy afterBuild
+
+        apply plugin: 'maven-publish'
+        publishing {
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/xfl03/MCCustomSkinLoader")
+                    credentials {
+                        username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                        password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                    }
+                }
+            }
+            publications {
+                gpr(MavenPublication) {
+                    groupId 'customskinloader'
+                    artifactId project.archivesBaseName
+                    from(components.java)
+                }
+            }
+        }
+        tasks.withType(PublishToMavenRepository) {
+            onlyIf { System.getenv("GITHUB_TOKEN") != null }
+        }
+    }
+
+    if (project.name.toLowerCase().contains("vanilla") && !project.name.toLowerCase().endsWith("vanilla")) {
+        apply from: rootProject.file('Vanilla/common.gradle')
+    }
 }
 
 apply from: rootProject.file('BuildScripts/cos.gradle')
