@@ -25,6 +25,11 @@ buildscript {
     }
 }
 
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = "4.10.3"
+}
+
 subprojects {
     apply plugin: 'net.minecraftforge.gradle.forge'
 

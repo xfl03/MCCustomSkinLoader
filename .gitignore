@@ -22,8 +22,6 @@ bin/
 # gradle
 .gradle/
 build/
-gradle/
-gradlew*
 logs/
 run/
 
