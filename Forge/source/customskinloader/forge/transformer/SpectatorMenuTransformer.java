@@ -3,7 +3,6 @@ package customskinloader.forge.transformer;
 import java.util.ListIterator;
 
 import customskinloader.forge.TransformerManager;
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -11,17 +10,14 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import customskinloader.forge.TransformerManager.IMethodTransformer;
-import customskinloader.forge.TransformerManager.TransformTarget;
-
 /**
  * Transformer of Spectator Menu for 1.13-
  */
 public class SpectatorMenuTransformer {
-    @TransformTarget(className = "net.minecraft.client.gui.spectator.PlayerMenuObject",
+    @TransformerManager.TransformTarget(className = "net.minecraft.client.gui.spectator.PlayerMenuObject",
             methodNames = {"<init>"},
             desc = "(Lcom/mojang/authlib/GameProfile;)V")
-    public static class PlayerMenuObjectTransformer implements IMethodTransformer {
+    public static class PlayerMenuObjectTransformer implements TransformerManager.IMethodTransformer {
 
         @Override
         public MethodNode transform(ClassNode cn, MethodNode mn) {

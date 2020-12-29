@@ -15,5 +15,5 @@ authors=["xfl03", "JLChnToZ"]
 modId="forge"
 mandatory=true
 versionRange="[25,)"
-ordering="NONE"
+ordering="BEFORE" # Make sure all classes of CustomSkinLoader is ordered before than forge so that some classes can be replaced in development environment.
 side="CLIENT"

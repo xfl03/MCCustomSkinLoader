@@ -1,6 +1,7 @@
 package customskinloader.forge;
 
 import customskinloader.CustomSkinLoader;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +33,7 @@ public class ForgeMod {
 
     @Mod.EventHandler
     public void fingerprintError(FMLFingerprintViolationEvent event) {
-        if (event.isDirectory()) return;//Development Environment
+        if ((boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment") || event.isDirectory()) return;//Development Environment
 
         CustomSkinLoader.logger.warning("!!!Fingerprint ERROR!!!");
         CustomSkinLoader.logger.warning("Failed to check fingerprint in file '" + event.getSource().getAbsolutePath() + "'.");
