@@ -1,0 +1,41 @@
+
+archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
+
+jar {
+    manifest {
+        attributes 'TweakClass'  : 'customskinloader.tweaker.ModSystemTweaker'
+        attributes 'TweakName'   : rootProject.ext.config.name
+        attributes 'TweakAuthor' : 'xfl03,JLChnToZ'
+        attributes 'TweakVersion': version
+        attributes 'TweakOrder'  : '-10'
+    }
+    exclude 'net/minecraft/client/renderer/RenderType.class'
+    exclude 'net/minecraft/client/renderer/texture/**'
+    exclude 'Profile.json'
+}
+
+projectImplementation project(':Common')
+projectImplementation project(':Vanilla')
+
+import java.security.MessageDigest
+task afterBuildForVanilla {
+    doLast {
+        def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
+
+        //copyProfileJson
+        File f = project.file("build/resources/main/Profile.json")
+        String of = String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortVersion)
+        File off = rootProject.file(of)
+        off.parentFile.mkdirs()
+
+        def digest = MessageDigest.getInstance "SHA1"
+        digest.update file0.getBytes()
+        def sha1 = new BigInteger(1, digest.digest()).toString 16 padLeft 40, "0"
+        off.withWriter "UTF-8", { w ->
+            f.eachLine "UTF-8", { str ->
+                w << "${-> str.contains("{SHA1}") ? str.replace("{SHA1}", sha1) : (!(str =~ $/"size":\s*-1/$) ? str : str.replace("-1", file0.size().toString()))}\n"
+            }
+        }
+    }
+}
+afterBuild.finalizedBy afterBuildForVanilla

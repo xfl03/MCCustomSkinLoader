@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 public class TileEntitySkullTransformer {
     @TransformerManager.TransformTarget(
         className = "net.minecraft.tileentity.TileEntitySkull",
-        methodNames = {"updateGameProfile", "func_174884_b"},
+        methodNames = {"func_174884_b", "updateGameprofile", "updateGameProfile"},
         desc = "(Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile;"
     )
     public static class UpdateGameProfileTransformer implements TransformerManager.IMethodTransformer {
