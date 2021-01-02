@@ -41,6 +41,9 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         } else {
             logger.warning("Can't read \"version.json\"! Ignore this message if the version you start is earlier than 18w47b.");
         }
+
+        // This mod will remap extra classes when in the development environment.
+        DevEnvRemapper.initRemapper();
     }
 
     @Override

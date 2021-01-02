@@ -8,5 +8,17 @@ jar {
     exclude 'Profile.json'
 }
 
+repositories {
+    maven {
+        name = "fabric"
+        url = "https://maven.fabricmc.net/"
+    }
+}
+
 projectImplementation project(':Common')
 projectImplementation project(':Vanilla')
+
+dependencies {
+    // This is the minimum version number that the mod should dependent in the development environment.
+    implementation "net.fabricmc:fabric-loader:0.4.9+build.160"
+}
