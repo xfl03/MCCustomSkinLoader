@@ -1,6 +1,4 @@
 
-archivesBaseName = rootProject.ext.config.name + "_" + config.minecraft_version
-
 jar {
     manifest {
         attributes 'TweakClass'  : 'customskinloader.tweaker.ModSystemTweaker'

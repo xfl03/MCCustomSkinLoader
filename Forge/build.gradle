@@ -1,8 +1,4 @@
 
-archivesBaseName = "CustomSkinLoader_Forge"
-
-projectImplementation project(':Common')
-
 jar {
     manifest {
         attributes([
@@ -13,6 +9,8 @@ jar {
     exclude 'net/minecraft/client/renderer/texture/**'
     exclude 'net/minecraftforge/**'
 }
+
+projectImplementation project(':Common')
 
 minecraft {
     clientJvmArgs += "-Dfml.coreMods.load=customskinloader.forge.ForgePlugin"
