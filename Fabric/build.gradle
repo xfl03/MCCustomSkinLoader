@@ -1,6 +1,4 @@
 
-archivesBaseName = "CustomSkinLoader_Fabric"
-
 jar {
     exclude 'customskinloader/tweaker/**'
     exclude 'net/minecraft/client/renderer/RenderType.class'
