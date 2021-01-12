@@ -141,7 +141,7 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (checkName(mn.name, "func_229145_a_", null) || checkName(mn.name, "func_229159_a_", null)) { // PlayerRenderer.renderItem || CapeLayer.render
+                    if (checkName(mn.name, "func_229145_a_", null) || checkName(mn.name, "func_225628_a_", null)) { // PlayerRenderer.renderItem || CapeLayer.render
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
                             if (node.getOpcode() === Opcodes.INVOKESTATIC && checkName(node.name, "func_228634_a_", null)) { // RenderType.getEntitySolid
