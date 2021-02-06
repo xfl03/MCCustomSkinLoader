@@ -28,7 +28,6 @@ public class TileEntitySkullTransformer {
             il.add(new JumpInsnNode(Opcodes.IFNE, ln));
             il.add(new VarInsnNode(Opcodes.ALOAD, 0));
             il.add(new InsnNode(Opcodes.ARETURN));
-            il.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             il.add(ln);
             il.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             mn.instructions.insert(il);
