@@ -27,6 +27,7 @@ public class Config {
     public boolean forceIgnoreHttpsCertificate = false;
     public boolean forceLoadAllTextures=false;
     public boolean enableCape = true;
+    public boolean forceFillSkullNBT = false;
     public int threadPoolSize = 3;
     public int retryTime = 1;
 
