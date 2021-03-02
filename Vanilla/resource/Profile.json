@@ -104,7 +104,7 @@
           "path": "org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar",
           "sha1": "1cf212283d26f706fd3074318870bebd14d2a9ed",
           "size": 935252,
-          "url": "https://repo.spongepowered.org/maven/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar"
+          "url": "https://repo.spongepowered.org/repository/maven-public/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar"
         }
       },
       "name": "org.spongepowered:mixin:0.8.2"

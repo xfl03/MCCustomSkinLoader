@@ -7,9 +7,9 @@ var LabelNode = Java.type('org.objectweb.asm.tree.LabelNode');
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
-// Compare method and field names, deobfName can be null if the srgName didn't exist in 1.13.2.
-function checkName(name, srgName, deobfName) {
-    return name.equals(mapName(srgName)) || name.equals(deobfName);
+// Compare method and field names, doesn't support forge-1.13.2-25.0.194 and earlier version.
+function checkName(name, srgName) {
+    return name.equals(mapName(srgName));
 }
 
 // De-obfuscate method and field names.
@@ -34,10 +34,11 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (checkName(mn.name, "func_175249_a", "render") || checkName(mn.name, "func_238523_a_", null)) {
+                    if ((checkName(mn.name, "func_175249_a") && mn.desc.equals("(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V")) // 1.15.2-
+                        || (checkName(mn.name, "func_238523_a_") && mn.desc.equals("(Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V"))) { // 1.16.1+
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
-                            if (node.getOpcode() === Opcodes.INVOKEVIRTUAL && checkName(node.name, "func_71387_A", "isIntegratedServerRunning")) {
+                            if (node.getOpcode() === Opcodes.INVOKEVIRTUAL && node.owner.equals("net/minecraft/client/Minecraft") && checkName(node.name, "func_71387_A") && node.desc.equals("()Z")) {
                                 mn.instructions.insertBefore(node, new InsnNode(Opcodes.POP));
                                 mn.instructions.set(node, new InsnNode(Opcodes.ICONST_1));
                             }
@@ -56,7 +57,7 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (checkName(mn.name, "func_174884_b", "updateGameProfile")) {
+                    if (checkName(mn.name, "func_174884_b") && mn.desc.equals("(Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile;")) {
                         var first = mn.instructions.getFirst();
                         var label = new LabelNode();
                         mn.instructions.insertBefore(first, new FieldInsnNode(Opcodes.GETSTATIC, "customskinloader/CustomSkinLoader", "config", "Lcustomskinloader/config/Config;"));
@@ -126,10 +127,10 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (checkName(mn.name, "func_229159_a_", null)) {
+                    if (checkName(mn.name, "func_229159_a_") && mn.desc.equals("(Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage;")) {
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
-                            if (node.getOpcode() === Opcodes.INVOKESTATIC && checkName(node.name, "func_229163_c_", null)) {
+                            if (node.getOpcode() === Opcodes.INVOKESTATIC && node.owner.equals("net/minecraft/client/renderer/texture/DownloadingTexture") && checkName(node.name, "func_229163_c_") && node.desc.equals("(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;")) {
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
                                 mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/texture/DownloadingTexture", mapName("field_229155_i_"), "Ljava/lang/Runnable;"));
                                 iterator.set(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;Ljava/lang/Runnable;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
@@ -149,10 +150,11 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.methods.forEach(function (mn) {
-                    if (checkName(mn.name, "func_229145_a_", null) || checkName(mn.name, "func_225628_a_", null)) { // PlayerRenderer.renderItem || CapeLayer.render
+                    if ((checkName(mn.name, "func_229145_a_") && mn.desc.equals("(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayerEntity;Lnet/minecraft/client/renderer/model/ModelRenderer;Lnet/minecraft/client/renderer/model/ModelRenderer;)V")) // PlayerRenderer.renderItem
+                        || (checkName(mn.name, "func_225628_a_") && mn.desc.equals("(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/player/AbstractClientPlayerEntity;FFFFFF)V"))) { // CapeLayer.render
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
-                            if (node.getOpcode() === Opcodes.INVOKESTATIC && checkName(node.name, "func_228634_a_", null)) { // RenderType.getEntitySolid
+                            if (node.getOpcode() === Opcodes.INVOKESTATIC && node.owner.equals("net/minecraft/client/renderer/RenderType") && checkName(node.name, "func_228634_a_") && node.desc.equals("(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;")) { // RenderType.getEntitySolid
                                 node.name = mapName("func_228644_e_"); // RenderType.getEntityTranslucent
                             }
                         }
