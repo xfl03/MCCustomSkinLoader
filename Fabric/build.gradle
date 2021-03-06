@@ -1,8 +1,22 @@
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.cadixdev:mercury:0.1.0-rc1"
+    }
+}
+
 jar {
     exclude 'customskinloader/tweaker/**'
     exclude 'net/minecraft/client/renderer/RenderType.class'
     exclude 'net/minecraft/client/renderer/texture/**'
+    exclude 'Profile.json'
+}
+sourceJar {
+    exclude 'customskinloader/tweaker/**'
+    exclude 'net/minecraft/class_1**'
     exclude 'Profile.json'
 }
 
@@ -19,4 +33,42 @@ projectImplementation project(':Vanilla')
 dependencies {
     // This is the minimum version number that the mod should dependent in the development environment.
     implementation "net.fabricmc:fabric-loader:0.4.9+build.160"
+}
+
+import net.minecraftforge.srg2source.ast.RangeExtractor
+import net.minecraftforge.srg2source.util.io.InputSupplier
+import org.cadixdev.lorenz.MappingSet
+import org.cadixdev.lorenz.io.srg.SrgReader
+import org.cadixdev.mercury.Mercury
+import org.cadixdev.mercury.remapper.MercuryRemapper
+
+tasks.extractRangemapReplacedMain.doFirst {
+    // Because of https://github.com/MinecraftForge/ForgeGradle/blob/6084129e4f407eca9fee6826aaa3276fe796553e/build.gradle#L147-L240,
+    // ForgeGradle modified Eclipse JDT and Mercury will call related methods,
+    // so here must be some hacks.
+    RangeExtractor.INSTANCE = new RangeExtractor().with {
+        it.input = new InputSupplier() {
+            @Override String getRoot(String resource) { return null }
+            @Override InputStream getInput(String relPath) { return file(relPath).newInputStream() }
+            @Override List<String> gatherAll(String endFilter) { return null }
+            @Override void close() throws IOException { }
+        }
+        it
+    }
+
+    // We use Mercury to remap source jar because srg2source have a few issues.
+    def mercury = new Mercury()
+    (configurations.compileClasspath + configurations.forgeGradleMc + configurations.forgeGradleMcDeps).getFiles().each { dep ->
+        mercury.classPath << dep.toPath()
+    }
+    file("build/reobf.srg").withReader { reader ->
+        mercury.processors << MercuryRemapper.create(new SrgReader(reader).read(MappingSet.create()))
+    }
+    def source = file("build/sources/main/java"), dest = file("build/sources/main/java_tmp")
+    if (source.renameTo(dest)) {
+        mercury.rewrite(dest.toPath(), source.toPath())
+        dest.deleteDir()
+    }
+
+    RangeExtractor.INSTANCE = null
 }

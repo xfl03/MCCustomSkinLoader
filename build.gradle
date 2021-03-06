@@ -177,7 +177,9 @@ subprojects {
                     include "**/*.jar"
                     exclude "**/*-srg.jar"
                     exclude "**/*-dev.jar"
-                    exclude "**/*-sources.jar"
+                    if (project.name.toLowerCase().contains("vanilla")) {
+                        exclude "**/*-sources.jar"
+                    }
                 }
             }
         }
