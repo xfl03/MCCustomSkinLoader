@@ -65,7 +65,10 @@ It's not a good idea to refer to CustomSkinLoader's source code to develop your 
 It's recommended to use CustomSkinLoader for your server directly.  
 Furthermore, you can add your server to 'Default Load List'.  
 You can also use 'ExtraList' which makes it easier for users to add your server into load list.  
-  
+
+## Development and Contribution
+See [DEVGUIDE.md](DEVGUIDE.md)
+
 ## Copyright & LICENSE  
 ### Binary File  
 You could not modify binary file.  
