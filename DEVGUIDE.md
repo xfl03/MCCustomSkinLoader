@@ -26,28 +26,31 @@ There are the available versions in different environments below:
    ```
 1. Create these folders in the new project directory, then copy the built jar and source jar into it:
    ```
-   Forge:  ./local-repo/mods/CustomSkinLoader_Forge/14.13-SNAPSHOT-00
-   Fabric: ./local-repo/mods/CustomSkinLoader_Fabric/14.13-SNAPSHOT-00
+   Forge:  ./local-repo/mods/CustomSkinLoader_Forge/${version}
+   Fabric: ./local-repo/mods/CustomSkinLoader_Fabric/${version}
    ```
+   *`${version}` should be repalced with something like `14.13-SNAPSHOT-00` manually*
 1. Create a pom file in the same folder:  
-   Forge: `CustomSkinLoader_Forge-14.13-SNAPSHOT-00.pom`
+   Forge: `CustomSkinLoader_Forge-${version}.pom`
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <modelVersion>4.0.0</modelVersion>
        <groupId>customskinloader</groupId>
        <artifactId>CustomSkinLoader_Forge</artifactId>
-       <version>14.13-SNAPSHOT-00</version>
+       <!-- `${version}` should be repalced with something like `14.13-SNAPSHOT-00` manually -->
+       <version>${version}</version>
    </project>
    ```
-   Fabric: `CustomSkinLoader_Fabric-14.13-SNAPSHOT-00.pom`
+   Fabric: `CustomSkinLoader_Fabric-${version}.pom`
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <modelVersion>4.0.0</modelVersion>
        <groupId>customskinloader</groupId>
        <artifactId>CustomSkinLoader_Fabric</artifactId>
-       <version>14.13-SNAPSHOT-00</version>
+       <!-- `${version}` should be repalced with something like `14.13-SNAPSHOT-00` manually -->
+       <version>${version}</version>
    </project>
    ```
 
@@ -86,7 +89,7 @@ There are the available versions in different environments below:
    ```
 1. Setup the development environment and run the game as usual.
 
-### fabric-loom ( fabric-loader-0.4.9+build.160 ~ latest )
+### For fabric-loom ( fabric-loader-0.4.9+build.160 ~ latest )
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
@@ -109,3 +112,8 @@ There are the available versions in different environments below:
        }
    }
 1. Follow the same steps in **Running and Testing**.
+
+## Developing
+- CustomSkinLoader is based on forge-1.12.2-14.23.5.2768 currently, including Fabric edition. We use custom reobfuscation mappings such as [Fabric.tsrg](Fabric/Fabric.tsrg) and [mixin.tsrg](Fabric/mixin.tsrg) to generate different editions jar and Mixin reference jsons.
+- The source codes are all in `${projectDir}/sources` and resource files are in `${projectDir}/resources` instead of `src/main/java` and `src/main/resources`.
+- Do not add other required mods.
