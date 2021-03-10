@@ -52,7 +52,7 @@ public class FakeSkinManager {
     private ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final HttpTextureInfo info, final Type textureType, final SkinAvailableCallback skinAvailableCallback) {
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + Hashing.sha1().hashUnencodedChars(info.hash).toString());
 
-        if (((IFakeTextureManager_1) this.textureManager).func_229267_b_(resourcelocation) != null) {//Have already loaded
+        if (((IFakeTextureManager_1) this.textureManager).getTexture(resourcelocation, null) != null) {//Have already loaded
             makeCallback(skinAvailableCallback, textureType, resourcelocation, modelCache.getOrDefault(resourcelocation, profileTexture));
         } else {
             SimpleTexture threaddownloadimagedata = FakeThreadDownloadImageData.createThreadDownloadImageData(info.cacheFile, info.url, DefaultPlayerSkin.getDefaultSkinLegacy(), new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture), textureType);
