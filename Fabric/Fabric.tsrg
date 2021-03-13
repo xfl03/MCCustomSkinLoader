@@ -1,6 +1,7 @@
 customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeTextureManager_1
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z method_4616
 	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; method_4619
+	getTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Lnet/minecraft/client/renderer/texture/Texture; method_34590
 customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V method_4616
 net/minecraft/client/Minecraft net/minecraft/class_310
