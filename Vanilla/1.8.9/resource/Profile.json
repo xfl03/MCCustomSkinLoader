@@ -36,7 +36,7 @@
           "path": "org/spongepowered/mixin/0.7.11-SNAPSHOT/mixin-0.7.11-20180703.121122-1.jar",
           "sha1": "7a670207bdb97db418118ad1e9bb42424ff3776d",
           "size": 1017668,
-          "url": "https://repo.spongepowered.org/maven/org/spongepowered/mixin/0.7.11-SNAPSHOT/mixin-0.7.11-20180703.121122-1.jar"
+          "url": "https://repo.spongepowered.org/repository/maven-public/org/spongepowered/mixin/0.7.11-SNAPSHOT/mixin-0.7.11-20180703.121122-1.jar"
         }
       },
       "name": "org.spongepowered:mixin:0.7.11-SNAPSHOT"

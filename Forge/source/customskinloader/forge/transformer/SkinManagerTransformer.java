@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class SkinManagerTransformer {
     @TransformerManager.TransformTarget(className="net.minecraft.client.resources.SkinManager",
-            methodNames={"<init>"},
+            methodNameSrg="<init>",
             desc="(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V")
     public static class InitTransformer implements TransformerManager.IMethodTransformer{
         @Override
@@ -45,7 +45,8 @@ public class SkinManagerTransformer {
         }
     }
     @TransformerManager.TransformTarget(className="net.minecraft.client.resources.SkinManager",
-            methodNames={"func_152789_a","loadSkin"},
+            methodNameSrg="func_152789_a",
+            methodNames="loadSkin",
             desc="(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation;")
     public static class LoadSkinTransformer implements TransformerManager.IMethodTransformer{
         @Override
@@ -63,7 +64,8 @@ public class SkinManagerTransformer {
         }
     }
     @TransformerManager.TransformTarget(className="net.minecraft.client.resources.SkinManager",
-            methodNames={"func_152790_a","loadProfileTextures"},
+            methodNameSrg="func_152790_a",
+            methodNames="loadProfileTextures",
             desc="(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V")
     public static class LoadProfileTexturesTransformer implements TransformerManager.IMethodTransformer{
         @Override
@@ -81,7 +83,8 @@ public class SkinManagerTransformer {
         }
     }
     @TransformerManager.TransformTarget(className="net.minecraft.client.resources.SkinManager",
-            methodNames={"func_152788_a","loadSkinFromCache"},
+            methodNameSrg="func_152788_a",
+            methodNames="loadSkinFromCache",
             desc="(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;")
     public static class LoadSkinFromCacheTransformer implements TransformerManager.IMethodTransformer{
         @Override

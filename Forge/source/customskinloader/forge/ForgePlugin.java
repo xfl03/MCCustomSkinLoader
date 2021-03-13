@@ -25,6 +25,7 @@ public class ForgePlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
+        TransformerManager.isDevelopmentEnvironment = !(boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override

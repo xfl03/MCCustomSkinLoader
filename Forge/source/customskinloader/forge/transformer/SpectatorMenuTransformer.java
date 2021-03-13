@@ -15,7 +15,7 @@ import org.objectweb.asm.tree.MethodNode;
  */
 public class SpectatorMenuTransformer {
     @TransformerManager.TransformTarget(className = "net.minecraft.client.gui.spectator.PlayerMenuObject",
-            methodNames = {"<init>"},
+            methodNameSrg = "<init>",
             desc = "(Lcom/mojang/authlib/GameProfile;)V")
     public static class PlayerMenuObjectTransformer implements TransformerManager.IMethodTransformer {
 
