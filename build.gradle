@@ -58,6 +58,7 @@ subprojects {
 
         replace '@MOD_VERSION@', rootProject.ext.config.version
         replace '@MOD_FULL_VERSION@', project.version
+        replace '@MOD_BUILD_NUMBER@', getBuildNum()
         replaceIn 'CustomSkinLoader.java'
     }
 

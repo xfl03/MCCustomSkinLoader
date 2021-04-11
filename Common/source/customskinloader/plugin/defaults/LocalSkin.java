@@ -12,15 +12,17 @@ public class LocalSkin implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "LocalSkin";
+    public String getName() {
+        return "LocalSkin";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
         ssp.type = "Legacy";
-        ssp.checkPNG = false;
-        ssp.skin = "LocalSkin/skins/{USERNAME}.png";
-        ssp.model = "auto";
-        ssp.cape = "LocalSkin/capes/{USERNAME}.png";
-        ssp.elytra = "LocalSkin/elytras/{USERNAME}.png";
-        return ssp;
+        if (ssp.checkPNG == null) ssp.checkPNG = false;
+        if (ssp.skin     == null) ssp.skin     = "LocalSkin/skins/{USERNAME}.png";
+        if (ssp.model    == null) ssp.model    = "auto";
+        if (ssp.cape     == null) ssp.cape     = "LocalSkin/capes/{USERNAME}.png";
+        if (ssp.elytra   == null) ssp.elytra   = "LocalSkin/elytras/{USERNAME}.png";
     }
 }

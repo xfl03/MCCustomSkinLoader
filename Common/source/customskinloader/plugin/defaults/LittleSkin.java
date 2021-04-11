@@ -13,11 +13,13 @@ public class LittleSkin implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "LittleSkin";
+    public String getName() {
+        return "LittleSkin";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
         ssp.type = "CustomSkinAPI";
-        ssp.root = "https://littleskin.cn/";
-        return ssp;
+        ssp.root = "https://littlesk.in/csl/";
     }
 }

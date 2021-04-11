@@ -13,11 +13,13 @@ public class GlitchlessGames implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "GlitchlessGames";
+    public String getName() {
+        return "GlitchlessGames";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
         ssp.type = "GlitchlessAPI";
         ssp.root = "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname=";
-        return ssp;
     }
 }

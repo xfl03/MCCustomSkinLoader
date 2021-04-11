@@ -12,10 +12,14 @@ public class Mojang implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "Mojang";
-        ssp.type = "MojangAPI";
-        return ssp;
+    public String getName() {
+        return "Mojang";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+        ssp.type        = "MojangAPI";
+        ssp.apiRoot     = "https://api.mojang.com/";
+        ssp.sessionRoot = "https://sessionserver.mojang.com/";
     }
 }

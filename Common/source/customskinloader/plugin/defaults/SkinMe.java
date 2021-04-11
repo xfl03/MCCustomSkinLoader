@@ -13,11 +13,13 @@ public class SkinMe implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "SkinMe";
+    public String getName() {
+        return "SkinMe";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
         ssp.type = "UniSkinAPI";
         ssp.root = "http://www.skinme.cc/uniskin/";
-        return ssp;
     }
 }

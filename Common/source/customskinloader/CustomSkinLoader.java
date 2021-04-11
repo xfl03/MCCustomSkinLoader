@@ -28,6 +28,7 @@ import customskinloader.utils.MinecraftUtil;
 public class CustomSkinLoader {
     public static final String CustomSkinLoader_VERSION="@MOD_VERSION@";
     public static final String CustomSkinLoader_FULL_VERSION="@MOD_FULL_VERSION@";
+    public static final int CustomSkinLoader_BUILD_NUMBER=Integer.parseInt("@MOD_BUILD_NUMBER@");
     
     public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader"),
             LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),

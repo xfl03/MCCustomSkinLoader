@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
@@ -19,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 public class Config {
     //Program
     public String version;
+    public int buildNumber = -1;
     public List<SkinSiteProfile> loadlist;
 
     //Function
@@ -78,9 +80,11 @@ public class Config {
 
         //Check config version
         Version configVersion = Version.of(config.version);
-        if (configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0) {
-            CustomSkinLoader.logger.info("Config File is out of date: " + config.version);
+        if (CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER == 0 // Custom builds
+            || configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0 && config.buildNumber < CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER) {
+            CustomSkinLoader.logger.info("Config File is out of date: " + config.version + ", build number: " + config.buildNumber);
             config.version = CustomSkinLoader.CustomSkinLoader_VERSION;
+            config.buildNumber = CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
 
             //Update some config
             if (configVersion.compareTo("14.10") < 0)//Lower than 14.10
@@ -92,11 +96,9 @@ public class Config {
         for (Field field : config.getClass().getDeclaredFields()) {
             try {
                 Object value = field.get(config);
-                if (value instanceof String || value instanceof Integer || value instanceof Boolean)
-                    CustomSkinLoader.logger.info(field.getName() + " : " + value);
+                CustomSkinLoader.logger.info(field.getName() + " : " + value);
             } catch (Exception ignored) { }
         }
-        CustomSkinLoader.logger.info("loadList : " + (config.loadlist == null ? 0 : config.loadlist.size()));
 
         return config;
     }
@@ -180,16 +182,26 @@ public class Config {
         }
     }
 
+    // The config file does not exist or was broken.
     private static Config initConfig() {
         List<SkinSiteProfile> loadlist = new ArrayList<SkinSiteProfile>();
-        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
-            loadlist.add(plugin.getSkinSiteProfile());
-        }
+        PluginLoader.PLUGINS.forEach((name, plugin) -> {
+            SkinSiteProfile ssp = new SkinSiteProfile();
+            ssp.name = name;
+            plugin.updateSkinSiteProfile(ssp);
+            loadlist.add(ssp);
+        });
         Config config=new Config(loadlist);
         writeConfig(config,false);
         return config;
     }
     private static void writeConfig(Config config,boolean update){
+        if (update && config.loadlist != null) { // Update loadlist, complete missing elements
+            PluginLoader.PLUGINS.forEach((name, plugin) -> config.loadlist.stream()
+                .filter(ssp -> Objects.equals(ssp.name, name))
+                .forEach(plugin::updateSkinSiteProfile));
+        }
+
         String json=CustomSkinLoader.GSON.toJson(config);
         if(CustomSkinLoader.CONFIG_FILE.exists())
             CustomSkinLoader.CONFIG_FILE.delete();

@@ -3,19 +3,16 @@ package customskinloader.loader;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.mojang.authlib.GameProfile;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.jsonapi.*;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
-import customskinloader.utils.HttpUtil0;
 import customskinloader.utils.HttpRequestUtil.HttpRequest;
 import customskinloader.utils.HttpRequestUtil.HttpResponce;
+import customskinloader.utils.HttpUtil0;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     

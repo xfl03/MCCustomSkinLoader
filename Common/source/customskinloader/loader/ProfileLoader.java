@@ -15,7 +15,7 @@ public class ProfileLoader {
     
     private static HashMap<String, IProfileLoader> initLoaders() {
         HashMap<String, ProfileLoader.IProfileLoader> profileLoaders = new HashMap<String, ProfileLoader.IProfileLoader>();
-        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
+        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS.values()) {
             ProfileLoader.IProfileLoader profileLoader = plugin.getProfileLoader();
             if (profileLoader != null) {
                 profileLoaders.put(profileLoader.getName().toLowerCase(), profileLoader);

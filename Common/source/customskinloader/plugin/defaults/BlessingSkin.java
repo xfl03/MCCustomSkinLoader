@@ -13,11 +13,13 @@ public class BlessingSkin implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "BlessingSkin";
+    public String getName() {
+        return "BlessingSkin";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
         ssp.type = "CustomSkinAPI";
         ssp.root = "http://skin.prinzeugen.net/";
-        return ssp;
     }
 }

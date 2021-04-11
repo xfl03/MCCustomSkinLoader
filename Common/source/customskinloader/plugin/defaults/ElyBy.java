@@ -13,10 +13,13 @@ public class ElyBy implements ICustomSkinLoaderPlugin {
     }
 
     @Override
-    public SkinSiteProfile getSkinSiteProfile() {
-        SkinSiteProfile ssp = new SkinSiteProfile();
-        ssp.name = "ElyBy";
+    public String getName() {
+        return "ElyBy";
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
         ssp.type = "ElyByAPI";
-        return ssp;
+        ssp.root = "http://skinsystem.ely.by/textures/";
     }
 }

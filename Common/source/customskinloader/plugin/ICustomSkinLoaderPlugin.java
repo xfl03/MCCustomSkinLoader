@@ -6,5 +6,7 @@ import customskinloader.loader.ProfileLoader;
 public interface ICustomSkinLoaderPlugin {
     ProfileLoader.IProfileLoader getProfileLoader();
 
-    SkinSiteProfile getSkinSiteProfile();
+    String getName();
+
+    void updateSkinSiteProfile(SkinSiteProfile ssp);
 }
