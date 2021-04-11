@@ -21,7 +21,6 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
         String getPayload(SkinSiteProfile ssp);
         UserProfile toUserProfile(String root, String json, boolean local);
         String getName();
-        boolean checkRoot();
     }
     public static class ErrorProfile{
         public int errno;
@@ -36,7 +35,7 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
         String username=gameProfile.getName();
-        if (StringUtils.isEmpty(ssp.root) && this.jsonAPI.checkRoot()) {
+        if (StringUtils.isEmpty(ssp.root)) {
             CustomSkinLoader.logger.info("Root not defined.");
             return null;
         }

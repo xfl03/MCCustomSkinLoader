@@ -43,11 +43,6 @@ public class CustomSkinAPIPlus extends CustomSkinAPI {
         return "CustomSKinAPIPlus";
     }
 
-    @Override
-    public boolean checkRoot() {
-        return true;
-    }
-
     public static class CustomSkinAPIPlusPayload{
         String gameVersion;//minecraft version
         String modVersion;//mod version
