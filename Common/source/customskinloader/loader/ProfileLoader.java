@@ -3,7 +3,6 @@ package customskinloader.loader;
 import java.util.HashMap;
 
 import com.mojang.authlib.GameProfile;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;

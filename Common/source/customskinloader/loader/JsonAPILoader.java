@@ -9,8 +9,6 @@ import customskinloader.config.SkinSiteProfile;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
-import customskinloader.utils.HttpRequestUtil.HttpRequest;
-import customskinloader.utils.HttpRequestUtil.HttpResponce;
 import customskinloader.utils.HttpUtil0;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +28,7 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
         public String msg;
     }
     
-    private IJsonAPI jsonAPI;
+    private final IJsonAPI jsonAPI;
     public JsonAPILoader(IJsonAPI jsonAPI){
         this.jsonAPI = jsonAPI;
     }
@@ -73,7 +71,7 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
             }
             json=IOUtils.toString(new FileInputStream(jsonFile), "UTF-8");
         }else{
-            HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequest(jsonUrl).setCacheTime(90).setUserAgent(ssp.userAgent).setPayload(this.jsonAPI.getPayload(ssp)));
+            HttpRequestUtil.HttpResponce responce=HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(jsonUrl).setCacheTime(90).setUserAgent(ssp.userAgent).setPayload(this.jsonAPI.getPayload(ssp)));
             json=responce.content;
         }
         if(json==null||json.equals("")){

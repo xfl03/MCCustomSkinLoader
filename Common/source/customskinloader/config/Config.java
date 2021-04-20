@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
-import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.plugin.PluginLoader;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;

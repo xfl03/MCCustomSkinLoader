@@ -1,13 +1,13 @@
 package customskinloader.loader.jsonapi;
 
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
-
-import java.util.Map;
 
 public abstract class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
 

@@ -1,24 +1,19 @@
 package customskinloader.loader;
 
 import java.io.File;
-
-import com.mojang.util.UUIDTypeAdapter;
-import customskinloader.plugin.ICustomSkinLoaderPlugin;
-import org.apache.commons.lang3.StringUtils;
+import javax.annotation.Nonnull;
 
 import com.mojang.authlib.GameProfile;
-
+import com.mojang.util.UUIDTypeAdapter;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
-import customskinloader.utils.HttpRequestUtil.HttpRequest;
-import customskinloader.utils.HttpRequestUtil.HttpResponce;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
-
-import javax.annotation.Nonnull;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
@@ -75,7 +70,7 @@ public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLo
                 if (skinFile.exists() && skinFile.isFile())
                     profile.skinUrl = HttpTextureUtil.getLocalLegacyFakeUrl(skin, HttpTextureUtil.getHash(skin, skinFile.length(), skinFile.lastModified()));
             } else {
-                HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequest(skin).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(skin).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if (responce.success)
                     profile.skinUrl = HttpTextureUtil.getLegacyFakeUrl(skin);
             }
@@ -88,7 +83,7 @@ public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLo
                 if (capeFile.exists() && capeFile.isFile())
                     profile.capeUrl = HttpTextureUtil.getLocalLegacyFakeUrl(cape, HttpTextureUtil.getHash(cape, capeFile.length(), capeFile.lastModified()));
             } else {
-                HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequest(cape).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(cape).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if (responce.success)
                     profile.capeUrl = HttpTextureUtil.getLegacyFakeUrl(cape);
             }
@@ -100,7 +95,7 @@ public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLo
                 if (elytraFile.exists() && elytraFile.isFile())
                     profile.elytraUrl = HttpTextureUtil.getLocalLegacyFakeUrl(elytra, HttpTextureUtil.getHash(elytra, elytraFile.length(), elytraFile.lastModified()));
             } else {
-                HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequest(elytra).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(elytra).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if (responce.success)
                     profile.elytraUrl = HttpTextureUtil.getLegacyFakeUrl(elytra);
             }

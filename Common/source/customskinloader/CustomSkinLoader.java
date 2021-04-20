@@ -2,18 +2,20 @@ package customskinloader;
 
 import java.io.File;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
-
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.*;
+import customskinloader.loader.ProfileLoader;
 import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
@@ -57,7 +59,7 @@ public class CustomSkinLoader {
     );
 
     //For User Skin
-    public static Map<Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
         String username=gameProfile.getName();
         String credential=MinecraftUtil.getCredential(gameProfile);
         //Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
@@ -155,7 +157,7 @@ public class CustomSkinLoader {
     }
     
     //For Skull
-    public static Map<Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
         String username=gameProfile.getName();
         String credential=MinecraftUtil.getCredential(gameProfile);
         

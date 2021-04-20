@@ -3,17 +3,15 @@ package customskinloader.loader.jsonapi;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.JsonAPILoader.IJsonAPI;
+import customskinloader.loader.JsonAPILoader;
 import customskinloader.profile.ModelManager0;
-import customskinloader.profile.ModelManager0.Model;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
+import org.apache.commons.lang3.StringUtils;
 
-public abstract class CustomSkinAPI implements IJsonAPI {
+public abstract class CustomSkinAPI implements JsonAPILoader.IJsonAPI {
 
     public static class LittleSkin extends CustomSkinAPI {
         @Override public String getLoaderName() { return "LittleSkin"; }
@@ -71,7 +69,7 @@ public abstract class CustomSkinAPI implements IJsonAPI {
         
         boolean hasSkin=false;
         for(String model:textures.keySet()){
-            Model enumModel=ModelManager0.getEnumModel(model);
+            ModelManager0.Model enumModel=ModelManager0.getEnumModel(model);
             if(enumModel==null||StringUtils.isEmpty(textures.get(model)))
                 continue;
             if(ModelManager0.isSkin(enumModel))
@@ -87,7 +85,7 @@ public abstract class CustomSkinAPI implements IJsonAPI {
         
         return p;
     }
-    private class CustomSkinAPIProfile{
+    private static class CustomSkinAPIProfile{
         public String username;
         public LinkedHashMap<String,String> textures;
         
