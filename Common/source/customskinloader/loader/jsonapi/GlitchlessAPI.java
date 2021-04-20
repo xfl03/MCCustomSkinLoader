@@ -9,7 +9,13 @@ import customskinloader.profile.UserProfile;
 
 import java.util.Map;
 
-public class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
+public abstract class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
+
+    public static class GlitchlessGames extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "GlitchlessGames"; }
+        @Override public String getRoot()       { return "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname="; }
+    }
+
     @Override
     public String toJsonUrl(String root, String username) {
         return root + username;

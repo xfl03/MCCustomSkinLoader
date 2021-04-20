@@ -13,7 +13,13 @@ import customskinloader.profile.UserProfile;
 import customskinloader.profile.ModelManager0.Model;
 import customskinloader.utils.HttpTextureUtil;
 
-public class UniSkinAPI implements IJsonAPI {
+public abstract class UniSkinAPI implements IJsonAPI {
+
+    public static class SkinMe extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "SkinMe"; }
+        @Override public String getRoot()       { return "http://www.skinme.cc/uniskin/"; }
+    }
+
     private static final String TEXTURES="textures/";
     private static final String SUFFIX=".json";
 

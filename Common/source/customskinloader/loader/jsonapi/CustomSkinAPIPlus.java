@@ -11,7 +11,7 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.utils.MinecraftUtil;
 
-public class CustomSkinAPIPlus extends CustomSkinAPI {
+public abstract class CustomSkinAPIPlus extends CustomSkinAPI {
 
     private static String clientID=null;
     public CustomSkinAPIPlus(){

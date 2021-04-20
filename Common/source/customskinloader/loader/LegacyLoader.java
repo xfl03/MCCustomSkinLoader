@@ -3,6 +3,7 @@ package customskinloader.loader;
 import java.io.File;
 
 import com.mojang.util.UUIDTypeAdapter;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import org.apache.commons.lang3.StringUtils;
 
 import com.mojang.authlib.GameProfile;
@@ -19,7 +20,47 @@ import customskinloader.utils.HttpUtil0;
 
 import javax.annotation.Nonnull;
 
-public class LegacyLoader implements ProfileLoader.IProfileLoader {
+public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
+
+    // === ICustomSkinLoaderPlugin ===
+
+    @Override
+    public ProfileLoader.IProfileLoader getProfileLoader() {
+        return this;
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+        ssp.type = this.getName();
+        if (ssp.checkPNG == null) ssp.checkPNG = false;
+        if (ssp.model    == null) ssp.model    = "auto";
+        if (ssp.skin     == null || !HttpUtil0.isLocal(this.getSkinRoot()))   ssp.skin   = this.getSkinRoot();
+        if (ssp.cape     == null || !HttpUtil0.isLocal(this.getCapeRoot()))   ssp.cape   = this.getCapeRoot();
+        if (ssp.elytra   == null || !HttpUtil0.isLocal(this.getElytraRoot())) ssp.elytra = this.getElytraRoot();
+    }
+
+    public abstract String getSkinRoot();
+    public abstract String getCapeRoot();
+    public abstract String getElytraRoot();
+
+    public static class LocalSkin extends LegacyLoader {
+        @Override public String getLoaderName() { return "LocalSkin"; }
+        @Override public String getSkinRoot()   { return "LocalSkin/skins/{USERNAME}.png"; }
+        @Override public String getCapeRoot()   { return "LocalSkin/capes/{USERNAME}.png"; }
+        @Override public String getElytraRoot() { return "LocalSkin/elytras/{USERNAME}.png"; }
+    }
+
+    /* Minecrack could not load skin correctly
+    public static class Minecrack extends LegacyLoader {
+        @Override public String getLoaderName() { return "Minecrack"; }
+        @Override public String getSkinRoot()   { return "http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png"; }
+        @Override public String getCapeRoot()   { return "http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"; }
+        @Override public String getElytraRoot() { return null; }
+    }
+     */
+
+    // === IProfileLoader ===
+
     public static final String USERNAME_PLACEHOLDER = "{USERNAME}";
     public static final String UUID_PLACEHOLDER = "{UUID}";
 

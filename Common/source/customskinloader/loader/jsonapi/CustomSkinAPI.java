@@ -13,7 +13,25 @@ import customskinloader.profile.ModelManager0.Model;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
 
-public class CustomSkinAPI implements IJsonAPI {
+public abstract class CustomSkinAPI implements IJsonAPI {
+
+    public static class LittleSkin extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "LittleSkin"; }
+        @Override public String getRoot()       { return "https://littlesk.in/csl/"; }
+    }
+
+    public static class BlessingSkin extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "BlessingSkin"; }
+        @Override public String getRoot()       { return "http://skin.prinzeugen.net/"; }
+    }
+
+    /* OneSkin has been removed temporarily
+    public static class OneSkin extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "OneSkin"; }
+        @Override public String getRoot()       { return "http://fleey.cn/skin/skin_user/skin_json.php/"; }
+    }
+     */
+
     private static final String TEXTURES="textures/";
     private static final String SUFFIX=".json";
 

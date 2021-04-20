@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import com.mojang.authlib.GameProfile;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpRequestUtil.HttpRequest;
@@ -14,9 +15,11 @@ import customskinloader.utils.HttpUtil0;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
-public class JsonAPILoader implements ProfileLoader.IProfileLoader {
+public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
     
     public interface IJsonAPI {
+        String getLoaderName();
+        String getRoot();
         String toJsonUrl(String root, String username);
         String getPayload(SkinSiteProfile ssp);
         UserProfile toUserProfile(String root, String json, boolean local);
@@ -31,6 +34,26 @@ public class JsonAPILoader implements ProfileLoader.IProfileLoader {
     public JsonAPILoader(IJsonAPI jsonAPI){
         this.jsonAPI = jsonAPI;
     }
+
+    // === ICustomSkinLoaderPlugin ===
+
+    @Override
+    public ProfileLoader.IProfileLoader getProfileLoader() {
+        return this;
+    }
+
+    @Override
+    public String getLoaderName() {
+        return this.jsonAPI.getLoaderName();
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+        ssp.type = this.getName();
+        ssp.root = this.jsonAPI.getRoot();
+    }
+
+    // === IProfileLoader ===
     
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {

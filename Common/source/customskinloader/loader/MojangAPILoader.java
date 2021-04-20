@@ -22,13 +22,39 @@ import com.mojang.util.UUIDTypeAdapter;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpRequestUtil.HttpRequest;
 import customskinloader.utils.HttpRequestUtil.HttpResponce;
 
-public class MojangAPILoader implements ProfileLoader.IProfileLoader {
+public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
+
+    // === ICustomSkinLoaderPlugin ===
+
+    @Override
+    public ProfileLoader.IProfileLoader getProfileLoader() {
+        return this;
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+        ssp.type        = this.getName();
+        ssp.apiRoot     = this.getAPIRoot();
+        ssp.sessionRoot = this.getSessionRoot();
+    }
+
+    public abstract String getAPIRoot();
+    public abstract String getSessionRoot();
+
+    public static class Mojang extends MojangAPILoader {
+        @Override public String getLoaderName()  { return "Mojang"; }
+        @Override public String getAPIRoot()     { return "https://api.mojang.com/"; }
+        @Override public String getSessionRoot() { return "https://sessionserver.mojang.com/"; }
+    }
+
+    // === IProfileLoader ===
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {

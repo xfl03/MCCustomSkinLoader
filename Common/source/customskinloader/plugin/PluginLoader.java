@@ -9,19 +9,25 @@ import java.util.LinkedHashMap;
 import java.util.ServiceLoader;
 
 import customskinloader.CustomSkinLoader;
-import customskinloader.plugin.defaults.BlessingSkin;
-import customskinloader.plugin.defaults.ElyBy;
-import customskinloader.plugin.defaults.GlitchlessGames;
-import customskinloader.plugin.defaults.LittleSkin;
-import customskinloader.plugin.defaults.LocalSkin;
-import customskinloader.plugin.defaults.Mojang;
-import customskinloader.plugin.defaults.SkinMe;
+import customskinloader.loader.JsonAPILoader;
+import customskinloader.loader.LegacyLoader;
+import customskinloader.loader.MojangAPILoader;
+import customskinloader.loader.jsonapi.CustomSkinAPI;
+import customskinloader.loader.jsonapi.ElyByAPI;
+import customskinloader.loader.jsonapi.GlitchlessAPI;
+import customskinloader.loader.jsonapi.UniSkinAPI;
 import org.apache.commons.io.FileUtils;
 
 public class PluginLoader {
     // This controls the default loading order.
     public static final ICustomSkinLoaderPlugin[] DEFAULT_PLUGINS = new ICustomSkinLoaderPlugin[] {
-        new Mojang(), new LittleSkin(), new BlessingSkin(), new ElyBy(), new SkinMe(), new LocalSkin(), new GlitchlessGames()
+        new MojangAPILoader.Mojang(),
+        new JsonAPILoader(new CustomSkinAPI.LittleSkin()),
+        new JsonAPILoader(new CustomSkinAPI.BlessingSkin()),
+        new JsonAPILoader(new ElyByAPI.ElyBy()),
+        new JsonAPILoader(new UniSkinAPI.SkinMe()),
+        new LegacyLoader.LocalSkin(),
+        new JsonAPILoader(new GlitchlessAPI.GlitchlessGames())
     };
     public static final LinkedHashMap<String, ICustomSkinLoaderPlugin> PLUGINS = loadPlugins();
 
@@ -43,14 +49,14 @@ public class PluginLoader {
 
         ServiceLoader<ICustomSkinLoaderPlugin> sl = ServiceLoader.load(ICustomSkinLoaderPlugin.class, new URLClassLoader(urls.toArray(new URL[0]), PluginLoader.class.getClassLoader()));
         for (ICustomSkinLoaderPlugin plugin : sl) {
-            plugins.put(plugin.getName(), plugin);
+            plugins.put(plugin.getLoaderName(), plugin);
         }
         return plugins;
     }
 
     public static void addPlugin(LinkedHashMap<String, ICustomSkinLoaderPlugin> pluginMap, ICustomSkinLoaderPlugin... plugins) {
         for (ICustomSkinLoaderPlugin plugin : plugins) {
-            pluginMap.put(plugin.getName(), plugin);
+            pluginMap.put(plugin.getLoaderName(), plugin);
         }
     }
 }
