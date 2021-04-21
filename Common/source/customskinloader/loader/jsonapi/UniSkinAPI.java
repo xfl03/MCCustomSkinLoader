@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public abstract class UniSkinAPI implements JsonAPILoader.IJsonAPI {
 
-    public static class SkinMe extends CustomSkinAPI {
+    public static class SkinMe extends UniSkinAPI {
         @Override public String getLoaderName() { return "SkinMe"; }
         @Override public String getRoot()       { return "http://www.skinme.cc/uniskin/"; }
     }

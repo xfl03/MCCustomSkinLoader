@@ -169,6 +169,35 @@ function initializeCoreMod() {
                 return cn;
             }
         },
+        'SkinAvailableCallbackTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/resources/SkinManager$SkinAvailableCallback'
+            },
+            'transformer': function (cn) {
+                var mn = new MethodNode(Opcodes.ACC_PUBLIC, mapName("func_180521_a"), "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V", null, null);
+                if (cn.access === 0) { // 1.14.2+
+                    cn.access = Opcodes.ACC_PUBLIC | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT;
+
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                    mn.instructions.add(new TypeInsnNode(Opcodes.CHECKCAST, "net/minecraft/client/resources/SkinManager$ISkinAvailableCallback"));
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 2));
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 3));
+                    mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "net/minecraft/client/resources/SkinManager$ISkinAvailableCallback", "onSkinTextureAvailable", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V", true));
+                    mn.instructions.add(new InsnNode(Opcodes.RETURN));
+                } else { // 1.13.2
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 2));
+                    mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 3));
+                    mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "net/minecraft/client/resources/SkinManager$SkinAvailableCallback", "onSkinTextureAvailable", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V", true));
+                    mn.instructions.add(new InsnNode(Opcodes.RETURN));
+                }
+                cn.methods.add(mn);
+                return cn;
+            }
+        },
         'ISkinAvailableCallbackTransformer': {
             'target': {
                 'type': 'CLASS',

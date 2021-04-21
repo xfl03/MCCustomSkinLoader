@@ -11,7 +11,7 @@ import customskinloader.profile.UserProfile;
 
 public abstract class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
 
-    public static class GlitchlessGames extends CustomSkinAPI {
+    public static class GlitchlessGames extends GlitchlessAPI {
         @Override public String getLoaderName() { return "GlitchlessGames"; }
         @Override public String getRoot()       { return "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname="; }
     }

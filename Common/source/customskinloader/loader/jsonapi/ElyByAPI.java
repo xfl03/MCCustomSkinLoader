@@ -12,7 +12,7 @@ import customskinloader.profile.UserProfile;
 
 public abstract class ElyByAPI implements JsonAPILoader.IJsonAPI {
 
-    public static class ElyBy extends CustomSkinAPI {
+    public static class ElyBy extends ElyByAPI {
         @Override public String getLoaderName() { return "ElyBy"; }
         @Override public String getRoot()       { return "http://skinsystem.ely.by/textures/"; }
     }
