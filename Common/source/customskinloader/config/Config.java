@@ -19,7 +19,7 @@ import org.apache.commons.io.FileUtils;
 public class Config {
     //Program
     public String version;
-    public int buildNumber = -1;
+    public int buildNumber;
     public List<SkinSiteProfile> loadlist;
 
     //Function
@@ -80,7 +80,8 @@ public class Config {
         //Check config version
         Version configVersion = Version.of(config.version);
         if (CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER == 0 // Custom builds
-            || configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0 && config.buildNumber < CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER) {
+            || configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0
+            || config.buildNumber < CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER) {
             CustomSkinLoader.logger.info("Config File is out of date: " + config.version + ", build number: " + config.buildNumber);
             config.version = CustomSkinLoader.CustomSkinLoader_VERSION;
             config.buildNumber = CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
