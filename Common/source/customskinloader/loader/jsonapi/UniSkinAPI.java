@@ -3,17 +3,21 @@ package customskinloader.loader.jsonapi;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.JsonAPILoader.IJsonAPI;
+import customskinloader.loader.JsonAPILoader;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
-import customskinloader.profile.ModelManager0.Model;
 import customskinloader.utils.HttpTextureUtil;
+import org.apache.commons.lang3.StringUtils;
 
-public class UniSkinAPI implements IJsonAPI {
+public abstract class UniSkinAPI implements JsonAPILoader.IJsonAPI {
+
+    public static class SkinMe extends UniSkinAPI {
+        @Override public String getLoaderName() { return "SkinMe"; }
+        @Override public String getRoot()       { return "http://www.skinme.cc/uniskin/"; }
+    }
+
     private static final String TEXTURES="textures/";
     private static final String SUFFIX=".json";
 
@@ -40,7 +44,7 @@ public class UniSkinAPI implements IJsonAPI {
         
         boolean hasSkin=false;
         for(String model:profile.model_preference){
-            Model enumModel=ModelManager0.getEnumModel(model);
+            ModelManager0.Model enumModel=ModelManager0.getEnumModel(model);
             if(enumModel==null||StringUtils.isEmpty(profile.skins.get(model)))
                 continue;
             if(ModelManager0.isSkin(enumModel))

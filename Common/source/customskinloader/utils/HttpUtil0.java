@@ -5,14 +5,19 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
-
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class HttpUtil0 {
     public static boolean isLocal(String url){
-        return url != null && !url.startsWith("http");
+        return url != null && !url.startsWith("http://") && !url.startsWith("https://");
     }
     
     //From: http://blog.csdn.net/xiyushiyi/article/details/46685387

@@ -1,5 +1,7 @@
 package customskinloader.loader.jsonapi;
 
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.config.SkinSiteProfile;
@@ -7,9 +9,13 @@ import customskinloader.loader.JsonAPILoader;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 
-import java.util.Map;
+public abstract class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
 
-public class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
+    public static class GlitchlessGames extends GlitchlessAPI {
+        @Override public String getLoaderName() { return "GlitchlessGames"; }
+        @Override public String getRoot()       { return "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname="; }
+    }
+
     @Override
     public String toJsonUrl(String root, String username) {
         return root + username;

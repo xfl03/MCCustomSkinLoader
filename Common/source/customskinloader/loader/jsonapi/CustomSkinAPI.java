@@ -3,17 +3,33 @@ package customskinloader.loader.jsonapi;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
-import customskinloader.loader.JsonAPILoader.IJsonAPI;
+import customskinloader.loader.JsonAPILoader;
 import customskinloader.profile.ModelManager0;
-import customskinloader.profile.ModelManager0.Model;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
+import org.apache.commons.lang3.StringUtils;
 
-public class CustomSkinAPI implements IJsonAPI {
+public abstract class CustomSkinAPI implements JsonAPILoader.IJsonAPI {
+
+    public static class LittleSkin extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "LittleSkin"; }
+        @Override public String getRoot()       { return "https://littlesk.in/csl/"; }
+    }
+
+    public static class BlessingSkin extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "BlessingSkin"; }
+        @Override public String getRoot()       { return "http://skin.prinzeugen.net/"; }
+    }
+
+    /* OneSkin has been removed temporarily
+    public static class OneSkin extends CustomSkinAPI {
+        @Override public String getLoaderName() { return "OneSkin"; }
+        @Override public String getRoot()       { return "http://fleey.cn/skin/skin_user/skin_json.php/"; }
+    }
+     */
+
     private static final String TEXTURES="textures/";
     private static final String SUFFIX=".json";
 
@@ -53,7 +69,7 @@ public class CustomSkinAPI implements IJsonAPI {
         
         boolean hasSkin=false;
         for(String model:textures.keySet()){
-            Model enumModel=ModelManager0.getEnumModel(model);
+            ModelManager0.Model enumModel=ModelManager0.getEnumModel(model);
             if(enumModel==null||StringUtils.isEmpty(textures.get(model)))
                 continue;
             if(ModelManager0.isSkin(enumModel))
@@ -69,7 +85,7 @@ public class CustomSkinAPI implements IJsonAPI {
         
         return p;
     }
-    private class CustomSkinAPIProfile{
+    private static class CustomSkinAPIProfile{
         public String username;
         public LinkedHashMap<String,String> textures;
         

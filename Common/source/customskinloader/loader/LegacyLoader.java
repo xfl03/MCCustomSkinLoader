@@ -1,25 +1,61 @@
 package customskinloader.loader;
 
 import java.io.File;
-
-import com.mojang.util.UUIDTypeAdapter;
-import org.apache.commons.lang3.StringUtils;
+import javax.annotation.Nonnull;
 
 import com.mojang.authlib.GameProfile;
-
+import com.mojang.util.UUIDTypeAdapter;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
-import customskinloader.utils.HttpRequestUtil.HttpRequest;
-import customskinloader.utils.HttpRequestUtil.HttpResponce;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nonnull;
+public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
-public class LegacyLoader implements ProfileLoader.IProfileLoader {
+    // === ICustomSkinLoaderPlugin ===
+
+    @Override
+    public ProfileLoader.IProfileLoader getProfileLoader() {
+        return this;
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+        ssp.type = this.getName();
+        if (ssp.checkPNG == null) ssp.checkPNG = false;
+        if (ssp.model    == null) ssp.model    = "auto";
+        if (ssp.skin     == null || !HttpUtil0.isLocal(this.getSkinRoot()))   ssp.skin   = this.getSkinRoot();
+        if (ssp.cape     == null || !HttpUtil0.isLocal(this.getCapeRoot()))   ssp.cape   = this.getCapeRoot();
+        if (ssp.elytra   == null || !HttpUtil0.isLocal(this.getElytraRoot())) ssp.elytra = this.getElytraRoot();
+    }
+
+    public abstract String getSkinRoot();
+    public abstract String getCapeRoot();
+    public abstract String getElytraRoot();
+
+    public static class LocalSkin extends LegacyLoader {
+        @Override public String getLoaderName() { return "LocalSkin"; }
+        @Override public String getSkinRoot()   { return "LocalSkin/skins/{USERNAME}.png"; }
+        @Override public String getCapeRoot()   { return "LocalSkin/capes/{USERNAME}.png"; }
+        @Override public String getElytraRoot() { return "LocalSkin/elytras/{USERNAME}.png"; }
+    }
+
+    /* Minecrack could not load skin correctly
+    public static class Minecrack extends LegacyLoader {
+        @Override public String getLoaderName() { return "Minecrack"; }
+        @Override public String getSkinRoot()   { return "http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png"; }
+        @Override public String getCapeRoot()   { return "http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"; }
+        @Override public String getElytraRoot() { return null; }
+    }
+     */
+
+    // === IProfileLoader ===
+
     public static final String USERNAME_PLACEHOLDER = "{USERNAME}";
     public static final String UUID_PLACEHOLDER = "{UUID}";
 
@@ -34,7 +70,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
                 if (skinFile.exists() && skinFile.isFile())
                     profile.skinUrl = HttpTextureUtil.getLocalLegacyFakeUrl(skin, HttpTextureUtil.getHash(skin, skinFile.length(), skinFile.lastModified()));
             } else {
-                HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequest(skin).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(skin).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if (responce.success)
                     profile.skinUrl = HttpTextureUtil.getLegacyFakeUrl(skin);
             }
@@ -47,7 +83,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
                 if (capeFile.exists() && capeFile.isFile())
                     profile.capeUrl = HttpTextureUtil.getLocalLegacyFakeUrl(cape, HttpTextureUtil.getHash(cape, capeFile.length(), capeFile.lastModified()));
             } else {
-                HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequest(cape).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(cape).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if (responce.success)
                     profile.capeUrl = HttpTextureUtil.getLegacyFakeUrl(cape);
             }
@@ -59,7 +95,7 @@ public class LegacyLoader implements ProfileLoader.IProfileLoader {
                 if (elytraFile.exists() && elytraFile.isFile())
                     profile.elytraUrl = HttpTextureUtil.getLocalLegacyFakeUrl(elytra, HttpTextureUtil.getHash(elytra, elytraFile.length(), elytraFile.lastModified()));
             } else {
-                HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequest(elytra).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(elytra).setUserAgent(ssp.userAgent).setCheckPNG(ssp.checkPNG != null && ssp.checkPNG).setLoadContent(false).setCacheTime(90));
                 if (responce.success)
                     profile.elytraUrl = HttpTextureUtil.getLegacyFakeUrl(elytra);
             }

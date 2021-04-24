@@ -4,12 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
-import com.google.common.collect.Maps;
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -19,16 +15,42 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import com.mojang.util.UUIDTypeAdapter;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
-import customskinloader.utils.HttpRequestUtil.HttpRequest;
-import customskinloader.utils.HttpRequestUtil.HttpResponce;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 
-public class MojangAPILoader implements ProfileLoader.IProfileLoader {
+public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
+
+    // === ICustomSkinLoaderPlugin ===
+
+    @Override
+    public ProfileLoader.IProfileLoader getProfileLoader() {
+        return this;
+    }
+
+    @Override
+    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+        ssp.type        = this.getName();
+        ssp.apiRoot     = this.getAPIRoot();
+        ssp.sessionRoot = this.getSessionRoot();
+    }
+
+    public abstract String getAPIRoot();
+    public abstract String getSessionRoot();
+
+    public static class Mojang extends MojangAPILoader {
+        @Override public String getLoaderName()  { return "Mojang"; }
+        @Override public String getAPIRoot()     { return "https://api.mojang.com/"; }
+        @Override public String getSessionRoot() { return "https://sessionserver.mojang.com/"; }
+    }
+
+    // === IProfileLoader ===
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
@@ -58,8 +80,8 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
         //Doc (https://wiki.vg/Mojang_API#Playernames_-.3E_UUIDs)
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
 
-        HttpResponce responce = HttpRequestUtil.makeHttpRequest(
-                new HttpRequest(apiRoot + "profiles/minecraft")
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(
+                new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft")
                         .setCacheTime(600).setPayload(gson.toJson(Collections.singletonList(username)))
         );
         if (StringUtils.isEmpty(responce.content))
@@ -78,8 +100,8 @@ public class MojangAPILoader implements ProfileLoader.IProfileLoader {
     //UUID -> Profile
     public static GameProfile fillGameProfile(String sessionRoot, GameProfile profile) {
         //Doc (http://wiki.vg/Mojang_API#UUID_-.3E_Profile_.2B_Skin.2FCape)
-        HttpResponce responce = HttpRequestUtil.makeHttpRequest(
-                new HttpRequest(sessionRoot + "session/minecraft/profile/"
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(
+                new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/"
                         + UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
         if (StringUtils.isEmpty(responce.content))
             return profile;
