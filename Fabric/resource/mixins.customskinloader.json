@@ -1,5 +1,6 @@
 {
   "compatibilityLevel": "JAVA_8",
+  "mixinPriority": 1010,
   "package": "customskinloader.mixin",
   "client": [
     "MixinGuiPlayerTabOverlay",

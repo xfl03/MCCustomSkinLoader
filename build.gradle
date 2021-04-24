@@ -9,10 +9,9 @@ configFile.withReader {
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "sponge"
@@ -65,7 +64,13 @@ subprojects {
     repositories {
         maven {
             name = "sponge"
-            url = "https://repo.spongepowered.org/maven"
+            url = "https://repo.spongepowered.org/repository/maven-public/"
+        }
+    }
+
+    repositories.each {
+        if (it instanceof MavenArtifactRepository && it.url.toString() == "https://files.minecraftforge.net/maven") {
+            it.url = "https://maven.minecraftforge.net/"
         }
     }
 
