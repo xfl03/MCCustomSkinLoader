@@ -46,8 +46,8 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
 
     public static class Mojang extends MojangAPILoader {
         @Override public String getLoaderName()  { return "Mojang"; }
-        @Override public String getAPIRoot()     { return "https://api.mojang.com/"; }
-        @Override public String getSessionRoot() { return "https://sessionserver.mojang.com/"; }
+        @Override public String getAPIRoot()     { return getMojangApiRoot(); }
+        @Override public String getSessionRoot() { return getMojangSessionRoot(); }
     }
 
     // === IProfileLoader ===
@@ -81,8 +81,8 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
 
         HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(
-                new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft")
-                        .setCacheTime(600).setPayload(gson.toJson(Collections.singletonList(username)))
+            new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft")
+                .setCacheTime(600).setPayload(gson.toJson(Collections.singletonList(username)))
         );
         if (StringUtils.isEmpty(responce.content))
             return null;
@@ -101,15 +101,15 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
     public static GameProfile fillGameProfile(String sessionRoot, GameProfile profile) {
         //Doc (http://wiki.vg/Mojang_API#UUID_-.3E_Profile_.2B_Skin.2FCape)
         HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(
-                new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/"
-                        + UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
+            new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/"
+                + UUIDTypeAdapter.fromUUID(profile.getId())).setCacheTime(90));
         if (StringUtils.isEmpty(responce.content))
             return profile;
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(UUID.class, new UUIDTypeAdapter())
-                .registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer())
-                .create();
+            .registerTypeAdapter(UUID.class, new UUIDTypeAdapter())
+            .registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer())
+            .create();
         MinecraftProfilePropertiesResponse propertiesResponce = gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
         GameProfile newGameProfile = new GameProfile(propertiesResponce.getId(), propertiesResponce.getName());
         newGameProfile.getProperties().putAll(propertiesResponce.getProperties());
@@ -136,7 +136,7 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
 
     @Override
     public boolean compare(SkinSiteProfile ssp0, SkinSiteProfile ssp1) {
-        return true;
+        return (!StringUtils.isNoneEmpty(ssp0.apiRoot) || ssp0.apiRoot.equalsIgnoreCase(ssp1.apiRoot)) || (!StringUtils.isNoneEmpty(ssp0.sessionRoot) || ssp0.sessionRoot.equalsIgnoreCase(ssp1.sessionRoot));
     }
 
     @Override
@@ -148,14 +148,20 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
     public void init(SkinSiteProfile ssp) {
         //Init default api & session root for Mojang API
         if (ssp.apiRoot == null)
-            ssp.apiRoot = "https://api.mojang.com/";
+            ssp.apiRoot = getMojangApiRoot();
         if (ssp.sessionRoot == null)
-            ssp.sessionRoot = "https://sessionserver.mojang.com/";
+            ssp.sessionRoot = getMojangSessionRoot();
     }
 
+    // Prevent authlib-injector (https://github.com/yushijinhun/authlib-injector) from modifying these strings
     private static final String MOJANG_API_ROOT = "https://api{DO_NOT_MODIFY}.mojang.com/";
+    private static final String MOJANG_SESSION_ROOT = "https://sessionserver{DO_NOT_MODIFY}.mojang.com/";
 
     public static String getMojangApiRoot() {
         return MOJANG_API_ROOT.replace("{DO_NOT_MODIFY}", "");
+    }
+
+    public static String getMojangSessionRoot() {
+        return MOJANG_SESSION_ROOT.replace("{DO_NOT_MODIFY}", "");
     }
 }
