@@ -155,7 +155,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
         }
     }
 
-    //Some cape image doesn't support alpha channel, so reset image format to ARGB
+    // Some cape image doesn't support alpha channel, so reset image format to ARGB
     private static FakeImage resetImageFormat(FakeImage image, int startX, int startY, int endX, int endY) {
         if (image != null) {
             int width = image.getWidth(), height = image.getHeight();
@@ -187,7 +187,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
 
         int x0 = (int) (startX * scaleWidth), x1 = (int) ((startX + 1) * scaleWidth), dx0 = x1 - x0;
         for (int x = startX; x < endX; ++x) {
-            int y0 = (int) (startY * scaleWidth), y1 = (int) ((startY + 1) * scaleWidth), dy0 = y1 - y0;
+            int y0 = (int) (startY * scaleHeight), y1 = (int) ((startY + 1) * scaleHeight), dy0 = y1 - y0;
             for (int y = startY; y < endY; ++y) {
                 int rgba = image.getRGBA(x, y);
                 for (int dx = 0; dx < dx0; dx++) {
@@ -195,7 +195,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                         newImage.setRGBA(x0 + dx, y0 + dy, rgba);
                     }
                 }
-                y0 = y1; y1 = (int) ((y + 2) * scaleWidth); dy0 = y1 - y0;
+                y0 = y1; y1 = (int) ((y + 2) * scaleHeight); dy0 = y1 - y0;
             }
             x0 = x1; x1 = (int) ((x + 2) * scaleWidth); dx0 = x1 - x0;
         }
