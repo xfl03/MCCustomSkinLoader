@@ -17,8 +17,9 @@ function checkName(name, srgName) {
 // De-obfuscate method and field names.
 function mapName(srgName) {
     try {
-        if (srgName.startsWith("field_")) return net.minecraftforge.coremod.api.ASMAPI.mapField(srgName);
-        if (srgName.startsWith("func_")) return net.minecraftforge.coremod.api.ASMAPI.mapMethod(srgName);
+        var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+        if (srgName.startsWith("field_")) return ASMAPI.mapField(srgName);
+        if (srgName.startsWith("func_")) return ASMAPI.mapMethod(srgName);
     } catch (ignored) {
         // Before forge-1.13.2-25.0.194
     }
@@ -166,6 +167,16 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.interfaces.add("customskinloader/fake/itf/IFakeMinecraft");
+
+                var mn = new MethodNode(Opcodes.ACC_PUBLIC, "getResourceFromResourceLocation", "(Lnet/minecraft/util/ResourceLocation;)Ljava/io/InputStream;", null, null);
+                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/Minecraft", mapName("func_195551_G"), "()Lnet/minecraft/resources/IResourceManager;", false));
+                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "net/minecraft/resources/IResourceManager", mapName("func_199002_a"), "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource;", true));
+                mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "net/minecraft/resources/IResource", mapName("func_199027_b"), "()Ljava/io/InputStream;", true));
+                mn.instructions.add(new InsnNode(Opcodes.ARETURN));
+                cn.methods.add(mn);
+
                 return cn;
             }
         },

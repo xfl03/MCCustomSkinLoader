@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ThreadDownloadImageData.class)
 @SuppressWarnings("target")
-public abstract class MixinThreadDownloadImageData {
+public abstract class MixinThreadDownloadImageDataV2 {
     @Final
     @Shadow
     private Runnable processTask;

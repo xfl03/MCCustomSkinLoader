@@ -54,7 +54,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         boolean result = true;
-        if (mixinClassName.endsWith(".MixinThreadDownloadImageData")) {
+        if (mixinClassName.endsWith(".MixinThreadDownloadImageDataV2")) {
             result = this.world_version >= 2205 && this.protocol_version >= 554; // 19w38a+
         } else if (mixinClassName.endsWith(".MixinLayerCape") || mixinClassName.endsWith(".MixinRenderPlayer")) {
             result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+

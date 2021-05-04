@@ -30,11 +30,14 @@ public class FakeNativeImage implements FakeImage {
     }
 
     public int getRGBA(int x, int y) {
-        return image.func_195709_a(x, y);
+        int abgr = image.func_195709_a(x, y);
+        int b = abgr >>> 16 & 0xFF, r = abgr >>> 0 & 0xFF;
+        return abgr & 0xFF00FF00 | (r << 16 | b);
     }
 
     public void setRGBA(int x, int y, int rgba) {
-        image.func_195700_a(x, y, rgba);
+        int b = rgba >>> 0 & 0xFF, r = rgba >>> 16 & 0xFF;
+        image.func_195700_a(x, y, rgba & 0xFF00FF00 | (b << 16 | r));
     }
 
     public void copyImageData(FakeImage image) {

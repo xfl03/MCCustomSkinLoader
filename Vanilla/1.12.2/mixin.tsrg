@@ -12,6 +12,8 @@ net/minecraft/client/model/ModelRenderer brs
 net/minecraft/client/renderer/RenderType net/minecraft/client/renderer/RenderType
 	getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; func_228634_a_
 net/minecraft/client/renderer/ThreadDownloadImageData cdh
+	bufferedImage l
+	textureUploaded n
 	processTask field_229155_i_
 	loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; func_229159_a_
 	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; func_229163_c_
