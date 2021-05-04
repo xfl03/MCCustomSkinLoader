@@ -18,11 +18,11 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     private static FakeImage elytraImage = loadElytra();
 
     public static FakeImage loadElytra() {
+        loadedGlobal++;
         try {
             InputStream is = MinecraftUtil.getResourceFromResourceLocation(TEXTURE_ELYTRA);
             if (is != null) {
                 FakeImage image = new FakeBufferedImage(ImageIO.read(is));
-                loadedGlobal++;
                 if (image.getWidth() % 64 != 0 || image.getHeight() % 32 != 0) { // wtf?
                     return elytraImage;
                 }
@@ -30,7 +30,6 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 return image;
             }
         } catch (IOException ignored) { }
-        loadedGlobal++;
         return null;
     }
 
@@ -53,6 +52,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
         if (this.loaded == loadedGlobal) {
             elytraImage = loadElytra();
         }
+        this.loaded = loadedGlobal;
         if (elytraImage != null) {
             if (this.ratioX < 0)
                 this.ratioX = this.image.getWidth() / 64.0D;
@@ -69,7 +69,6 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 }
             }
         }
-        this.loaded = loadedGlobal;
         return this.image;
     }
 
@@ -105,7 +104,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 capeH = elytraH;
                 this.ratioY = capeH / 32.0D;
             }
-            // cape part ((22, 0), (45, 21)) -> (24 * 22)
+            // elytra part ((22, 0), (45, 21)) -> (24 * 22)
             if (elytraW < capeW) {
                 elytraImage = scaleImage(elytraImage, false, capeW / (double) elytraW, 1, elytraW / 64.0D, elytraH / 32.0D, capeW, elytraH, 22, 0, 46, 22);
                 elytraW = capeW;
