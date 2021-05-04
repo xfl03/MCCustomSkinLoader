@@ -152,7 +152,6 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
             // NOTICE: OptiFine modified the upload process of the texture from ThreadDownloadImageData
             // Therefore, it may not be correct to simply copy the vanilla behavior
             ((IFakeThreadDownloadImageData) textureObj).resetNewBufferedImage(image.getImage());
-            ((IFakeThreadDownloadImageData) textureObj).resetTextureUploaded();
         }
     }
 

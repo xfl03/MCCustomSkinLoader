@@ -28,22 +28,15 @@ public class FakeInterfacesTransformer {
         public ClassNode transform(ClassNode cn) {
             cn.interfaces.add("customskinloader/fake/itf/IFakeThreadDownloadImageData");
 
-            {
-                MethodNode mn = new MethodNode(Opcodes.ACC_PUBLIC, "resetTextureUploaded", "()V", null, null);
-                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                mn.instructions.add(new InsnNode(Opcodes.ICONST_0));
-                mn.instructions.add(new FieldInsnNode(Opcodes.PUTFIELD, cn.name, TransformerManager.mapFieldName(cn.name, "field_110559_g", "Z"), "Z"));
-                mn.instructions.add(new InsnNode(Opcodes.RETURN));
-                cn.methods.add(mn);
-            }
-            {
-                MethodNode mn = new MethodNode(Opcodes.ACC_PUBLIC, "resetNewBufferedImage", "(Ljava/awt/image/BufferedImage;)V", null, null);
-                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                mn.instructions.add(new FieldInsnNode(Opcodes.PUTFIELD, cn.name, TransformerManager.mapFieldName(cn.name, "field_110560_d", "Ljava/awt/image/BufferedImage;"), "Ljava/awt/image/BufferedImage;"));
-                mn.instructions.add(new InsnNode(Opcodes.RETURN));
-                cn.methods.add(mn);
-            }
+            MethodNode mn = new MethodNode(Opcodes.ACC_PUBLIC, "resetNewBufferedImage", "(Ljava/awt/image/BufferedImage;)V", null, null);
+            mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+            mn.instructions.add(new InsnNode(Opcodes.ICONST_0));
+            mn.instructions.add(new FieldInsnNode(Opcodes.PUTFIELD, cn.name, TransformerManager.mapFieldName(cn.name, "field_110559_g", "Z"), "Z"));
+            mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+            mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+            mn.instructions.add(new FieldInsnNode(Opcodes.PUTFIELD, cn.name, TransformerManager.mapFieldName(cn.name, "field_110560_d", "Ljava/awt/image/BufferedImage;"), "Ljava/awt/image/BufferedImage;"));
+            mn.instructions.add(new InsnNode(Opcodes.RETURN));
+            cn.methods.add(mn);
 
             return cn;
         }

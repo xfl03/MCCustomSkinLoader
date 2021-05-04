@@ -16,12 +16,8 @@ public abstract class MixinThreadDownloadImageDataV1 implements IFakeThreadDownl
     private boolean textureUploaded;
 
     @Override
-    public void resetTextureUploaded() {
-        this.textureUploaded = false;
-    }
-
-    @Override
     public void resetNewBufferedImage(BufferedImage image) {
+        this.textureUploaded = false;
         this.bufferedImage = image;
     }
 }
