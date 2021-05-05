@@ -1,9 +1,5 @@
 package customskinloader.loader;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -24,6 +20,10 @@ import customskinloader.utils.HttpRequestUtil;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 
 public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
@@ -77,7 +77,17 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
 
     //Username -> UUID
     public static GameProfile loadGameProfile(String apiRoot, String username) {
-        //Doc (https://wiki.vg/Mojang_API#Playernames_-.3E_UUIDs)
+        GameProfile gameProfile = loadGameProfileByPayload(apiRoot, username);
+        if (gameProfile != null) {
+            return gameProfile;
+        }
+        gameProfile = loadGameProfileByQuery(apiRoot, username);
+        return gameProfile;
+    }
+
+    //Usernames -> UUIDs
+    private static GameProfile loadGameProfileByPayload(String apiRoot, String username) {
+        //Doc (https://wiki.vg/Mojang_API#Usernames_to_UUIDs)
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
 
         HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(
@@ -95,6 +105,26 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
         if (gameProfile.getId() == null)
             return null;
         return new GameProfile(gameProfile.getId(), gameProfile.getName());
+    }
+
+    //Username -> UUID
+    private static GameProfile loadGameProfileByQuery(String apiRoot, String username) {
+        //Doc (https://wiki.vg/Mojang_API#Username_to_UUID)
+        Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
+
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(
+                new HttpRequestUtil.HttpRequest(apiRoot + "users/profiles/minecraft/" + username)
+                        .setCacheTime(600)
+        );
+        if (StringUtils.isEmpty(responce.content)) {
+            return null;
+        }
+
+        GameProfile profile = gson.fromJson(responce.content, GameProfile.class);
+        if (profile == null || profile.getId() == null) {
+            return null;
+        }
+        return new GameProfile(profile.getId(), profile.getName());
     }
 
     //UUID -> Profile
