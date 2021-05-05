@@ -9,7 +9,11 @@ It's a mod which can load skins and capes from any online source or from your lo
 
 Build Server : [CircleCI](https://circleci.com/gh/xfl03/MCCustomSkinLoader) & ~~[Infinity Studio CI](https://ci.infstudio.net/job/CustomSkinLoader/)~~   
 Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html) & [GitHub](https://github.com/xfl03/MCCustomSkinLoader/releases) & [CurseForge](https://minecraft.curseforge.com/projects/customskinloader)  
-  
+
+## Contact Us
+[QQ Group](https://im.qq.com/): [651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)  
+[Telegram](https://telegram.org/): [@customskinloader](https://t.me/customskinloader)
+
 ## Feature  
 ### Support Plenty of Skin Load API and Customizable Skin Load List  
 Supported Skin Load APIs:  
@@ -70,7 +74,7 @@ Furthermore, you can add your server to 'Default Load List'.
 You can also use 'ExtraList' which makes it easier for users to add your server into load list.  
 
 ## Development and Contribution
-See [DEVGUIDE.md](DEVGUIDE.md)
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Copyright & LICENSE  
 ### Binary File  
