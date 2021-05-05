@@ -136,7 +136,7 @@ void uploadArtifacts(String shortVersion) {
         String mcversion = getMcVersion(file.getName())
         println(String.format("csl-%s-%s\t%s", mcversion.replace(".", "").toLowerCase(), cslversion, url))
 
-        if (key.endsWith(".jar") && !key.endsWith("-sources.jar")) {
+        if (key.startsWith("mods/") && key.endsWith(".jar") && !key.endsWith("-sources.jar")) {
             map2.put(mcversion, url)
         } else if (key.endsWith(".json")) {
             map3.put(mcversion, url)
