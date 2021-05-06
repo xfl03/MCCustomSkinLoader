@@ -84,7 +84,7 @@ public class FakeThreadDownloadImageData {
         V4(() -> new IThreadDownloadImageDataBuilder() { // Forge 1.15.x~1.16.x
             @Override
             public SimpleTexture build(File cacheFile, String imageUrl, ResourceLocation textureResourceLocation, IImageBuffer imageBuffer, MinecraftProfileTexture.Type textureType) {
-                return new DownloadingTexture(cacheFile, imageUrl, textureResourceLocation, textureType != MinecraftProfileTexture.Type.ELYTRA, imageBuffer);
+                return new DownloadingTexture(cacheFile, imageUrl, textureResourceLocation, true, imageBuffer);
             }
         });
 

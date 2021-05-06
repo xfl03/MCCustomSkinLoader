@@ -16,6 +16,11 @@ public abstract class MixinThreadDownloadImageDataV2 {
     @Shadow
     private Runnable processTask;
 
+    @Shadow
+    private static NativeImage processLegacySkin(NativeImage nativeImageIn) {
+        return null;
+    }
+
     @Redirect(
         method = "Lnet/minecraft/client/renderer/ThreadDownloadImageData;loadTexture(Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage;",
         at = @At(
@@ -24,6 +29,6 @@ public abstract class MixinThreadDownloadImageDataV2 {
         )
     )
     private NativeImage redirect_loadTexture(NativeImage image) {
-        return FakeSkinBuffer.processLegacySkin(image, this.processTask);
+        return FakeSkinBuffer.processLegacySkin(image, this.processTask, MixinThreadDownloadImageDataV2::processLegacySkin);
     }
 }
