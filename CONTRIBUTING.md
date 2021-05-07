@@ -11,7 +11,7 @@ For now, CustomSkinLoader is unable to run under self development environment, s
 There are the available versions in different environments below:  
 |  | Forge | Fabric |
 |:-:|:-:|:-:|
-| Runtime Environment | forge-1.8-11.14.0.1237 ~ latest | fabric-loader-0.4.3+build.134 ~ latest<br/> Minecraft 18w43b ~ latest<br/> *fabric-api is not required* |
+| Runtime Environment | forge-1.8-11.14.0.1237 ~ 1.13.2-25.0.22<br/> forge-1.13.2-25.0.42 ~ latest | fabric-loader-0.4.3+build.134 ~ latest<br/> Minecraft 18w43b ~ latest<br/> *fabric-api is not required* |
 | Development Environment | ForgeGradle-2.1-SNAPSHOT ~ latest<br/> forge-1.8-11.14.3.1503 ~ 1.12.2-14.23.5.2855<br/> forge-1.13.2-25.0.198 ~ latest | fabric-loom-(?) ~ latest<br/> fabric-loader-0.4.9+build.160 ~ latest<br/> Minecraft 18w49a ~ latest<br/> *fabric-api is not required* |
 
 ### Preliminary steps for testing local builds
