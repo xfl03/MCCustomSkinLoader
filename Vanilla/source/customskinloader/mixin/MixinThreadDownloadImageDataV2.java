@@ -11,10 +11,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ThreadDownloadImageData.class)
 @SuppressWarnings("target")
-public abstract class MixinThreadDownloadImageData {
+public abstract class MixinThreadDownloadImageDataV2 {
     @Final
     @Shadow
     private Runnable processTask;
+
+    @Shadow
+    private static NativeImage processLegacySkin(NativeImage nativeImageIn) {
+        return null;
+    }
 
     @Redirect(
         method = "Lnet/minecraft/client/renderer/ThreadDownloadImageData;loadTexture(Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage;",
@@ -24,6 +29,6 @@ public abstract class MixinThreadDownloadImageData {
         )
     )
     private NativeImage redirect_loadTexture(NativeImage image) {
-        return FakeSkinBuffer.processLegacySkin(image, this.processTask);
+        return FakeSkinBuffer.processLegacySkin(image, this.processTask, MixinThreadDownloadImageDataV2::processLegacySkin);
     }
 }

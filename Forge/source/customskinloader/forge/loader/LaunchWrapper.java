@@ -19,7 +19,8 @@ import org.objectweb.asm.tree.MethodNode;
 public class LaunchWrapper implements IClassTransformer {
     private static final TransformerManager.IClassTransformer[] CLASS_TRANSFORMERS = {
         new FakeInterfacesTransformer.MinecraftTransformer(),
-        new FakeInterfacesTransformer.AbstractTextureTransfomer(),
+        new FakeInterfacesTransformer.ThreadDownloadImageDataTransformer(),
+        new FakeInterfacesTransformer.AbstractTextureTransformer(),
         new FakeInterfacesTransformer.TextureTransformer(),
         new FakeInterfacesTransformer.TextureManagerTransformer()
     };

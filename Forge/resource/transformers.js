@@ -1,7 +1,10 @@
+var Handle = Java.type('org.objectweb.asm.Handle');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
+var Type = Java.type('org.objectweb.asm.Type');
 var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 var FieldNode = Java.type('org.objectweb.asm.tree.FieldNode');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
+var InvokeDynamicInsnNode = Java.type('org.objectweb.asm.tree.InvokeDynamicInsnNode');
 var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
 var LabelNode = Java.type('org.objectweb.asm.tree.LabelNode');
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -17,8 +20,9 @@ function checkName(name, srgName) {
 // De-obfuscate method and field names.
 function mapName(srgName) {
     try {
-        if (srgName.startsWith("field_")) return net.minecraftforge.coremod.api.ASMAPI.mapField(srgName);
-        if (srgName.startsWith("func_")) return net.minecraftforge.coremod.api.ASMAPI.mapMethod(srgName);
+        var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+        if (srgName.startsWith("field_")) return ASMAPI.mapField(srgName);
+        if (srgName.startsWith("func_")) return ASMAPI.mapMethod(srgName);
     } catch (ignored) {
         // Before forge-1.13.2-25.0.194
     }
@@ -166,6 +170,16 @@ function initializeCoreMod() {
             },
             'transformer': function (cn) {
                 cn.interfaces.add("customskinloader/fake/itf/IFakeMinecraft");
+
+                var mn = new MethodNode(Opcodes.ACC_PUBLIC, "getResourceFromResourceLocation", "(Lnet/minecraft/util/ResourceLocation;)Ljava/io/InputStream;", null, null);
+                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/Minecraft", mapName("func_195551_G"), "()Lnet/minecraft/resources/IResourceManager;", false));
+                mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "net/minecraft/resources/IResourceManager", mapName("func_199002_a"), "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource;", true));
+                mn.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "net/minecraft/resources/IResource", mapName("func_199027_b"), "()Ljava/io/InputStream;", true));
+                mn.instructions.add(new InsnNode(Opcodes.ARETURN));
+                cn.methods.add(mn);
+
                 return cn;
             }
         },
@@ -203,9 +217,15 @@ function initializeCoreMod() {
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
                             if (node.getOpcode() === Opcodes.INVOKESTATIC && node.owner.equals("net/minecraft/client/renderer/texture/DownloadingTexture") && checkName(node.name, "func_229163_c_") && node.desc.equals("(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;")) {
+                                // FakeSkinBuffer.processLegacySkin(image, this.processTask, DownloadingTexture::processLegacySkin);
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
                                 mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/texture/DownloadingTexture", mapName("field_229155_i_"), "Ljava/lang/Runnable;"));
-                                iterator.set(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;Ljava/lang/Runnable;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
+                                mn.instructions.insertBefore(node, new InvokeDynamicInsnNode("apply", "()Ljava/util/function/Function;",
+                                    /*   bsm   */ new Handle(Opcodes.H_INVOKESTATIC, "java/lang/invoke/LambdaMetafactory", "metafactory", "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;", false),
+                                    /* bsmArgs */ Type.getType("(Ljava/lang/Object;)Ljava/lang/Object;"),
+                                    /* bsmArgs */ new Handle(Opcodes.H_INVOKESTATIC, "net/minecraft/client/renderer/texture/DownloadingTexture", mapName("func_229163_c_"), "(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;", false),
+                                    /* bsmArgs */ Type.getType("(Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage;")));
+                                iterator.set(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinBuffer", "processLegacySkin", "(Lnet/minecraft/client/renderer/texture/NativeImage;Ljava/lang/Runnable;Ljava/util/function/Function;)Lnet/minecraft/client/renderer/texture/NativeImage;", false));
                             }
                         }
                     }

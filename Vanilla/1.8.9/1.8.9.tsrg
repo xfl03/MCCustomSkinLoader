@@ -9,6 +9,7 @@ net/minecraft/client/Minecraft ave
 	addScheduledTask (Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture; a
 	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; D
 	getMinecraft ()Lnet/minecraft/client/Minecraft; A
+	getResourceManager ()Lnet/minecraft/client/resources/IResourceManager; Q
 	getSession ()Lnet/minecraft/util/Session; L
 	getSessionService ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; aa
 	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; ab
@@ -45,6 +46,10 @@ net/minecraft/client/renderer/texture/ThreadDownloadImageData bma
 net/minecraft/client/resources/DefaultPlayerSkin bmz
 	getDefaultSkin (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; a
 	getDefaultSkinLegacy ()Lnet/minecraft/util/ResourceLocation; a
+net/minecraft/client/resources/IResource bnh
+	getInputStream ()Ljava/io/InputStream; b
+net/minecraft/client/resources/IResourceManager bni
+	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; a
 net/minecraft/client/resources/SkinManager bnp
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback bnp$a

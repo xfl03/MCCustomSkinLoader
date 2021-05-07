@@ -1,6 +1,8 @@
 package customskinloader.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -8,9 +10,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.mojang.authlib.GameProfile;
+import customskinloader.fake.itf.IFakeMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
+import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -28,6 +32,10 @@ public class MinecraftUtil {
 
     public static SkinManager getSkinManager() {
         return Minecraft.getMinecraft().getSkinManager();
+    }
+
+    public static InputStream getResourceFromResourceLocation(ResourceLocation location) throws IOException {
+        return ((IFakeMinecraft) Minecraft.getMinecraft()).getResourceFromResourceLocation(location);
     }
 
 

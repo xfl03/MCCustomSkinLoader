@@ -105,7 +105,10 @@ public class FakeSkinManager {
         private MinecraftProfileTexture texture;
 
         public BaseBuffer(SkinAvailableCallback callback, Type type, ResourceLocation location, MinecraftProfileTexture texture) {
-            this.buffer = (type == Type.SKIN ? new FakeSkinBuffer() : null);
+            switch (type) {
+                case SKIN: this.buffer = new FakeSkinBuffer(); break;
+                case CAPE: this.buffer = new FakeCapeBuffer(location); break;
+            }
 
             this.callback = callback;
             this.type = type;
@@ -118,7 +121,7 @@ public class FakeSkinManager {
         }
 
         public BufferedImage parseUserSkin(BufferedImage image) {
-            return buffer == null ? image : buffer.parseUserSkin(image);
+            return buffer instanceof FakeSkinBuffer ? ((FakeSkinBuffer) buffer).parseUserSkin(image) : image;
         }
 
         public void skinAvailable() {

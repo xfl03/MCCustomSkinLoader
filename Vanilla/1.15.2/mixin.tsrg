@@ -12,6 +12,8 @@ net/minecraft/client/renderer/IRenderTypeBuffer dqt
 net/minecraft/client/renderer/RenderType drb
 	getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; a
 net/minecraft/client/renderer/ThreadDownloadImageData dzz
+	bufferedImage field_110560_d
+	textureUploaded k
 	processTask i
 	loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; a
 	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; c

@@ -44,6 +44,10 @@ public class TransformerManager {
         return remapper.mapType(name);
     }
 
+    public static String mapFieldName(String owner, String name, String desc) {
+        return remapper.mapFieldName(owner, name, desc);
+    }
+
     public static String mapMethodName(String owner, String name, String desc) {
         return remapper.mapMethodName(owner, name, desc);
     }
