@@ -3,23 +3,32 @@ package customskinloader.loader.jsonapi;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class UniSkinAPI implements JsonAPILoader.IJsonAPI {
+public class UniSkinAPI implements JsonAPILoader.IJsonAPI {
 
-    public static class SkinMe extends UniSkinAPI {
-        @Override public String getLoaderName() { return "SkinMe"; }
-        @Override public String getRoot()       { return "http://www.skinme.cc/uniskin/"; }
+    public static class SkinMe extends JsonAPILoader.DefaultProfile {
+        public SkinMe(JsonAPILoader loader) { super(loader); }
+        @Override public String getName()   { return "SkinMe"; }
+        @Override public int getPriority()  { return 500; }
+        @Override public String getRoot()   { return "http://www.skinme.cc/uniskin/"; }
     }
 
     private static final String TEXTURES="textures/";
     private static final String SUFFIX=".json";
+
+    @Override
+    public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
+        return Lists.newArrayList(new SkinMe(loader));
+    }
 
     @Override
     public String toJsonUrl(String root, String username) {
