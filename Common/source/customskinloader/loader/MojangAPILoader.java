@@ -1,10 +1,12 @@
 package customskinloader.loader;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,9 +27,7 @@ import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
-
-    // === ICustomSkinLoaderPlugin ===
+public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
     @Override
     public ProfileLoader.IProfileLoader getProfileLoader() {
@@ -35,22 +35,35 @@ public abstract class MojangAPILoader implements ICustomSkinLoaderPlugin, Profil
     }
 
     @Override
-    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
-        ssp.type        = this.getName();
-        ssp.apiRoot     = this.getAPIRoot();
-        ssp.sessionRoot = this.getSessionRoot();
+    public List<IDefaultProfile> getDefaultProfiles() {
+        return Lists.newArrayList(new Mojang(this));
     }
 
-    public abstract String getAPIRoot();
-    public abstract String getSessionRoot();
+    public abstract static class DefaultProfile implements ICustomSkinLoaderPlugin.IDefaultProfile {
+        protected final MojangAPILoader loader;
 
-    public static class Mojang extends MojangAPILoader {
-        @Override public String getLoaderName()  { return "Mojang"; }
+        public DefaultProfile(MojangAPILoader loader) {
+            this.loader = loader;
+        }
+
+        @Override
+        public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+            ssp.type        = this.loader.getName();
+            ssp.apiRoot     = this.getAPIRoot();
+            ssp.sessionRoot = this.getSessionRoot();
+        }
+
+        public abstract String getAPIRoot();
+        public abstract String getSessionRoot();
+    }
+
+    public static class Mojang extends MojangAPILoader.DefaultProfile {
+        public Mojang(MojangAPILoader loader)    { super(loader); }
+        @Override public String getName()        { return "Mojang"; }
+        @Override public int getPriority()       { return 100; }
         @Override public String getAPIRoot()     { return getMojangApiRoot(); }
         @Override public String getSessionRoot() { return getMojangSessionRoot(); }
     }
-
-    // === IProfileLoader ===
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {

@@ -10,11 +10,11 @@ import customskinloader.plugin.PluginLoader;
 import customskinloader.profile.UserProfile;
 
 public class ProfileLoader {
-    public static final HashMap<String,IProfileLoader> LOADERS=initLoaders();
+    public static final HashMap<String, IProfileLoader> LOADERS = initLoaders();
     
     private static HashMap<String, IProfileLoader> initLoaders() {
-        HashMap<String, ProfileLoader.IProfileLoader> profileLoaders = new HashMap<String, ProfileLoader.IProfileLoader>();
-        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS.values()) {
+        HashMap<String, ProfileLoader.IProfileLoader> profileLoaders = new HashMap<>();
+        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
             ProfileLoader.IProfileLoader profileLoader = plugin.getProfileLoader();
             if (profileLoader != null) {
                 profileLoaders.put(profileLoader.getName().toLowerCase(), profileLoader);

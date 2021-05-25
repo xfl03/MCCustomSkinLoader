@@ -2,6 +2,7 @@ package customskinloader.loader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 import com.mojang.authlib.GameProfile;
 import customskinloader.CustomSkinLoader;
@@ -16,8 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
     
     public interface IJsonAPI {
-        String getLoaderName();
-        String getRoot();
+        List<IDefaultProfile> getDefaultProfiles(JsonAPILoader loader);
         String toJsonUrl(String root, String username);
         String getPayload(SkinSiteProfile ssp);
         UserProfile toUserProfile(String root, String json, boolean local);
@@ -41,14 +41,24 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
     }
 
     @Override
-    public String getLoaderName() {
-        return this.jsonAPI.getLoaderName();
+    public List<IDefaultProfile> getDefaultProfiles() {
+        return this.jsonAPI.getDefaultProfiles(this);
     }
 
-    @Override
-    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
-        ssp.type = this.getName();
-        ssp.root = this.jsonAPI.getRoot();
+    public abstract static class DefaultProfile implements ICustomSkinLoaderPlugin.IDefaultProfile {
+        protected final JsonAPILoader loader;
+
+        public DefaultProfile(JsonAPILoader loader) {
+            this.loader = loader;
+        }
+
+        @Override
+        public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+            ssp.type = this.loader.getName();
+            ssp.root = this.getRoot();
+        }
+
+        public abstract String getRoot();
     }
 
     // === IProfileLoader ===

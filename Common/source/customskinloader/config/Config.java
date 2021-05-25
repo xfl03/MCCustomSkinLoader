@@ -3,11 +3,12 @@ package customskinloader.config;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
+import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.plugin.PluginLoader;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
@@ -41,9 +42,15 @@ public class Config {
     public boolean enableCacheAutoClean=false;
     public boolean forceDisableCache = false;
 
+    // Used by Gson to create an instance with default value.
+    public Config() {
+        this(new ArrayList<>());
+    }
+
     //Init config
     public Config(List<SkinSiteProfile> loadlist){
         this.version=CustomSkinLoader.CustomSkinLoader_VERSION;
+        this.buildNumber=CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
         this.loadlist=loadlist;
     }
 
@@ -85,12 +92,8 @@ public class Config {
             CustomSkinLoader.logger.info("Config File is out of date: " + config.version + ", build number: " + config.buildNumber);
             config.version = CustomSkinLoader.CustomSkinLoader_VERSION;
             config.buildNumber = CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
-
-            //Update some config
-            if (configVersion.compareTo("14.10") < 0)//Lower than 14.10
-                config.enableCape = true;
-            writeConfig(config, true);
         }
+        writeConfig(config, true);
 
         //Output config
         for (Field field : config.getClass().getDeclaredFields()) {
@@ -184,22 +187,41 @@ public class Config {
 
     // The config file does not exist or was broken.
     private static Config initConfig() {
-        List<SkinSiteProfile> loadlist = new ArrayList<SkinSiteProfile>();
-        PluginLoader.PLUGINS.forEach((name, plugin) -> {
+        List<ICustomSkinLoaderPlugin.IDefaultProfile> profiles = new ArrayList<>();
+        for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
+            List<ICustomSkinLoaderPlugin.IDefaultProfile> defaultProfiles = plugin.getDefaultProfiles();
+            if (defaultProfiles != null) {
+                profiles.addAll(defaultProfiles);
+            }
+        }
+        profiles.sort(Comparator.comparingInt(ICustomSkinLoaderPlugin.IDefaultProfile::getPriority));
+
+        List<SkinSiteProfile> loadlist = new ArrayList<>();
+        for (ICustomSkinLoaderPlugin.IDefaultProfile profile : profiles) {
             SkinSiteProfile ssp = new SkinSiteProfile();
-            ssp.name = name;
-            plugin.updateSkinSiteProfile(ssp);
+            ssp.name = profile.getName();
+            profile.updateSkinSiteProfile(ssp);
             loadlist.add(ssp);
-        });
-        Config config=new Config(loadlist);
-        writeConfig(config,false);
+        }
+
+        Config config = new Config(loadlist);
+        writeConfig(config, false);
         return config;
     }
-    private static void writeConfig(Config config,boolean update){
+    private static void writeConfig(Config config, boolean update){
         if (update && config.loadlist != null) { // Update loadlist, complete missing elements
-            PluginLoader.PLUGINS.forEach((name, plugin) -> config.loadlist.stream()
-                .filter(ssp -> Objects.equals(ssp.name, name))
-                .forEach(plugin::updateSkinSiteProfile));
+            for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
+                List<ICustomSkinLoaderPlugin.IDefaultProfile> profiles = plugin.getDefaultProfiles();
+                if (profiles != null) {
+                    for (ICustomSkinLoaderPlugin.IDefaultProfile profile : profiles) {
+                        for (SkinSiteProfile ssp : config.loadlist) {
+                            if (profile.getName().equals(ssp.name)) {
+                                profile.updateSkinSiteProfile(ssp);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         String json=CustomSkinLoader.GSON.toJson(config);

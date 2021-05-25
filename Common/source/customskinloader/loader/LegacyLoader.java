@@ -1,8 +1,10 @@
 package customskinloader.loader;
 
 import java.io.File;
+import java.util.List;
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.util.UUIDTypeAdapter;
 import customskinloader.CustomSkinLoader;
@@ -15,9 +17,7 @@ import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
-
-    // === ICustomSkinLoaderPlugin ===
+public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
     @Override
     public ProfileLoader.IProfileLoader getProfileLoader() {
@@ -25,36 +25,50 @@ public abstract class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLo
     }
 
     @Override
-    public void updateSkinSiteProfile(SkinSiteProfile ssp) {
-        ssp.type = this.getName();
-        if (ssp.checkPNG == null) ssp.checkPNG = false;
-        if (ssp.model    == null) ssp.model    = "auto";
-        if (ssp.skin     == null || !HttpUtil0.isLocal(this.getSkinRoot()))   ssp.skin   = this.getSkinRoot();
-        if (ssp.cape     == null || !HttpUtil0.isLocal(this.getCapeRoot()))   ssp.cape   = this.getCapeRoot();
-        if (ssp.elytra   == null || !HttpUtil0.isLocal(this.getElytraRoot())) ssp.elytra = this.getElytraRoot();
+    public List<IDefaultProfile> getDefaultProfiles() {
+        return Lists.newArrayList(new LocalSkin(this));
     }
 
-    public abstract String getSkinRoot();
-    public abstract String getCapeRoot();
-    public abstract String getElytraRoot();
+    public abstract static class DefaultProfile implements ICustomSkinLoaderPlugin.IDefaultProfile {
+        protected final LegacyLoader loader;
 
-    public static class LocalSkin extends LegacyLoader {
-        @Override public String getLoaderName() { return "LocalSkin"; }
+        public DefaultProfile(LegacyLoader loader) {
+            this.loader = loader;
+        }
+
+        @Override
+        public void updateSkinSiteProfile(SkinSiteProfile ssp) {
+            ssp.type = this.loader.getName();
+            if (ssp.checkPNG == null) ssp.checkPNG = false;
+            if (ssp.model    == null) ssp.model    = "auto";
+            if (ssp.skin     == null || !HttpUtil0.isLocal(this.getSkinRoot()))   ssp.skin   = this.getSkinRoot();
+            if (ssp.cape     == null || !HttpUtil0.isLocal(this.getCapeRoot()))   ssp.cape   = this.getCapeRoot();
+            if (ssp.elytra   == null || !HttpUtil0.isLocal(this.getElytraRoot())) ssp.elytra = this.getElytraRoot();
+        }
+
+        public abstract String getSkinRoot();
+        public abstract String getCapeRoot();
+        public abstract String getElytraRoot();
+    }
+
+    public static class LocalSkin extends LegacyLoader.DefaultProfile {
+        public LocalSkin(LegacyLoader loader)   { super(loader); }
+        @Override public String getName()       { return "LocalSkin"; }
+        @Override public int getPriority()      { return 600; }
         @Override public String getSkinRoot()   { return "LocalSkin/skins/{USERNAME}.png"; }
         @Override public String getCapeRoot()   { return "LocalSkin/capes/{USERNAME}.png"; }
         @Override public String getElytraRoot() { return "LocalSkin/elytras/{USERNAME}.png"; }
     }
 
-    /* Minecrack could not load skin correctly
-    public static class Minecrack extends LegacyLoader {
-        @Override public String getLoaderName() { return "Minecrack"; }
-        @Override public String getSkinRoot()   { return "http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png"; }
-        @Override public String getCapeRoot()   { return "http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"; }
-        @Override public String getElytraRoot() { return null; }
-    }
-     */
-
-    // === IProfileLoader ===
+    // // Minecrack could not load skin correctly
+    // public static class Minecrack extends LegacyLoader.DefaultProfile {
+    //     public Minecrack(LegacyLoader loader)   { super(loader); }
+    //     @Override public String getName()       { return "Minecrack"; }
+    //     @Override public int getPriority()      { return 600; }
+    //     @Override public String getSkinRoot()   { return "http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png"; }
+    //     @Override public String getCapeRoot()   { return "http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"; }
+    //     @Override public String getElytraRoot() { return null; }
+    // }
 
     public static final String USERNAME_PLACEHOLDER = "{USERNAME}";
     public static final String UUID_PLACEHOLDER = "{UUID}";

@@ -5,35 +5,35 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.ServiceLoader;
 
+import com.google.common.collect.Lists;
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.loader.LegacyLoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.loader.jsonapi.CustomSkinAPI;
+import customskinloader.loader.jsonapi.CustomSkinAPIPlus;
 import customskinloader.loader.jsonapi.ElyByAPI;
 import customskinloader.loader.jsonapi.GlitchlessAPI;
 import customskinloader.loader.jsonapi.UniSkinAPI;
 import org.apache.commons.io.FileUtils;
 
 public class PluginLoader {
-    // This controls the default loading order.
     public static final ICustomSkinLoaderPlugin[] DEFAULT_PLUGINS = new ICustomSkinLoaderPlugin[] {
-        new MojangAPILoader.Mojang(),
-        new JsonAPILoader(new CustomSkinAPI.LittleSkin()),
-        new JsonAPILoader(new CustomSkinAPI.BlessingSkin()),
-        new JsonAPILoader(new ElyByAPI.ElyBy()),
-        new JsonAPILoader(new UniSkinAPI.SkinMe()),
-        new LegacyLoader.LocalSkin(),
-        new JsonAPILoader(new GlitchlessAPI.GlitchlessGames())
+        new MojangAPILoader(),
+        new LegacyLoader(),
+        new JsonAPILoader(new CustomSkinAPI()),
+        new JsonAPILoader(new CustomSkinAPIPlus()),
+        new JsonAPILoader(new UniSkinAPI()),
+        new JsonAPILoader(new ElyByAPI()),
+        new JsonAPILoader(new GlitchlessAPI())
     };
-    public static final LinkedHashMap<String, ICustomSkinLoaderPlugin> PLUGINS = loadPlugins();
+    public static final ArrayList<ICustomSkinLoaderPlugin> PLUGINS = loadPlugins();
 
-    private static LinkedHashMap<String, ICustomSkinLoaderPlugin> loadPlugins() {
+    private static ArrayList<ICustomSkinLoaderPlugin> loadPlugins() {
         File pluginsDir = new File(CustomSkinLoader.DATA_DIR, "Plugins");
-        ArrayList<URL> urls = new ArrayList<URL>();
+        ArrayList<URL> urls = new ArrayList<>();
         if (!pluginsDir.isDirectory()) {
             pluginsDir.mkdirs();
         } else {
@@ -44,19 +44,12 @@ public class PluginLoader {
                 } catch (MalformedURLException ignored) {}
             }
         }
-        LinkedHashMap<String, ICustomSkinLoaderPlugin> plugins = new LinkedHashMap<>();
-        addPlugin(plugins, DEFAULT_PLUGINS);
+        ArrayList<ICustomSkinLoaderPlugin> plugins = Lists.newArrayList(DEFAULT_PLUGINS);
 
         ServiceLoader<ICustomSkinLoaderPlugin> sl = ServiceLoader.load(ICustomSkinLoaderPlugin.class, new URLClassLoader(urls.toArray(new URL[0]), PluginLoader.class.getClassLoader()));
         for (ICustomSkinLoaderPlugin plugin : sl) {
-            plugins.put(plugin.getLoaderName(), plugin);
+            plugins.add(plugin);
         }
         return plugins;
-    }
-
-    public static void addPlugin(LinkedHashMap<String, ICustomSkinLoaderPlugin> pluginMap, ICustomSkinLoaderPlugin... plugins) {
-        for (ICustomSkinLoaderPlugin plugin : plugins) {
-            pluginMap.put(plugin.getLoaderName(), plugin);
-        }
     }
 }
