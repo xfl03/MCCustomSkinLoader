@@ -58,6 +58,8 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             result = this.world_version >= 2205 && this.protocol_version >= 554; // 19w38a+
         } else if (mixinClassName.endsWith(".MixinLayerCape") || mixinClassName.endsWith(".MixinRenderPlayer")) {
             result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+
+        } else if (mixinClassName.endsWith(".MixinTileEntitySkull")) {
+            result = this.world_version <= 2715 && (this.protocol_version <= 803 || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x4000001C)); // 21w20a-
         }
         logger.info("target: " + targetClassName + ", mixin: " + mixinClassName + ", result: " + result);
         return result;
