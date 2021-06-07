@@ -55,13 +55,13 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         boolean result = true;
         if (mixinClassName.endsWith(".MixinThreadDownloadImageDataV2")) {
-            result = (this.world_version >= 2205 && this.world_version <= 2722) && ((this.protocol_version >= 554 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x40000022)); // 19w38a ~ 1.17-rc1
+            result = (this.world_version >= 2205 && this.world_version <= 2722) && ((this.protocol_version >= 554 && this.protocol_version <= 754) || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x40000022)); // 19w38a ~ 1.17-rc1
         } else if (mixinClassName.endsWith(".MixinLayerCape") || mixinClassName.endsWith(".MixinRenderPlayer")) {
             result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+
         } else if (mixinClassName.endsWith(".MixinTileEntitySkull")) {
             result = this.world_version <= 2715 && (this.protocol_version <= 803 || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x4000001C)); // 21w20a-
         } else if (mixinClassName.endsWith(".MixinThreadDownloadImageDataV3")) {
-            result = this.world_version >= 2723 && ((this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000023); // 1.17-rc2+
+            result = this.world_version >= 2723 && ((this.protocol_version >= 755 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000023); // 1.17-rc2+
         }
         logger.info("target: " + targetClassName + ", mixin: " + mixinClassName + ", result: " + result);
         return result;
