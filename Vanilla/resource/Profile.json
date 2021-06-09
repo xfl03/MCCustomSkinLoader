@@ -46,68 +46,68 @@
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm/9.0/asm-9.0.jar",
-          "sha1": "af582ff60bc567c42d931500c3fdc20e0141ddf9",
-          "size": 121783,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar"
+          "path": "org/ow2/asm/asm/9.1/asm-9.1.jar",
+          "sha1": "a99500cf6eea30535eeac6be73899d048f8d12a8",
+          "size": 121790,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.1/asm-9.1.jar"
         }
       },
-      "name": "org.ow2.asm:asm:9.0"
+      "name": "org.ow2.asm:asm:9.1"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-analysis/9.0/asm-analysis-9.0.jar",
-          "sha1": "4630afefbb43939c739445dde0af1a5729a0fb4e",
-          "size": 33439,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.0/asm-analysis-9.0.jar"
+          "path": "org/ow2/asm/asm-analysis/9.1/asm-analysis-9.1.jar",
+          "sha1": "4f61b83b81d8b659958f4bcc48907e93ecea55a0",
+          "size": 34257,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.1/asm-analysis-9.1.jar"
         }
       },
-      "name": "org.ow2.asm:asm-analysis:9.0"
+      "name": "org.ow2.asm:asm-analysis:9.1"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-commons/9.0/asm-commons-9.0.jar",
-          "sha1": "5a34a3a9ac44f362f35d1b27932380b0031a3334",
-          "size": 71646,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.0/asm-commons-9.0.jar"
+          "path": "org/ow2/asm/asm-commons/9.1/asm-commons-9.1.jar",
+          "sha1": "8b971b182eb5cf100b9e8d4119152d83e00e0fdd",
+          "size": 72641,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.1/asm-commons-9.1.jar"
         }
       },
-      "name": "org.ow2.asm:asm-commons:9.0"
+      "name": "org.ow2.asm:asm-commons:9.1"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-tree/9.0/asm-tree-9.0.jar",
-          "sha1": "9df939f25c556b0c7efe00701d47e77a49837f24",
-          "size": 52673,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.0/asm-tree-9.0.jar"
+          "path": "org/ow2/asm/asm-tree/9.1/asm-tree-9.1.jar",
+          "sha1": "c333f2a855069cb8eb17a40a3eb8b1b67755d0eb",
+          "size": 52662,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.1/asm-tree-9.1.jar"
         }
       },
-      "name": "org.ow2.asm:asm-tree:9.0"
+      "name": "org.ow2.asm:asm-tree:9.1"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-util/9.0/asm-util-9.0.jar",
-          "sha1": "7c059a94ab5eed3347bf954e27fab58e52968848",
-          "size": 84857,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.0/asm-util-9.0.jar"
+          "path": "org/ow2/asm/asm-util/9.1/asm-util-9.1.jar",
+          "sha1": "36464a45d871779f3383a8a9aba2b26562a86729",
+          "size": 84679,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.1/asm-util-9.1.jar"
         }
       },
-      "name": "org.ow2.asm:asm-util:9.0"
+      "name": "org.ow2.asm:asm-util:9.1"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar",
-          "sha1": "1cf212283d26f706fd3074318870bebd14d2a9ed",
-          "size": 935252,
-          "url": "https://repo.spongepowered.org/repository/maven-public/org/spongepowered/mixin/0.8.2/mixin-0.8.2.jar"
+          "path": "org/spongepowered/mixin/0.8.3-SNAPSHOT/mixin-0.8.3-20210427.123106-6.jar",
+          "sha1": "ac62dd93389087d7568d614146b37da0b1cdc642",
+          "size": 1006436,
+          "url": "https://repo.spongepowered.org/repository/maven-public/org/spongepowered/mixin/0.8.3-SNAPSHOT/mixin-0.8.3-20210427.123106-6.jar"
         }
       },
-      "name": "org.spongepowered:mixin:0.8.2"
+      "name": "org.spongepowered:mixin:0.8.3-SNAPSHOT"
     }
   ],
   "mainClass": "net.minecraft.launchwrapper.Launch",

@@ -37,3 +37,35 @@ task afterBuildForVanilla {
     }
 }
 afterBuild.finalizedBy afterBuildForVanilla
+
+// Make vanilla remap tsrg file via Fabric tsrg file.
+task convertFabricMappingToVanilla {
+    doLast {
+        [{ Project p -> p.file(p.ext.config.srg_notch_map) }, { Project p -> p.file("mixin.tsrg") }].each { tsrgGetter ->
+            def lines = [] as List<String>
+            def mapping = [:] as Map<String, String>
+            // Read Fabric tsrg file
+            tsrgGetter(project(":Fabric")).eachLine { line ->
+                lines.add line
+                line.split($/\s/$).with { strs -> strs[strs.length - 1] }.with { str -> mapping.put str, str }
+            }
+            // Read Fabric intermediary tiny mappings.
+            // We don't care about descriptions of the member because all of intermediary names are unique.
+            new URL("https://raw.githubusercontent.com/FabricMC/intermediary/master/mappings/${project.ext.config.minecraft_version}.tiny").eachLine { line ->
+                line.split($/\s/$).with { strs ->
+                    if (mapping.containsKey(strs[strs.length - 1])) {
+                        mapping.put strs[strs.length - 1], strs[strs.length - 2]
+                    }
+                }
+            }
+            // Write vanilla tsrg file.
+            tsrgGetter(project).withWriter { writer ->
+                lines.each { line ->
+                    line.split($/\s/$).with { strs -> strs[strs.length - 1] }.with { str ->
+                        writer.writeLine line.replace(str, mapping.get(str))
+                    }
+                }
+            }
+        }
+    }
+}
