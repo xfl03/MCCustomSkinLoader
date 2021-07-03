@@ -16,23 +16,28 @@ projectImplementation project(':Common')
 projectImplementation project(':Vanilla')
 
 import java.security.MessageDigest
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 task afterBuildForVanilla {
     doLast {
         def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
 
         //copyProfileJson
-        File f = project.file("build/resources/main/Profile.json")
-        String of = String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortVersion)
-        File off = rootProject.file(of)
-        off.parentFile.mkdirs()
+        File profile = project.file("build/resources/main/Profile.json")
+        File target = rootProject.file(String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortVersion))
+        target.parentFile.mkdirs()
 
-        def digest = MessageDigest.getInstance "SHA1"
-        digest.update file0.getBytes()
-        def sha1 = new BigInteger(1, digest.digest()).toString 16 padLeft 40, "0"
-        off.withWriter "UTF-8", { w ->
-            f.eachLine "UTF-8", { str ->
-                w << "${-> str.contains("{SHA1}") ? str.replace("{SHA1}", sha1) : (!(str =~ $/"size":\s*-1/$) ? str : str.replace("-1", file0.size().toString()))}\n"
+        new JsonSlurper().parse(profile, "UTF-8").with { p ->
+            p.libraries.find({ lib ->
+                lib.name.startsWith "customskinloader:CustomSkinLoader_"
+            }).downloads.artifact.with { artifact ->
+                artifact.sha1 = MessageDigest.getInstance "SHA1" with { digest ->
+                    digest.update file0.bytes
+                    new BigInteger(1, digest.digest()).toString 16 padLeft 40, "0"
+                }
+                artifact.size = file0.size()
             }
+            target.write JsonOutput.prettyPrint(JsonOutput.toJson(p)), "UTF-8"
         }
     }
 }

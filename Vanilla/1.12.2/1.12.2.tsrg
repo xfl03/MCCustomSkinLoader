@@ -10,7 +10,6 @@ net/minecraft/client/Minecraft bib
 	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; C
 	getMinecraft ()Lnet/minecraft/client/Minecraft; z
 	getResourceManager ()Lnet/minecraft/client/resources/IResourceManager; O
-	getSession ()Lnet/minecraft/util/Session; K
 	getSessionService ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; X
 	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; Y
 	getTextureManager ()Lnet/minecraft/client/renderer/texture/TextureManager; N
@@ -56,7 +55,5 @@ net/minecraft/client/resources/SkinManager$SkinAvailableCallback cex$a
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V a
 net/minecraft/tileentity/TileEntitySkull awd
 net/minecraft/util/ResourceLocation nf
-net/minecraft/util/Session bii
-	getProfile ()Lcom/mojang/authlib/GameProfile; e
 net/minecraft/util/StringUtils rp
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; a

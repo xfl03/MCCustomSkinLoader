@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.cadixdev:mercury:0.1.0-rc1"
+        classpath "org.cadixdev:mercury:0.1.0"
     }
 }
 
@@ -43,7 +43,7 @@ import org.cadixdev.mercury.Mercury
 import org.cadixdev.mercury.remapper.MercuryRemapper
 
 tasks.extractRangemapReplacedMain.doFirst {
-    // Because of https://github.com/MinecraftForge/ForgeGradle/blob/6084129e4f407eca9fee6826aaa3276fe796553e/build.gradle#L147-L240,
+    // Because of https://github.com/MinecraftForge/ForgeGradle/blob/62f37569f3afc044489e7606d2eb4c2509a85fb8/build.gradle#L152-L245,
     // ForgeGradle modified Eclipse JDT and Mercury will call related methods,
     // so here must be some hacks.
     RangeExtractor.INSTANCE = new RangeExtractor().with {

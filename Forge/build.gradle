@@ -12,6 +12,11 @@ jar {
     exclude 'net/minecraftforge/**'
 }
 
+tasks.signJar {
+    // To prevent modlauncher from checking signer information about Minecraft classes in CustomSkinLoader jar after forge-1.16.3-34.1.27.
+    exclude "net/minecraft/client/**"
+}
+
 projectImplementation project(':Common')
 
 minecraft {
