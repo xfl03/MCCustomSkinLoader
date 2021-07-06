@@ -1,0 +1,26 @@
+
+dependencies {
+    provided "com.google.guava:guava:21.0"
+}
+
+jar {
+    // Mixin 0.8 requires Guava 21.0 but Minecraft 1.8.9 uses Guava 17.0
+    from configurations.provided.files.collect {
+        return zipTree(it).matching { filter ->
+            filter.include { e ->
+                matchInnerClass e.path as String,
+                        "com/google/common/io/InsecureRecursiveDeleteException",
+                        "com/google/common/io/MoreFiles",
+                        "com/google/common/io/RecursiveDeleteOption"
+            }
+        }
+    }
+}
+
+tasks.signJar {
+    exclude "com/google/common/io/**"
+}
+
+static boolean matchInnerClass(String path, String... names) {
+    names.any { name -> path.equals(name + ".class") || (path.startsWith(name + '$') && path.endsWith(".class")) }
+}

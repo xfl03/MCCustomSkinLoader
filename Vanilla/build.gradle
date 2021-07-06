@@ -4,5 +4,5 @@ dependencies {
     implementation project(':Common'), {
         transitive = false
     }
-    implementation 'org.spongepowered:mixin:0.8.2:thin'
+    implementation 'org.spongepowered:mixin:0.8.3:thin'
 }

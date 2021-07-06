@@ -10,7 +10,6 @@ net/minecraft/client/Minecraft net/minecraft/class_310
 	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; method_1558
 	getMinecraft ()Lnet/minecraft/client/Minecraft; method_1551
 	getResourceManager ()Lnet/minecraft/client/resources/IResourceManager; method_1478
-	getSession ()Lnet/minecraft/util/Session; method_1548
 	getSessionService ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; method_1495
 	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; method_1582
 	getTextureManager ()Lnet/minecraft/client/renderer/texture/TextureManager; method_1531
@@ -56,7 +55,5 @@ net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/c
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
 net/minecraft/tileentity/TileEntitySkull net/minecraft/class_2631
 net/minecraft/util/ResourceLocation net/minecraft/class_2960
-net/minecraft/util/Session net/minecraft/class_320
-	getProfile ()Lcom/mojang/authlib/GameProfile; method_1677
 net/minecraft/util/StringUtils net/minecraft/class_3544
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; method_15440

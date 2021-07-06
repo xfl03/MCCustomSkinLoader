@@ -1,105 +1,36 @@
 /**
- * Gradle Script for Remap
- * Designed for remapping jar.
- * Remap Jar: mcp<->srg<->notch
+ * Gradle Script for Converting Mappings
+ * Designed for Converting Mappings.
+ * Converting Mappings: tsrg->srg
  */
 
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
     }
     dependencies {
-        classpath 'net.md-5:SpecialSource:1.8.6'
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "org.cadixdev:lorenz:0.5.7"
     }
 }
 
-import net.md_5.specialsource.JarMapping
-import net.md_5.specialsource.JarRemapper
-import net.md_5.specialsource.provider.JarProvider
-import net.md_5.specialsource.provider.JointProvider
-
-
-void reobfSrgToNotch() {
-    def srgName = "${archivesBaseName}-${version}-srg.jar"
-    def notchName = srgName.replace('-srg', '')
-    if (config.srg_notch_map == null) {
-        //Default Map
-        def mcpName = srgName.replace('-srg', '-dev')
-        applySpecialSource(srgName, mcpName, getDefaultMap("srg-mcp"))
-        applySpecialSource(mcpName, notchName, getDefaultMap("mcp-notch"))
-    } else {
-        //Custom Map
-        applySpecialSource(srgName, notchName, config.srg_notch_map)
-    }
-}
-
-void applySpecialSource(String inputName, String outputName, String mapFile) {
-    def mapping = new JarMapping()
-    def srgFile = file(mapFile)
-    def inputFile = file("build/libs/${inputName}")
-    def outputFile = file("build/libs/${outputName}")
-    def remapper = new JarRemapper(null, mapping)
-    def inputJar = net.md_5.specialsource.Jar.init(inputFile)
-    def inheritanceProviders = new JointProvider()
-    def jarProvider = new JarProvider(inputJar)
-    inheritanceProviders.add(jarProvider)
-    mapping.loadMappings(srgFile)
-    mapping.setFallbackInheritanceProvider(inheritanceProviders)
-    remapper.remapJar(inputJar, outputFile)
-}
-
-String getDefaultMap(String srgType) {
-    def mcpVersion = minecraft.mappings.replace('_', "/")
-    return System.getProperty('user.home') + "/.gradle/caches/minecraft/de/oceanlabs/mcp/mcp_${mcpVersion}/${config.forge_mc_version}/srgs/${srgType}.srg"
-}
+import org.cadixdev.lorenz.MappingSet
+import org.cadixdev.lorenz.io.srg.SrgWriter
+import org.cadixdev.lorenz.io.srg.tsrg.TSrgReader
 
 static void tsrg2srg(File tsrg, File srg) {
-    if (!tsrg.exists()) {
-        return
-    }
-    if (!srg.getParentFile().exists()) {
-        srg.getParentFile().mkdirs()
+    if (!tsrg.exists()) return
+    if (!srg.parentFile.exists()) srg.parentFile.mkdirs()
+    MappingSet.create().with { set ->
+        tsrg.withReader "UTF-8", { reader ->
+            new TSrgReader(reader).read(set)
+        }
+        srg.withWriter "UTF-8", { writer ->
+            new SrgWriter(writer).write(set)
+        }
     }
     srg.deleteOnExit()
-
-    String mcpClass = "", obfClass = ""
-    Map<String, String> map = new HashMap<>()
-    for (String line : tsrg.readLines("UTF-8")) {
-        String[] strs = line.split($/\s/$)
-        if (!line.startsWith("\t")) {
-            mcpClass = strs[0]
-            obfClass = strs[1]
-            map.put "L" + mcpClass + ";", "L" + obfClass + ";"
-        }
-    }
-
-    String srgStr = "";
-    for (String line : tsrg.readLines("UTF-8")) {
-        String[] strs = line.split($/\s/$)
-        if (!line.startsWith("\t")) {
-            mcpClass = strs[0]
-            obfClass = strs[1]
-            srgStr += "CL: ${-> mcpClass} ${-> obfClass}\n"
-        } else if (strs.length == 3) {
-            srgStr += "FD: ${-> mcpClass}/${-> strs[1]} ${-> obfClass}/${-> strs[2]}\n"
-        } else if (strs.length == 4) {
-            String mcpDesc = strs[2]
-            String obfDesc = mcpDesc
-            map.forEach {k, v ->
-                obfDesc = obfDesc.replace(k, v)
-            }
-            srgStr += "MD: ${-> mcpClass}/${-> strs[1]} ${-> strs[2]} ${-> obfClass}/${-> strs[3]} ${-> obfDesc}\n"
-        }
-    }
-    srg.write srgStr, "UTF-8"
 }
 
 ext {
-    reobfSrgToNotch = this.&reobfSrgToNotch
     tsrg2srg = this.&tsrg2srg
 }

@@ -92,10 +92,6 @@ public class MinecraftUtil {
         return HttpUtil0.isLanServer(getStandardServerAddress());
     }
 
-    public static String getCurrentUsername() {
-        return Minecraft.getMinecraft().getSession().getProfile().getName();
-    }
-
     private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");
 
     private static void testProbe() {
@@ -112,27 +108,6 @@ public class MinecraftUtil {
                 continue;
             minecraftVersion.add(m.group(2));
         }
-    }
-
-    public static boolean isCoreFile(URL url) {
-        return regexMatch(url, MINECRAFT_CORE_FILE_PATTERN);
-    }
-
-    private final static Pattern LIBRARY_FILE_PATTERN = Pattern.compile("^(.*?)/libraries/(.*?)/([^\\/\\\\]*?).jar$");
-
-    public static boolean isLibraryFile(URL url) {
-        return regexMatch(url, LIBRARY_FILE_PATTERN);
-    }
-
-    private static boolean regexMatch(URL url, Pattern p) {
-        Matcher m;
-        try {
-            m = p.matcher(URLDecoder.decode(url.getPath(), "UTF-8"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return m.matches();
     }
 
     public static String getCredential(GameProfile profile) {
