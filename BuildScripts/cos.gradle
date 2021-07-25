@@ -144,6 +144,7 @@ void uploadArtifacts(String shortVersion) {
     }
 
     File latest = new File("build/libs/latest.json")
+    map.get("downloads").put("Forge", map.get("downloads").remove("ForgeLegacy"))
     writeToFile(latest, toJson(map))
     uploadFile("latest.json", latest)
 }

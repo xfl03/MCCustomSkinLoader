@@ -1,0 +1,20 @@
+
+jar {
+    manifest {
+        attributes([
+                "Automatic-Module-Name" : "customskinloader"
+        ])
+    }
+
+    exclude 'net/minecraft/client/renderer/RenderType.class'
+    exclude 'net/minecraft/client/renderer/texture/**'
+}
+sourceJar {
+    exclude 'com/**'
+    exclude 'net/**'
+}
+
+projectImplementation project(':Common')
+dependencies.implementation project(':Forge/Common')
+
+remapSources project

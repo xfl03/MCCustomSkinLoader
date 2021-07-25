@@ -7,17 +7,27 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net/"
+        }
     }
     dependencies {
-        classpath "org.cadixdev:lorenz:0.5.7"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3.+'
+        classpath "org.cadixdev:mercury:0.1.0"
     }
 }
 
+import net.minecraftforge.srg2source.ast.RangeExtractor
+import net.minecraftforge.srg2source.util.io.InputSupplier
 import org.cadixdev.lorenz.MappingSet
+import org.cadixdev.lorenz.io.srg.SrgReader
 import org.cadixdev.lorenz.io.srg.SrgWriter
 import org.cadixdev.lorenz.io.srg.tsrg.TSrgReader
+import org.cadixdev.mercury.Mercury
+import org.cadixdev.mercury.remapper.MercuryRemapper
 
-static void tsrg2srg(File tsrg, File srg) {
+void tsrg2srg(File tsrg, File srg) {
     if (!tsrg.exists()) return
     if (!srg.parentFile.exists()) srg.parentFile.mkdirs()
     MappingSet.create().with { set ->
@@ -31,6 +41,40 @@ static void tsrg2srg(File tsrg, File srg) {
     srg.deleteOnExit()
 }
 
+void remapSources(Project proj) {
+    proj.tasks.extractRangemapReplacedMain.doFirst {
+        // Because of https://github.com/MinecraftForge/ForgeGradle/blob/62f37569f3afc044489e7606d2eb4c2509a85fb8/build.gradle#L152-L245,
+        // ForgeGradle modified Eclipse JDT and Mercury will call related methods,
+        // so here must be some hacks.
+        RangeExtractor.INSTANCE = new RangeExtractor().with {
+            it.input = new InputSupplier() {
+                @Override String getRoot(String resource) { return null }
+                @Override InputStream getInput(String relPath) { return file(relPath).newInputStream() }
+                @Override List<String> gatherAll(String endFilter) { return null }
+                @Override void close() throws IOException { }
+            }
+            it
+        }
+
+        // We use Mercury to remap source jar because srg2source have a few issues.
+        def mercury = new Mercury()
+        (configurations.compileClasspath + configurations.forgeGradleMc + configurations.forgeGradleMcDeps).getFiles().each { dep ->
+            mercury.classPath << dep.toPath()
+        }
+        file("build/reobf.srg").withReader { reader ->
+            mercury.processors << MercuryRemapper.create(new SrgReader(reader).read(MappingSet.create()))
+        }
+        def source = file("build/sources/main/java"), dest = file("build/sources/main/java_tmp")
+        if (source.renameTo(dest)) {
+            mercury.rewrite(dest.toPath(), source.toPath())
+            dest.deleteDir()
+        }
+
+        RangeExtractor.INSTANCE = null
+    }
+}
+
 ext {
     tsrg2srg = this.&tsrg2srg
+    remapSources = this.&remapSources
 }

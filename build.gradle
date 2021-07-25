@@ -94,7 +94,7 @@ subprojects {
 
     // For real subprojects
     if (!config.is_real_project || Boolean.parseBoolean(config.is_real_project.toString())) {
-        archivesBaseName = "CustomSkinLoader_${-> project.name.contains("Vanilla") ? config.minecraft_version : project.name }"
+        archivesBaseName = "CustomSkinLoader_${-> project.name.contains("Vanilla") ? config.minecraft_version : project.name.replace('/', '') }"
 
         apply from: rootProject.file("BuildScripts/sources.gradle")
 
@@ -115,7 +115,7 @@ subprojects {
         }
 
         // Mixin stuffs
-        if (!project.name.toLowerCase().contains("forge")) {
+        if (!project.name.toLowerCase().contains("forge/legacy")) {
             apply plugin: 'org.spongepowered.mixin'
 
             dependencies {
@@ -203,7 +203,7 @@ subprojects {
         }
     }
 
-    if (project.name.toLowerCase().contains("vanilla") && !project.name.toLowerCase().endsWith("vanilla")) {
+    if (project.name.toLowerCase().contains("vanilla/1.")) {
         apply from: rootProject.file('Vanilla/common.gradle')
     }
 }

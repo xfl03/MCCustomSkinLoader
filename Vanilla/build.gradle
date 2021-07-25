@@ -1,8 +1,0 @@
-// This subproject is only to provide dependency for other subprojects.
-
-dependencies {
-    implementation project(':Common'), {
-        transitive = false
-    }
-    implementation 'org.spongepowered:mixin:0.8.3:thin'
-}
