@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[37,)"
+license="GPL-3.0-only"
+issueTrackerURL="https://github.com/xfl03/MCCustomSkinLoader/issues"
+[[mods]]
+modId="customskinloader"
+version="${modFullVersion}"
+displayName="CustomSkinLoader"
+description='''
+Custom Skin Loader for Minecraft
+'''
+displayURL="https://github.com/xfl03/MCCustomSkinLoader"
+authors=["xfl03", "JLChnToZ"]
+[[dependencies.customskinloader]]
+modId="forge"
+mandatory=true
+versionRange="[37,)"
+ordering="NONE"
+side="CLIENT"
+[[dependencies.customskinloader]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.17.1,)"
+ordering="NONE"
+side="CLIENT"

@@ -13,7 +13,7 @@ jar {
 }
 
 projectImplementation project(':Common')
-projectImplementation project(':Vanilla')
+projectImplementation project(':Vanilla/Common')
 
 import java.security.MessageDigest
 import groovy.json.JsonOutput

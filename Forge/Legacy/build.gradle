@@ -1,0 +1,28 @@
+
+jar {
+    manifest {
+        attributes([
+                "TweakClass": "customskinloader.forge.ForgeTweaker",
+                "TweakOrder": -10
+        ])
+    }
+    exclude 'net/minecraft/client/renderer/texture/**'
+    exclude 'net/minecraft/client/resources/SkinManager.class'
+    exclude 'net/minecraft/client/resources/SkinManager$ISkinAvailableCallback.class'
+}
+sourceJar {
+    exclude 'net/**'
+}
+
+tasks.signJar {
+    // To prevent modlauncher from checking signer information about Minecraft classes in CustomSkinLoader jar after forge-1.16.3-34.1.27.
+    exclude "net/minecraft/client/**"
+}
+
+projectImplementation project(':Common')
+dependencies.implementation project(':Forge/Common')
+
+minecraft {
+    clientJvmArgs += "-Dfml.coreMods.load=customskinloader.forge.ForgePlugin"
+    replaceIn 'ForgeMod.java'
+}

@@ -61,8 +61,13 @@ public class DevEnvRemapper extends SimpleRemapper {
         return cw.toByteArray();
     }
 
-    private boolean isGettingIntermediaryDesc = false;
     private final String owner;
+    private final SimpleRemapper remapper = new SimpleRemapper(new HashMap<>()) {
+        @Override
+        public String map(String key) {
+            return FabricLoader.getInstance().getMappingResolver().unmapClassName("intermediary", Type.getType("L" + key + ";").getClassName()).replace(".", "/");
+        }
+    };
 
     public DevEnvRemapper(String owner) {
         super(new HashMap<>());
@@ -72,19 +77,9 @@ public class DevEnvRemapper extends SimpleRemapper {
     @Override
     public String mapMethodName(String owner, String name, String desc) {
         // Method desc should be unmapped in the development environment.
-        this.isGettingIntermediaryDesc = true;
-        desc = this.mapDesc(desc);
-        this.isGettingIntermediaryDesc = false;
+        desc = this.remapper.mapDesc(desc);
 
         String s = FabricLoader.getInstance().getMappingResolver().mapMethodName("intermediary", this.owner, name, desc);
         return s == null ? name : s;
-    }
-
-    @Override
-    public String map(String key) {
-        if (this.isGettingIntermediaryDesc) {
-            return FabricLoader.getInstance().getMappingResolver().unmapClassName("intermediary", Type.getType("L" + key + ";").getClassName()).replace(".", "/");
-        }
-        return super.map(key);
     }
 }
