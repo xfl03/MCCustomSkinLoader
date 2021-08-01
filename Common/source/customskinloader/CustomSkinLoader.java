@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -58,37 +59,48 @@ public class CustomSkinLoader {
             new LinkedBlockingQueue<>(333), customFactory, new ThreadPoolExecutor.DiscardOldestPolicy()
     );
 
+    public static void loadProfileLazily(GameProfile gameProfile, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> consumer) {
+        String username = gameProfile.getName();
+        String credential = MinecraftUtil.getCredential(gameProfile);
+        // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
+        if (username == null) {
+            logger.warning("Could not load profile: username is null.");
+            consumer.accept(Maps.newHashMap());
+            return;
+        }
+        String tempName = Thread.currentThread().getName();
+        Thread.currentThread().setName(username); // Change Thread Name
+        if (profileCache.isLoading(credential)) {
+            profileCache.putLoader(credential, consumer);
+            Thread.currentThread().setName(tempName);
+            return;
+        }
+        consumer.accept(loadProfile(gameProfile));
+        Thread.currentThread().setName(tempName);
+        profileCache.getLastLoader(credential).ifPresent(c -> loadProfileLazily(gameProfile, c));
+    }
+
     //For User Skin
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
-        String username=gameProfile.getName();
-        String credential=MinecraftUtil.getCredential(gameProfile);
-        //Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
-        if(username==null){
-            logger.warning("Could not load profile: username is null.");
-            return Maps.newHashMap();
-        }
-        String tempName=Thread.currentThread().getName();
-        Thread.currentThread().setName(username);//Change Thread Name
+        String credential = MinecraftUtil.getCredential(gameProfile);
         UserProfile profile;
-        if(profileCache.isReady(credential)){
+        if (profileCache.isReady(credential)) {
             logger.info("Cached profile will be used.");
-            profile=profileCache.getProfile(credential);
-            if(profile==null){
-                logger.warning("(!Cached Profile is empty!) Expiry:"+profileCache.getExpiry(credential));
-                if(profileCache.isExpired(credential))//force load
-                    profile=loadProfile0(gameProfile);
-            }
-            else
+            profile = profileCache.getProfile(credential);
+            if (profile == null) {
+                logger.warning("(Cached Profile is empty!) Expiry: " + profileCache.getExpiry(credential));
+                if (profileCache.isExpired(credential)) // force load
+                    profile = loadProfile0(gameProfile, false);
+            } else
                 logger.info(profile.toString(profileCache.getExpiry(credential)));
-        }else{
+        } else {
             profileCache.setLoading(credential, true);
-            profile=loadProfile0(gameProfile);
+            profile = loadProfile0(gameProfile, false);
         }
-        Thread.currentThread().setName(tempName);
         return ModelManager0.fromUserProfile(profile);
     }
     //Core
-    public static UserProfile loadProfile0(GameProfile gameProfile){
+    public static UserProfile loadProfile0(GameProfile gameProfile, boolean isSkull){
         String username=gameProfile.getName();
         String credential=MinecraftUtil.getCredential(gameProfile);
         
@@ -121,11 +133,11 @@ public class CustomSkinLoader {
             }
             if(profile==null)
                 continue;
-            if(!config.forceLoadAllTextures){
-                profile0=profile;
-                break;
-            }
             profile0.mix(profile);
+            if(isSkull&&!profile0.hasSkinUrl())
+                continue;
+            if(!config.forceLoadAllTextures)
+                break;
             if(profile0.isFull())
                 break;
         }
@@ -172,7 +184,7 @@ public class CustomSkinLoader {
             Runnable loadThread = () -> {
                 String tempName = Thread.currentThread().getName();
                 Thread.currentThread().setName(username + "'s skull");
-                loadProfile0(gameProfile);//Load in thread
+                loadProfile0(gameProfile, true);//Load in thread
                 Thread.currentThread().setName(tempName);
             };
             if (config.forceUpdateSkull) {

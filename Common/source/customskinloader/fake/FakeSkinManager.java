@@ -13,21 +13,19 @@ import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import customskinloader.CustomSkinLoader;
 import customskinloader.fake.itf.IFakeMinecraft;
 import customskinloader.fake.itf.IFakeTextureManager_1;
 import customskinloader.fake.itf.IFakeTextureManager_2;
 import customskinloader.utils.HttpTextureUtil;
-import customskinloader.utils.HttpTextureUtil.HttpTextureInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager {
@@ -41,15 +39,15 @@ public class FakeSkinManager {
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory;
     }
 
-    public ResourceLocation loadSkin(MinecraftProfileTexture profileTexture, Type textureType) {
+    public ResourceLocation loadSkin(MinecraftProfileTexture profileTexture, MinecraftProfileTexture.Type textureType) {
         return this.loadSkin(profileTexture, textureType, null);
     }
 
-    public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final Type textureType, final SkinAvailableCallback skinAvailableCallback) {
+    public ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final MinecraftProfileTexture.Type textureType, final SkinManager.SkinAvailableCallback skinAvailableCallback) {
         return this.loadSkin(profileTexture, HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl()), textureType, skinAvailableCallback);
     }
 
-    private ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final HttpTextureInfo info, final Type textureType, final SkinAvailableCallback skinAvailableCallback) {
+    private ResourceLocation loadSkin(final MinecraftProfileTexture profileTexture, final HttpTextureUtil.HttpTextureInfo info, final MinecraftProfileTexture.Type textureType, final SkinManager.SkinAvailableCallback skinAvailableCallback) {
         final ResourceLocation resourcelocation = new ResourceLocation("skins/" + Hashing.sha1().hashUnencodedChars(info.hash).toString());
 
         if (((IFakeTextureManager_1) this.textureManager).getTexture(resourcelocation, null) != null) {//Have already loaded
@@ -63,15 +61,15 @@ public class FakeSkinManager {
         return resourcelocation;
     }
 
-    public void loadProfileTextures(final GameProfile profile, final SkinAvailableCallback skinAvailableCallback, final boolean requireSecure) {
-        THREAD_POOL.execute(() -> {
-            final Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
-            map.putAll(CustomSkinLoader.loadProfile(profile));
+    public void loadProfileTextures(final GameProfile profile, final SkinManager.SkinAvailableCallback skinAvailableCallback, final boolean requireSecure) {
+        THREAD_POOL.execute(() -> CustomSkinLoader.loadProfileLazily(profile, m -> {
+            final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = Maps.newHashMap();
+            map.putAll(m);
 
             for (MinecraftProfileTexture.Type type : MinecraftProfileTexture.Type.values()) {
                 MinecraftProfileTexture profileTexture = map.get(type);
                 if (profileTexture != null) {
-                    HttpTextureInfo info = HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
+                    HttpTextureUtil.HttpTextureInfo info = HttpTextureUtil.toHttpTextureInfo(profileTexture.getUrl());
                     FakeThreadDownloadImageData.downloadTexture(info.cacheFile, info.url);
 
                     ((IFakeMinecraft) Minecraft.getMinecraft()).execute(() -> {
@@ -84,14 +82,14 @@ public class FakeSkinManager {
                     });
                 }
             }
-        });
+        }));
     }
 
-    public Map<Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile) {
+    public Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile) {
         return CustomSkinLoader.loadProfileFromCache(profile);
     }
 
-    private static void makeCallback(SkinAvailableCallback callback, Type type, ResourceLocation location, MinecraftProfileTexture texture) {
+    private static void makeCallback(SkinManager.SkinAvailableCallback callback, MinecraftProfileTexture.Type type, ResourceLocation location, MinecraftProfileTexture texture) {
         if (callback != null)
             callback.skinAvailable(type, location, texture);
     }
@@ -99,12 +97,12 @@ public class FakeSkinManager {
     private class BaseBuffer implements IImageBuffer {
         private IImageBuffer buffer;
 
-        private SkinAvailableCallback callback;
-        private Type type;
+        private SkinManager.SkinAvailableCallback callback;
+        private MinecraftProfileTexture.Type type;
         private ResourceLocation location;
         private MinecraftProfileTexture texture;
 
-        public BaseBuffer(SkinAvailableCallback callback, Type type, ResourceLocation location, MinecraftProfileTexture texture) {
+        public BaseBuffer(SkinManager.SkinAvailableCallback callback, MinecraftProfileTexture.Type type, ResourceLocation location, MinecraftProfileTexture texture) {
             switch (type) {
                 case SKIN: this.buffer = new FakeSkinBuffer(); break;
                 case CAPE: this.buffer = new FakeCapeBuffer(location); break;
