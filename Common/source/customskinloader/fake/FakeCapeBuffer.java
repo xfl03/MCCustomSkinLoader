@@ -97,12 +97,10 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
             if (capeW < elytraW) {
                 this.image = scaleImage(this.image, true, elytraW / (double) capeW, 1, capeW / 64.0D, capeH / 32.0D, elytraW, capeH, 0, 0, 22, 17);
                 capeW = elytraW;
-                this.ratioX = capeW / 64.0D;
             }
             if (capeH < elytraH) {
                 this.image = scaleImage(this.image, true, 1, elytraH / (double) capeH, capeW / 64.0D, capeH / 32.0D, capeW, elytraH, 0, 0, 22, 17);
                 capeH = elytraH;
-                this.ratioY = capeH / 32.0D;
             }
             // elytra part ((22, 0), (45, 21)) -> (24 * 22)
             if (elytraW < capeW) {
@@ -113,6 +111,8 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 elytraImage = scaleImage(elytraImage, false, 1, capeH / (double) elytraH, elytraW / 64.0D, elytraH / 32.0D, elytraW, capeH, 22, 0, 46, 22);
                 elytraH = capeH;
             }
+            this.ratioX = capeW / 64.0D;
+            this.ratioY = capeH / 32.0D;
 
             // Overwrite pixels from elytra to cape
             FakeImage finalElytraImage = elytraImage;

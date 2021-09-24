@@ -1,20 +1,24 @@
 package customskinloader.profile;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Deque;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Consumer;
 
-import org.apache.commons.io.FileUtils;
-
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.CustomSkinLoader;
 import customskinloader.utils.TimeUtil;
+import org.apache.commons.io.FileUtils;
 
 public class ProfileCache {
     public static File PROFILE_CACHE_DIR=new File(CustomSkinLoader.DATA_DIR,"ProfileCache");
     
     private Map<String, CachedProfile> cachedProfiles = new ConcurrentHashMap<>();
     private Map<String, UserProfile> localProfiles = new ConcurrentHashMap<>();
+    private Map<String, Deque<Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>>> profileLoaders = new ConcurrentHashMap<>();
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ProfileCache(){
@@ -49,6 +53,13 @@ public class ProfileCache {
             return localProfiles.get(username.toLowerCase());
         return loadLocalProfile(username);
     }
+    public Optional<Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>> getLastLoader(String username) {
+        Deque<Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>> deque = this.profileLoaders.get(username);
+        if (deque != null) {
+            return Optional.ofNullable(deque.pollLast());
+        }
+        return Optional.empty();
+    }
     
     public void setLoading(String username,boolean loading){
         getCachedProfile(username).loading=loading;
@@ -63,6 +74,10 @@ public class ProfileCache {
         if(!saveLocalProfile)
             return;
         saveLocalProfile(username,profile);
+    }
+    public void putLoader(String username, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> loader) {
+        this.profileLoaders.putIfAbsent(username, new ConcurrentLinkedDeque<>());
+        this.profileLoaders.get(username).offerLast(loader);
     }
     
     private CachedProfile getCachedProfile(String username){
