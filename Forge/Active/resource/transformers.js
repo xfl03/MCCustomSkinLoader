@@ -138,8 +138,8 @@ function initializeCoreMod() {
             'transformer': function (mn) {
                 for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                     var node = iterator.next();
-                    if (node.getOpcode() === Opcodes.INVOKEVIRTUAL && node.owner.equals("net/minecraft/client/renderer/texture/HttpTexture") && checkName(node.name, "m_118032_") && node.desc.equals("(Lcom/mojang/blaze3d/platform/NativeImage;)Lcom/mojang/blaze3d/platform/NativeImage;")) {
-                        // FakeSkinBuffer.processLegacySkin(image, this.onDownloaded, HttpTexture::processLegacySkin);
+                    if ((node.getOpcode() === Opcodes.INVOKEVIRTUAL || node.getOpcode() === Opcodes.INVOKESPECIAL) && node.owner.equals("net/minecraft/client/renderer/texture/HttpTexture") && checkName(node.name, "m_118032_") && node.desc.equals("(Lcom/mojang/blaze3d/platform/NativeImage;)Lcom/mojang/blaze3d/platform/NativeImage;")) {
+                        // FakeSkinBuffer.processLegacySkin(image, this.onDownloaded, this::processLegacySkin);
                         mn.instructions.insertBefore(node, new InsnNode(Opcodes.SWAP));
                         mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/renderer/texture/HttpTexture", mapName("f_117997_"), "Ljava/lang/Runnable;"));
                         mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
