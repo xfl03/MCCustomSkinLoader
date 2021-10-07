@@ -2,6 +2,7 @@ package customskinloader.loader.jsonapi;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader;
@@ -37,14 +38,8 @@ public class TLauncherAPI implements JsonAPILoader.IJsonAPI {
 
     @Override
     public UserProfile toUserProfile(String root, String json, boolean local) {
-        TLauncherAPIResponse res = new Gson().fromJson(json, TLauncherAPIResponse.class);
-        if(!res.textures.containsKey(MinecraftProfileTexture.Type.SKIN)) return null;
-
-        return ModelManager0.toUserProfile(res.textures);
-    }
-
-    public static class TLauncherAPIResponse {
-        protected Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures;
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> result = new Gson().fromJson(json, new TypeToken<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>() { }.getType());
+        return ModelManager0.toUserProfile(result);
     }
 
     @Override
