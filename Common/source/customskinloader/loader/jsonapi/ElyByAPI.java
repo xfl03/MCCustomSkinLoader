@@ -22,6 +22,13 @@ public class ElyByAPI implements JsonAPILoader.IJsonAPI {
         @Override public String getRoot()  { return "http://skinsystem.ely.by/textures/"; }
     }
 
+    public static class TLauncher extends JsonAPILoader.DefaultProfile {
+        public TLauncher(JsonAPILoader loader) { super(loader); }
+        @Override public String getName()   { return "TLauncher"; }
+        @Override public int getPriority()  { return 550; }
+        @Override public String getRoot()   { return "https://auth.tlauncher.org/skin/profile/texture/login/"; }
+    }
+
     @Override
     public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
         return Lists.newArrayList(new ElyBy(loader));

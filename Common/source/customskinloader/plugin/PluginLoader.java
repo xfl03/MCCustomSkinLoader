@@ -23,8 +23,7 @@ public class PluginLoader {
         new JsonAPILoader(new CustomSkinAPIPlus()),
         new JsonAPILoader(new UniSkinAPI()),
         new JsonAPILoader(new ElyByAPI()),
-        new JsonAPILoader(new GlitchlessAPI()),
-        new JsonAPILoader(new TLauncherAPI())
+        new JsonAPILoader(new GlitchlessAPI())
     };
     public static final ArrayList<ICustomSkinLoaderPlugin> PLUGINS = loadPlugins();
 
