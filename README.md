@@ -22,6 +22,7 @@ Supported Skin Load APIs:
 - CustomSkinAPIPlus (Test Only)  
 - [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)  
 - [ElyByAPI](http://docs.ely.by/api.html)  
+- TLauncher
 - Legacy  
 
 You can use this feature to customize your skin load list so as to load your skins from any skin server you want.  
@@ -62,7 +63,8 @@ By using this mod, you can see correct avatar of players in Spectator Menu rathe
 - [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
 - [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
 - [ElyBy](http://docs.ely.by/) (ElyByAPI)
-- SkinMe (UniSkinAPI)  
+- SkinMe (UniSkinAPI)
+- TLauncher
 - LocalSkin (Legacy)  
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
   
