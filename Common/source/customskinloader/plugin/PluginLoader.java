@@ -14,9 +14,9 @@ import customskinloader.loader.LegacyLoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.loader.jsonapi.CustomSkinAPI;
 import customskinloader.loader.jsonapi.CustomSkinAPIPlus;
-import customskinloader.loader.jsonapi.UniSkinAPI;
 import customskinloader.loader.jsonapi.ElyByAPI;
 import customskinloader.loader.jsonapi.GlitchlessAPI;
+import customskinloader.loader.jsonapi.UniSkinAPI;
 import org.apache.commons.io.FileUtils;
 
 public class PluginLoader {

@@ -31,7 +31,7 @@ public class ElyByAPI implements JsonAPILoader.IJsonAPI {
 
     @Override
     public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
-        return Lists.newArrayList(new ElyBy(loader));
+        return Lists.newArrayList(new ElyBy(loader), new TLauncher(loader));
     }
 
     @Override
