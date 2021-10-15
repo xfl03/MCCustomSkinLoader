@@ -8,8 +8,8 @@ import java.util.Objects;
 
 import com.google.common.collect.Lists;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.entrypoint.EntrypointTransformer;
-import net.fabricmc.loader.game.MinecraftGameProvider;
+import net.fabricmc.loader.impl.FabricLoaderImpl;
+import net.fabricmc.loader.impl.game.patch.GameTransformer;
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -31,9 +31,9 @@ public class DevEnvRemapper extends SimpleRemapper {
         try {
             if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
                 ClassLoader cl = Thread.currentThread().getContextClassLoader();
-                Field patchedClassesField = EntrypointTransformer.class.getDeclaredField("patchedClasses");
+                Field patchedClassesField = GameTransformer.class.getDeclaredField("patchedClasses");
                 patchedClassesField.setAccessible(true);
-                Map<String, byte[]> patchedClasses = (Map<String, byte[]>) patchedClassesField.get(MinecraftGameProvider.TRANSFORMER);
+                Map<String, byte[]> patchedClasses = (Map<String, byte[]>) patchedClassesField.get(FabricLoaderImpl.INSTANCE.getGameProvider().getEntrypointTransformer());
 
                 for (Map.Entry<String, List<String>> entry : remappedClasses.entrySet()) {
                     for (String clazz : entry.getValue()) {

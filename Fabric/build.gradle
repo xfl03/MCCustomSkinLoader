@@ -25,5 +25,5 @@ remapSources project
 
 dependencies {
     // This is the minimum version number that the mod should dependent in the development environment.
-    implementation "net.fabricmc:fabric-loader:0.4.9+build.160"
+    implementation "net.fabricmc:fabric-loader:0.12.0"
 }

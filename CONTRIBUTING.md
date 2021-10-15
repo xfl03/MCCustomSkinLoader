@@ -12,7 +12,7 @@ There are the available versions in different environments below:
 |  | Forge | Fabric |
 |:-:|:-:|:-:|
 | Runtime Environment | forge-1.8-11.14.0.1237 ~ 1.13.2-25.0.22<br/> forge-1.13.2-25.0.42 ~ latest | fabric-loader-0.4.3+build.134 ~ latest<br/> Minecraft 18w43b ~ latest<br/> *fabric-api is not required* |
-| Development Environment | ForgeGradle-2.1-SNAPSHOT ~ latest<br/> forge-1.8-11.14.3.1503 ~ 1.12.2-14.23.5.2855<br/> forge-1.13.2-25.0.198 ~ latest | fabric-loom-(?) ~ latest<br/> fabric-loader-0.4.9+build.160 ~ latest<br/> Minecraft 18w49a ~ latest<br/> *fabric-api is not required* |
+| Development Environment | ForgeGradle-2.1-SNAPSHOT ~ latest<br/> forge-1.8-11.14.3.1503 ~ 1.12.2-14.23.5.2855<br/> forge-1.13.2-25.0.198 ~ latest | fabric-loom-(?) ~ latest<br/> fabric-loader-0.12.0 ~ latest<br/> Minecraft 18w49a ~ latest<br/> *fabric-api is not required* |
 
 ### Preliminary steps for testing local builds
 1. Create a new empty minecraft development environment.
@@ -71,7 +71,7 @@ There are the available versions in different environments below:
 1. Add `--tweakClass customskinloader.forge.ForgeDevTweaker --username <Your username>` to CLI arguments in `Run/Debug Configurations` dialog.
 1. Then you can debug the mod in IDE or through `./gradlew runClient` command.
 
-### For ForgeGradle 3.x ~ 4.x ( forge-1.12.2-14.23.5.2851 ~ latest )
+### For ForgeGradle 3.x ~ 5.x ( forge-1.12.2-14.23.5.2851 ~ latest )
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
@@ -89,28 +89,47 @@ There are the available versions in different environments below:
    ```
 1. Setup the development environment and run the game as usual.
 
-### For fabric-loom ( fabric-loader-0.4.9+build.160 ~ latest )
+### For fabric-loom ( fabric-loader-0.12.0 ~ latest )
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       modCompile "mods:CustomSkinLoader_Fabric:14.13-SNAPSHOT-00"
+       modImplementation "mods:CustomSkinLoader_Fabric:14.13-SNAPSHOT-00"
+   }
+
+   tasks.runClient {
+	   args += ["--username", "<Your username>"]
    }
    ```
 1. Add `--username <Your username>` to CLI arguments in `Run/Debug Configurations` dialog.
-1. Run the game as usual.
+1. Run the game in IDE or through `./gradlew runClient` command..
 
 ## Depend on release builds
-1. Check the latest version in https://csl.littleservice.cn/latest.json .
+1. Check the latest version in https://littlesk.in/csl-latest .
 1. Add below contents to `build.gradle`:
    ```gradle
+   // Before Gradle 5.x
    repositories {
        ivy {
+           url = "https://csl.littleservice.cn/"
            layout "pattern", {
                artifact "[organisation]/[artifact]-[revision](-[classifier])(.[ext])"
            }
-           url = "https://csl.littleservice.cn/"
        }
    }
+   
+   // After Gradle 6.x
+   repositories {
+       ivy {
+           url = "https://csl.littleservice.cn/"
+           metadataSources {
+               artifact()
+           }
+           patternLayout {
+               artifact "[organisation]/[artifact]-[revision](-[classifier])(.[ext])"
+           }
+       }
+   }
+   ```
 1. Follow the same steps in **Running and Testing**.
 
 ## Developing
