@@ -1,5 +1,6 @@
 apply plugin: 'base'
 
+println "Git commit desc: " + System.getenv("GIT_COMMIT_DESC")
 ext.configFile = file "build.properties"
 configFile.withReader {
     def prop = new Properties()
@@ -27,16 +28,6 @@ buildscript {
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
     gradleVersion = "4.10.3"
-}
-
-apply from: rootProject.file('BuildScripts/cos.gradle')
-apply from: rootProject.file('BuildScripts/version.gradle')
-
-task upload {
-    onlyIf { System.getenv("COS_SECRET_KEY") != null }
-    doLast {
-        uploadArtifacts(getShortVersion())
-    }
 }
 
 subprojects {
@@ -222,5 +213,15 @@ subprojects {
             apply from: rootProject.file("BuildScripts/modrinth.gradle")
             provideModrinth project
         }
+    }
+}
+
+apply from: rootProject.file('BuildScripts/cos.gradle')
+apply from: rootProject.file('BuildScripts/version.gradle')
+
+task upload {
+    onlyIf { System.getenv("COS_SECRET_KEY") != null }
+    doLast {
+        uploadArtifacts(getShortVersion())
     }
 }

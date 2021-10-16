@@ -15,18 +15,18 @@ import com.modrinth.minotaur.request.VersionType
 
 // https://modrinth.com/mod/csl
 static void provideModrinth0(Project proj) {
-    proj.tasks.create(name: "publishModrinth", type: TaskModrinthUpload) {
+    proj.tasks.create(name: "publishModrinth", type: TaskModrinthUpload) { task ->
         onlyIf {
             System.getenv("MODRINTH_TOKEN") != null
         }
 
         token = System.getenv("MODRINTH_TOKEN")
         projectId = "idMHQ4n2"
-        versionNumber = proj.rootProject.getCSLVersion()
+        versionNumber = proj.ext.getCSLVersion()
         versionName = "${proj.archivesBaseName}-${proj.ext.getShortVersion()}"
         changelog = System.getenv("GIT_COMMIT_DESC") ?: ""
         uploadFile = proj.tasks.jar
-        versionType = proj.rootProject.isSnapshot ? VersionType.BETA : VersionType.RELEASE
+        versionType = proj.ext.isSnapshot ? VersionType.BETA : VersionType.RELEASE
         failSilently = true
         detectLoaders = false
 
@@ -35,7 +35,11 @@ static void provideModrinth0(Project proj) {
         }
         addLoader proj.name.split("/")[0] // Loader Version
 
-        proj.rootProject.tasks.upload.finalizedBy it
+        proj.rootProject.tasks.whenTaskAdded {
+            if (it.name == "upload") {
+                it.finalizedBy task
+            }
+        }
     }
 }
 
