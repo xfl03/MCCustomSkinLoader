@@ -1,6 +1,5 @@
 apply plugin: 'base'
 
-println "Git commit desc: " + System.getenv("GIT_COMMIT_DESC")
 ext.configFile = file "build.properties"
 configFile.withReader {
     def prop = new Properties()
