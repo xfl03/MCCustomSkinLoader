@@ -29,6 +29,16 @@ wrapper {
     gradleVersion = "4.10.3"
 }
 
+apply from: rootProject.file('BuildScripts/cos.gradle')
+apply from: rootProject.file('BuildScripts/version.gradle')
+
+task upload {
+    onlyIf { System.getenv("COS_SECRET_KEY") != null }
+    doLast {
+        uploadArtifacts(getShortVersion())
+    }
+}
+
 subprojects {
     apply plugin: 'net.minecraftforge.gradle.forge'
 
@@ -201,19 +211,16 @@ subprojects {
         tasks.withType(PublishToMavenRepository) {
             onlyIf { System.getenv("GITHUB_TOKEN") != null }
         }
-    }
 
-    if (project.name.toLowerCase().contains("vanilla/1.")) {
-        apply from: rootProject.file('Vanilla/common.gradle')
-    }
-}
+        if (project.name.toLowerCase().contains("vanilla/1.")) {
+            apply from: rootProject.file('Vanilla/common.gradle')
+        } else {
+            // Only Fabric and Forge edition should be uploaded to CurseForge and Modrinth
+            apply from: rootProject.file("BuildScripts/curseforge.gradle")
+            provideCurseForge project
 
-apply from: rootProject.file('BuildScripts/cos.gradle')
-apply from: rootProject.file('BuildScripts/version.gradle')
-
-task upload {
-    onlyIf { System.getenv("COS_SECRET_KEY") != null }
-    doLast {
-        uploadArtifacts(getShortVersion())
+            apply from: rootProject.file("BuildScripts/modrinth.gradle")
+            provideModrinth project
+        }
     }
 }

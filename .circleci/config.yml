@@ -10,6 +10,7 @@ jobs:
     environment:
       JVM_OPTS: -Xmx3200m
       TERM: dumb
+      GIT_COMMIT_DESC: $(git log --format=%B -n 1 $CIRCLE_SHA1)
     
     steps:
       - checkout

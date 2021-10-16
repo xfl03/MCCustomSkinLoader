@@ -27,3 +27,24 @@ dependencies {
     // This is the minimum version number that the mod should dependent in the development environment.
     implementation "net.fabricmc:fabric-loader:0.4.9+build.160"
 }
+
+import groovy.json.JsonSlurper
+
+// Resolve snapshot versions
+tasks.publishModrinth.doFirst {
+    gameVersions.removeIf { v -> v.endsWith("-Snapshot") }
+
+    // The CustomSkinLoader Fabric edition should support all Minecraft snapshot edition.
+    def jsonSlurper = new JsonSlurper()
+    def officialVersionList = [] as Set
+    jsonSlurper.parse(new URL("https://launchermeta.mojang.com/mc/game/version_manifest.json")).versions.each { version ->
+        officialVersionList << version.id
+    }
+    jsonSlurper.parse(new URL("https://meta.fabricmc.net/v2/versions/game")).each { version ->
+        // Exclude experimental editions which is not support in Modrinth.
+        if (!version.stable && officialVersionList.contains(version.version)) {
+            gameVersions << version.version.replace(" ", "-").replace("Pre-Release-", "pre") // Fix the id of the earlier preview versions of 1.14.
+        }
+    }
+    println gameVersions
+}
