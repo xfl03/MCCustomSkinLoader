@@ -30,6 +30,7 @@ String getShortVersion() {
 }
 
 ext {
+    isSnapshot = this.&isSnapshot
     getBuildNum = this.&getBuildNum
     getCSLVersion = this.&getCSLVersion
     getShortVersion = this.&getShortVersion

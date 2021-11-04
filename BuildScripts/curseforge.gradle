@@ -1,0 +1,54 @@
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
+    }
+}
+
+import com.matthewprenger.cursegradle.CurseArtifact
+import com.matthewprenger.cursegradle.CurseGradlePlugin
+import com.matthewprenger.cursegradle.CurseUploadTask
+
+// https://www.curseforge.com/minecraft/mc-mods/customskinloader
+static void provideCurseForge0(Project proj) {
+    proj.apply plugin: CurseGradlePlugin
+
+    // We don’t use the task provided by the plugin because it adds some dependencies that we don’t need.
+    proj.tasks.create(name: "publishCurseForge", type: CurseUploadTask) { task ->
+        onlyIf {
+            System.getenv("CURSEFORGE_API_KEY") != null
+        }
+
+        apiKey = System.getenv("CURSEFORGE_API_KEY")
+        projectId = "286924"
+        mainArtifact = new CurseArtifact().with {
+            artifact = proj.tasks.jar
+            gameVersionStrings = proj.ext.config.minecraft_full_versions.split(",") // Minecraft Versions
+            proj.ext.config.java_full_versions.split(",").each {
+                gameVersionStrings += "Java ${it}" // Java Versions
+            }
+            gameVersionStrings += proj.name.split("/")[0] // Loader Version
+            changelogType = "text"
+            changelog = System.getenv("GIT_COMMIT_DESC") ?: ""
+            displayName = "${proj.archivesBaseName}-${proj.ext.getShortVersion()}"
+            releaseType = proj.ext.isSnapshot ? "beta" : "release"
+            it
+        }
+        additionalArtifacts = []
+
+        proj.rootProject.tasks.whenTaskAdded {
+            if (it.name == "upload") {
+                it.finalizedBy task
+            }
+        }
+    }
+}
+
+ext {
+    provideCurseForge = { Project p -> provideCurseForge0 p }
+}

@@ -201,10 +201,17 @@ subprojects {
         tasks.withType(PublishToMavenRepository) {
             onlyIf { System.getenv("GITHUB_TOKEN") != null }
         }
-    }
 
-    if (project.name.toLowerCase().contains("vanilla/1.")) {
-        apply from: rootProject.file('Vanilla/common.gradle')
+        if (project.name.toLowerCase().contains("vanilla/1.")) {
+            apply from: rootProject.file('Vanilla/common.gradle')
+        } else {
+            // Only Fabric and Forge edition should be uploaded to CurseForge and Modrinth
+            apply from: rootProject.file("BuildScripts/curseforge.gradle")
+            provideCurseForge project
+
+            apply from: rootProject.file("BuildScripts/modrinth.gradle")
+            provideModrinth project
+        }
     }
 }
 

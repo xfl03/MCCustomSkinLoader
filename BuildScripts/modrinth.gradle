@@ -1,0 +1,48 @@
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.modrinth.minotaur:Minotaur:1.2.1"
+    }
+}
+
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.request.VersionType
+
+// https://modrinth.com/mod/csl
+static void provideModrinth0(Project proj) {
+    proj.tasks.create(name: "publishModrinth", type: TaskModrinthUpload) { task ->
+        onlyIf {
+            System.getenv("MODRINTH_TOKEN") != null
+        }
+
+        token = System.getenv("MODRINTH_TOKEN")
+        projectId = "idMHQ4n2"
+        versionNumber = proj.ext.getCSLVersion()
+        versionName = "${proj.archivesBaseName}-${proj.ext.getShortVersion()}"
+        changelog = System.getenv("GIT_COMMIT_DESC") ?: ""
+        uploadFile = proj.tasks.jar
+        versionType = proj.ext.isSnapshot ? VersionType.BETA : VersionType.RELEASE
+        failSilently = true
+        detectLoaders = false
+
+        proj.ext.config.minecraft_full_versions.split(",").each {
+            addGameVersion it // Minecraft Versions
+        }
+        addLoader proj.name.split("/")[0] // Loader Version
+
+        proj.rootProject.tasks.whenTaskAdded {
+            if (it.name == "upload") {
+                it.finalizedBy task
+            }
+        }
+    }
+}
+
+ext {
+    provideModrinth = { Project p -> provideModrinth0 p }
+}
