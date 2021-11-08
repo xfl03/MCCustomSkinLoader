@@ -33,7 +33,7 @@ static void provideModrinth0(Project proj) {
         proj.ext.config.minecraft_full_versions.split(",").each {
             addGameVersion it // Minecraft Versions
         }
-        addLoader proj.name.split("/")[0] // Loader Version
+        addLoader proj.name.split("/")[0].toLowerCase() // Loader Version
 
         proj.rootProject.tasks.whenTaskAdded {
             if (it.name == "upload") {
