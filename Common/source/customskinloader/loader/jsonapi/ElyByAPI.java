@@ -24,9 +24,9 @@ public class ElyByAPI implements JsonAPILoader.IJsonAPI {
 
     public static class TLauncher extends JsonAPILoader.DefaultProfile {
         public TLauncher(JsonAPILoader loader) { super(loader); }
-        @Override public String getName()   { return "TLauncher"; }
-        @Override public int getPriority()  { return 550; }
-        @Override public String getRoot()   { return "https://auth.tlauncher.org/skin/profile/texture/login/"; }
+        @Override public String getName()      { return "TLauncher"; }
+        @Override public int getPriority()     { return 550; }
+        @Override public String getRoot()      { return "https://auth.tlauncher.org/skin/profile/texture/login/"; }
     }
 
     @Override
