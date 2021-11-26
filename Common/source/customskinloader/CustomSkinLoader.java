@@ -115,6 +115,10 @@ public class CustomSkinLoader {
         for(int i=0;i<config.loadlist.size();i++){
             SkinSiteProfile ssp=config.loadlist.get(i);
             logger.info((i+1)+"/"+config.loadlist.size()+" Try to load profile from '"+ssp.name+"'.");
+            if(ssp.type==null){
+                logger.info("The type of '" + ssp.name + "' is null.");
+                continue;
+            }
             ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
             if(loader==null){
                 logger.info("Type '"+ssp.type+"' is not defined.");

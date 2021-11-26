@@ -3,8 +3,10 @@ package customskinloader.config;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
@@ -69,6 +71,7 @@ public class Config {
 
         //Init program
         config.loadExtraList();
+        config.updateLoadlist();
         config.initLocalFolder();
         config.threadPoolSize = Math.max(config.threadPoolSize, 1);
         config.retryTime = Math.max(config.retryTime, 0);
@@ -120,10 +123,7 @@ public class Config {
             return config;
         }catch (Exception e) {
             CustomSkinLoader.logger.info("Failed to load config, use default instead.("+e.toString()+")");
-            File brokenFile=new File(CustomSkinLoader.DATA_DIR,"BROKEN-CustomSkinLoader.json");
-            if(brokenFile.exists())
-                brokenFile.delete();
-            CustomSkinLoader.CONFIG_FILE.renameTo(brokenFile);
+            createBrokenFile(CustomSkinLoader.CONFIG_FILE);
             return initConfig();
         }
     }
@@ -144,44 +144,74 @@ public class Config {
                 String json=FileUtils.readFileToString(file, "UTF-8");
                 SkinSiteProfile ssp=CustomSkinLoader.GSON.fromJson(json, SkinSiteProfile.class);
                 CustomSkinLoader.logger.info("Successfully load Extra List.");
-                file.delete();
-                ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
-                if(loader==null){
-                    CustomSkinLoader.logger.info("Extra List will be ignore: Type '"+ssp.type+"' is not defined.");
-                    continue;
-                }
-                boolean duplicate=false;
-                for(SkinSiteProfile ssp0:this.loadlist){
-                    if(!ssp0.type.equalsIgnoreCase(ssp.type))
+                if (ssp.type != null) {
+                    ProfileLoader.IProfileLoader loader = ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
+                    if (loader == null) {
+                        CustomSkinLoader.logger.info("Extra List will be ignored: Type '" + ssp.type + "' is not defined.");
                         continue;
-                    if(loader.compare(ssp0, ssp)){
-                        duplicate=true;
-                        break;
                     }
-                }
-                if(!duplicate){
-                    adds.add(ssp);
-                    CustomSkinLoader.logger.info("Successfully apply Extra List.("+ssp.name+")");
-                }else{
-                    CustomSkinLoader.logger.info("Extra List will be ignore: Duplicate.("+ssp.name+")");
+                    boolean duplicate = false;
+                    for (SkinSiteProfile ssp0 : this.loadlist) {
+                        if (!ssp0.type.equalsIgnoreCase(ssp.type))
+                            continue;
+                        if (loader.compare(ssp0, ssp)) {
+                            duplicate = true;
+                            break;
+                        }
+                    }
+                    if (!duplicate) {
+                        adds.add(ssp);
+                        CustomSkinLoader.logger.info("Successfully apply Extra List.(" + ssp.name + ")");
+                    } else {
+                        CustomSkinLoader.logger.info("Extra List will be ignored: Duplicate.(" + ssp.name + ")");
+                    }
+                    file.delete();
+                } else {
+                    CustomSkinLoader.logger.info("Extra List is invalid: Type is not defined.(" + file.getName() + ")");
+                    createBrokenFile(file);
                 }
             }catch (Exception e) {
                 CustomSkinLoader.logger.info("Failed to load Extra List.("+e.toString()+")");
+                createBrokenFile(file);
             }
         }
         if(adds.size()!=0){
             adds.addAll(this.loadlist);
             this.loadlist=adds;
-            writeConfig(this,true);
         }
+    }
+
+    private void updateLoadlist() {
+        PluginLoader.PLUGINS.stream()
+            .map(ICustomSkinLoaderPlugin::getDefaultProfiles)
+            .filter(Objects::nonNull)
+            .flatMap(Collection::stream)
+            .forEach(profile -> this.loadlist.stream()
+                .filter(ssp -> profile.getName().equals(ssp.name))
+                .forEach(profile::updateSkinSiteProfile));
     }
 
     private void initLocalFolder(){
         for(SkinSiteProfile ssp:this.loadlist){
+            if(ssp.type==null)
+                continue;
             ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
             if(loader==null)
                 continue;
             loader.init(ssp);
+        }
+    }
+
+    private static void createBrokenFile(File file) {
+        try {
+            File brokenFile = new File(file.getParentFile(), file.getName() + ".broken");
+            if (brokenFile.exists()) {
+                brokenFile.delete();
+            }
+            file.renameTo(brokenFile);
+        } catch (Exception e) {
+            CustomSkinLoader.logger.warning("Failed to create broken file. (" + file.getName() + ")");
+            CustomSkinLoader.logger.warning(e);
         }
     }
 
@@ -209,21 +239,6 @@ public class Config {
         return config;
     }
     private static void writeConfig(Config config, boolean update){
-        if (update && config.loadlist != null) { // Update loadlist, complete missing elements
-            for (ICustomSkinLoaderPlugin plugin : PluginLoader.PLUGINS) {
-                List<ICustomSkinLoaderPlugin.IDefaultProfile> profiles = plugin.getDefaultProfiles();
-                if (profiles != null) {
-                    for (ICustomSkinLoaderPlugin.IDefaultProfile profile : profiles) {
-                        for (SkinSiteProfile ssp : config.loadlist) {
-                            if (profile.getName().equals(ssp.name)) {
-                                profile.updateSkinSiteProfile(ssp);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         String json=CustomSkinLoader.GSON.toJson(config);
         if(CustomSkinLoader.CONFIG_FILE.exists())
             CustomSkinLoader.CONFIG_FILE.delete();
