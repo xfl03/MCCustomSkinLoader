@@ -22,7 +22,7 @@ static void provideModrinth0(Project proj) {
 
         token = System.getenv("MODRINTH_TOKEN")
         projectId = "idMHQ4n2"
-        versionNumber = proj.ext.getCSLVersion()
+        versionNumber = "${proj.ext.getCSLVersion()}-${proj.name.replace("/", ".")}"
         versionName = "${proj.archivesBaseName}-${proj.ext.getShortVersion()}"
         changelog = System.getenv("GIT_COMMIT_DESC") ?: ""
         uploadFile = proj.tasks.jar
