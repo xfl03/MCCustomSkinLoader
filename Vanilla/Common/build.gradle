@@ -26,5 +26,4 @@ compileJava {
     IMessagerEx.MessageType.values().each { msg ->
         options.compilerArgs << "-AMSG_${msg.name()}=note"
     }
-    println options.compilerArgs
 }
