@@ -119,7 +119,7 @@ subprojects {
             apply plugin: 'org.spongepowered.mixin'
 
             dependencies {
-                implementation 'org.spongepowered:mixin:0.8.3'
+                implementation 'org.spongepowered:mixin:0.8.5-20211105.183713-1'
             }
 
             apply from: rootProject.file("BuildScripts/remap.gradle")

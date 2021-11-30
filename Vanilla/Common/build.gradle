@@ -1,6 +1,30 @@
 // This subproject is only to provide dependency for other subprojects.
 
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "sponge"
+            url = "https://repo.spongepowered.org/repository/maven-public/"
+        }
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixin:0.8.5-20211105.183713-1'
+    }
+}
+
 dependencies {
     implementation project(':Common')
-    implementation 'org.spongepowered:mixin:0.8.3:thin'
+    implementation 'org.spongepowered:mixin:0.8.5-20211105.183713-1'
+}
+
+import org.spongepowered.tools.obfuscation.interfaces.IMessagerEx
+
+compileJava {
+    // Disable all Mixin AP messages
+    // Since 0.8.4, Mixin no longer provide the jar exclude AP, we should disable them manually
+    IMessagerEx.MessageType.values().each { msg ->
+        options.compilerArgs << "-AMSG_${msg.name()}=note"
+    }
+    println options.compilerArgs
 }

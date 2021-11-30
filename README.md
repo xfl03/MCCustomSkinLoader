@@ -8,7 +8,7 @@ It's a mod which can load skins and capes from any online source or from your lo
 **CustomSkinLoader which downloaded from GitHub Release page may have been outdated because of the release lifecycle, and may not be compatible with the latest Minecraft/Forge/Fabric, please check https://littlesk.in/csl-latest to get the latest download link.**
 
 Build Server : [CircleCI](https://circleci.com/gh/xfl03/MCCustomSkinLoader) & ~~[Infinity Studio CI](https://ci.infstudio.net/job/CustomSkinLoader/)~~   
-Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html) & [GitHub](https://github.com/xfl03/MCCustomSkinLoader/releases) & [CurseForge](https://minecraft.curseforge.com/projects/customskinloader)  
+Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html) & [GitHub](https://github.com/xfl03/MCCustomSkinLoader/releases) & [CurseForge](https://minecraft.curseforge.com/projects/customskinloader) & [Modrinth](https://modrinth.com/mod/customskinloader)  
 
 ## Contact Us
 [QQ Group](https://im.qq.com/): [651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)  
