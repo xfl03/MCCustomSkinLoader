@@ -90,13 +90,13 @@
     {
       "downloads": {
         "artifact": {
-          "path": "org/spongepowered/mixin/0.8.5-SNAPSHOT/mixin-0.8.5-20211105.183713-1.jar",
-          "sha1": "afd548f754a72df63a853c0cc1d064b6fcf76441",
-          "size": 1088089,
-          "url": "https://repo.spongepowered.org/repository/maven-public/org/spongepowered/mixin/0.8.5-SNAPSHOT/mixin-0.8.5-20211105.183713-1.jar"
+          "path": "org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar",
+          "sha1": "9d1c0c3a304ae6697ecd477218fa61b850bf57fc",
+          "size": 1089277,
+          "url": "https://repo.spongepowered.org/repository/maven-public/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar"
         }
       },
-      "name": "org.spongepowered:mixin:0.8.5-20211105.183713-1"
+      "name": "org.spongepowered:mixin:0.8.5"
     }
   ],
   "mainClass": "net.minecraft.launchwrapper.Launch",

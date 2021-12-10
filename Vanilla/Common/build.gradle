@@ -9,13 +9,13 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.spongepowered:mixin:0.8.5-20211105.183713-1'
+        classpath 'org.spongepowered:mixin:0.8.5'
     }
 }
 
 dependencies {
     implementation project(':Common')
-    implementation 'org.spongepowered:mixin:0.8.5-20211105.183713-1'
+    implementation 'org.spongepowered:mixin:0.8.5'
 }
 
 import org.spongepowered.tools.obfuscation.interfaces.IMessagerEx
