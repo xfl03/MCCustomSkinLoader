@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -32,7 +33,7 @@ public class FakeSkinManager {
     private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(CustomSkinLoader.config.threadPoolSize, CustomSkinLoader.config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     private final TextureManager textureManager;
 
-    private final Map<ResourceLocation, MinecraftProfileTexture> modelCache = new HashMap<>();
+    private final Map<ResourceLocation, MinecraftProfileTexture> modelCache = new ConcurrentHashMap<>();
 
     public FakeSkinManager(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService) {
         this.textureManager = textureManagerInstance;
@@ -86,7 +87,14 @@ public class FakeSkinManager {
     }
 
     public Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile) {
-        return CustomSkinLoader.loadProfileFromCache(profile);
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = new HashMap<>();
+        for (Map.Entry<MinecraftProfileTexture.Type, MinecraftProfileTexture> entry : CustomSkinLoader.loadProfileFromCache(profile).entrySet()) {
+            MinecraftProfileTexture texture = this.modelCache.get(this.loadSkin(entry.getValue(), entry.getKey())); // load texture
+            if (texture != null) { // remove texture if was not loaded before
+                map.put(entry.getKey(), texture);
+            }
+        }
+        return map;
     }
 
     private static void makeCallback(SkinManager.SkinAvailableCallback callback, MinecraftProfileTexture.Type type, ResourceLocation location, MinecraftProfileTexture texture) {
