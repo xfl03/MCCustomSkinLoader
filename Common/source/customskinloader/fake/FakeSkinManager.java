@@ -2,7 +2,7 @@ package customskinloader.fake;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -87,11 +87,17 @@ public class FakeSkinManager {
     }
 
     public Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile) {
-        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = new HashMap<>();
-        for (Map.Entry<MinecraftProfileTexture.Type, MinecraftProfileTexture> entry : CustomSkinLoader.loadProfileFromCache(profile).entrySet()) {
-            MinecraftProfileTexture texture = this.modelCache.get(this.loadSkin(entry.getValue(), entry.getKey())); // load texture
-            if (texture != null) { // remove texture if was not loaded before
-                map.put(entry.getKey(), texture);
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = CustomSkinLoader.loadProfileFromCache(profile);
+        for (Iterator<Map.Entry<MinecraftProfileTexture.Type, MinecraftProfileTexture>> it = map.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<MinecraftProfileTexture.Type, MinecraftProfileTexture> entry = it.next();
+            MinecraftProfileTexture texture = entry.getValue();
+            if (shouldJudgeType(texture)) {
+                texture = this.modelCache.get(this.loadSkin(texture, entry.getKey()));
+                if (texture == null) { // remove texture if was not loaded before
+                    it.remove();
+                } else {
+                    map.put(entry.getKey(), texture);
+                }
             }
         }
         return map;
@@ -100,6 +106,10 @@ public class FakeSkinManager {
     private static void makeCallback(SkinManager.SkinAvailableCallback callback, MinecraftProfileTexture.Type type, ResourceLocation location, MinecraftProfileTexture texture) {
         if (callback != null)
             callback.skinAvailable(type, location, texture);
+    }
+
+    private static boolean shouldJudgeType(MinecraftProfileTexture texture) {
+        return texture != null && "auto".equals(texture.getMetadata("model"));
     }
 
     private class BaseBuffer implements IImageBuffer {
@@ -133,7 +143,7 @@ public class FakeSkinManager {
         public void skinAvailable() {
             if (buffer != null) {
                 buffer.skinAvailable();
-                if ("auto".equals(texture.getMetadata("model")) && buffer instanceof FakeSkinBuffer) {
+                if (shouldJudgeType(texture) && buffer instanceof FakeSkinBuffer) {
                     //Auto judge skin type
                     Map<String, String> metadata = Maps.newHashMap();
                     String type = ((FakeSkinBuffer) buffer).judgeType();
