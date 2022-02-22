@@ -51,7 +51,7 @@ public class UserProfile {
             this.capeUrl=url;
             return;
         case ELYTRA:
-            this.capeUrl=url;
+            this.elytraUrl = url;
         }
     }
     
