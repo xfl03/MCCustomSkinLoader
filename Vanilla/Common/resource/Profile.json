@@ -100,6 +100,7 @@
     }
   ],
   "mainClass": "net.minecraft.launchwrapper.Launch",
+  "minecraftArguments": "",
   "releaseTime": "${releaseTime}",
   "time": "${releaseTime}",
   "type": "release"

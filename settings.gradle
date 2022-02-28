@@ -10,7 +10,7 @@ include "Vanilla/1.8.9"
 include "Vanilla/1.12.2"
 include "Vanilla/1.16.5"
 include "Vanilla/1.17.1"
-include "Vanilla/1.18.1"
+include "Vanilla/1.18.2"
 
 //Forge Base Project
 include "Forge/Common"

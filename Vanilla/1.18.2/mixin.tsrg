@@ -1,37 +1,37 @@
-com/mojang/blaze3d/matrix/MatrixStack dsj
-net/minecraft/client/Minecraft dxo
+com/mojang/blaze3d/matrix/MatrixStack dtm
+net/minecraft/client/Minecraft dyr
 	isIntegratedServerRunning ()Z G
-net/minecraft/client/entity/AbstractClientPlayer eom
+net/minecraft/client/entity/AbstractClientPlayer ept
 	getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; a
 	getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; d
-net/minecraft/client/gui/GuiPlayerTabOverlay dzp
+net/minecraft/client/gui/GuiPlayerTabOverlay eau
 	renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V func_175249_a
 	renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V a
-net/minecraft/client/model/ModelRenderer eku
-net/minecraft/client/renderer/IRenderTypeBuffer epl
-net/minecraft/client/renderer/RenderType ept
+net/minecraft/client/model/ModelRenderer emb
+net/minecraft/client/renderer/IRenderTypeBuffer eqs
+net/minecraft/client/renderer/RenderType era
 	getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; b
-net/minecraft/client/renderer/ThreadDownloadImageData ezi
+net/minecraft/client/renderer/ThreadDownloadImageData fap
 	bufferedImage field_110560_d
 	textureUploaded o
 	processTask m
 	loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; a
 	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; c
-net/minecraft/client/renderer/entity/RenderPlayer eyy
+net/minecraft/client/renderer/entity/RenderPlayer faf
 	renderItem (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V a
 	renderItem (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;Lnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V func_229145_a_
-net/minecraft/client/renderer/entity/layers/LayerCape exh
+net/minecraft/client/renderer/entity/layers/LayerCape eyo
 	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V a
 	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V func_225628_a_
-net/minecraft/client/renderer/texture/NativeImage drl
-net/minecraft/client/renderer/texture/TextureManager ezs
-net/minecraft/client/resources/SkinManager fah
+net/minecraft/client/renderer/texture/NativeImage dsn
+net/minecraft/client/renderer/texture/TextureManager faz
+net/minecraft/client/resources/SkinManager fbo
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; a
 	loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; a
-net/minecraft/client/resources/SkinManager$SkinAvailableCallback fah$a
-net/minecraft/scoreboard/ScoreObjective dph
-net/minecraft/scoreboard/Scoreboard dpk
-net/minecraft/tileentity/TileEntitySkull cna
+net/minecraft/client/resources/SkinManager$SkinAvailableCallback fbo$a
+net/minecraft/scoreboard/ScoreObjective dqj
+net/minecraft/scoreboard/Scoreboard dqm
+net/minecraft/tileentity/TileEntitySkull cns
 	updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; func_174884_b
-net/minecraft/util/ResourceLocation yh
+net/minecraft/util/ResourceLocation yt

@@ -7,7 +7,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(LayerCape.class)
+@Mixin(
+    value = LayerCape.class,
+    priority = 990
+)
 @SuppressWarnings("target")
 public abstract class MixinLayerCape {
     @Redirect(
@@ -18,7 +21,8 @@ public abstract class MixinLayerCape {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/renderer/RenderType;getEntitySolid(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;"
-        )
+        ),
+        require = 0
     )
     private RenderType redirect_doRenderLayer(ResourceLocation locationIn) {
         return RenderType.func_228644_e_(locationIn);

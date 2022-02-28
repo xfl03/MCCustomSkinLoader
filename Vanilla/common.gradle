@@ -27,7 +27,8 @@ task afterBuildForVanilla {
         File target = rootProject.file(String.format("build/libs/%s-CSL-%s.json", config.minecraft_version, shortVersion))
         target.parentFile.mkdirs()
 
-        new JsonSlurper().parse(profile, "UTF-8").with { p ->
+        def jsonSlurper = new JsonSlurper()
+        jsonSlurper.parse(profile, "UTF-8").with { p ->
             p.libraries.find({ lib ->
                 lib.name.startsWith "customskinloader:CustomSkinLoader_"
             }).downloads.artifact.with { artifact ->
@@ -36,6 +37,18 @@ task afterBuildForVanilla {
                     new BigInteger(1, digest.digest()).toString 16 padLeft 40, "0"
                 }
                 artifact.size = file0.size()
+            }
+            this.plugins.withId "net.minecraftforge.gradle.forge", { plugin ->
+                // Get the version json from manifest.
+                // https://github.com/MinecraftForge/ForgeGradle/blob/fc67182a61926f0bdb0d12da5fba7f4322f64d86/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L229
+                jsonSlurper.parse(new URL(jsonSlurper.parse(plugin.cacheFile("McManifest.json")).versions.find { version -> version.id == this.project.ext.config.minecraft_version }.url)).with { ver ->
+                    if (ver.minecraftArguments != null) {
+                        p.put "minecraftArguments", "${ver.minecraftArguments} ${p.arguments.game.join(" ")}"
+                        p.remove "arguments"
+                    } else {
+                        p.remove "minecraftArguments"
+                    }
+                }
             }
             target.write JsonOutput.prettyPrint(JsonOutput.toJson(p)), "UTF-8"
         }
