@@ -37,8 +37,12 @@ tasks.publishModrinth.doFirst {
     // The CustomSkinLoader Fabric edition should support all Minecraft snapshot edition.
     def jsonSlurper = new JsonSlurper()
     def officialVersionList = [] as Set
-    jsonSlurper.parse(new URL("https://launchermeta.mojang.com/mc/game/version_manifest.json")).versions.each { version ->
-        officialVersionList << version.id
+    plugins.withId "net.minecraftforge.gradle.forge", { plugin ->
+        // Get version manifest json.
+        // https://github.com/MinecraftForge/ForgeGradle/blob/fc67182a61926f0bdb0d12da5fba7f4322f64d86/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L229
+        jsonSlurper.parse(plugin.cacheFile("McManifest.json")).versions.each { version ->
+            officialVersionList << version.id
+        }
     }
     jsonSlurper.parse(new URL("https://meta.fabricmc.net/v2/versions/game")).each { version ->
         // Exclude experimental editions which is not support in Modrinth.
@@ -46,5 +50,4 @@ tasks.publishModrinth.doFirst {
             gameVersions << version.version.replace(" ", "-").replace("Pre-Release-", "pre") // Fix the id of the earlier preview versions of 1.14.
         }
     }
-    println gameVersions
 }

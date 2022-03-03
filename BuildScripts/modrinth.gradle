@@ -13,7 +13,7 @@ buildscript {
 import com.modrinth.minotaur.TaskModrinthUpload
 import com.modrinth.minotaur.request.VersionType
 
-// https://modrinth.com/mod/csl
+// https://modrinth.com/mod/customskinloader
 static void provideModrinth0(Project proj) {
     proj.tasks.create(name: "publishModrinth", type: TaskModrinthUpload) { task ->
         onlyIf {

@@ -7,7 +7,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(RenderPlayer.class)
+@Mixin(
+    value = RenderPlayer.class,
+    priority = 990
+)
 @SuppressWarnings("target")
 public abstract class MixinRenderPlayer {
     @Redirect(
@@ -18,7 +21,8 @@ public abstract class MixinRenderPlayer {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/renderer/RenderType;getEntitySolid(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;"
-        )
+        ),
+        require = 0
     )
     private RenderType redirect_renderItem(ResourceLocation locationIn) {
         return RenderType.func_228644_e_(locationIn);
