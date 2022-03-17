@@ -36,7 +36,7 @@ static void provideCurseForge0(Project proj) {
             changelogType = "text"
             changelog = System.getenv("GIT_COMMIT_DESC") ?: ""
             displayName = "${proj.archivesBaseName}-${proj.ext.getShortVersion()}"
-            releaseType = proj.ext.isSnapshot ? "beta" : "release"
+            releaseType = proj.ext.isSnapshot() ? "beta" : "release"
             it
         }
         additionalArtifacts = []

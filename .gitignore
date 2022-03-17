@@ -29,3 +29,6 @@ run/
 .idea/
 *.iml
 out/
+
+#mac OS
+.DS_Store
