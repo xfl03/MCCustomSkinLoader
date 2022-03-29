@@ -28,6 +28,8 @@ run/
 # IDEA
 .idea/
 *.iml
+*.ipr
+*.iws
 out/
 
 #mac OS

@@ -32,16 +32,38 @@ import groovy.json.JsonSlurper
 
 // Resolve snapshot versions
 tasks.publishModrinth.doFirst {
-    gameVersions.removeIf { v -> v.endsWith("-Snapshot") }
+    def snapshot = []
+    gameVersions.groupBy { v -> v.endsWith("-Snapshot") }.with {
+        this.tasks.publishModrinth.gameVersions = it[false]
+        snapshot = it[true]
+    }
 
     // The CustomSkinLoader Fabric edition should support all Minecraft snapshot edition.
     def jsonSlurper = new JsonSlurper()
     def officialVersionList = [] as Set
     plugins.withId "net.minecraftforge.gradle.forge", { plugin ->
+        def currentRelease = null
         // Get version manifest json.
         // https://github.com/MinecraftForge/ForgeGradle/blob/fc67182a61926f0bdb0d12da5fba7f4322f64d86/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L229
         jsonSlurper.parse(plugin.cacheFile("McManifest.json")).versions.each { version ->
-            officialVersionList << version.id
+            if (version.type == "snapshot") {
+                // If the first version is a snapshot, assume the target release version is the same as the assets version.
+                if (currentRelease == null) {
+                    currentRelease = jsonSlurper.parse(new URL(version.url)).assets.with {
+                        it.toString().split($/\./$).with { "${it[0]}.${it[1]}" }
+                    }
+                }
+            } else if (version.type == "release") {
+                currentRelease = version.id.with {
+                    it.toString().split($/\./$).with { "${it[0]}.${it[1]}" }
+                }
+            } else {
+                // We do not care about other types.
+                return
+            }
+            if (snapshot.contains("${currentRelease}-Snapshot".toString())) {
+                officialVersionList << version.id
+            }
         }
     }
     jsonSlurper.parse(new URL("https://meta.fabricmc.net/v2/versions/game")).each { version ->
