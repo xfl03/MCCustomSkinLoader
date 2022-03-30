@@ -31,7 +31,7 @@ function initializeCoreMod() {
         'SkinManagerTransformer': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net.minecraft.client.resources.SkinManager'
+                'name': 'net/minecraft/client/resources/SkinManager'
             },
             'transformer': function (cn) {
                 cn.fields.removeIf(function (fn) {

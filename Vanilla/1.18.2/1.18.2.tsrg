@@ -53,7 +53,6 @@ net/minecraft/client/resources/SkinManager fbo
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback fbo$a
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
-net/minecraft/tileentity/TileEntitySkull cns
 net/minecraft/util/ResourceLocation yt
 net/minecraft/util/StringUtils aju
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; a

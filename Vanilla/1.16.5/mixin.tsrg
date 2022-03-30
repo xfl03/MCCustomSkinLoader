@@ -32,6 +32,4 @@ net/minecraft/client/resources/SkinManager eks
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback eks$a
 net/minecraft/scoreboard/ScoreObjective ddk
 net/minecraft/scoreboard/Scoreboard ddn
-net/minecraft/tileentity/TileEntitySkull cdg
-	updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; b
 net/minecraft/util/ResourceLocation vk

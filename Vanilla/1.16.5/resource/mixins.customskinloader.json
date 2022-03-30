@@ -9,8 +9,7 @@
     "MixinRenderPlayer",
     "MixinSkinManager",
     "MixinTextureManager",
-    "MixinThreadDownloadImageDataV2",
-    "MixinTileEntitySkull"
+    "MixinThreadDownloadImageDataV2"
   ],
   "refmap": "mixins.customskinloader.refmap.json",
   "injectors": {
