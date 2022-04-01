@@ -32,6 +32,4 @@ net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
 net/minecraft/scoreboard/ScoreObjective net/minecraft/class_266
 net/minecraft/scoreboard/Scoreboard net/minecraft/class_269
-net/minecraft/tileentity/TileEntitySkull net/minecraft/class_2631
-	updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; method_11335
 net/minecraft/util/ResourceLocation net/minecraft/class_2960

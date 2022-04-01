@@ -43,7 +43,7 @@ function initializeCoreMod() {
         'SkinManagerTransformer': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net.minecraft.client.resources.SkinManager'
+                'name': 'net/minecraft/client/resources/SkinManager'
             },
             'transformer': function (cn) {
                 cn.fields.removeIf(function (fn) {
@@ -118,29 +118,6 @@ function initializeCoreMod() {
                                 mn.instructions.set(node, new InsnNode(Opcodes.ICONST_1));
                             }
                         }
-                    }
-                });
-                return cn;
-            }
-        },
-        'TileEntitySkullTransformer': {
-            'target': {
-                'type': 'CLASS',
-                'names': function (target) {
-                    return ['net/minecraft/tileentity/TileEntitySkull', 'net/minecraft/tileentity/SkullTileEntity'];
-                }
-            },
-            'transformer': function (cn) {
-                cn.methods.forEach(function (mn) {
-                    if (checkName(mn.name, "func_174884_b") && mn.desc.equals("(Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile;")) {
-                        var first = mn.instructions.getFirst();
-                        var label = new LabelNode();
-                        mn.instructions.insertBefore(first, new FieldInsnNode(Opcodes.GETSTATIC, "customskinloader/CustomSkinLoader", "config", "Lcustomskinloader/config/Config;"));
-                        mn.instructions.insertBefore(first, new FieldInsnNode(Opcodes.GETFIELD, "customskinloader/config/Config", "forceFillSkullNBT", "Z"));
-                        mn.instructions.insertBefore(first, new JumpInsnNode(Opcodes.IFNE, label));
-                        mn.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 0));
-                        mn.instructions.insertBefore(first, new InsnNode(Opcodes.ARETURN));
-                        mn.instructions.insertBefore(first, label);
                     }
                 });
                 return cn;

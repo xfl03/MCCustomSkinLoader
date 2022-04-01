@@ -32,6 +32,4 @@ net/minecraft/client/resources/SkinManager cex
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback cex$a
 net/minecraft/scoreboard/ScoreObjective bhg
 net/minecraft/scoreboard/Scoreboard bhk
-net/minecraft/tileentity/TileEntitySkull awd
-	updateGameProfile (Lcom/mojang/authlib/GameProfile;)Lcom/mojang/authlib/GameProfile; b
 net/minecraft/util/ResourceLocation nf

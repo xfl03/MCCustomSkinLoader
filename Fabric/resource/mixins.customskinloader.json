@@ -10,8 +10,7 @@
     "MixinSkinManager",
     "MixinTextureManager",
     "MixinThreadDownloadImageDataV2",
-    "MixinThreadDownloadImageDataV3",
-    "MixinTileEntitySkull"
+    "MixinThreadDownloadImageDataV3"
   ],
   "refmap": "mixins.customskinloader.refmap.json",
   "plugin": "customskinloader.fabric.MixinConfigPlugin",

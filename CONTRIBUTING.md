@@ -8,10 +8,11 @@
 
 ## Running and Testing
 For now, CustomSkinLoader is unable to run under self development environment, so it needs to add to another development environment as a library.  
-There are the available versions in different environments below:  
-|  | Forge | Fabric |
-|:-:|:-:|:-:|
-| Runtime Environment | forge-1.8-11.14.0.1237 ~ 1.13.2-25.0.22<br/> forge-1.13.2-25.0.42 ~ latest | fabric-loader-0.4.3+build.134 ~ latest<br/> Minecraft 18w43b ~ latest<br/> *fabric-api is not required* |
+There are the available versions in different environments below:
+
+|                         |                                                          Forge                                                          |                                                            Fabric                                                            |
+|:-----------------------:|:-----------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|
+|   Runtime Environment   |                       forge-1.8-11.14.0.1237 ~ 1.13.2-25.0.22<br/> forge-1.13.2-25.0.42 ~ latest                        |           fabric-loader-0.4.3+build.134 ~ latest<br/> Minecraft 18w43b ~ latest<br/> *fabric-api is not required*            |
 | Development Environment | ForgeGradle-2.1-SNAPSHOT ~ latest<br/> forge-1.8-11.14.3.1503 ~ 1.12.2-14.23.5.2855<br/> forge-1.13.2-25.0.198 ~ latest | fabric-loom-(?) ~ latest<br/> fabric-loader-0.12.0 ~ latest<br/> Minecraft 18w49a ~ latest<br/> *fabric-api is not required* |
 
 ### Preliminary steps for testing local builds
@@ -26,30 +27,42 @@ There are the available versions in different environments below:
    ```
 1. Create these folders in the new project directory, then copy the built jar and source jar into it:
    ```
-   Forge:  ./local-repo/mods/CustomSkinLoader_Forge/${version}
-   Fabric: ./local-repo/mods/CustomSkinLoader_Fabric/${version}
+   Forge 1.8    ~ 1.16.5:  ./local-repo/mods/CustomSkinLoader_ForgeLegacy/${version}
+   Forge 1.17.1 ~ latest:  ./local-repo/mods/CustomSkinLoader_ForgeActive/${version}
+   Fabric:                 ./local-repo/mods/CustomSkinLoader_Fabric/${version}
    ```
-   *`${version}` should be repalced with something like `14.13-SNAPSHOT-00` manually*
-1. Create a pom file in the same folder:  
-   Forge: `CustomSkinLoader_Forge-${version}.pom`
+   *`${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually*
+1. Create a pom file in the same folder:
+   - Forge 1.8 ~ 1.16.5: `CustomSkinLoader_ForgeLegacy-${version}.pom`
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <modelVersion>4.0.0</modelVersion>
-       <groupId>customskinloader</groupId>
-       <artifactId>CustomSkinLoader_Forge</artifactId>
-       <!-- `${version}` should be repalced with something like `14.13-SNAPSHOT-00` manually -->
+       <groupId>mods</groupId>
+       <artifactId>CustomSkinLoader_ForgeLegacy</artifactId>
+       <!-- `${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
    ```
-   Fabric: `CustomSkinLoader_Fabric-${version}.pom`
+   - Forge 1.17.1 ~ latest: `CustomSkinLoader_ForgeActive-${version}.pom`
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <modelVersion>4.0.0</modelVersion>
-       <groupId>customskinloader</groupId>
+       <groupId>mods</groupId>
+       <artifactId>CustomSkinLoader_ForgeActive</artifactId>
+       <!-- `${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually -->
+       <version>${version}</version>
+   </project>
+   ```
+   - Fabric: `CustomSkinLoader_Fabric-${version}.pom`
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       <modelVersion>4.0.0</modelVersion>
+       <groupId>mods</groupId>
        <artifactId>CustomSkinLoader_Fabric</artifactId>
-       <!-- `${version}` should be repalced with something like `14.13-SNAPSHOT-00` manually -->
+       <!-- `${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
    ```
@@ -58,7 +71,7 @@ There are the available versions in different environments below:
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       deobfCompile "mods:CustomSkinLoader_Forge:14.13-SNAPSHOT-00"
+       deobfCompile "mods:CustomSkinLoader_ForgeLegacy:14.14-SNAPSHOT-00"
    }
 
    minecraft {
@@ -75,7 +88,8 @@ There are the available versions in different environments below:
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       implementation fg.deobf("mods:CustomSkinLoader_Forge:14.13-SNAPSHOT-00")
+       implementation fg.deobf("mods:CustomSkinLoader_ForgeLegacy:14.14-SNAPSHOT-00") // Only required for MinecraftForge 1.8 ~ 1.16.5
+       implementation fg.deobf("mods:CustomSkinLoader_ForgeActive:14.14-SNAPSHOT-00") // Only required for MinecraftForge 1.17.1 ~ latest
    }
 
    minecraft {
@@ -93,7 +107,7 @@ There are the available versions in different environments below:
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       modImplementation "mods:CustomSkinLoader_Fabric:14.13-SNAPSHOT-00"
+       modImplementation "mods:CustomSkinLoader_Fabric:14.14-SNAPSHOT-00"
    }
 
    tasks.runClient {

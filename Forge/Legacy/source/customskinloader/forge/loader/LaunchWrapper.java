@@ -7,7 +7,6 @@ import customskinloader.forge.transformer.FakeInterfacesTransformer;
 import customskinloader.forge.transformer.PlayerTabTransformer;
 import customskinloader.forge.transformer.SkinManagerTransformer;
 import customskinloader.forge.transformer.SpectatorMenuTransformer;
-import customskinloader.forge.transformer.TileEntitySkullTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -30,8 +29,7 @@ public class LaunchWrapper implements IClassTransformer {
         new SkinManagerTransformer.LoadProfileTexturesTransformer(),
         new SkinManagerTransformer.LoadSkinFromCacheTransformer(),
         new PlayerTabTransformer.ScoreObjectiveTransformer(),
-        new SpectatorMenuTransformer.PlayerMenuObjectTransformer(),
-        new TileEntitySkullTransformer.UpdateGameProfileTransformer()
+        new SpectatorMenuTransformer.PlayerMenuObjectTransformer()
     };
     private TransformerManager transformerManager = new TransformerManager(CLASS_TRANSFORMERS, TRANFORMERS);
 
