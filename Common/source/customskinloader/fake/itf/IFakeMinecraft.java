@@ -1,14 +1,12 @@
 package customskinloader.fake.itf;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.IResourceManager;
 
 public interface IFakeMinecraft {
-    default InputStream getResourceFromResourceLocation(ResourceLocation location) throws IOException {
-        return ((Minecraft) this).getResourceManager().getResource(location).getInputStream();
+    // 1.13.2+
+    default IResourceManager func_195551_G() {
+        return (IResourceManager) ((Minecraft) this).getResourceManager();
     }
 
     // 1.14+

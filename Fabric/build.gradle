@@ -3,11 +3,13 @@ jar {
     exclude 'customskinloader/tweaker/**'
     exclude 'net/minecraft/client/renderer/RenderType.class'
     exclude 'net/minecraft/client/renderer/texture/**'
+    exclude 'net/minecraft/client/resources/**'
+    exclude 'net/minecraft/resources/**'
     exclude 'Profile.json'
 }
 sourceJar {
     exclude 'customskinloader/tweaker/**'
-    exclude 'net/minecraft/class_1**'
+    exclude 'net/**'
     exclude 'Profile.json'
 }
 

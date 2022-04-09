@@ -84,6 +84,26 @@ function initializeCoreMod() {
                 return cn;
             }
         },
+        'IResourceTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/server/packs/resources/Resource'
+            },
+            'transformer': function (cn) {
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource");
+                return cn;
+            }
+        },
+        'IResourceManagerTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/server/packs/resources/ResourceManager'
+            },
+            'transformer': function (cn) {
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResourceManager");
+                return cn;
+            }
+        },
         'MinecraftTransformer': {
             'target': {
                 'type': 'CLASS',
@@ -100,8 +120,8 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/client/renderer/texture/TextureManager'
             },
             'transformer': function (cn) {
-                cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_1");
-                cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_2");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager$V1");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager$V2");
                 return cn;
             }
         },

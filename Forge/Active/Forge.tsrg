@@ -1,8 +1,15 @@
-customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeTextureManager_1
+customskinloader/fake/itf/IFakeIResource customskinloader/fake/itf/IFakeIResource
+	func_199027_b ()Ljava/io/InputStream; m_6679_
+customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
+	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; m_142591_
+	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; getResource
+customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
+	func_195551_G ()Lnet/minecraft/resources/IResourceManager; m_91098_
+customskinloader/fake/itf/IFakeTextureManager$V1 customskinloader/fake/itf/IFakeTextureManager$V1
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z func_229263_a_
 	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; m_118506_
 	getTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Lnet/minecraft/client/renderer/texture/Texture; m_174786_
-customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
+customskinloader/fake/itf/IFakeTextureManager$V2 customskinloader/fake/itf/IFakeTextureManager$V2
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V m_118495_
 net/minecraft/client/Minecraft net/minecraft/client/Minecraft
 	gameDir f_91069_
@@ -53,6 +60,8 @@ net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinMa
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V m_118817_
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/client/resources/SkinManager$SkinTextureCallback
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V m_118856_
+net/minecraft/resources/IResource net/minecraft/server/packs/resources/Resource
+net/minecraft/resources/IResourceManager net/minecraft/server/packs/resources/ResourceManager
 net/minecraft/util/ResourceLocation net/minecraft/resources/ResourceLocation
 net/minecraft/util/StringUtils net/minecraft/util/StringUtil
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; m_14406_

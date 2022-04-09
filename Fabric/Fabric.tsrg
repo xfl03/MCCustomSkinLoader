@@ -1,8 +1,15 @@
-customskinloader/fake/itf/IFakeTextureManager_1 customskinloader/fake/itf/IFakeTextureManager_1
+customskinloader/fake/itf/IFakeIResource customskinloader/fake/itf/IFakeIResource
+	func_199027_b ()Ljava/io/InputStream; method_14482
+customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
+	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; method_14486
+	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; method_14486
+customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
+	func_195551_G ()Lnet/minecraft/resources/IResourceManager; method_1478
+customskinloader/fake/itf/IFakeTextureManager$V1 customskinloader/fake/itf/IFakeTextureManager$V1
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z method_4616
 	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; method_4619
 	getTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Lnet/minecraft/client/renderer/texture/Texture; method_34590
-customskinloader/fake/itf/IFakeTextureManager_2 customskinloader/fake/itf/IFakeTextureManager_2
+customskinloader/fake/itf/IFakeTextureManager$V2 customskinloader/fake/itf/IFakeTextureManager$V2
 	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V method_4616
 net/minecraft/client/Minecraft net/minecraft/class_310
 	gameDir field_1697
@@ -53,6 +60,8 @@ net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
+net/minecraft/resources/IResource net/minecraft/class_3298
+net/minecraft/resources/IResourceManager net/minecraft/class_3300
 net/minecraft/util/ResourceLocation net/minecraft/class_2960
 net/minecraft/util/StringUtils net/minecraft/class_3544
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; method_15440
