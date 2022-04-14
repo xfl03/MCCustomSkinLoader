@@ -21,7 +21,11 @@ public class LaunchWrapper implements IClassTransformer {
         new FakeInterfacesTransformer.ThreadDownloadImageDataTransformer(),
         new FakeInterfacesTransformer.AbstractTextureTransformer(),
         new FakeInterfacesTransformer.TextureTransformer(),
-        new FakeInterfacesTransformer.TextureManagerTransformer()
+        new FakeInterfacesTransformer.TextureManagerTransformer(),
+        new FakeInterfacesTransformer.ClientIResourceTransformer(),
+        new FakeInterfacesTransformer.ClientIResourceManagerTransformer(),
+        new FakeInterfacesTransformer.IResourceTransformer(),
+        new FakeInterfacesTransformer.IResourceManagerTransformer()
     };
     private static final TransformerManager.IMethodTransformer[] TRANFORMERS = {
         new SkinManagerTransformer.InitTransformer(),

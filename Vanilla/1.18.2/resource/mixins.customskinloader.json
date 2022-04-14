@@ -4,6 +4,8 @@
   "package": "customskinloader.mixin",
   "client": [
     "MixinGuiPlayerTabOverlay",
+    "MixinIResource",
+    "MixinIResourceManager",
     "MixinLayerCape",
     "MixinMinecraft",
     "MixinRenderPlayer",

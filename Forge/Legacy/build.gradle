@@ -9,6 +9,7 @@ jar {
     exclude 'net/minecraft/client/renderer/texture/**'
     exclude 'net/minecraft/client/resources/SkinManager.class'
     exclude 'net/minecraft/client/resources/SkinManager$ISkinAvailableCallback.class'
+    exclude 'net/minecraft/resources/**'
 }
 sourceJar {
     exclude 'net/**'

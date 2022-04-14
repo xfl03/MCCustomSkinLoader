@@ -1,6 +1,8 @@
 package customskinloader.fabric;
 
 import java.lang.reflect.Field;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +21,41 @@ import org.objectweb.asm.commons.SimpleRemapper;
 import org.objectweb.asm.tree.ClassNode;
 
 public class DevEnvRemapper extends SimpleRemapper {
-    private static Map<String, List<String>> remappedClasses = new HashMap<>();
+    // key: correct method owner names,
+    // value:
+    //     left: fake method owner names,
+    //     right: other classes which contain fake methods.
+    private static Map<String, Map.Entry<List<String>, List<String>>> remappedClasses = new HashMap<>();
 
     static {
-        // TODO: Remove hardcoded class names
-        remappedClasses.put("net.minecraft.class_1060", Lists.newArrayList("customskinloader.fake.FakeSkinManager", "customskinloader.fake.itf.IFakeTextureManager_1", "customskinloader.fake.itf.IFakeTextureManager_2"));
+        remappedClasses.put(
+            "net.minecraft.class_310",
+            new AbstractMap.SimpleEntry<>(
+                Lists.newArrayList("customskinloader.fake.itf.IFakeMinecraft"),
+                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
+            )
+        );
+        remappedClasses.put(
+            "net.minecraft.class_1060",
+            new AbstractMap.SimpleEntry<>(
+                Lists.newArrayList("customskinloader.fake.itf.IFakeTextureManager$V1", "customskinloader.fake.itf.IFakeTextureManager$V2"),
+                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
+            )
+        );
+        remappedClasses.put(
+            "net.minecraft.class_3298",
+            new AbstractMap.SimpleEntry<>(
+                Lists.newArrayList("customskinloader.fake.itf.IFakeIResource"),
+                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
+            )
+        );
+        remappedClasses.put(
+            "net.minecraft.class_3300",
+            new AbstractMap.SimpleEntry<>(
+                Lists.newArrayList("customskinloader.fake.itf.IFakeIResourceManager"),
+                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
+            )
+        );
     }
 
     @SuppressWarnings("unchecked")
@@ -35,8 +67,10 @@ public class DevEnvRemapper extends SimpleRemapper {
                 patchedClassesField.setAccessible(true);
                 Map<String, byte[]> patchedClasses = (Map<String, byte[]>) patchedClassesField.get(FabricLoaderImpl.INSTANCE.getGameProvider().getEntrypointTransformer());
 
-                for (Map.Entry<String, List<String>> entry : remappedClasses.entrySet()) {
-                    for (String clazz : entry.getValue()) {
+                for (Map.Entry<String, Map.Entry<List<String>, List<String>>> entry : remappedClasses.entrySet()) {
+                    List<String> targetClasses = new ArrayList<>(entry.getValue().getKey());
+                    targetClasses.addAll(entry.getValue().getValue());
+                    for (String clazz : targetClasses) {
                         byte[] classBytes = patchedClasses.get(clazz);
                         if (classBytes == null) {
                             classBytes = IOUtils.toByteArray(Objects.requireNonNull(cl.getResourceAsStream(clazz.replace(".", "/") + ".class")));
@@ -79,7 +113,11 @@ public class DevEnvRemapper extends SimpleRemapper {
         // Method desc should be unmapped in the development environment.
         desc = this.remapper.mapDesc(desc);
 
-        String s = FabricLoader.getInstance().getMappingResolver().mapMethodName("intermediary", this.owner, name, desc);
+        String s = this.isFakeOwner(owner) ? FabricLoader.getInstance().getMappingResolver().mapMethodName("intermediary", this.owner, name, desc) : name;
         return s == null ? name : s;
+    }
+
+    private boolean isFakeOwner(String owner) {
+        return remappedClasses.get(this.owner).getKey().contains(owner.replace("/", "."));
     }
 }

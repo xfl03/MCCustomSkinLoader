@@ -15,6 +15,7 @@ jar {
             }
         }
     }
+    exclude "net/**"
 }
 
 tasks.signJar {

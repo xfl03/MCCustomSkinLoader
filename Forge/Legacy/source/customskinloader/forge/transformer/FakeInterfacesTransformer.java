@@ -9,6 +9,16 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 public class FakeInterfacesTransformer {
+    public static class FakeInterfaceTransformer implements TransformerManager.IClassTransformer {
+        @Override
+        public ClassNode transform(ClassNode cn) {
+            if (cn.access == 0) {
+                cn.access = Opcodes.ACC_PUBLIC | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT;
+            }
+            return cn;
+        }
+    }
+
     @TransformerManager.TransformTarget(
         className = "net.minecraft.client.Minecraft"
     )
@@ -56,14 +66,8 @@ public class FakeInterfacesTransformer {
     @TransformerManager.TransformTarget(
         className = "net.minecraft.client.renderer.texture.Texture"
     )
-    public static class TextureTransformer implements TransformerManager.IClassTransformer {
-        @Override
-        public ClassNode transform(ClassNode cn) {
-            if (cn.access == 0) {
-                cn.access = Opcodes.ACC_PUBLIC | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT;
-            }
-            return cn;
-        }
+    public static class TextureTransformer extends FakeInterfacesTransformer.FakeInterfaceTransformer {
+
     }
 
     @TransformerManager.TransformTarget(
@@ -72,9 +76,47 @@ public class FakeInterfacesTransformer {
     public static class TextureManagerTransformer implements TransformerManager.IClassTransformer {
         @Override
         public ClassNode transform(ClassNode cn) {
-            cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_1");
-            cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager_2");
+            cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager$V1");
+            cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager$V2");
             return cn;
         }
+    }
+
+    @TransformerManager.TransformTarget(
+        className = "net.minecraft.client.resources.IResource"
+    )
+    public static class ClientIResourceTransformer implements TransformerManager.IClassTransformer {
+        @Override
+        public ClassNode transform(ClassNode cn) {
+            cn.interfaces.add("customskinloader/fake/itf/IFakeIResource");
+            cn.interfaces.add("net/minecraft/resources/IResource");
+            return cn;
+        }
+    }
+
+    @TransformerManager.TransformTarget(
+        className = "net.minecraft.client.resources.IResourceManager"
+    )
+    public static class ClientIResourceManagerTransformer implements TransformerManager.IClassTransformer {
+        @Override
+        public ClassNode transform(ClassNode cn) {
+            cn.interfaces.add("customskinloader/fake/itf/IFakeIResourceManager");
+            cn.interfaces.add("net/minecraft/resources/IResourceManager");
+            return cn;
+        }
+    }
+
+    @TransformerManager.TransformTarget(
+        className = "net.minecraft.resources.IResource"
+    )
+    public static class IResourceTransformer extends FakeInterfacesTransformer.FakeInterfaceTransformer {
+
+    }
+
+    @TransformerManager.TransformTarget(
+        className = "net.minecraft.resources.IResourceManager"
+    )
+    public static class IResourceManagerTransformer extends FakeInterfacesTransformer.FakeInterfaceTransformer {
+
     }
 }

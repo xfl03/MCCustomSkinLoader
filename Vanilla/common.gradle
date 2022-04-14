@@ -9,15 +9,20 @@ jar {
     }
     exclude 'net/minecraft/client/renderer/RenderType.class'
     exclude 'net/minecraft/client/renderer/texture/**'
+    exclude 'net/minecraft/client/resources/**'
+    exclude 'net/minecraft/resources/**'
     exclude 'Profile.json'
 }
 
 projectImplementation project(':Common')
 projectImplementation project(':Vanilla/Common')
 
-import java.security.MessageDigest
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+
+import java.security.MessageDigest
+
 task afterBuildForVanilla {
     doLast {
         def file0 = file("build/libs/${archivesBaseName}-${version}.jar")

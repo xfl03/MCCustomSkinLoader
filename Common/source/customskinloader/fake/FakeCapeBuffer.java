@@ -2,14 +2,16 @@ package customskinloader.fake;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import javax.imageio.ImageIO;
 
-import customskinloader.fake.itf.IFakeThreadDownloadImageData;
+import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
 import customskinloader.utils.MinecraftUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeCapeBuffer extends FakeSkinBuffer {
@@ -20,7 +22,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     public static FakeImage loadElytra() {
         loadedGlobal++;
         try {
-            InputStream is = MinecraftUtil.getResourceFromResourceLocation(TEXTURE_ELYTRA);
+            InputStream is = FakeInterfaceManager.IResource_getInputStream(FakeInterfaceManager.IResourceManager_getResource(FakeInterfaceManager.Minecraft_getResourceManager(Minecraft.getMinecraft()), TEXTURE_ELYTRA).get());
             if (is != null) {
                 FakeImage image = new FakeBufferedImage(ImageIO.read(is));
                 if (image.getWidth() % 64 != 0 || image.getHeight() % 32 != 0) { // wtf?
@@ -29,7 +31,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 image = resetImageFormat(image, 22, 0, 46, 22);
                 return image;
             }
-        } catch (IOException ignored) { }
+        } catch (IOException | NoSuchElementException ignored) { }
         return null;
     }
 
@@ -148,10 +150,10 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     // TextureID won't be regenerated when changing resource packs before 1.12.2
     private void refreshTexture(FakeBufferedImage image) {
         Object textureObj = MinecraftUtil.getTextureManager().getTexture(this.location);
-        if (textureObj instanceof IFakeThreadDownloadImageData) {
+        if (textureObj != null) {
             // NOTICE: OptiFine modified the upload process of the texture from ThreadDownloadImageData
             // Therefore, it may not be correct to simply copy the vanilla behavior
-            ((IFakeThreadDownloadImageData) textureObj).resetNewBufferedImage(image.getImage());
+            FakeInterfaceManager.ThreadDownloadImageData_resetNewBufferedImage(textureObj, image.getImage());
         }
     }
 
