@@ -17,10 +17,8 @@ jar {
 projectImplementation project(':Common')
 projectImplementation project(':Vanilla/Common')
 
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-
 import java.security.MessageDigest
 
 task afterBuildForVanilla {

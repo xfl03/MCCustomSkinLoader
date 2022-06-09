@@ -165,7 +165,8 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/resources/IResource'
             },
             'transformer': function (cn) {
-                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource$V1");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource$V2");
                 cn.interfaces.add("net/minecraft/client/resources/IResource");
                 return cn;
             }

@@ -88,7 +88,8 @@ public class FakeInterfacesTransformer {
     public static class ClientIResourceTransformer implements TransformerManager.IClassTransformer {
         @Override
         public ClassNode transform(ClassNode cn) {
-            cn.interfaces.add("customskinloader/fake/itf/IFakeIResource");
+            cn.interfaces.add("customskinloader/fake/itf/IFakeIResource$V1");
+            cn.interfaces.add("customskinloader/fake/itf/IFakeIResource$V2");
             cn.interfaces.add("net/minecraft/resources/IResource");
             return cn;
         }

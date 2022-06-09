@@ -1,8 +1,10 @@
-customskinloader/fake/itf/IFakeIResource customskinloader/fake/itf/IFakeIResource
+customskinloader/fake/itf/IFakeIResource$V1 customskinloader/fake/itf/IFakeIResource$V1
 	func_199027_b ()Ljava/io/InputStream; m_6679_
+customskinloader/fake/itf/IFakeIResource$V2 customskinloader/fake/itf/IFakeIResource$V2
+	open ()Ljava/io/InputStream; m_215507_
 customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
 	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; m_142591_
-	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; getResource
+	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; m_213713_
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
 	func_195551_G ()Lnet/minecraft/resources/IResourceManager; m_91098_
 customskinloader/fake/itf/IFakeTextureManager$V1 customskinloader/fake/itf/IFakeTextureManager$V1

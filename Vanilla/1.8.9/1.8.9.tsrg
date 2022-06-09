@@ -1,5 +1,7 @@
-customskinloader/fake/itf/IFakeIResource customskinloader/fake/itf/IFakeIResource
+customskinloader/fake/itf/IFakeIResource$V1 customskinloader/fake/itf/IFakeIResource$V1
 	func_199027_b ()Ljava/io/InputStream; b
+customskinloader/fake/itf/IFakeIResource$V2 customskinloader/fake/itf/IFakeIResource$V2
+	open ()Ljava/io/InputStream; open
 customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
 	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; a
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; getResource

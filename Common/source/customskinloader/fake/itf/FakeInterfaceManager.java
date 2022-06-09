@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class FakeInterfaceManager {
     public static InputStream IResource_getInputStream(Object resource) {
-        return ((IFakeIResource) resource).func_199027_b();
+        return ((IFakeIResource.V2) resource).open();
     }
 
     public static Optional<IResource> IResourceManager_getResource(Object resourceManager, ResourceLocation location) throws IOException {

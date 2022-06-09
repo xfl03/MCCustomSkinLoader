@@ -90,7 +90,8 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/server/packs/resources/Resource'
             },
             'transformer': function (cn) {
-                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource$V1");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResource$V2");
                 return cn;
             }
         },
