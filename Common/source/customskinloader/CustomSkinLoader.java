@@ -2,6 +2,7 @@ package customskinloader;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -44,6 +45,8 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache=new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
 
+    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+
     //Correct thread name in thread pool
     private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
     private static final ThreadFactory customFactory = r -> {
@@ -58,6 +61,10 @@ public class CustomSkinLoader {
             config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES,
             new LinkedBlockingQueue<>(333), customFactory, new ThreadPoolExecutor.DiscardOldestPolicy()
     );
+
+    public static void loadProfileTextures(Runnable runnable) {
+        THREAD_POOL.execute(runnable);
+    }
 
     public static void loadProfileLazily(GameProfile gameProfile, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> consumer) {
         String username = gameProfile.getName();

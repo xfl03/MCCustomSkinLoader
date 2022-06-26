@@ -1,9 +1,15 @@
 package net.minecraft.client.renderer.texture;
 
+import java.io.InputStream;
+
 /**
  * Empty stack for NativeImage
  */
 public class NativeImage {
+    public static NativeImage func_195713_a(InputStream inputStreamIn) {
+        return null;
+    }
+
     public NativeImage(int p_i48122_1_, int p_i48122_2_, boolean p_i48122_3_) {
     }
 

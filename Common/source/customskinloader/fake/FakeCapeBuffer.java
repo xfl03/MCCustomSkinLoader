@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import javax.imageio.ImageIO;
 
 import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.fake.texture.FakeBufferedImage;
@@ -17,14 +16,14 @@ import net.minecraft.util.ResourceLocation;
 public class FakeCapeBuffer extends FakeSkinBuffer {
     private static final ResourceLocation TEXTURE_ELYTRA = new ResourceLocation("textures/entity/elytra.png");
     private static int loadedGlobal = 0;
-    private static FakeImage elytraImage = loadElytra();
+    private static FakeImage elytraImage;
 
-    public static FakeImage loadElytra() {
+    private static FakeImage loadElytra(FakeImage originalImage) {
         loadedGlobal++;
         try {
             InputStream is = FakeInterfaceManager.IResource_getInputStream(FakeInterfaceManager.IResourceManager_getResource(FakeInterfaceManager.Minecraft_getResourceManager(Minecraft.getMinecraft()), TEXTURE_ELYTRA).get());
             if (is != null) {
-                FakeImage image = new FakeBufferedImage(ImageIO.read(is));
+                FakeImage image = originalImage.createImage(is);
                 if (image.getWidth() % 64 != 0 || image.getHeight() % 32 != 0) { // wtf?
                     return elytraImage;
                 }
@@ -52,7 +51,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
 
         // When resource packs were changed, the elytra image needs to be reloaded, and here will be entered again
         if (this.loaded == loadedGlobal) {
-            elytraImage = loadElytra();
+            elytraImage = loadElytra(image);
         }
         this.loaded = loadedGlobal;
         if (elytraImage != null) {

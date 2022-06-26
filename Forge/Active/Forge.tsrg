@@ -43,6 +43,7 @@ net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/Na
 	func_195702_a ()I m_84982_
 	func_195703_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V m_85054_
 	func_195709_a (II)I m_84985_
+	func_195713_a (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; m_85058_
 	func_195714_b ()I m_85084_
 	func_195715_a (IIIII)V m_84997_
 net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/client/renderer/texture/SimpleTexture

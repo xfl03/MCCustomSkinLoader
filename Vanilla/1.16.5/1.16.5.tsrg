@@ -43,6 +43,7 @@ net/minecraft/client/renderer/texture/NativeImage det
 	func_195702_a ()I a
 	func_195703_a (Lnet/minecraft/client/renderer/texture/NativeImage;)V a
 	func_195709_a (II)I a
+	func_195713_a (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; a
 	func_195714_b ()I b
 	func_195715_a (IIIII)V a
 net/minecraft/client/renderer/texture/SimpleTexture ejy
