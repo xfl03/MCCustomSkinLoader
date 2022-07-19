@@ -1,0 +1,53 @@
+package customskinloader.gradle.util;
+
+import org.gradle.api.Project;
+import org.gradle.util.VersionNumber;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+public class VersionUtil {
+    public static boolean isRelease(Project rootProject) {
+        String s = ConfigUtil.getConfigString(rootProject, "snapshot");
+        return s == null || s.equals("") || s.equals("0");
+    }
+
+    public static boolean isSnapshot(Project rootProject) {
+        return !isRelease(rootProject);
+    }
+
+    public static String getBuildNum() {
+        if (System.getenv("CIRCLE_BUILD_NUM") != null) {
+            return System.getenv("CIRCLE_BUILD_NUM");
+        }
+        return "00";
+    }
+
+    //Example: 14.10a-SNAPSHOT-33
+    public static String getCSLVersion(Project rootProject) {
+
+        return ConfigUtil.getConfigString(rootProject, "version") +
+                ConfigUtil.getConfigString(rootProject, "dev_version") +
+                (isRelease(rootProject) ? "" : ("-SNAPSHOT-" + getBuildNum()));
+    }
+
+    //Example: 14.10a-s33
+    public static String getShortVersion(Project rootProject) {
+        return getCSLVersion(rootProject).replace("SNAPSHOT-", "s");
+    }
+
+    public static String getMcVersion(String filename) {
+        if (filename.endsWith(".json")) {
+            return filename.substring(0, filename.indexOf('-'));
+        }
+        return filename.substring(filename.indexOf('_') + 1, filename.indexOf('-'));
+    }
+
+    public static Collection<String> getMcMajorVersions(String version) {
+        return Arrays.stream(version.split(","))
+                .map(VersionNumber::parse)
+                .map(it -> String.format("%s.%s", it.getMajor(), it.getMinor()))
+                .collect(Collectors.toSet());
+    }
+}

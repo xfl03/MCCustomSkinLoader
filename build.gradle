@@ -1,4 +1,5 @@
 apply plugin: 'base'
+apply plugin: 'customskinloader'
 
 ext.configFile = file "build.properties"
 configFile.withReader {
@@ -29,6 +30,8 @@ wrapper {
     gradleVersion = "4.10.3"
 }
 
+import customskinloader.gradle.util.VersionUtil
+
 subprojects {
     apply plugin: 'net.minecraftforge.gradle.forge'
 
@@ -39,11 +42,9 @@ subprojects {
         project.ext.config = new ConfigSlurper().parse prop
     }
 
-    apply from: rootProject.file("BuildScripts/version.gradle")
-
-    version = getCSLVersion()
+    version = VersionUtil.getCSLVersion(rootProject)
     group = "customskinloader"
-    ext.shortVersion = getShortVersion()
+    ext.shortVersion = VersionUtil.getShortVersion(rootProject)
 
     sourceCompatibility = targetCompatibility = 1.8
     compileJava {
@@ -57,7 +58,7 @@ subprojects {
 
         replace '@MOD_VERSION@', rootProject.ext.config.version
         replace '@MOD_FULL_VERSION@', project.version
-        replace '@MOD_BUILD_NUMBER@', getBuildNum()
+        replace '@MOD_BUILD_NUMBER@', VersionUtil.getBuildNum()
         replaceIn 'CustomSkinLoader.java'
     }
 
@@ -212,15 +213,5 @@ subprojects {
             apply from: rootProject.file("BuildScripts/modrinth.gradle")
             provideModrinth project
         }
-    }
-}
-
-apply from: rootProject.file('BuildScripts/cos.gradle')
-apply from: rootProject.file('BuildScripts/version.gradle')
-
-task upload {
-    onlyIf { System.getenv("COS_SECRET_KEY") != null }
-    doLast {
-        uploadArtifacts(getShortVersion())
     }
 }

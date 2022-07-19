@@ -13,6 +13,7 @@ buildscript {
 import com.matthewprenger.cursegradle.CurseArtifact
 import com.matthewprenger.cursegradle.CurseGradlePlugin
 import com.matthewprenger.cursegradle.CurseUploadTask
+import customskinloader.gradle.util.VersionUtil
 
 // https://www.curseforge.com/minecraft/mc-mods/customskinloader
 static void provideCurseForge0(Project proj) {
@@ -35,8 +36,8 @@ static void provideCurseForge0(Project proj) {
             gameVersionStrings += proj.name.split("/")[0] // Loader Version
             changelogType = "text"
             changelog = System.getenv("GIT_COMMIT_DESC") ?: ""
-            displayName = "${proj.archivesBaseName}-${proj.ext.getShortVersion()}"
-            releaseType = proj.ext.isSnapshot() ? "beta" : "release"
+            displayName = "${proj.archivesBaseName}-${VersionUtil.getShortVersion(proj.rootProject)}"
+            releaseType = VersionUtil.isSnapshot(proj.rootProject) ? "beta" : "release"
             it
         }
         additionalArtifacts = []
