@@ -21,5 +21,3 @@ include "Forge/Active"
 
 //Fabric Edition for [1.14,)
 include "Fabric"
-include 'buildSrc'
-

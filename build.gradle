@@ -95,7 +95,7 @@ subprojects {
 
     // For real subprojects
     if (!config.is_real_project || Boolean.parseBoolean(config.is_real_project.toString())) {
-        archivesBaseName = "CustomSkinLoader_${-> project.name.contains("Vanilla") ? config.minecraft_version : project.name.replace('/', '') }"
+        archivesBaseName = "CustomSkinLoader_${-> VersionUtil.getEdition(project)}"
 
         apply from: rootProject.file("BuildScripts/sources.gradle")
 

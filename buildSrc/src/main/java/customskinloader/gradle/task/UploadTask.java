@@ -2,6 +2,9 @@ package customskinloader.gradle.task;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import customskinloader.gradle.entity.CslDetail;
+import customskinloader.gradle.entity.CslLatest;
+import customskinloader.gradle.util.ConfigUtil;
 import customskinloader.gradle.util.CosUtil;
 import customskinloader.gradle.util.VersionUtil;
 import org.apache.commons.io.FileUtils;
@@ -12,6 +15,7 @@ import org.gradle.api.tasks.TaskAction;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 
 public class UploadTask extends DefaultTask {
@@ -19,24 +23,19 @@ public class UploadTask extends DefaultTask {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private void uploadArtifacts() throws IOException {
+    private CslLatest uploadArtifacts() throws IOException {
         String shortVersion = VersionUtil.getShortVersion(rootProject);
         File dir = rootProject.file("build/libs");
         if (!dir.isDirectory()) {
-            return;
+            return null;
         }
 
         String cslversion = shortVersion.replace(".", "");
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        LinkedHashMap<String, String> map2 = new LinkedHashMap<>();
-        LinkedHashMap<String, String> map3 = new LinkedHashMap<>();
-        map.put("version", shortVersion);
-        map.put("downloads", map2);
-        map.put("launchermeta", map3);
+        CslLatest latest = new CslLatest(shortVersion);
 
         File[] files = dir.listFiles();
         if (files == null) {
-            return;
+            return null;
         }
         for (File file : files) {
             String key = CosUtil.getKey(file.getName());
@@ -53,21 +52,40 @@ public class UploadTask extends DefaultTask {
                     mcversion.replace(".", "").toLowerCase(), cslversion, url);
 
             if (key.startsWith("mods/") && key.endsWith(".jar") && !key.endsWith("-sources.jar")) {
-                map2.put(mcversion, url);
+                latest.downloads.put(mcversion, url);
             } else if (key.endsWith(".json")) {
-                map3.put(mcversion, url);
+                latest.launchermeta.put(mcversion, url);
             }
         }
 
-        File latest = new File("build/libs/latest.json");
-        FileUtils.write(latest, gson.toJson(map), StandardCharsets.UTF_8);
-        CosUtil.uploadFile("latest.json", latest);
+        CosUtil.writeAndUploadObject("latest.json", latest);
+        return latest;
+    }
+
+    public void uploadDetail(CslLatest latest) throws IOException {
+        CslDetail detail = new CslDetail(latest.version);
+
+        rootProject.getAllprojects().stream()
+                .filter(it -> !"false".equals(ConfigUtil.getConfigString(it, "is_real_project")))
+                .forEach(project -> {
+                    String edition = VersionUtil.getEdition(project);
+                    String url = latest.getUrl(edition);
+                    VersionUtil.getMcMajorVersions(
+                                    ConfigUtil.getConfigString(project, "minecraft_full_versions"))
+                            .forEach(mcMajorVersion -> detail.addDetail(mcMajorVersion, edition, url));
+                });
+
+        detail.sortDetails();
+        CosUtil.writeAndUploadObject("detail.json", detail);
     }
 
     @TaskAction
     public void upload() throws IOException {
         if (System.getenv("COS_SECRET_KEY") != null) {
-            uploadArtifacts();
+            CslLatest latest = uploadArtifacts();
+            if (latest != null) {
+                uploadDetail(latest);
+            }
         }
     }
 }

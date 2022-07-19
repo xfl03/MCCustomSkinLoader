@@ -5,6 +5,7 @@ import org.gradle.util.VersionNumber;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class VersionUtil {
@@ -45,9 +46,18 @@ public class VersionUtil {
     }
 
     public static Collection<String> getMcMajorVersions(String version) {
+        if (version == null) {
+            return Collections.emptyList();
+        }
         return Arrays.stream(version.split(","))
                 .map(VersionNumber::parse)
                 .map(it -> String.format("%s.%s", it.getMajor(), it.getMinor()))
                 .collect(Collectors.toSet());
+    }
+
+    public static String getEdition(Project project) {
+        return project.getName().contains("Vanilla") ?
+                ConfigUtil.getConfigString(project, "minecraft_version") :
+                project.getName().replace("/", "");
     }
 }
