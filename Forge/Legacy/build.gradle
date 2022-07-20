@@ -20,10 +20,14 @@ tasks.signJar {
     exclude "net/minecraft/client/**"
 }
 
-projectImplementation project(':Common')
-dependencies.implementation project(':Forge/Common')
+dependencies {
+    implementation project(":Forge/Common")
+}
 
 minecraft {
-    clientJvmArgs += "-Dfml.coreMods.load=customskinloader.forge.ForgePlugin"
     replaceIn 'ForgeMod.java'
 }
+
+import customskinloader.gradle.util.SourceUtil
+
+SourceUtil.addDependencies project, project(":Common")

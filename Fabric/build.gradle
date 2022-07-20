@@ -20,17 +20,17 @@ repositories {
     }
 }
 
-projectImplementation project(':Common')
-projectImplementation project(':Vanilla/Common')
-
-remapSources project
-
 dependencies {
     // This is the minimum version number that the mod should dependent in the development environment.
     implementation "net.fabricmc:fabric-loader:0.12.0"
 }
 
+import customskinloader.gradle.util.RemapUtil
+import customskinloader.gradle.util.SourceUtil
 import groovy.json.JsonSlurper
+
+SourceUtil.addDependencies project, project(":Common"), project(":Vanilla/Common")
+RemapUtil.remapSources project
 
 // Resolve snapshot versions
 tasks.publishModrinth.doFirst {
