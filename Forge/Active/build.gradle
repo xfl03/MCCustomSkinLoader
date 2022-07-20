@@ -16,7 +16,12 @@ sourceJar {
     exclude 'net/**'
 }
 
-projectImplementation project(':Common')
-dependencies.implementation project(':Forge/Common')
+dependencies {
+    implementation project(":Forge/Common")
+}
 
-remapSources project
+import customskinloader.gradle.util.RemapUtil
+import customskinloader.gradle.util.SourceUtil
+
+RemapUtil.remapSources project
+SourceUtil.addDependencies project, project(":Common")

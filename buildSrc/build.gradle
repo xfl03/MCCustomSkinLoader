@@ -1,0 +1,26 @@
+plugins {
+    id("java")
+}
+
+group = "customskinloader"
+version = "1.0.0"
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        url = "https://maven.minecraftforge.net/"
+    }
+}
+
+dependencies {
+    implementation("com.qcloud:cos_api:5.6.98")
+    implementation("com.google.code.gson:gson:2.9.0")
+    implementation("commons-io:commons-io:2.11.0")
+    implementation("net.minecraftforge.gradle:ForgeGradle:2.3.+")
+    implementation("org.cadixdev:mercury:0.1.0")
+    implementation("gradle.plugin.com.matthewprenger:CurseGradle:1.4.0")
+    implementation("gradle.plugin.com.modrinth.minotaur:Minotaur:1.2.1")
+}

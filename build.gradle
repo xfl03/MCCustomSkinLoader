@@ -30,6 +30,9 @@ wrapper {
     gradleVersion = "4.10.3"
 }
 
+import customskinloader.gradle.util.CurseForgeUtil
+import customskinloader.gradle.util.ModrinthUtil
+import customskinloader.gradle.util.RemapUtil
 import customskinloader.gradle.util.VersionUtil
 
 subprojects {
@@ -97,8 +100,6 @@ subprojects {
     if (!config.is_real_project || Boolean.parseBoolean(config.is_real_project.toString())) {
         archivesBaseName = "CustomSkinLoader_${-> VersionUtil.getEdition(project)}"
 
-        apply from: rootProject.file("BuildScripts/sources.gradle")
-
         processResources {
             filesNotMatching("**/*.js") {
                 expand([
@@ -123,13 +124,12 @@ subprojects {
                 implementation 'org.spongepowered:mixin:0.8.5'
             }
 
-            apply from: rootProject.file("BuildScripts/remap.gradle")
             task genSrgMap {
                 doLast {
                     if (config.srg_notch_map != null) {
                         // convert mappings
-                        tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
-                        tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
+                        RemapUtil.tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
+                        RemapUtil.tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
                     }
                 }
             }
@@ -207,11 +207,8 @@ subprojects {
             apply from: rootProject.file('Vanilla/common.gradle')
         } else {
             // Only Fabric and Forge edition should be uploaded to CurseForge and Modrinth
-            apply from: rootProject.file("BuildScripts/curseforge.gradle")
-            provideCurseForge project
-
-            apply from: rootProject.file("BuildScripts/modrinth.gradle")
-            provideModrinth project
+            CurseForgeUtil.provideCurseForge project
+            ModrinthUtil.provideModrinth project
         }
     }
 }

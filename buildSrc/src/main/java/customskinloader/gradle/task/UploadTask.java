@@ -1,5 +1,8 @@
 package customskinloader.gradle.task;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import customskinloader.gradle.entity.CslDetail;
@@ -7,16 +10,9 @@ import customskinloader.gradle.entity.CslLatest;
 import customskinloader.gradle.util.ConfigUtil;
 import customskinloader.gradle.util.CosUtil;
 import customskinloader.gradle.util.VersionUtil;
-import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskAction;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.LinkedHashMap;
 
 public class UploadTask extends DefaultTask {
     public Project rootProject;

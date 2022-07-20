@@ -14,12 +14,12 @@ jar {
     exclude 'Profile.json'
 }
 
-projectImplementation project(':Common')
-projectImplementation project(':Vanilla/Common')
-
+import customskinloader.gradle.util.SourceUtil
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import java.security.MessageDigest
+
+SourceUtil.addDependencies project, project(":Common"), project(":Vanilla/Common")
 
 task afterBuildForVanilla {
     doLast {
