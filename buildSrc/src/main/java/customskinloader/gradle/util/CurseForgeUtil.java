@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.matthewprenger.cursegradle.CurseArtifact;
+import com.matthewprenger.cursegradle.CurseExtension;
 import com.matthewprenger.cursegradle.CurseUploadTask;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.BasePluginConvention;
@@ -14,6 +15,11 @@ import org.gradle.api.plugins.BasePluginConvention;
 public class CurseForgeUtil {
     public static void provideCurseForge(Project project) {
         if (!project.getPlugins().hasPlugin("base")) return;
+
+        //Fix "Extension of type 'CurseExtension' does not exist."
+        if (project.getExtensions().findByType(CurseExtension.class) == null) {
+            project.getExtensions().create("curseforge", CurseExtension.class);
+        }
 
         // We don’t use the task provided by the plugin because it adds some dependencies that we don’t need.
         project.getTasks().create("publishCurseForge", CurseUploadTask.class, task -> {

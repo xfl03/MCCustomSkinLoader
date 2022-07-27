@@ -72,7 +72,7 @@ public class MinecraftUtil {
         }
 
         //No version can be found
-        return null;
+        return "unknown";
     }
 
     // (domain|ip)(:port)
