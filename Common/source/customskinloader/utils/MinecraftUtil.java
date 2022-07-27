@@ -1,16 +1,26 @@
 package customskinloader.utils;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
+import net.minecraft.realms.RealmsSharedConstants;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -29,42 +39,40 @@ public class MinecraftUtil {
     public static SkinManager getSkinManager() {
         return Minecraft.getMinecraft().getSkinManager();
     }
-
-
-    private static ArrayList<String> minecraftVersion = new ArrayList<String>();
     private static String minecraftMainVersion = null;
-    private final static Pattern MINECRAFT_VERSION_PATTERN = Pattern.compile(".*?(\\d+\\.\\d+[\\.]?\\d*).*?");
-
-    public static ArrayList<String> getMinecraftVersions() {
-        if (minecraftVersion != null && !minecraftVersion.isEmpty())
-            return minecraftVersion;
-        testProbe();
-        return minecraftVersion;
-    }
-
-    public static String getMinecraftVersionText() {
-        StringBuilder sb = new StringBuilder();
-        for (String version : getMinecraftVersions())
-            sb.append(version).append(" ");
-        return StringUtils.trim(sb.toString());
-    }
 
     public static String getMinecraftMainVersion() {
-        if (minecraftMainVersion != null)
+        //Check if cached version found
+        if (minecraftMainVersion != null) {
             return minecraftMainVersion;
-        for (String version : getMinecraftVersions()) {
-            Matcher m = null;
-            try {
-                m = MINECRAFT_VERSION_PATTERN.matcher(version);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (m == null || !m.matches())
-                continue;
-            minecraftMainVersion = m.group(m.groupCount());
-            break;
         }
-        return minecraftMainVersion;
+
+        //version.json can be found in 1.14+
+        URL versionFile = MinecraftUtil.class.getResource("/version.json");
+        if (versionFile != null) {
+            try (
+                    InputStream is = versionFile.openStream();
+                    InputStreamReader isr = new InputStreamReader(is)
+            ) {
+                JsonObject obj = new JsonParser().parse(isr).getAsJsonObject();
+                minecraftMainVersion = obj.get("name").getAsString();
+                return minecraftMainVersion;
+            } catch (Exception ignored) {
+
+            }
+        }
+
+        //RealmsSharedConstants.VERSION_STRING is available in 1.16-
+        try {
+            Class<?> realmsSharedConstants = Class.forName("net.minecraft.realms.RealmsSharedConstants");
+            MethodHandle mh = MethodHandles.publicLookup().findStaticGetter(realmsSharedConstants, "VERSION_STRING", String.class);
+            minecraftMainVersion = (String) mh.invoke();
+            return minecraftMainVersion;
+        } catch (Throwable ignored) {
+        }
+
+        //No version can be found
+        return null;
     }
 
     // (domain|ip)(:port)
@@ -82,24 +90,6 @@ public class MinecraftUtil {
 
     public static boolean isLanServer() {
         return HttpUtil0.isLanServer(getStandardServerAddress());
-    }
-
-    private final static Pattern MINECRAFT_CORE_FILE_PATTERN = Pattern.compile("^(.*?)/versions/([^\\/\\\\]*?)/([^\\/\\\\]*?).jar$");
-
-    private static void testProbe() {
-        minecraftVersion.clear();
-        URL urls[] = JavaUtil.getClasspath();
-        for (URL url : urls) {
-            Matcher m = null;
-            try {
-                m = MINECRAFT_CORE_FILE_PATTERN.matcher(URLDecoder.decode(url.getPath(), "UTF-8"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (m == null || !m.matches())
-                continue;
-            minecraftVersion.add(m.group(2));
-        }
     }
 
     public static String getCredential(GameProfile profile) {
