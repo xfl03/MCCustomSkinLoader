@@ -26,10 +26,15 @@ jobs:
       # Gradle
       - run: gradle --version
       - run:
-          name: Build and publish
+          name: Build
           command: |
               export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-              gradle clean build upload
+              gradle clean build
+      - run:
+          name: Publish
+          command: |
+            export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
+            gradle upload --info
       # - run: gradle publishGprPublicationToGitHubPackagesRepository
 
       - store_artifacts:
