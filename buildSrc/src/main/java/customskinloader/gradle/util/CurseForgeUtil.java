@@ -28,26 +28,26 @@ public class CurseForgeUtil {
 
             task.setApiKey(System.getenv("CURSEFORGE_API_KEY"));
             task.setProjectId("286924");
-            task.setMainArtifact(new CurseArtifact() {
-                {
-                    this.setArtifact(project.getTasks().getByName("jar"));
-                    List<Object> gameVersionStrings = new ArrayList<>();
-                    Optional.ofNullable(ConfigUtil.getConfigString(project, "minecraft_full_versions"))
-                        .ifPresent(versions -> Collections.addAll(gameVersionStrings, versions.split(","))); // Minecraft Versions
-                    Optional.ofNullable(ConfigUtil.getConfigString(project, "java_full_versions"))
-                        .ifPresent(versions -> {
-                            for (String javaVersion : versions.split(",")) {
-                                gameVersionStrings.add("Java " + javaVersion); // Java Versions
-                            }
-                        });
-                    gameVersionStrings.add(project.getName().split("/")[0]); // Loader Version
-                    this.setGameVersionStrings(gameVersionStrings);
-                    this.setChangelogType("text");
-                    this.setChangelog(System.getenv("GIT_COMMIT_DESC"));
-                    this.setDisplayName(project.getConvention().getPlugin(BasePluginConvention.class).getArchivesBaseName() + "-" + VersionUtil.getShortVersion(project.getRootProject()));
-                    this.setReleaseType(VersionUtil.isSnapshot(project.getRootProject()) ? "beta" : "release");
-                }
-            });
+
+            CurseArtifact artifact = new CurseArtifact();
+            artifact.setArtifact(project.getTasks().getByName("jar"));
+            List<Object> gameVersionStrings = new ArrayList<>();
+            Optional.ofNullable(ConfigUtil.getConfigString(project, "minecraft_full_versions"))
+                    .ifPresent(versions -> Collections.addAll(gameVersionStrings, versions.split(","))); // Minecraft Versions
+            Optional.ofNullable(ConfigUtil.getConfigString(project, "java_full_versions"))
+                    .ifPresent(versions -> {
+                        for (String javaVersion : versions.split(",")) {
+                            gameVersionStrings.add("Java " + javaVersion); // Java Versions
+                        }
+                    });
+            gameVersionStrings.add(project.getName().split("/")[0]); // Loader Version
+            artifact.setGameVersionStrings(gameVersionStrings);
+            artifact.setChangelogType("text");
+            artifact.setChangelog(System.getenv("GIT_COMMIT_DESC"));
+            artifact.setDisplayName(project.getConvention().getPlugin(BasePluginConvention.class).getArchivesBaseName() + "-" + VersionUtil.getShortVersion(project.getRootProject()));
+            artifact.setReleaseType(VersionUtil.isSnapshot(project.getRootProject()) ? "beta" : "release");
+            task.setMainArtifact(artifact);
+
             task.setAdditionalArtifacts(new ArrayList<>());
 
             TaskUtil.withTask(project.getRootProject(), "upload", task0 -> task0.finalizedBy(task));

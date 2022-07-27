@@ -21,7 +21,7 @@ public class ConfigUtil {
         ConfigObject config = getConfig(project);
         Object o = config.get(key);
         if (o == null) {
-            System.out.printf("Config '%s' not found in '%s'", key, project.getName());
+            //System.out.printf("Config '%s' not found in '%s'", key, project.getName());
             return null;
         }
         if (!(o instanceof String)) {
