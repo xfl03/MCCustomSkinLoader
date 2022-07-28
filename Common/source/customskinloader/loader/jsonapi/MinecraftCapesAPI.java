@@ -88,7 +88,7 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
 
     @Override
     public String getName() {
-        return "GlitchlessAPI";
+        return "MinecraftCapesAPI";
     }
 
     public static class MinecraftCapesApiResponse {
