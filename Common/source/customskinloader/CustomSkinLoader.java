@@ -26,24 +26,26 @@ import customskinloader.utils.MinecraftUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
+ *
  * @author (C) Jeremy Lam [JLChnToZ] 2013-2014 & Alexander Xia [xfl03] 2014-2020
  * @version @MOD_FULL_VERSION@
  */
 public class CustomSkinLoader {
-    public static final String CustomSkinLoader_VERSION="@MOD_VERSION@";
-    public static final String CustomSkinLoader_FULL_VERSION="@MOD_FULL_VERSION@";
-    public static final int CustomSkinLoader_BUILD_NUMBER=Integer.parseInt("@MOD_BUILD_NUMBER@");
-    
-    public static final File DATA_DIR=new File(MinecraftUtil.getMinecraftDataDir(),"CustomSkinLoader"),
-            LOG_FILE=new File(DATA_DIR,"CustomSkinLoader.log"),
-            CONFIG_FILE=new File(DATA_DIR,"CustomSkinLoader.json");
-    
-    public static final Gson GSON=new GsonBuilder().setPrettyPrinting().create();
-    public static final Logger logger=initLogger();
-    public static final Config config=Config.loadConfig0();
-    
-    private static final ProfileCache profileCache=new ProfileCache();
-    private static final DynamicSkullManager dynamicSkullManager=new DynamicSkullManager();
+    public static final String CustomSkinLoader_VERSION = "@MOD_VERSION@";
+    public static final String CustomSkinLoader_FULL_VERSION = "@MOD_FULL_VERSION@";
+    public static final int CustomSkinLoader_BUILD_NUMBER = Integer.parseInt("@MOD_BUILD_NUMBER@");
+
+    public static final File
+            DATA_DIR = new File(MinecraftUtil.getMinecraftDataDir(), "CustomSkinLoader"),
+            LOG_FILE = new File(DATA_DIR, "CustomSkinLoader.log"),
+            CONFIG_FILE = new File(DATA_DIR, "CustomSkinLoader.json");
+
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final Logger logger = initLogger();
+    public static final Config config = Config.loadConfig0();
+
+    private static final ProfileCache profileCache = new ProfileCache();
+    private static final DynamicSkullManager dynamicSkullManager = new DynamicSkullManager();
 
     private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
 
@@ -51,7 +53,7 @@ public class CustomSkinLoader {
     private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
     private static final ThreadFactory customFactory = r -> {
         Thread t = defaultFactory.newThread(r);
-        if(r instanceof Thread) {
+        if (r instanceof Thread) {
             t.setName(((Thread) r).getName());
         }
         return t;
@@ -88,7 +90,7 @@ public class CustomSkinLoader {
     }
 
     //For User Skin
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile){
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile) {
         String credential = MinecraftUtil.getCredential(gameProfile);
         UserProfile profile;
         if (profileCache.isReady(credential)) {
@@ -96,81 +98,89 @@ public class CustomSkinLoader {
             profile = profileCache.getProfile(credential);
             if (profile == null) {
                 logger.warning("(Cached Profile is empty!) Expiry: " + profileCache.getExpiry(credential));
-                if (profileCache.isExpired(credential)) // force load
+                if (profileCache.isExpired(credential)) { // force load
                     profile = loadProfile0(gameProfile, false);
-            } else
+                }
+            } else {
                 logger.info(profile.toString(profileCache.getExpiry(credential)));
+            }
         } else {
             profileCache.setLoading(credential, true);
             profile = loadProfile0(gameProfile, false);
         }
         return ModelManager0.fromUserProfile(profile);
     }
+
     //Core
-    public static UserProfile loadProfile0(GameProfile gameProfile, boolean isSkull){
-        String username=gameProfile.getName();
-        String credential=MinecraftUtil.getCredential(gameProfile);
-        
+    public static UserProfile loadProfile0(GameProfile gameProfile, boolean isSkull) {
+        String username = gameProfile.getName();
+        String credential = MinecraftUtil.getCredential(gameProfile);
+
         profileCache.setLoading(credential, true);
-        logger.info("Loading "+username+"'s profile.");
-        if(config.loadlist==null||config.loadlist.isEmpty()){
+        logger.info("Loading " + username + "'s profile.");
+        if (config.loadlist == null || config.loadlist.isEmpty()) {
             logger.info("LoadList is Empty.");
             return null;
         }
-        
-        UserProfile profile0=new UserProfile();
-        for(int i=0;i<config.loadlist.size();i++){
-            SkinSiteProfile ssp=config.loadlist.get(i);
-            logger.info((i+1)+"/"+config.loadlist.size()+" Try to load profile from '"+ssp.name+"'.");
-            if(ssp.type==null){
+
+        UserProfile profile0 = new UserProfile();
+        for (int i = 0; i < config.loadlist.size(); i++) {
+            SkinSiteProfile ssp = config.loadlist.get(i);
+            logger.info((i + 1) + "/" + config.loadlist.size() + " Try to load profile from '" + ssp.name + "'.");
+            if (ssp.type == null) {
                 logger.info("The type of '" + ssp.name + "' is null.");
                 continue;
             }
-            ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
-            if(loader==null){
-                logger.info("Type '"+ssp.type+"' is not defined.");
+            ProfileLoader.IProfileLoader loader = ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
+            if (loader == null) {
+                logger.info("Type '" + ssp.type + "' is not defined.");
                 continue;
             }
-            UserProfile profile=null;
-            try{
-                profile=loader.loadProfile(ssp, gameProfile);
-            }catch(Exception e){
+            UserProfile profile = null;
+            try {
+                profile = loader.loadProfile(ssp, gameProfile);
+            } catch (Exception e) {
                 logger.warning("Exception occurs while loading.");
                 logger.warning(e);
-                if(e.getCause()!=null) {
+                if (e.getCause() != null) {
                     logger.warning("Caused By:");
                     logger.warning(e.getCause());
                 }
             }
-            if(profile==null)
+            if (profile == null) {
                 continue;
+            }
             profile0.mix(profile);
-            if(isSkull&&!profile0.hasSkinUrl())
+            if (isSkull && !profile0.hasSkinUrl()) {
                 continue;
-            if(!config.forceLoadAllTextures)
+            }
+            if (!config.forceLoadAllTextures) {
                 break;
-            if(profile0.isFull())
+            }
+            if (profile0.isFull()) {
                 break;
+            }
         }
-        if(!profile0.isEmpty()){
-            logger.info(username+"'s profile loaded.");
-            if(!config.enableCape)
+        if (!profile0.isEmpty()) {
+            logger.info(username + "'s profile loaded.");
+            if (!config.enableCape) {
                 profile0.capeUrl = null;
+            }
             profileCache.updateCache(credential, profile0);
             profileCache.setLoading(credential, false);
             logger.info(profile0.toString(profileCache.getExpiry(credential)));
             return profile0;
         }
-        logger.info(username+"'s profile not found in load list.");
-        
-        if(config.enableLocalProfileCache){
-            UserProfile profile=profileCache.getLocalProfile(credential);
-            if(profile==null)
-                logger.info(username+"'s LocalProfile not found.");
-            else{
+        logger.info(username + "'s profile not found in load list.");
+
+        if (config.enableLocalProfileCache) {
+            UserProfile profile = profileCache.getLocalProfile(credential);
+            if (profile == null) {
+                logger.info(username + "'s LocalProfile not found.");
+            } else {
                 profileCache.updateCache(credential, profile, false);
                 profileCache.setLoading(credential, false);
-                logger.info(username+"'s LocalProfile will be used.");
+                logger.info(username + "'s LocalProfile will be used.");
                 logger.info(profile.toString(profileCache.getExpiry(credential)));
                 return profile;
             }
@@ -178,16 +188,19 @@ public class CustomSkinLoader {
         profileCache.setLoading(credential, false);
         return null;
     }
-    
+
     //For Skull
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
-        String username=gameProfile.getName();
-        String credential=MinecraftUtil.getCredential(gameProfile);
-        
-        if(username == null || credential == null)
+        String username = gameProfile.getName();
+        String credential = MinecraftUtil.getCredential(gameProfile);
+
+        //CustomSkinLoader needs username to load standard skin, if username not exist, only textures in NBT can be used
+        //Authlib 3.11.50 makes empty username to "\u0020"
+        if (username == null || username.equals("\u0020") || credential == null) {
             return dynamicSkullManager.getTexture(gameProfile);
-        if(config.forceUpdateSkull ?profileCache.isReady(credential):profileCache.isExist(credential)){
-            UserProfile profile=profileCache.getProfile(credential);
+        }
+        if (config.forceUpdateSkull ? profileCache.isReady(credential) : profileCache.isExist(credential)) {
+            UserProfile profile = profileCache.getProfile(credential);
             return ModelManager0.fromUserProfile(profile);
         }
         if (!profileCache.isLoading(credential)) {
@@ -206,7 +219,7 @@ public class CustomSkinLoader {
         }
         return Maps.newHashMap();
     }
-    
+
     private static Logger initLogger() {
         Logger logger = new Logger(LOG_FILE);
         logger.info("CustomSkinLoader " + CustomSkinLoader_FULL_VERSION);
