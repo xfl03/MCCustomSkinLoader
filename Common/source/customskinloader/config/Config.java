@@ -117,7 +117,7 @@ public class Config {
         try {
             CustomSkinLoader.logger.info("Try to load config.");
             String json=FileUtils.readFileToString(CustomSkinLoader.CONFIG_FILE, "UTF-8");
-            Config config=CustomSkinLoader.GSON.fromJson(json, Config.class);
+            Config config=Objects.requireNonNull(CustomSkinLoader.GSON.fromJson(json, Config.class));
             CustomSkinLoader.logger.info("Successfully load config.");
             return config;
         }catch (Exception e) {

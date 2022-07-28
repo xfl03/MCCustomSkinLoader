@@ -1,7 +1,12 @@
 package customskinloader.fake.texture;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public interface FakeImage {
     FakeImage createImage(int width, int height);
+
+    FakeImage createImage(InputStream is) throws IOException;
 
     int getWidth();
 

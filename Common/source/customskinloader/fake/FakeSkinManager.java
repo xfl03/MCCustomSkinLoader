@@ -5,10 +5,6 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
@@ -27,7 +23,6 @@ import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager {
-    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(CustomSkinLoader.config.threadPoolSize, CustomSkinLoader.config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     private final TextureManager textureManager;
 
     private final Map<ResourceLocation, MinecraftProfileTexture> modelCache = new ConcurrentHashMap<>();
@@ -60,7 +55,7 @@ public class FakeSkinManager {
     }
 
     public void loadProfileTextures(final GameProfile profile, final SkinManager.SkinAvailableCallback skinAvailableCallback, final boolean requireSecure) {
-        THREAD_POOL.execute(() -> CustomSkinLoader.loadProfileLazily(profile, m -> {
+        CustomSkinLoader.loadProfileTextures(() -> CustomSkinLoader.loadProfileLazily(profile, m -> {
             final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = Maps.newHashMap();
             map.putAll(m);
 

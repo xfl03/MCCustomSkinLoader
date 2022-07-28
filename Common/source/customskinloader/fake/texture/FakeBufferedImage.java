@@ -1,7 +1,11 @@
 package customskinloader.fake.texture;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
 
 public class FakeBufferedImage implements FakeImage {
     private BufferedImage image;
@@ -23,6 +27,10 @@ public class FakeBufferedImage implements FakeImage {
 
     public FakeImage createImage(int width, int height) {
         return new FakeBufferedImage(width, height);
+    }
+
+    public FakeImage createImage(InputStream is) throws IOException {
+        return new FakeBufferedImage(ImageIO.read(is));
     }
 
     public int getWidth() {
