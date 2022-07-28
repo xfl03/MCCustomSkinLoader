@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     implementation("com.qcloud:cos_api:5.6.98")
+    implementation("com.tencentcloudapi:tencentcloud-sdk-java-cdn:3.1.559")
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("commons-io:commons-io:2.11.0")
     implementation("net.minecraftforge.gradle:ForgeGradle:2.3.+")

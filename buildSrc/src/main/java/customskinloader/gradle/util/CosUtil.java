@@ -45,8 +45,7 @@ public class CosUtil {
         return filename;
     }
 
-    private static final String bucketName = System.getenv("COS_BUCKET");
-    public static final String cosUrl = "https://csl.littleservice.cn/";
+    private static final String BUCKET_NAME = System.getenv("COS_BUCKET");
     private static COSClient cosClient0 = null;
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -55,8 +54,10 @@ public class CosUtil {
             return cosClient0;
         }
 
-        COSCredentials cred = new BasicCOSCredentials(System.getenv("COS_SECRET_ID"),
-                System.getenv("COS_SECRET_KEY"));
+        COSCredentials cred = new BasicCOSCredentials(
+                System.getenv("COS_SECRET_ID"),
+                System.getenv("COS_SECRET_KEY")
+        );
         ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
         cosClient0 = new COSClient(cred, clientConfig);
 
@@ -64,7 +65,7 @@ public class CosUtil {
     }
 
     public static void uploadFile(String key, File file) {
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, key, file);
         getCosClient().putObject(putObjectRequest);
     }
 
@@ -75,7 +76,7 @@ public class CosUtil {
     }
 
     public static void downloadFile(String key, File file) {
-        GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, key);
+        GetObjectRequest getObjectRequest = new GetObjectRequest(BUCKET_NAME, key);
         getCosClient().getObject(getObjectRequest, file);
     }
 }

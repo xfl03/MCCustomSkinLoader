@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import customskinloader.gradle.entity.CslDetail;
 import customskinloader.gradle.entity.CslLatest;
+import customskinloader.gradle.util.CdnUtil;
 import customskinloader.gradle.util.ConfigUtil;
 import customskinloader.gradle.util.CosUtil;
 import customskinloader.gradle.util.VersionUtil;
@@ -39,7 +41,7 @@ public class UploadTask extends DefaultTask {
                 continue;
             }
             CosUtil.uploadFile(key, file);
-            String url = CosUtil.cosUrl + key;
+            String url = CdnUtil.CDN_ROOT + key;
             String mcversion = VersionUtil.getMcVersion(file.getName());
             if (mcversion.equals("ForgeLegacy")) {
                 mcversion = "Forge";
@@ -76,12 +78,15 @@ public class UploadTask extends DefaultTask {
     }
 
     @TaskAction
-    public void upload() throws IOException {
-        if (System.getenv("COS_SECRET_KEY") != null) {
-            CslLatest latest = uploadArtifacts();
-            if (latest != null) {
-                uploadDetail(latest);
-            }
+    public void upload() throws IOException, TencentCloudSDKException {
+        if (System.getenv("COS_SECRET_KEY") == null) {
+            return;
         }
+        CslLatest latest = uploadArtifacts();
+        if (latest == null) {
+            return;
+        }
+        uploadDetail(latest);
+        CdnUtil.updateCdn("latest.json", "detail.json");
     }
 }
