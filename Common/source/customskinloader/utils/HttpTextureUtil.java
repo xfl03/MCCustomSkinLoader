@@ -94,7 +94,7 @@ public class HttpTextureUtil {
     }
 
     public static String getHash(byte[] bytes) {
-        return DigestUtils.sha1Hex(bytes);
+        return DigestUtils.sha256Hex(bytes);
     }
 
     public static File getCacheFile(String hash) {
