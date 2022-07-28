@@ -92,13 +92,14 @@ public class HttpRequestUtil {
 
     public static HttpResponce makeHttpRequest(HttpRequest request, int redirectTime) {
         try {
-            if(request.url.contains("{ABORT}")){
-                CustomSkinLoader.logger.info("ABORT tag found in url, request has been aborted.");
-                return new HttpResponce();
+            //No url provided, try to load from special cache file
+            if (request.url == null || request.url.isEmpty()) {
+                CustomSkinLoader.logger.debug("Try to read cache '" + request.cacheFile + "'.");
+                return loadFromCache(request, new HttpResponce());
             }
             CustomSkinLoader.logger.debug("Try to request '" + request.url + (request.userAgent == null ? "'." : "' with user agent '" + request.userAgent + "'."));
             //Check Cache
-            if (StringUtils.isNotEmpty(request.payload) || CustomSkinLoader.config.forceDisableCache){
+            if (StringUtils.isNotEmpty(request.payload) || CustomSkinLoader.config.forceDisableCache) {
                 request.cacheTime = -1;//No Cache
             }
             File cacheInfoFile = null;
@@ -108,32 +109,38 @@ public class HttpRequestUtil {
                 request.cacheFile = new File(CACHE_DIR, hash);
                 cacheInfoFile = new File(CACHE_DIR, hash + ".json");
             }
-            if (request.cacheTime == 0 && request.cacheFile.isFile())
+            //noinspection BulkFileAttributesRead
+            if (request.cacheTime == 0 && request.cacheFile.isFile()) {
                 return loadFromCache(request, new HttpResponce());
+            }
             if (cacheInfoFile != null && cacheInfoFile.isFile()) {
                 String json = FileUtils.readFileToString(cacheInfoFile, "UTF-8");
-                if (StringUtils.isNotEmpty(json))
+                if (StringUtils.isNotEmpty(json)) {
                     cacheInfo = CustomSkinLoader.GSON.fromJson(json, CacheInfo.class);
-                if (cacheInfo == null)
+                }
+                if (cacheInfo == null) {
                     cacheInfo = new CacheInfo();
-                if (cacheInfo.expire >= TimeUtil.getCurrentUnixTimestamp())
+                }
+                if (cacheInfo.expire >= TimeUtil.getCurrentUnixTimestamp()) {
                     return loadFromCache(request, new HttpResponce(), cacheInfo.expire);
+                }
             }
 
             //Init Connection
             URL rawUrl = new URL(request.url);
             URI uri = new URI(
-                rawUrl.getProtocol(),
-                rawUrl.getUserInfo(),
-                rawUrl.getHost(),
-                rawUrl.getPort(),
-                rawUrl.getPath(),
-                rawUrl.getQuery(),
-                rawUrl.getRef()
+                    rawUrl.getProtocol(),
+                    rawUrl.getUserInfo(),
+                    rawUrl.getHost(),
+                    rawUrl.getPort(),
+                    rawUrl.getPath(),
+                    rawUrl.getQuery(),
+                    rawUrl.getRef()
             );
             String url = uri.toASCIIString();
-            if (!url.equalsIgnoreCase(request.url))
+            if (!url.equalsIgnoreCase(request.url)) {
                 CustomSkinLoader.logger.debug("Encoded URL: " + url);
+            }
             HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
             c.setReadTimeout(1000 * 10);
             c.setConnectTimeout(1000 * 10);
@@ -142,13 +149,16 @@ public class HttpRequestUtil {
             c.setInstanceFollowRedirects(true);
 
             //Make Connection
-            if (cacheInfo.lastModified >= 0)
+            if (cacheInfo.lastModified >= 0) {
                 c.setIfModifiedSince(cacheInfo.lastModified);
-            if (cacheInfo.etag != null)
+            }
+            if (cacheInfo.etag != null) {
                 c.setRequestProperty("If-None-Match", cacheInfo.etag);
+            }
             c.setRequestProperty("Accept-Encoding", "gzip");
-            if (request.userAgent != null)
+            if (request.userAgent != null) {
                 c.setRequestProperty("User-Agent", request.userAgent);
+            }
             if (StringUtils.isNotEmpty(request.payload)) {
                 CustomSkinLoader.logger.info("Payload: " + request.payload);
                 c.setRequestProperty("Content-Type", "application/json");
@@ -183,10 +193,12 @@ public class HttpRequestUtil {
             }
             responce.success = true;
             CustomSkinLoader.logger.debug("Successfully request (Response Code: " + res + " , Content Length: " + c.getContentLength() + ")");
-            if (responce.responceCode == HttpURLConnection.HTTP_NOT_MODIFIED)
+            if (responce.responceCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
                 return loadFromCache(request, responce);
-            if (responce.responceCode == HttpURLConnection.HTTP_NO_CONTENT)
+            }
+            if (responce.responceCode == HttpURLConnection.HTTP_NO_CONTENT) {
                 request.cacheTime = 3600;
+            }
 
             //Load Content
             InputStream is = "gzip".equals(c.getContentEncoding()) ? new GZIPInputStream(c.getInputStream()) : c.getInputStream();
@@ -205,16 +217,18 @@ public class HttpRequestUtil {
                     cacheInfo.expire = getExpire(c, request.cacheTime);
                     FileUtils.write(cacheInfoFile, CustomSkinLoader.GSON.toJson(cacheInfo), "UTF-8");
                 }
+                //noinspection BulkFileAttributesRead
                 CustomSkinLoader.logger.debug("Saved to cache (Length: " + request.cacheFile.length() + " , Path: '" + request.cacheFile.getAbsolutePath() + "' , Expire: " + cacheInfo.expire + ")");
             }
-            if (!request.loadContent)
+            if (!request.loadContent) {
                 return responce;
+            }
             responce.content = new String(bytes, StandardCharsets.UTF_8);
             CustomSkinLoader.logger.debug("Content: " + responce.content);
             return responce;
 
         } catch (Exception e) {
-            CustomSkinLoader.logger.debug("Failed to request " + request.url + " (Exception: " + e.toString() + ")");
+            CustomSkinLoader.logger.debug("Failed to request " + request.url + " (Exception: " + e + ")");
             return loadFromCache(request, new HttpResponce());
         }
     }
@@ -228,13 +242,15 @@ public class HttpRequestUtil {
     }
 
     private static HttpResponce loadFromCache(HttpRequest request, HttpResponce responce, long expireTime) {
-        if (request.cacheFile == null || !request.cacheFile.isFile())
+        if (request.cacheFile == null || !request.cacheFile.isFile()) {
             return responce;
+        }
         CustomSkinLoader.logger.debug("Cache file found (Length: " + request.cacheFile.length() + " , Path: '" + request.cacheFile.getAbsolutePath() + "' , Expire: " + expireTime + ")");
         responce.fromCache = true;
         responce.success = true;
-        if (!request.loadContent)
+        if (!request.loadContent) {
             return responce;
+        }
 
         CustomSkinLoader.logger.info("Try to load from cache '" + request.cacheFile.getAbsolutePath() + "'.");
         try {
@@ -242,7 +258,7 @@ public class HttpRequestUtil {
             CustomSkinLoader.logger.debug("Successfully load from cache");
             CustomSkinLoader.logger.debug("Content: " + responce.content);
         } catch (IOException e) {
-            CustomSkinLoader.logger.debug("Failed to load from cache (Exception: " + e.toString() + ")");
+            CustomSkinLoader.logger.debug("Failed to load from cache (Exception: " + e + ")");
             responce.success = false;
         }
         return responce;

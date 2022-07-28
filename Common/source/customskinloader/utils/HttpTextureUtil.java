@@ -67,7 +67,7 @@ public class HttpTextureUtil {
         if (fakeUrl.startsWith(BASE64_MARK)) {
             fakeUrl = fakeUrl.replace(BASE64_MARK, "");
             info.hash = fakeUrl;
-            info.cacheFile = HttpRequestUtil.getCacheFile(info.hash);
+            info.cacheFile = getCacheFile(info.hash);
             return info;
         }
         return info;
@@ -93,8 +93,8 @@ public class HttpTextureUtil {
         return DigestUtils.sha1Hex(size + url + lastModified);
     }
 
-    public static String getHash(String base64) {
-        return DigestUtils.sha1Hex(base64);
+    public static String getHash(byte[] bytes) {
+        return DigestUtils.sha1Hex(bytes);
     }
 
     public static File getCacheFile(String hash) {

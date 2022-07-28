@@ -66,13 +66,13 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
         }
 
         String capeBase64 = result.textures.cape;
-        String hash = HttpTextureUtil.getHash(capeBase64);
+        byte[] capeBytes = Base64.decodeBase64(capeBase64);
+        String hash = HttpTextureUtil.getHash(capeBytes);
         File cacheFile = HttpTextureUtil.getCacheFile(hash);
         String fakeUrl = HttpTextureUtil.getBase64FakeUrl(hash);
 
         //Save base64 image to cache file
         try {
-            byte[] capeBytes = Base64.decodeBase64(capeBase64);
             FileUtils.writeByteArrayToFile(cacheFile, capeBytes);
             CustomSkinLoader.logger.info("Saved base64 image to " + cacheFile);
         } catch (Exception e) {
