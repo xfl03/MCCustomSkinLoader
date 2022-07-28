@@ -20,14 +20,14 @@ public class CustomSkinAPI implements JsonAPILoader.IJsonAPI {
         public LittleSkin(JsonAPILoader loader) { super(loader); }
         @Override public String getName()       { return "LittleSkin"; }
         @Override public int getPriority()      { return 200; }
-        @Override public String getRoot()       { return "https://littlesk.in/csl/"; }
+        @Override public String getRoot()       { return "https://littleskin.cn/csl/"; }
     }
 
     public static class BlessingSkin extends JsonAPILoader.DefaultProfile {
         public BlessingSkin(JsonAPILoader loader) { super(loader); }
         @Override public String getName()         { return "BlessingSkin"; }
         @Override public int getPriority()        { return 300; }
-        @Override public String getRoot()         { return "http://skin.prinzeugen.net/"; }
+        @Override public String getRoot()         { return "https://skin.prinzeugen.net/"; }
     }
 
     // // OneSkin has been removed temporarily
@@ -72,7 +72,7 @@ public class CustomSkinAPI implements JsonAPILoader.IJsonAPI {
                 p.elytraUrl=HttpTextureUtil.getLocalFakeUrl(p.elytraUrl);
         }
         
-        Map<String,String> textures=new LinkedHashMap<String,String>();
+        Map<String,String> textures=new LinkedHashMap<>();
         if(profile.skins!=null)
             textures.putAll(profile.skins);
         if(profile.textures!=null)
