@@ -196,7 +196,7 @@ public class CustomSkinLoader {
 
         //CustomSkinLoader needs username to load standard skin, if username not exist, only textures in NBT can be used
         //Authlib 3.11.50 makes empty username to "\u0020"
-        if (username == null || username.equals("\u0020") || credential == null) {
+        if (username == null || username.isEmpty() || username.equals("\u0020") || credential == null) {
             return dynamicSkullManager.getTexture(gameProfile);
         }
         if (config.forceUpdateSkull ? profileCache.isReady(credential) : profileCache.isExist(credential)) {
