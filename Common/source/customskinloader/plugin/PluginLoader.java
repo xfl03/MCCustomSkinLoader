@@ -12,22 +12,19 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.loader.LegacyLoader;
 import customskinloader.loader.MojangAPILoader;
-import customskinloader.loader.jsonapi.CustomSkinAPI;
-import customskinloader.loader.jsonapi.CustomSkinAPIPlus;
-import customskinloader.loader.jsonapi.ElyByAPI;
-import customskinloader.loader.jsonapi.GlitchlessAPI;
-import customskinloader.loader.jsonapi.UniSkinAPI;
+import customskinloader.loader.jsonapi.*;
 import org.apache.commons.io.FileUtils;
 
 public class PluginLoader {
-    public static final ICustomSkinLoaderPlugin[] DEFAULT_PLUGINS = new ICustomSkinLoaderPlugin[] {
-        new MojangAPILoader(),
-        new LegacyLoader(),
-        new JsonAPILoader(new CustomSkinAPI()),
-        new JsonAPILoader(new CustomSkinAPIPlus()),
-        new JsonAPILoader(new UniSkinAPI()),
-        new JsonAPILoader(new ElyByAPI()),
-        new JsonAPILoader(new GlitchlessAPI())
+    public static final ICustomSkinLoaderPlugin[] DEFAULT_PLUGINS = new ICustomSkinLoaderPlugin[]{
+            new MojangAPILoader(),
+            new LegacyLoader(),
+            new JsonAPILoader(new CustomSkinAPI()),
+            new JsonAPILoader(new CustomSkinAPIPlus()),
+            new JsonAPILoader(new UniSkinAPI()),
+            new JsonAPILoader(new ElyByAPI()),
+            new JsonAPILoader(new GlitchlessAPI()),
+            new JsonAPILoader(new MinecraftCapesAPI())
     };
     public static final ArrayList<ICustomSkinLoaderPlugin> PLUGINS = loadPlugins();
 
@@ -35,13 +32,15 @@ public class PluginLoader {
         File pluginsDir = new File(CustomSkinLoader.DATA_DIR, "Plugins");
         ArrayList<URL> urls = new ArrayList<>();
         if (!pluginsDir.isDirectory()) {
+            //noinspection ResultOfMethodCallIgnored
             pluginsDir.mkdirs();
         } else {
-            for (File plugin : FileUtils.listFiles(pluginsDir, new String[] {"jar", "zip"}, false)) {
+            for (File plugin : FileUtils.listFiles(pluginsDir, new String[]{"jar", "zip"}, false)) {
                 try {
                     urls.add(plugin.toURI().toURL());
                     CustomSkinLoader.logger.info("Found a jar or zip file: " + plugin.getName());
-                } catch (MalformedURLException ignored) {}
+                } catch (MalformedURLException ignored) {
+                }
             }
         }
         ArrayList<ICustomSkinLoaderPlugin> plugins = Lists.newArrayList(DEFAULT_PLUGINS);
