@@ -49,8 +49,13 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
 
     @Override
     public String toJsonUrl(String root, String username) {
+        String uuid = MojangAPILoader.getMojangUuidByUsername(username);
+        //If uuid cannot be found, we won't load profile in this API.
+        if (uuid == null) {
+            return null;
+        }
         //API url is `${root}${uuid}`
-        return root + MojangAPILoader.getMojangUuidByUsername(username);
+        return root + uuid;
     }
 
     @Override
