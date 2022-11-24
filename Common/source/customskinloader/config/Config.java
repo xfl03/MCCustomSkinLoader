@@ -26,21 +26,29 @@ public class Config {
     public List<SkinSiteProfile> loadlist;
 
     //Function
-    public boolean enableDynamicSkull=true;
-    public boolean enableTransparentSkin=true;
+    public boolean enableDynamicSkull = true;
+    public boolean enableTransparentSkin = true;
     public boolean forceIgnoreHttpsCertificate = false;
-    public boolean forceLoadAllTextures=false;
+    public boolean forceLoadAllTextures = false;
     public boolean enableCape = true;
     public int threadPoolSize = 3;
     public int retryTime = 1;
+    /**
+     * Can logger write message to standard output(System.out).
+     * Because standard output won't write to latest.log after Forge 1.17,
+     * printing to standard output is meaningless,
+     * which makes this switch default value is <code>false</code>.
+     * @since 14.15
+     */
+    public boolean enableLogStdOut = false;
 
     //Profile Cache
-    public int cacheExpiry=30;
+    public int cacheExpiry = 30;
     public boolean forceUpdateSkull = false;
-    public boolean enableLocalProfileCache=false;
+    public boolean enableLocalProfileCache = false;
 
     //Network Cache
-    public boolean enableCacheAutoClean=false;
+    public boolean enableCacheAutoClean = false;
     public boolean forceDisableCache = false;
 
     // Used by Gson to create an instance with default value.
@@ -49,21 +57,21 @@ public class Config {
     }
 
     //Init config
-    public Config(List<SkinSiteProfile> loadlist){
-        this.version=CustomSkinLoader.CustomSkinLoader_VERSION;
-        this.buildNumber=CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
-        this.loadlist=loadlist;
+    public Config(List<SkinSiteProfile> loadlist) {
+        this.version = CustomSkinLoader.CustomSkinLoader_VERSION;
+        this.buildNumber = CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
+        this.loadlist = loadlist;
     }
 
     public static Config loadConfig0() {
-        Config config=loadConfig();
+        Config config = loadConfig();
 
         //LoadList null checker
-        if(config.loadlist==null){
-            config.loadlist=new ArrayList<SkinSiteProfile>();
-        }else{
-            for(int i=0;i<config.loadlist.size();i++){
-                if(config.loadlist.get(i)==null)
+        if (config.loadlist == null) {
+            config.loadlist = new ArrayList<>();
+        } else {
+            for (int i = 0; i < config.loadlist.size(); i++) {
+                if (config.loadlist.get(i) == null)
                     config.loadlist.remove(i--);
             }
         }
@@ -74,24 +82,25 @@ public class Config {
         config.initLocalFolder();
         config.threadPoolSize = Math.max(config.threadPoolSize, 1);
         config.retryTime = Math.max(config.retryTime, 0);
-        if(config.forceIgnoreHttpsCertificate)
+        if (config.forceIgnoreHttpsCertificate)
             HttpUtil0.ignoreHttpsCertificate();
-        if(config.enableCacheAutoClean && !config.enableLocalProfileCache){
-            try{
+        if (config.enableCacheAutoClean && !config.enableLocalProfileCache) {
+            try {
                 FileUtils.deleteDirectory(HttpRequestUtil.CACHE_DIR);
                 FileUtils.deleteDirectory(HttpTextureUtil.getCacheDir());
                 CustomSkinLoader.logger.info("Successfully cleaned cache.");
-            }catch(Exception e){
-                CustomSkinLoader.logger.warning("Exception occurs while cleaning cache: "+e.toString());
+            } catch (Exception e) {
+                CustomSkinLoader.logger.warning("Exception occurs while cleaning cache: " + e);
             }
         }
 
         //Check config version
         Version configVersion = Version.of(config.version);
         if (CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER == 0 // Custom builds
-            || configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0
-            || config.buildNumber < CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER) {
-            CustomSkinLoader.logger.info("Config File is out of date: " + config.version + ", build number: " + config.buildNumber);
+                || configVersion.compareTo(CustomSkinLoader.CustomSkinLoader_VERSION) < 0
+                || config.buildNumber < CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER) {
+            CustomSkinLoader.logger.info("Config File is out of date: " + config.version +
+                    ", build number: " + config.buildNumber);
             config.version = CustomSkinLoader.CustomSkinLoader_VERSION;
             config.buildNumber = CustomSkinLoader.CustomSkinLoader_BUILD_NUMBER;
         }
@@ -102,51 +111,53 @@ public class Config {
             try {
                 Object value = field.get(config);
                 CustomSkinLoader.logger.info(field.getName() + " : " + value);
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
 
         return config;
     }
 
     private static Config loadConfig() {
-        CustomSkinLoader.logger.info("Config File: "+CustomSkinLoader.CONFIG_FILE.getAbsolutePath());
-        if(!CustomSkinLoader.CONFIG_FILE.exists()){
+        CustomSkinLoader.logger.info("Config File: " + CustomSkinLoader.CONFIG_FILE.getAbsolutePath());
+        if (!CustomSkinLoader.CONFIG_FILE.exists()) {
             CustomSkinLoader.logger.info("Config file not found, use default instead.");
             return initConfig();
         }
         try {
             CustomSkinLoader.logger.info("Try to load config.");
-            String json=FileUtils.readFileToString(CustomSkinLoader.CONFIG_FILE, "UTF-8");
-            Config config=Objects.requireNonNull(CustomSkinLoader.GSON.fromJson(json, Config.class));
+            String json = FileUtils.readFileToString(CustomSkinLoader.CONFIG_FILE, "UTF-8");
+            Config config = Objects.requireNonNull(CustomSkinLoader.GSON.fromJson(json, Config.class));
             CustomSkinLoader.logger.info("Successfully load config.");
             return config;
-        }catch (Exception e) {
-            CustomSkinLoader.logger.info("Failed to load config, use default instead.("+e.toString()+")");
+        } catch (Exception e) {
+            CustomSkinLoader.logger.info("Failed to load config, use default instead.(" + e + ")");
             createBrokenFile(CustomSkinLoader.CONFIG_FILE);
             return initConfig();
         }
     }
 
-    private void loadExtraList(){
-        File listAddition=new File(CustomSkinLoader.DATA_DIR,"ExtraList");
-        if(!listAddition.isDirectory()){
+    private void loadExtraList() {
+        File listAddition = new File(CustomSkinLoader.DATA_DIR, "ExtraList");
+        if (!listAddition.isDirectory()) {
             listAddition.mkdirs();
             return;
         }
-        List<SkinSiteProfile> adds=new ArrayList<SkinSiteProfile>();
-        File[] files=listAddition.listFiles();
-        for(File file: files != null ? files : new File[0]){
-            if(!file.getName().toLowerCase().endsWith(".json")&&!file.getName().toLowerCase().endsWith(".txt"))
+        List<SkinSiteProfile> adds = new ArrayList<>();
+        File[] files = listAddition.listFiles();
+        for (File file : files != null ? files : new File[0]) {
+            if (!file.getName().toLowerCase().endsWith(".json") && !file.getName().toLowerCase().endsWith(".txt"))
                 continue;
             try {
-                CustomSkinLoader.logger.info("Try to load Extra List.("+file.getName()+")");
-                String json=FileUtils.readFileToString(file, "UTF-8");
-                SkinSiteProfile ssp=CustomSkinLoader.GSON.fromJson(json, SkinSiteProfile.class);
+                CustomSkinLoader.logger.info("Try to load Extra List.(" + file.getName() + ")");
+                String json = FileUtils.readFileToString(file, "UTF-8");
+                SkinSiteProfile ssp = CustomSkinLoader.GSON.fromJson(json, SkinSiteProfile.class);
                 CustomSkinLoader.logger.info("Successfully load Extra List.");
                 if (ssp.type != null) {
                     ProfileLoader.IProfileLoader loader = ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
                     if (loader == null) {
-                        CustomSkinLoader.logger.info("Extra List will be ignored: Type '" + ssp.type + "' is not defined.");
+                        CustomSkinLoader.logger.info("Extra List will be ignored: Type '" + ssp.type +
+                                "' is not defined.");
                         continue;
                     }
                     boolean duplicate = false;
@@ -166,36 +177,37 @@ public class Config {
                     }
                     file.delete();
                 } else {
-                    CustomSkinLoader.logger.info("Extra List is invalid: Type is not defined.(" + file.getName() + ")");
+                    CustomSkinLoader.logger.info("Extra List is invalid: Type is not defined.(" +
+                            file.getName() + ")");
                     createBrokenFile(file);
                 }
-            }catch (Exception e) {
-                CustomSkinLoader.logger.info("Failed to load Extra List.("+e.toString()+")");
+            } catch (Exception e) {
+                CustomSkinLoader.logger.info("Failed to load Extra List.(" + e + ")");
                 createBrokenFile(file);
             }
         }
-        if(adds.size()!=0){
+        if (adds.size() != 0) {
             adds.addAll(this.loadlist);
-            this.loadlist=adds;
+            this.loadlist = adds;
         }
     }
 
     private void updateLoadlist() {
         PluginLoader.PLUGINS.stream()
-            .map(ICustomSkinLoaderPlugin::getDefaultProfiles)
-            .filter(Objects::nonNull)
-            .flatMap(Collection::stream)
-            .forEach(profile -> this.loadlist.stream()
-                .filter(ssp -> profile.getName().equals(ssp.name))
-                .forEach(profile::updateSkinSiteProfile));
+                .map(ICustomSkinLoaderPlugin::getDefaultProfiles)
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .forEach(profile -> this.loadlist.stream()
+                        .filter(ssp -> profile.getName().equals(ssp.name))
+                        .forEach(profile::updateSkinSiteProfile));
     }
 
-    private void initLocalFolder(){
-        for(SkinSiteProfile ssp:this.loadlist){
-            if(ssp.type==null)
+    private void initLocalFolder() {
+        for (SkinSiteProfile ssp : this.loadlist) {
+            if (ssp.type == null)
                 continue;
-            ProfileLoader.IProfileLoader loader=ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
-            if(loader==null)
+            ProfileLoader.IProfileLoader loader = ProfileLoader.LOADERS.get(ssp.type.toLowerCase());
+            if (loader == null)
                 continue;
             loader.init(ssp);
         }
@@ -237,16 +249,17 @@ public class Config {
         writeConfig(config, false);
         return config;
     }
-    private static void writeConfig(Config config, boolean update){
-        String json=CustomSkinLoader.GSON.toJson(config);
-        if(CustomSkinLoader.CONFIG_FILE.exists())
+
+    private static void writeConfig(Config config, boolean update) {
+        String json = CustomSkinLoader.GSON.toJson(config);
+        if (CustomSkinLoader.CONFIG_FILE.exists())
             CustomSkinLoader.CONFIG_FILE.delete();
         try {
             CustomSkinLoader.CONFIG_FILE.createNewFile();
             FileUtils.write(CustomSkinLoader.CONFIG_FILE, json, "UTF-8");
-            CustomSkinLoader.logger.info("Successfully "+(update?"update":"create")+" config.");
+            CustomSkinLoader.logger.info("Successfully " + (update ? "update" : "create") + " config.");
         } catch (Exception e) {
-            CustomSkinLoader.logger.info("Failed to "+(update?"update":"create")+" config.("+e.toString()+")");
+            CustomSkinLoader.logger.info("Failed to " + (update ? "update" : "create") + " config.(" + e + ")");
         }
     }
 }

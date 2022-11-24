@@ -42,12 +42,13 @@ public class CustomSkinLoader {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static final Logger logger = initLogger();
-    public static final Config config = Config.loadConfig0();
+    public static final Config config = initConfig();
 
     private static final ProfileCache profileCache = new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager = new DynamicSkullManager();
 
-    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(
+            config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
 
     //Correct thread name in thread pool
     private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
@@ -68,7 +69,8 @@ public class CustomSkinLoader {
         THREAD_POOL.execute(runnable);
     }
 
-    public static void loadProfileLazily(GameProfile gameProfile, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> consumer) {
+    public static void loadProfileLazily(
+            GameProfile gameProfile, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> consumer) {
         String username = gameProfile.getName();
         String credential = MinecraftUtil.getCredential(gameProfile);
         // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
@@ -190,7 +192,8 @@ public class CustomSkinLoader {
     }
 
     //For Skull
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(
+            final GameProfile gameProfile) {
         String username = gameProfile.getName();
         String credential = MinecraftUtil.getCredential(gameProfile);
 
@@ -224,10 +227,25 @@ public class CustomSkinLoader {
         Logger logger = new Logger(LOG_FILE);
         logger.info("CustomSkinLoader " + CustomSkinLoader_FULL_VERSION);
         logger.info("DataDir: " + DATA_DIR.getAbsolutePath());
-        logger.info("Operating System: " + System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version"));
-        logger.info("Java Version: " + System.getProperty("java.version") + ", " + System.getProperty("java.vendor"));
-        logger.info("Java VM Version: " + System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor"));
+        logger.info("Operating System: " + System.getProperty("os.name") +
+                " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version"));
+        logger.info("Java Version: " + System.getProperty("java.version") +
+                ", " + System.getProperty("java.vendor"));
+        logger.info("Java VM Version: " + System.getProperty("java.vm.name") +
+                " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor"));
         logger.info("Minecraft: " + MinecraftUtil.getMinecraftMainVersion());
         return logger;
+    }
+
+    /**
+     * Create <code>Config</code> object.
+     * To use <code>logger</code>, please make sure call this function after <code>initLogger</code>.
+     *
+     * @return <code>Config</code>
+     */
+    private static Config initConfig() {
+        Config config = Config.loadConfig0();
+        logger.enableLogStdOut = config.enableLogStdOut;
+        return config;
     }
 }
