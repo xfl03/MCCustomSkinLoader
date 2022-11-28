@@ -223,7 +223,7 @@ public class Config {
                 profiles.addAll(defaultProfiles);
             }
         }
-        profiles.sort(Comparator.comparingInt(ICustomSkinLoaderPlugin.IDefaultProfile::getPriority));
+        profiles.sort((c1, c2) -> Integer.compare(c1.getPriority(), c2.getPriority()));
 
         List<SkinSiteProfile> loadlist = new ArrayList<>();
         for (ICustomSkinLoaderPlugin.IDefaultProfile profile : profiles) {

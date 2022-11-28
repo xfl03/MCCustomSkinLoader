@@ -1,0 +1,116 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.ow2.asm:asm-debug-all:5.2"
+    }
+}
+
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.InsnList
+import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.MethodNode
+
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
+
+
+configurations {
+    patchClass
+}
+
+void patch(Object dependency, Closure<Boolean> fileFilter, Closure<Boolean> classFilter, Closure<Boolean> methodFilter, Closure<Boolean> nodeFilter, Closure methodPathcer) {
+    project.dependencies {
+        patchClass dependency
+    }
+
+    project.afterEvaluate {
+        project.configurations.patchClass.findAll({ File f -> fileFilter.call(f) }).each { File f ->
+            def name = "${project.buildDir}/libs/${f.name}"
+            file(name).parentFile.mkdirs()
+            def zos = new ZipOutputStream(new FileOutputStream(name))
+            try {
+                def zf = new ZipFile(f)
+                zf.stream().filter({ ZipEntry ze -> classFilter.call(ze.name) }).forEach({ ZipEntry ze ->
+                    def cn = new ClassNode()
+                    new ClassReader(zf.getInputStream(ze).bytes).accept(cn, 0)
+                    cn.methods.findAll({ MethodNode mn -> methodFilter.call(mn) }).each { MethodNode mn ->
+                        mn.instructions.toArray().each { AbstractInsnNode ain ->
+                            if (nodeFilter.call(ain)) {
+                                methodPathcer.call(mn.instructions, ain)
+                            }
+                        }
+                    }
+                    def cw = new ClassWriter(ClassWriter.COMPUTE_MAXS)
+                    cn.accept(cw)
+                    zos.putNextEntry(new ZipEntry(ze.name))
+                    zos.write(cw.toByteArray())
+                    zos.closeEntry()
+                })
+            } finally {
+                zos.close()
+            }
+            project.dependencies {
+                compile files(name)
+                compile dependency
+            }
+        }
+    }
+}
+
+// Mercury assumes that all classes containing '$' are inner classes and ignores classes that contain '$' natively.
+void patchMercury() {
+    this.patch(
+            "org.cadixdev:mercury:0.1.0",
+            { File f ->
+                f.name == "mercury-0.1.0.jar"
+            },
+            { String name ->
+                name == "org/cadixdev/mercury/remapper/RemapperVisitor.class"
+            },
+            { MethodNode mn ->
+                mn.name == "remapType" && mn.desc == "(Lorg/eclipse/jdt/core/dom/SimpleName;Lorg/eclipse/jdt/core/dom/ITypeBinding;)V"
+            },
+            { AbstractInsnNode node ->
+                node.opcode == Opcodes.ASTORE && node.var == 4
+            },
+            { InsnList list, AbstractInsnNode node ->
+                list.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/gradle/util/RemapUtil", "fixClassName", "(Ljava/lang/String;)Ljava/lang/String;", false))
+            }
+    )
+}
+
+// Mixin uses incorrect method for field descriptors to get the signature.
+void patchMixin() {
+    this.patch(
+            "org.spongepowered:mixin:0.8.5",
+            { File f ->
+                f.name == "mixin-0.8.5.jar"
+            },
+            { String name ->
+                name == "org/spongepowered/tools/obfuscation/mirror/TypeHandleASM.class"
+            },
+            { MethodNode mn ->
+                mn.name == "findField" && mn.desc == "(Ljava/lang/String;Ljava/lang/String;Z)Lorg/spongepowered/tools/obfuscation/mirror/FieldHandle;"
+            },
+            { AbstractInsnNode node ->
+                node.opcode == Opcodes.INVOKESTATIC && node.owner == "org/spongepowered/tools/obfuscation/mirror/TypeUtils" && node.name == "getJavaSignature" && node.desc == "(Ljava/lang/String;)Ljava/lang/String;"
+            },
+            { InsnList list, AbstractInsnNode node ->
+                list.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "org/objectweb/asm/Type", "getType", "(Ljava/lang/String;)Lorg/objectweb/asm/Type;", false))
+                list.set(node, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "org/objectweb/asm/Type", "getClassName", "()Ljava/lang/String;", false))
+            }
+    )
+}
+
+ext {
+    patchMixin = this.&patchMixin
+    patchMercury = this.&patchMercury
+}

@@ -31,7 +31,7 @@ There are the available versions in different environments below:
    Forge 1.17.1 ~ latest:  ./local-repo/mods/CustomSkinLoader_ForgeActive/${version}
    Fabric:                 ./local-repo/mods/CustomSkinLoader_Fabric/${version}
    ```
-   *`${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually*
+   *`${version}` should be repalced with something like `14.15-SNAPSHOT-00` manually*
 1. Create a pom file in the same folder:
    - Forge 1.8 ~ 1.16.5: `CustomSkinLoader_ForgeLegacy-${version}.pom`
    ```xml
@@ -40,7 +40,7 @@ There are the available versions in different environments below:
        <modelVersion>4.0.0</modelVersion>
        <groupId>mods</groupId>
        <artifactId>CustomSkinLoader_ForgeLegacy</artifactId>
-       <!-- `${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually -->
+       <!-- `${version}` should be repalced with something like `14.15-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
    ```
@@ -51,7 +51,7 @@ There are the available versions in different environments below:
        <modelVersion>4.0.0</modelVersion>
        <groupId>mods</groupId>
        <artifactId>CustomSkinLoader_ForgeActive</artifactId>
-       <!-- `${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually -->
+       <!-- `${version}` should be repalced with something like `14.15-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
    ```
@@ -62,7 +62,7 @@ There are the available versions in different environments below:
        <modelVersion>4.0.0</modelVersion>
        <groupId>mods</groupId>
        <artifactId>CustomSkinLoader_Fabric</artifactId>
-       <!-- `${version}` should be repalced with something like `14.14-SNAPSHOT-00` manually -->
+       <!-- `${version}` should be repalced with something like `14.15-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
    ```
@@ -71,7 +71,7 @@ There are the available versions in different environments below:
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       deobfCompile "mods:CustomSkinLoader_ForgeLegacy:14.14-SNAPSHOT-00"
+       deobfCompile "mods:CustomSkinLoader_ForgeLegacy:14.15-SNAPSHOT-00"
    }
 
    minecraft {
@@ -88,8 +88,8 @@ There are the available versions in different environments below:
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       implementation fg.deobf("mods:CustomSkinLoader_ForgeLegacy:14.14-SNAPSHOT-00") // Only required for MinecraftForge 1.8 ~ 1.16.5
-       implementation fg.deobf("mods:CustomSkinLoader_ForgeActive:14.14-SNAPSHOT-00") // Only required for MinecraftForge 1.17.1 ~ latest
+       implementation fg.deobf("mods:CustomSkinLoader_ForgeLegacy:14.15-SNAPSHOT-00") // Only required for MinecraftForge 1.8 ~ 1.16.5
+       implementation fg.deobf("mods:CustomSkinLoader_ForgeActive:14.15-SNAPSHOT-00") // Only required for MinecraftForge 1.17.1 ~ latest
    }
 
    minecraft {
@@ -107,7 +107,7 @@ There are the available versions in different environments below:
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
-       modImplementation "mods:CustomSkinLoader_Fabric:14.14-SNAPSHOT-00"
+       modImplementation "mods:CustomSkinLoader_Fabric:14.15-SNAPSHOT-00"
    }
 
    tasks.runClient {

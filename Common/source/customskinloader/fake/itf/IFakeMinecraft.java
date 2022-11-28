@@ -8,9 +8,4 @@ public interface IFakeMinecraft {
     default IResourceManager func_195551_G() {
         return (IResourceManager) ((Minecraft) this).getResourceManager();
     }
-
-    // 1.14+
-    default void execute(Runnable runnable) {
-        ((Minecraft) this).addScheduledTask(runnable);
-    }
 }

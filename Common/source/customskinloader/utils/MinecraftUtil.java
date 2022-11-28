@@ -1,27 +1,19 @@
 package customskinloader.utils;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Field;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
-import net.minecraft.realms.RealmsSharedConstants;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Alexander Xia
@@ -77,7 +69,7 @@ public class MinecraftUtil {
 
     // (domain|ip)(:port)
     public static String getServerAddress() {
-        net.minecraft.client.multiplayer.ServerData data = Minecraft.getMinecraft().getCurrentServerData();
+        ServerData data = Minecraft.getMinecraft().getCurrentServerData();
         if (data == null)//Single Player
             return null;
         return data.serverIP;

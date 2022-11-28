@@ -10,7 +10,8 @@
     "MixinMinecraft",
     "MixinRenderPlayer",
     "MixinSkinManager",
-    "MixinTextureManager",
+    "MixinSkinManager$V1",
+    "MixinSkinManager$V2",
     "MixinThreadDownloadImageDataV2"
   ],
   "refmap": "mixins.customskinloader.refmap.json",

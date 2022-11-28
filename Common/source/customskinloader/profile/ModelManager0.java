@@ -3,11 +3,10 @@ package customskinloader.profile;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.Maps;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import customskinloader.fake.FakeMinecraftProfileTexture;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Model Manager for 1.8 and higher.
@@ -25,10 +24,10 @@ public class ModelManager0 {
     }
 
     private static HashMap<String, Model> models = new HashMap<String, Model>();
-    private static Type typeElytra = null;
+    private static MinecraftProfileTexture.Type typeElytra = null;
 
     static {
-        for (Type type : Type.values()) {
+        for (MinecraftProfileTexture.Type type : MinecraftProfileTexture.Type.values()) {
             if (type.ordinal() == 2)//ELYTRA
                 typeElytra = type;
         }
@@ -76,17 +75,17 @@ public class ModelManager0 {
      * @return profile - UserProfile instance
      * @since 13.1
      */
-    public static UserProfile toUserProfile(Map<Type, MinecraftProfileTexture> profile) {
+    public static UserProfile toUserProfile(Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> profile) {
         UserProfile userProfile = new UserProfile();
         if (profile == null)
             return userProfile;
-        MinecraftProfileTexture skin = profile.get(Type.SKIN);
+        MinecraftProfileTexture skin = profile.get(MinecraftProfileTexture.Type.SKIN);
         userProfile.skinUrl = skin == null ? null : skin.getUrl();//Avoid NullPointerException
         userProfile.model = skin == null ? null : skin.getMetadata("model");
         if (StringUtils.isEmpty(userProfile.model))
             userProfile.model = "default";
 
-        MinecraftProfileTexture cape = profile.get(Type.CAPE);
+        MinecraftProfileTexture cape = profile.get(MinecraftProfileTexture.Type.CAPE);
         userProfile.capeUrl = cape == null ? null : cape.getUrl();
         return userProfile;
     }
@@ -98,8 +97,8 @@ public class ModelManager0 {
      * @return profile - hashMapProfile (HashMap<String,MinecraftProfileTexture>)
      * @since 13.1
      */
-    public static Map<Type, MinecraftProfileTexture> fromUserProfile(UserProfile profile) {
-        Map<Type, MinecraftProfileTexture> map = Maps.newHashMap();
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> fromUserProfile(UserProfile profile) {
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = Maps.newHashMap();
         if (profile == null)
             return map;
         if (profile.skinUrl != null) {
@@ -108,10 +107,10 @@ public class ModelManager0 {
                 metadata = Maps.newHashMap();
                 metadata.put("model", profile.model);
             }
-            map.put(Type.SKIN, getProfileTexture(profile.skinUrl, metadata));
+            map.put(MinecraftProfileTexture.Type.SKIN, getProfileTexture(profile.skinUrl, metadata));
         }
         if (profile.capeUrl != null)
-            map.put(Type.CAPE, getProfileTexture(profile.capeUrl, null));
+            map.put(MinecraftProfileTexture.Type.CAPE, getProfileTexture(profile.capeUrl, null));
         if (typeElytra != null && profile.elytraUrl != null)
             map.put(typeElytra, getProfileTexture(profile.elytraUrl, null));
         return map;
@@ -126,6 +125,6 @@ public class ModelManager0 {
      * @since 14.5
      */
     public static MinecraftProfileTexture getProfileTexture(String url, Map<String, String> metadata) {
-        return new MinecraftProfileTexture(url, metadata);
+        return new FakeMinecraftProfileTexture(url, metadata);
     }
 }
