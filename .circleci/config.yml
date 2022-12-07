@@ -33,7 +33,7 @@ jobs:
           name: Publish
           command: |
             export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-            ./gradlew upload --info
+            ./gradlew upload --debug --stacktrace
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       - store_artifacts:
