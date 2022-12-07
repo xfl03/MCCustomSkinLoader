@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk@sha256:7be33522f6f0ca65c2e78b22b1ef3e6739038494c1de1b8fb6d96da400dccf53
+      - image: cimg/openjdk:8.0
 
     working_directory: ~/repo
 
@@ -19,23 +19,22 @@ jobs:
           - gradle-cache
 
       # Gradle Wrapper
-      # - run: sudo chmod +x gradlew
-      # - run: ./gradlew --version
-      # - run: ./gradlew clean build
-
-      # Gradle
-      - run: gradle --version
+      - run:
+          name: Gradle Version
+          command: |
+            sudo chmod +x gradlew
+            ./gradlew --version
       - run:
           name: Build
           command: |
-              export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-              gradle clean build
+            export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
+            ./gradlew clean build
       - run:
           name: Publish
           command: |
             export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-            gradle upload --info
-      # - run: gradle publishGprPublicationToGitHubPackagesRepository
+            ./gradlew upload --info
+          # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       - store_artifacts:
           path: ./build/libs
