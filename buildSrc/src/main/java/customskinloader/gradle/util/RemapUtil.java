@@ -21,6 +21,7 @@ import org.cadixdev.lorenz.MappingSet;
 import org.cadixdev.lorenz.io.srg.SrgReader;
 import org.cadixdev.lorenz.io.srg.SrgWriter;
 import org.cadixdev.lorenz.io.srg.tsrg.TSrgReader;
+import org.cadixdev.lorenz.model.ClassMapping;
 import org.cadixdev.mercury.Mercury;
 import org.cadixdev.mercury.remapper.MercuryRemapper;
 import org.gradle.api.Project;
@@ -42,7 +43,7 @@ public class RemapUtil {
             Writer writer = Files.newBufferedWriter(srg.toPath(), StandardCharsets.UTF_8)
         ) {
             new TSrgReader(reader).read(set);
-            new SrgWriter(writer).write(set);
+            new SrgWriterWithoutFilter(writer).write(set);
         }
         srg.deleteOnExit();
     }
@@ -88,5 +89,60 @@ public class RemapUtil {
                 throw new RuntimeException(e);
             }
         }));
+    }
+
+    /**
+     * Invoked from {@link org.cadixdev.mercury.remapper.RemapperVisitor#remapType(org.eclipse.jdt.core.dom.SimpleName, org.eclipse.jdt.core.dom.ITypeBinding)}
+     */
+    public static String fixClassName(String name) {
+        char[] chars = name.toCharArray();
+        for (int i = 0; i < chars.length - 1; i++) {
+            if (chars[i] == '.' && chars[i + 1] >= '0' && chars[i + 1] <= '9') {
+                chars[i] = '$';
+            }
+        }
+        return new String(chars);
+    }
+
+    public static class SrgWriterWithoutFilter extends SrgWriter {
+        private final static Field classesField;
+
+        static {
+            try {
+                classesField = SrgWriter.class.getDeclaredField("classes");
+                classesField.setAccessible(true);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public SrgWriterWithoutFilter(Writer writer) {
+            super(writer);
+        }
+
+        @Override
+        protected void writeClassMapping(ClassMapping<?, ?> mapping) {
+            // Write class mappings without checking
+            try {
+                ((List<String>) classesField.get(this)).add(String.format("CL: %s %s", mapping.getFullObfuscatedName(), mapping.getFullDeobfuscatedName()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            // Write inner class mappings
+            mapping.getInnerClassMappings().stream()
+                .sorted(this.getConfig().getClassMappingComparator())
+                .forEach(this::writeClassMapping);
+
+            // Write field mappings
+            mapping.getFieldsByName().values().stream()
+                .sorted(this.getConfig().getFieldMappingComparator())
+                .forEach(this::writeFieldMapping);
+
+            // Write method mappings
+            mapping.getMethodMappings().stream()
+                .sorted(this.getConfig().getMethodMappingComparator())
+                .forEach(this::writeMethodMapping);
+        }
     }
 }

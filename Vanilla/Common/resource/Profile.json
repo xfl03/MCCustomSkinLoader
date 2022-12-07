@@ -35,57 +35,57 @@
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm/9.3/asm-9.3.jar",
-          "sha1": "8e6300ef51c1d801a7ed62d07cd221aca3a90640",
-          "size": 122176,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.3/asm-9.3.jar"
+          "path": "org/ow2/asm/asm/9.4/asm-9.4.jar",
+          "sha1": "b4e0e2d2e023aa317b7cfcfc916377ea348e07d1",
+          "size": 122445,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.4/asm-9.4.jar"
         }
       },
-      "name": "org.ow2.asm:asm:9.3"
+      "name": "org.ow2.asm:asm:9.4"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-analysis/9.3/asm-analysis-9.3.jar",
-          "sha1": "4b071f211b37c38e0e9f5998550197c8593f6ad8",
-          "size": 34276,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.3/asm-analysis-9.3.jar"
+          "path": "org/ow2/asm/asm-analysis/9.4/asm-analysis-9.4.jar",
+          "sha1": "0a5fec9dfc039448d4fd098fbaffcaf55373b223",
+          "size": 34331,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.4/asm-analysis-9.4.jar"
         }
       },
-      "name": "org.ow2.asm:asm-analysis:9.3"
+      "name": "org.ow2.asm:asm-analysis:9.4"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-commons/9.3/asm-commons-9.3.jar",
-          "sha1": "1f2a432d1212f5c352ae607d7b61dcae20c20af5",
-          "size": 72716,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.3/asm-commons-9.3.jar"
+          "path": "org/ow2/asm/asm-commons/9.4/asm-commons-9.4.jar",
+          "sha1": "8fc2810ddbcbbec0a8bbccb3f8eda58321839912",
+          "size": 72781,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.4/asm-commons-9.4.jar"
         }
       },
-      "name": "org.ow2.asm:asm-commons:9.3"
+      "name": "org.ow2.asm:asm-commons:9.4"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-tree/9.3/asm-tree-9.3.jar",
-          "sha1": "78d2ecd61318b5a58cd04fb237636c0e86b77d97",
-          "size": 52669,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.3/asm-tree-9.3.jar"
+          "path": "org/ow2/asm/asm-tree/9.4/asm-tree-9.4.jar",
+          "sha1": "a99175a17d7fdc18cbcbd0e8ea6a5d276844190a",
+          "size": 52665,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.4/asm-tree-9.4.jar"
         }
       },
-      "name": "org.ow2.asm:asm-tree:9.3"
+      "name": "org.ow2.asm:asm-tree:9.4"
     },
     {
       "downloads": {
         "artifact": {
-          "path": "org/ow2/asm/asm-util/9.3/asm-util-9.3.jar",
-          "sha1": "9595bc05510d0bd4b610188b77333fe4851a1975",
-          "size": 85682,
-          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.3/asm-util-9.3.jar"
+          "path": "org/ow2/asm/asm-util/9.4/asm-util-9.4.jar",
+          "sha1": "ab1e0a84b72561dbaf1ee260321e72148ebf4b19",
+          "size": 91549,
+          "url": "https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.4/asm-util-9.4.jar"
         }
       },
-      "name": "org.ow2.asm:asm-util:9.3"
+      "name": "org.ow2.asm:asm-util:9.4"
     },
     {
       "downloads": {

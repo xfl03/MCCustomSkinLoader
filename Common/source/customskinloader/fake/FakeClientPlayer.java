@@ -21,6 +21,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 
 public class FakeClientPlayer {
+    /**
+     * Invoked from {@link SkinManager#loadSkin(MinecraftProfileTexture, MinecraftProfileTexture.Type, SkinManager.SkinAvailableCallback)}
+     */
+    public static ThreadDownloadImageData putCache(ThreadDownloadImageData threaddownloadimagedata, SkinManager.SkinAvailableCallback skinAvailableCallback, ResourceLocation resourcelocation) {
+        if (skinAvailableCallback instanceof FakeClientPlayer.LegacyBuffer) {//Cache for client player
+            textureCache.put(resourcelocation, threaddownloadimagedata);
+        }
+        return threaddownloadimagedata;
+    }
+
     //For Legacy Skin
     public static ThreadDownloadImageData getDownloadImageSkin(ResourceLocation resourceLocationIn, String username) {
         //CustomSkinLoader.logger.debug("FakeClientPlayer/getDownloadImageSkin "+username);

@@ -7,19 +7,11 @@ customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeI
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; getResource
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
 	func_195551_G ()Lnet/minecraft/resources/IResourceManager; Q
-customskinloader/fake/itf/IFakeTextureManager$V1 customskinloader/fake/itf/IFakeTextureManager$V1
-	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Z func_229263_a_
-	func_229267_b_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/Texture; func_229267_b_
-	getTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)Lnet/minecraft/client/renderer/texture/Texture; getTexture
-customskinloader/fake/itf/IFakeTextureManager$V2 customskinloader/fake/itf/IFakeTextureManager$V2
-	func_229263_a_ (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/Texture;)V func_229263_a_
 net/minecraft/client/Minecraft ave
 	gameDir v
-	addScheduledTask (Ljava/lang/Runnable;)Lcom/google/common/util/concurrent/ListenableFuture; a
 	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; D
 	getMinecraft ()Lnet/minecraft/client/Minecraft; A
 	getResourceManager ()Lnet/minecraft/client/resources/IResourceManager; Q
-	getSessionService ()Lcom/mojang/authlib/minecraft/MinecraftSessionService; aa
 	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; ab
 	getTextureManager ()Lnet/minecraft/client/renderer/texture/TextureManager; P
 net/minecraft/client/gui/GuiPlayerTabOverlay awh
@@ -35,7 +27,6 @@ net/minecraft/client/renderer/IImageBuffer bfm
 net/minecraft/client/renderer/ThreadDownloadImageData bma
 net/minecraft/client/renderer/entity/RenderPlayer bln
 net/minecraft/client/renderer/entity/layers/LayerCape bkp
-net/minecraft/client/renderer/texture/DownloadingTexture bma
 net/minecraft/client/renderer/texture/ITextureObject bmk
 net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/NativeImage
 	func_195699_a (IIIIIIZZ)V func_195699_a
@@ -47,20 +38,20 @@ net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/Na
 	func_195714_b ()I func_195714_b
 	func_195715_a (IIIII)V func_195715_a
 net/minecraft/client/renderer/texture/SimpleTexture bme
-net/minecraft/client/renderer/texture/Texture bly
 net/minecraft/client/renderer/texture/TextureManager bmj
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; b
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z a
-net/minecraft/client/renderer/texture/ThreadDownloadImageData bma
 net/minecraft/client/resources/DefaultPlayerSkin bmz
 	getDefaultSkin (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; a
-	getDefaultSkinLegacy ()Lnet/minecraft/util/ResourceLocation; a
 net/minecraft/client/resources/IResource bnh
 	getInputStream ()Ljava/io/InputStream; b
 net/minecraft/client/resources/IResourceManager bni
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; a
 net/minecraft/client/resources/SkinManager bnp
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
+net/minecraft/client/resources/SkinManager$3 bnp$3
+	field_152801_c c
+	field_152802_d d
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback bnp$a
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V a
 net/minecraft/resources/IResource bnh

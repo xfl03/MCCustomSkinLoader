@@ -53,36 +53,6 @@ public class FakeInterfacesTransformer {
     }
 
     @TransformerManager.TransformTarget(
-        className = "net.minecraft.client.renderer.texture.AbstractTexture"
-    )
-    public static class AbstractTextureTransformer implements TransformerManager.IClassTransformer {
-        @Override
-        public ClassNode transform(ClassNode cn) {
-            cn.interfaces.add("net/minecraft/client/renderer/texture/Texture");
-            return cn;
-        }
-    }
-
-    @TransformerManager.TransformTarget(
-        className = "net.minecraft.client.renderer.texture.Texture"
-    )
-    public static class TextureTransformer extends FakeInterfacesTransformer.FakeInterfaceTransformer {
-
-    }
-
-    @TransformerManager.TransformTarget(
-        className = "net.minecraft.client.renderer.texture.TextureManager"
-    )
-    public static class TextureManagerTransformer implements TransformerManager.IClassTransformer {
-        @Override
-        public ClassNode transform(ClassNode cn) {
-            cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager$V1");
-            cn.interfaces.add("customskinloader/fake/itf/IFakeTextureManager$V2");
-            return cn;
-        }
-    }
-
-    @TransformerManager.TransformTarget(
         className = "net.minecraft.client.resources.IResource"
     )
     public static class ClientIResourceTransformer implements TransformerManager.IClassTransformer {

@@ -7,27 +7,10 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "https://maven.minecraftforge.net/"
-        }
-        maven {
-            name = "sponge"
-            url = "https://repo.spongepowered.org/repository/maven-public/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3.+'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-    }
-}
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = "4.10.3"
+    gradleVersion = "4.9"
 }
 
 import customskinloader.gradle.util.CurseForgeUtil
@@ -101,7 +84,7 @@ subprojects {
         archivesBaseName = "CustomSkinLoader_${-> VersionUtil.getEdition(project)}"
 
         processResources {
-            filesNotMatching("**/*.js") {
+            filesNotMatching(["**/*.js", "mixins.*.json"]) {
                 expand([
                         modVersion         : rootProject.ext.config.version,
                         modFullVersion     : project.version,
@@ -120,9 +103,8 @@ subprojects {
         if (!project.name.toLowerCase().contains("forge/legacy")) {
             apply plugin: 'org.spongepowered.mixin'
 
-            dependencies {
-                implementation 'org.spongepowered:mixin:0.8.5'
-            }
+            apply from: rootProject.file("buildSrc/patch.gradle")
+            patchMixin()
 
             task genSrgMap {
                 doLast {

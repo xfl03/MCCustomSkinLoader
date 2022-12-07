@@ -48,6 +48,10 @@ public class TransformerManager {
         return remapper.mapFieldName(owner, name, desc);
     }
 
+    public static String mapFieldDesc(String desc) {
+        return remapper.mapDesc(desc);
+    }
+
     public static String mapMethodName(String owner, String name, String desc) {
         return remapper.mapMethodName(owner, name, desc);
     }
@@ -61,6 +65,22 @@ public class TransformerManager {
             return name.equals(deobfName);
         } else {
             return mapClassName(name).equals(deobfName);
+        }
+    }
+
+    public static boolean checkFieldName(String owner, String name, String desc, String srgName) {
+        if (isDevelopmentEnvironment) {
+            return mapFieldName(owner, srgName, desc).equals(name);
+        } else {
+            return mapFieldName(owner, name, desc).equals(srgName);
+        }
+    }
+
+    public static boolean checkFieldDesc(String desc, String deobfDesc)  {
+        if (isDevelopmentEnvironment) {
+            return desc.equals(deobfDesc);
+        } else {
+            return mapFieldDesc(desc).equals(deobfDesc);
         }
     }
 

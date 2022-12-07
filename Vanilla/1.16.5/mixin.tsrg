@@ -7,7 +7,9 @@ net/minecraft/client/entity/AbstractClientPlayer dzj
 net/minecraft/client/gui/GuiPlayerTabOverlay dly
 	renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V func_175249_a
 	renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V a
+net/minecraft/client/gui/spectator/PlayerMenuObject ehx
 net/minecraft/client/model/ModelRenderer dwn
+net/minecraft/client/renderer/IImageBuffer net/minecraft/client/renderer/IImageBuffer
 net/minecraft/client/renderer/IRenderTypeBuffer eag
 net/minecraft/client/renderer/RenderType eao
 	getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; b
@@ -26,10 +28,19 @@ net/minecraft/client/renderer/entity/layers/LayerCape ehu
 net/minecraft/client/renderer/texture/NativeImage det
 net/minecraft/client/renderer/texture/TextureManager ekd
 net/minecraft/client/resources/SkinManager eks
+	func_210275_a (Lcom/mojang/authlib/GameProfile;ZLnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V a
+	func_229297_b_ (Ljava/util/Map;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V b
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; a
 	loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; a
+net/minecraft/client/resources/SkinManager$3 eks$3
+	run ()V run
+net/minecraft/client/resources/SkinManager$3$1 eks$3$1
+	field_152803_a field_152803_a
+	field_152804_b field_152804_b
+	run ()V run
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback eks$a
+	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
 net/minecraft/scoreboard/ScoreObjective ddk
 net/minecraft/scoreboard/Scoreboard ddn
 net/minecraft/util/ResourceLocation vk

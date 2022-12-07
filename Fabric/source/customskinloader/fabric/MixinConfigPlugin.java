@@ -56,6 +56,8 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         boolean result = true;
         if (mixinClassName.endsWith(".MixinThreadDownloadImageDataV2")) {
             result = (this.world_version >= 2205 && this.world_version <= 2722) && ((this.protocol_version >= 554 && this.protocol_version <= 754) || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x40000022)); // 19w38a ~ 1.17-rc1
+        } else if (mixinClassName.endsWith(".MixinSkinManager$V2")) {
+            result = this.world_version >= 2205 && this.protocol_version >= 554; // 19w38a+
         } else if (mixinClassName.endsWith(".MixinLayerCape") || mixinClassName.endsWith(".MixinRenderPlayer")) {
             result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+
         } else if (mixinClassName.endsWith(".MixinThreadDownloadImageDataV3")) {

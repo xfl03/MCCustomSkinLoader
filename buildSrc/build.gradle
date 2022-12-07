@@ -13,6 +13,9 @@ repositories {
     maven {
         url = "https://maven.minecraftforge.net/"
     }
+    maven {
+        url = "https://repo.spongepowered.org/repository/maven-public/"
+    }
 }
 
 dependencies {
@@ -21,7 +24,10 @@ dependencies {
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("commons-io:commons-io:2.11.0")
     implementation("net.minecraftforge.gradle:ForgeGradle:2.3.+")
-    implementation("org.cadixdev:mercury:0.1.0")
     implementation("gradle.plugin.com.matthewprenger:CurseGradle:1.4.0")
     implementation("gradle.plugin.com.modrinth.minotaur:Minotaur:1.2.1")
+    implementation("org.spongepowered:mixingradle:0.6-SNAPSHOT")
 }
+
+apply from: file("patch.gradle")
+patchMercury()
