@@ -32,7 +32,6 @@ public class Config {
     public boolean forceLoadAllTextures = false;
     public boolean enableCape = true;
     public int threadPoolSize = 3;
-    public int retryTime = 1;
     /**
      * Can logger write message to standard output(System.out).
      * Because standard output won't write to latest.log after Forge 1.17,
@@ -81,7 +80,6 @@ public class Config {
         config.updateLoadlist();
         config.initLocalFolder();
         config.threadPoolSize = Math.max(config.threadPoolSize, 1);
-        config.retryTime = Math.max(config.retryTime, 0);
         if (config.forceIgnoreHttpsCertificate)
             HttpUtil0.ignoreHttpsCertificate();
         if (config.enableCacheAutoClean && !config.enableLocalProfileCache) {
