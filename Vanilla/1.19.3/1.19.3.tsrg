@@ -1,34 +1,34 @@
 customskinloader/fake/itf/IFakeIResource$V1 customskinloader/fake/itf/IFakeIResource$V1
 	func_199027_b ()Ljava/io/InputStream; func_199027_b
 customskinloader/fake/itf/IFakeIResource$V2 customskinloader/fake/itf/IFakeIResource$V2
-	open ()Ljava/io/InputStream; b
+	open ()Ljava/io/InputStream; d
 customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
 	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; func_199002_a
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; getResource
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
-	func_195551_G ()Lnet/minecraft/resources/IResourceManager; S
-net/minecraft/client/Minecraft efu
+	func_195551_G ()Lnet/minecraft/resources/IResourceManager; Y
+net/minecraft/client/Minecraft ejf
 	gameDir p
-	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; K
-	getMinecraft ()Lnet/minecraft/client/Minecraft; I
-	getResourceManager ()Lnet/minecraft/client/resources/IResourceManager; S
-	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; ad
-	getTextureManager ()Lnet/minecraft/client/renderer/texture/TextureManager; R
-net/minecraft/client/gui/GuiPlayerTabOverlay eii
-net/minecraft/client/gui/spectator/PlayerMenuObject epw
-net/minecraft/client/multiplayer/ServerData evb
+	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; P
+	getMinecraft ()Lnet/minecraft/client/Minecraft; N
+	getResourceManager ()Lnet/minecraft/client/resources/IResourceManager; Y
+	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; ak
+	getTextureManager ()Lnet/minecraft/client/renderer/texture/TextureManager; X
+net/minecraft/client/gui/GuiPlayerTabOverlay elx
+net/minecraft/client/gui/spectator/PlayerMenuObject ett
+net/minecraft/client/multiplayer/ServerData ezg
 	serverIP b
-net/minecraft/client/renderer/RenderType faa
+net/minecraft/client/renderer/RenderType fed
 	func_228644_e_ (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; h
 net/minecraft/client/renderer/IImageBuffer net/minecraft/client/renderer/IImageBuffer
 	func_195786_a (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; func_195786_a
 	parseUserSkin (Ljava/awt/image/BufferedImage;)Ljava/awt/image/BufferedImage; func_78432_a
 	skinAvailable ()V func_152634_a
-net/minecraft/client/renderer/ThreadDownloadImageData fjv
-net/minecraft/client/renderer/entity/RenderPlayer fjk
-net/minecraft/client/renderer/entity/layers/LayerCape fhs
+net/minecraft/client/renderer/ThreadDownloadImageData fnz
+net/minecraft/client/renderer/entity/RenderPlayer fnp
+net/minecraft/client/renderer/entity/layers/LayerCape flx
 net/minecraft/client/renderer/texture/ITextureObject net/minecraft/client/renderer/texture/ITextureObject
-net/minecraft/client/renderer/texture/NativeImage dzq
+net/minecraft/client/renderer/texture/NativeImage ede
 	func_195699_a (IIIIIIZZ)V a
 	func_195700_a (III)V a
 	func_195702_a ()I a
@@ -37,25 +37,25 @@ net/minecraft/client/renderer/texture/NativeImage dzq
 	func_195713_a (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; a
 	func_195714_b ()I b
 	func_195715_a (IIIII)V a
-net/minecraft/client/renderer/texture/SimpleTexture fka
-net/minecraft/client/renderer/texture/TextureManager fkf
+net/minecraft/client/renderer/texture/SimpleTexture foe
+net/minecraft/client/renderer/texture/TextureManager fom
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; func_110581_b
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z func_110579_a
-net/minecraft/client/resources/DefaultPlayerSkin fkl
+net/minecraft/client/resources/DefaultPlayerSkin fpb
 	getDefaultSkin (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; a
-net/minecraft/client/resources/IResource aik
-	getInputStream ()Ljava/io/InputStream; b
-net/minecraft/client/resources/IResourceManager aim
+net/minecraft/client/resources/IResource akc
+	getInputStream ()Ljava/io/InputStream; d
+net/minecraft/client/resources/IResourceManager ake
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; getResource
-net/minecraft/client/resources/SkinManager fku
+net/minecraft/client/resources/SkinManager fpj
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V a
-net/minecraft/client/resources/SkinManager$3 fku$3
+net/minecraft/client/resources/SkinManager$3 fpj$3
 	field_152801_c field_152801_c
 	field_152802_d field_152802_d
-net/minecraft/client/resources/SkinManager$SkinAvailableCallback fku$a
+net/minecraft/client/resources/SkinManager$SkinAvailableCallback fpj$a
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
-net/minecraft/resources/IResource aik
-net/minecraft/resources/IResourceManager aim
-net/minecraft/util/ResourceLocation abb
-net/minecraft/util/StringUtils amx
+net/minecraft/resources/IResource akc
+net/minecraft/resources/IResourceManager ake
+net/minecraft/util/ResourceLocation acf
+net/minecraft/util/StringUtils aos
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; a
