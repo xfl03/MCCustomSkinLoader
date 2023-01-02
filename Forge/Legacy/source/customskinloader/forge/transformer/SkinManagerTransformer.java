@@ -11,7 +11,6 @@ import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
@@ -158,6 +157,7 @@ public class SkinManagerTransformer {
             il.add(new VarInsnNode(Opcodes.ALOAD, 1));
             il.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "customskinloader/fake/FakeSkinManager", "loadSkinFromCache", "(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;", false));
             il.add(new InsnNode(Opcodes.ARETURN));
+            il.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             mn.instructions.insert(il);
             return mn;
         }
@@ -222,7 +222,11 @@ public class SkinManagerTransformer {
             }
 
             if (val$skinAvailableCallback != null && this$0 != null && val$map != null && this$1 != null) {
+                AbstractInsnNode frame = null;
                 for (AbstractInsnNode ain : mn.instructions.toArray()) {
+                    if (ain instanceof FrameNode) {
+                        frame = ain;
+                    }
                     if (ain.getOpcode() == Opcodes.RETURN) {
                         InsnList il = new InsnList();
                         il.add(new VarInsnNode(Opcodes.ALOAD, 0));
@@ -237,6 +241,7 @@ public class SkinManagerTransformer {
                         mn.instructions.insertBefore(ain, il);
                     }
                 }
+                mn.instructions.set(frame, new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             }
 
             return mn;

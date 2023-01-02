@@ -8,7 +8,6 @@ import customskinloader.forge.transformer.PlayerTabTransformer;
 import customskinloader.forge.transformer.SkinManagerTransformer;
 import customskinloader.forge.transformer.SpectatorMenuTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.launchwrapper.Launch;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -64,33 +63,7 @@ public class LaunchWrapper implements IClassTransformer {
         cn.methods.addAll(methods);
 
         //Parse Class Node to bytes
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES) {
-            @Override
-            protected String getCommonSuperClass(final String type1, final String type2) {
-                Class<?> c, d;
-                ClassLoader classLoader = Launch.classLoader;
-                try {
-                    c = classLoader.loadClass(type1.replace('/', '.'));
-                    d = classLoader.loadClass(type2.replace('/', '.'));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                if (c.isAssignableFrom(d)) {
-                    return type1;
-                }
-                if (d.isAssignableFrom(c)) {
-                    return type2;
-                }
-                if (c.isInterface() || d.isInterface()) {
-                    return "java/lang/Object";
-                } else {
-                    do {
-                        c = c.getSuperclass();
-                    } while (!c.isAssignableFrom(d));
-                    return c.getName().replace('.', '/');
-                }
-            }
-        };
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         cn.accept(cw);
         return cw.toByteArray();
     }
