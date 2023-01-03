@@ -1,5 +1,5 @@
 # Java Gradle CircleCI 2.0 configuration file
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
