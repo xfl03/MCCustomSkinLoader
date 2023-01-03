@@ -78,26 +78,29 @@ You can also use 'ExtraList' which makes it easier for users to add your server 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Copyright & LICENSE  
+### Major Contributor
+- 2013-2014 Jeremy Lam([JLChnToZ](https://github.com/JLChnToZ))
+- 2014-2023 Alexander Xia([xfl03](https://github.com/xfl03))
+- 2020-2023 [ZekerZhayard](https://github.com/ZekerZhayard)
+
 ### Binary File  
 You could not modify binary file.  
 Feel free to use and share this mod and unmodified file in anyway like modpack.  
 When using in modpack, you must put 'CustomSkinLoader' in mod list.   
 You could not repost this mod to any website without permission.  
 You could not earn money with this mod excluding modpack.  
+
 ### Source Code  
 #### Package 'customskinloader'  
 Including some codes from 
 - [AsteriskTeam/TabIconHackForge](http://git.oschina.net/AsteriskTeam/TabIconHackForge) (GPLv3)
 - [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)  
 - [NekoCaffeine/Alchemy](https://github.com/NekoCaffeine/Alchemy) (GPLv3)  
-  
-Copyright © 2013-2014 Jeremy Lam "JLChnToZ".  
-Copyright © 2014-2019 Alexander Xia "xfl03".
 
-    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-    
+```
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+```
 GPLv3: http://www.gnu.org/licenses/gpl.html  
   
 You should change the name of the package to avoid others' misunderstanding.  

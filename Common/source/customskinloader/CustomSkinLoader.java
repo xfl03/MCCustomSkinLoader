@@ -27,7 +27,7 @@ import customskinloader.utils.MinecraftUtil;
 /**
  * Custom skin loader mod for Minecraft.
  *
- * @author (C) Jeremy Lam [JLChnToZ] 2013-2014 & Alexander Xia [xfl03] 2014-2020
+ * @author Jeremy Lam [JLChnToZ] 2013-2014 & Alexander Xia [xfl03] 2014-2023
  * @version @MOD_FULL_VERSION@
  */
 public class CustomSkinLoader {
@@ -198,8 +198,8 @@ public class CustomSkinLoader {
         String credential = MinecraftUtil.getCredential(gameProfile);
 
         //CustomSkinLoader needs username to load standard skin, if username not exist, only textures in NBT can be used
-        //Authlib 3.11.50 makes empty username to "\u0020"
-        if (username == null || username.isEmpty() || username.equals("\u0020") || credential == null) {
+        //Authlib 3.11.50 makes empty username to " "
+        if (username == null || username.isEmpty() || username.equals(" ") || credential == null) {
             return dynamicSkullManager.getTexture(gameProfile);
         }
         if (config.forceUpdateSkull ? profileCache.isReady(credential) : profileCache.isExist(credential)) {

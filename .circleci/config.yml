@@ -28,13 +28,17 @@ jobs:
           name: Build
           command: |
             export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-            ./gradlew clean build
-      - run:
-          name: Publish
-          command: |
-            export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-            ./gradlew upload --debug --stacktrace
-          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+            ./gradlew clean build --stacktrace
+      - when:
+          condition:
+            equal: [ 14-release, << pipeline.git.branch >> ]
+          steps:
+            - run:
+                name: Publish
+                command: |
+                  export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
+                  ./gradlew upload --info --stacktrace
+                # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       - store_artifacts:
           path: ./build/libs
