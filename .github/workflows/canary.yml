@@ -1,4 +1,4 @@
-name: canary
+name: Canary
 on:
   push:
     branches:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-canary:
+    name: Build Canary
     uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@15-develop
     with:
       type: Canary

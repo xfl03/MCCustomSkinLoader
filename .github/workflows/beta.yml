@@ -1,4 +1,4 @@
-name: beta
+name: Beta
 on:
   push:
     branches:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-beta:
+    name: Build Beta
     uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@14-develop
     with:
       type: Beta

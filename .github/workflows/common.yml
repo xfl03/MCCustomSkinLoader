@@ -1,3 +1,4 @@
+name: Common
 on:
   workflow_call:
     inputs:
@@ -9,7 +10,8 @@ on:
         type: string
 
 jobs:
-  common_build:
+  build-common:
+    name: Build Common
     runs-on: ubuntu-latest
     environment: Build
     steps:

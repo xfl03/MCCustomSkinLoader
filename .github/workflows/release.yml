@@ -1,11 +1,12 @@
-name: release
+name: Release
 on:
   push:
-    branches:
-      - '14-release'
+    tags:
+      - '*'
 
 jobs:
   build-release:
+    name: Build Release
     uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@14-release
     with:
       type: Release
