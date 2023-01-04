@@ -56,7 +56,7 @@ public class UploadTask extends DefaultTask {
         return latest;
     }
 
-    public void uploadDetail(CslLatest latest, String filename) throws IOException {
+    private void uploadDetail(CslLatest latest, String filename) throws IOException {
         CslDetail detail = new CslDetail(latest.version);
 
         rootProject.getAllprojects().stream()
@@ -73,7 +73,7 @@ public class UploadTask extends DefaultTask {
         CosUtil.writeAndUploadObject(filename, detail);
     }
 
-    private void uploadBase(String latestJsonName, String detailJsonName) throws IOException, TencentCloudSDKException {
+    protected void uploadBase(String latestJsonName, String detailJsonName) throws IOException, TencentCloudSDKException {
         if (System.getenv("COS_SECRET_KEY") == null) {
             return;
         }
@@ -88,15 +88,5 @@ public class UploadTask extends DefaultTask {
     @TaskAction
     public void upload() throws IOException, TencentCloudSDKException {
         uploadBase("latest.json","detail.json");
-    }
-
-    @TaskAction
-    public void uploadBeta() throws IOException, TencentCloudSDKException {
-        uploadBase("latest-beta.json","detail-beta.json");
-    }
-
-    @TaskAction
-    public void uploadCanary() throws IOException, TencentCloudSDKException {
-        uploadBase("latest-canary.json","detail-canary.json");
     }
 }
