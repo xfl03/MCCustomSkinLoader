@@ -9,4 +9,4 @@ jobs:
     uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@15-develop
     with:
       type: Canary
-      upload-task: uploadCanary
+      publish-task: uploadCanary

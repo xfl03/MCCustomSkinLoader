@@ -9,4 +9,4 @@ jobs:
     uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@14-develop
     with:
       type: Beta
-      upload-task: uploadBeta
+      publish-task: uploadBeta
