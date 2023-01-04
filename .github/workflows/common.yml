@@ -4,7 +4,7 @@ on:
       type:
         required: true
         type: string
-      publish_task:
+      publish-task:
         required: true
         type: string
 
@@ -40,7 +40,7 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew ${{ inputs.publish_task }} --info --stacktrace
+          ./gradlew ${{ inputs.publish-task }} --info --stacktrace
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
       -
         uses: actions/upload-artifact@v3
