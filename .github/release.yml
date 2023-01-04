@@ -1,0 +1,36 @@
+name: release
+on:
+  push:
+    branches:
+      - '14-release'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'gradle'
+      -
+        name: Build
+        run: |
+          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
+          ./gradlew clean build --stacktrace
+      -
+        name: Publish
+        run: |
+          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
+          ./gradlew upload --info --stacktrace
+          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+      -
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-build
+          path: build/libs

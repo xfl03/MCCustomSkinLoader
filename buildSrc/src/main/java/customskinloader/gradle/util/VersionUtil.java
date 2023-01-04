@@ -19,6 +19,9 @@ public class VersionUtil {
     }
 
     public static String getBuildNum() {
+        if (System.getenv("GITHUB_RUN_NUMBER") != null) {
+            return System.getenv("GITHUB_RUN_NUMBER");
+        }
         if (System.getenv("CIRCLE_BUILD_NUM") != null) {
             return System.getenv("CIRCLE_BUILD_NUM");
         }

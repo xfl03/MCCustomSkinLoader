@@ -92,8 +92,8 @@ subprojects {
                         mcVersion          : config.minecraft_version,
                         mcFullVersions     : config.minecraft_full_versions,
                         forgeVersion       : config.forge_version,
-                        gitVersion         : System.getenv("CIRCLE_SHA1"),
-                        buildUrl           : System.getenv("CIRCLE_BUILD_URL"),
+                        gitVersion         : System.getenv("CIRCLE_SHA1") ?: System.getenv("GITHUB_SHA"),
+                        buildUrl           : System.getenv("CIRCLE_BUILD_URL") ?: "https://github.com/xfl03/MCCustomSkinLoader/actions/runs/" + System.getenv("GITHUB_RUN_ID"),
                         releaseTime        : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
                 ])
             }
