@@ -10,3 +10,4 @@ jobs:
     with:
       type: Canary
       publish-task: uploadCanary
+    secrets: inherit

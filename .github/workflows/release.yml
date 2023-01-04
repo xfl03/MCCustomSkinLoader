@@ -10,3 +10,4 @@ jobs:
     with:
       type: Release
       publish-task: upload
+    secrets: inherit
