@@ -4,15 +4,17 @@ Custom Skin Loader mod for Minecraft.
 It's a mod which can load skins and capes from any online source or from your local.
   
 ## Download  
-Latest version could be found in [CurseForge](https://minecraft.curseforge.com/projects/customskinloader) or [Modrinth](https://modrinth.com/mod/customskinloader).  
-中文用户也可以从[33 Kit](https://3-3.dev/csl-download)获取最新版本。
+### Release Build
+- [CurseForge](https://minecraft.curseforge.com/projects/customskinloader)
+- [Modrinth](https://modrinth.com/mod/customskinloader)
+- [33 Kit（Chinese/中文）](https://3-3.dev/csl-download)
 
-Build Server : [CircleCI](https://circleci.com/gh/xfl03/MCCustomSkinLoader) & ~~[Infinity Studio CI](https://ci.infstudio.net/job/CustomSkinLoader/)~~   
-Release Page : [MCBBS](http://www.mcbbs.net/thread-269807-1-1.html) & [GitHub](https://github.com/xfl03/MCCustomSkinLoader/releases) & [CurseForge](https://minecraft.curseforge.com/projects/customskinloader) & [Modrinth](https://modrinth.com/mod/customskinloader) & [33 Kit](https://3-3.dev/csl-download)  
+### Develop Build
+- [GitHub Action](https://github.com/xfl03/MCCustomSkinLoader/actions) 
 
 ## Contact Us
-[QQ Group](https://im.qq.com/): [651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)  
-[Telegram](https://telegram.org/): [@customskinloader](https://t.me/customskinloader)
+- [Telegram](https://telegram.org/): [@customskinloader](https://t.me/customskinloader)
+- [QQ Group（Chinese/中文）](https://im.qq.com/): [651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)
 
 ## Feature  
 ### Support Plenty of Skin Load API and Customizable Skin Load List  

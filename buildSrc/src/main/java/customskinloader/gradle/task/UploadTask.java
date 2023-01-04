@@ -3,8 +3,6 @@ package customskinloader.gradle.task;
 import java.io.File;
 import java.io.IOException;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import customskinloader.gradle.entity.CslDetail;
 import customskinloader.gradle.entity.CslLatest;
@@ -19,9 +17,7 @@ import org.gradle.api.tasks.TaskAction;
 public class UploadTask extends DefaultTask {
     public Project rootProject;
 
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    private CslLatest uploadArtifacts() throws IOException {
+    private CslLatest uploadArtifacts(String filename) throws IOException {
         String shortVersion = VersionUtil.getShortVersion(rootProject);
         File dir = rootProject.file("build/libs");
         if (!dir.isDirectory()) {
@@ -56,11 +52,11 @@ public class UploadTask extends DefaultTask {
             }
         }
 
-        CosUtil.writeAndUploadObject("latest.json", latest);
+        CosUtil.writeAndUploadObject(filename, latest);
         return latest;
     }
 
-    public void uploadDetail(CslLatest latest) throws IOException {
+    public void uploadDetail(CslLatest latest, String filename) throws IOException {
         CslDetail detail = new CslDetail(latest.version);
 
         rootProject.getAllprojects().stream()
@@ -74,19 +70,33 @@ public class UploadTask extends DefaultTask {
                 });
 
         detail.sortDetails();
-        CosUtil.writeAndUploadObject("detail.json", detail);
+        CosUtil.writeAndUploadObject(filename, detail);
+    }
+
+    private void uploadBase(String latestJsonName, String detailJsonName) throws IOException, TencentCloudSDKException {
+        if (System.getenv("COS_SECRET_KEY") == null) {
+            return;
+        }
+        CslLatest latest = uploadArtifacts(latestJsonName);
+        if (latest == null) {
+            return;
+        }
+        uploadDetail(latest, detailJsonName);
+        CdnUtil.updateCdn(latestJsonName, detailJsonName);
     }
 
     @TaskAction
     public void upload() throws IOException, TencentCloudSDKException {
-        if (System.getenv("COS_SECRET_KEY") == null) {
-            return;
-        }
-        CslLatest latest = uploadArtifacts();
-        if (latest == null) {
-            return;
-        }
-        uploadDetail(latest);
-        CdnUtil.updateCdn("latest.json", "detail.json");
+        uploadBase("latest.json","detail.json");
+    }
+
+    @TaskAction
+    public void uploadBeta() throws IOException, TencentCloudSDKException {
+        uploadBase("latest-beta.json","detail-beta.json");
+    }
+
+    @TaskAction
+    public void uploadCanary() throws IOException, TencentCloudSDKException {
+        uploadBase("latest-canary.json","detail-canary.json");
     }
 }

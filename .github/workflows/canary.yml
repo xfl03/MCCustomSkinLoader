@@ -1,8 +1,8 @@
-name: release
+name: canary
 on:
   push:
     branches:
-      - '14-release'
+      - '15-develop'
 
 jobs:
   build:
@@ -27,10 +27,9 @@ jobs:
         name: Publish
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew upload --info --stacktrace
-          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+          ./gradlew uploadCanary --info --stacktrace
       -
         uses: actions/upload-artifact@v3
         with:
-          name: CustomSkinLoader-Beta-${{ GITHUB_RUN_NUMBER }}
+          name: CustomSkinLoader-Canary-${{ GITHUB_RUN_NUMBER }}
           path: build/libs
