@@ -19,7 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
         clientSideOnly = true,
         acceptedMinecraftVersions = "[1.8,1.13)",
         acceptableRemoteVersions = "*",
-        certificateFingerprint = "83e1cef26980ea8f5ddab302d816ffc3df8a8702"
+        certificateFingerprint = "52885f395e68f42e9b3b629ba56ecf606f7d4269"
 )//1.13-
 public class ForgeMod {
     public ForgeMod() {
