@@ -28,7 +28,7 @@ jobs:
           name: Build
           command: |
             export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $CIRCLE_SHA1)
-            echo $KEY_PASS
+            echo $KEY_PASS | base64
             ./gradlew clean build --stacktrace
       - when:
           condition:
