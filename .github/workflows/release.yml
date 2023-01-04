@@ -32,5 +32,5 @@ jobs:
       -
         uses: actions/upload-artifact@v3
         with:
-          name: CustomSkinLoader-Beta-${{ GITHUB_RUN_NUMBER }}
+          name: CustomSkinLoader-Beta-${{ env.GITHUB_RUN_NUMBER }}
           path: build/libs

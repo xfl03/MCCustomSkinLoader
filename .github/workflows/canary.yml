@@ -31,5 +31,5 @@ jobs:
       -
         uses: actions/upload-artifact@v3
         with:
-          name: CustomSkinLoader-Canary-${{ GITHUB_RUN_NUMBER }}
+          name: CustomSkinLoader-Canary-${{ env.GITHUB_RUN_NUMBER }}
           path: build/libs
