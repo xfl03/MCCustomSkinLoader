@@ -12,9 +12,8 @@ import customskinloader.gradle.util.CosUtil;
 import customskinloader.gradle.util.VersionUtil;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
-import org.gradle.api.tasks.TaskAction;
 
-public class UploadTask extends DefaultTask {
+public abstract class UploadBaseTask extends DefaultTask {
     public Project rootProject;
 
     private CslLatest uploadArtifacts(String filename) throws IOException {
@@ -74,7 +73,9 @@ public class UploadTask extends DefaultTask {
     }
 
     protected void uploadBase(String latestJsonName, String detailJsonName) throws IOException, TencentCloudSDKException {
+        System.out.printf("latestJsonName: %s, detailJsonName: %s\n", latestJsonName, detailJsonName);
         if (System.getenv("COS_SECRET_KEY") == null) {
+            System.out.println("COS_SECRET_KEY not found.");
             return;
         }
         CslLatest latest = uploadArtifacts(latestJsonName);
@@ -83,10 +84,5 @@ public class UploadTask extends DefaultTask {
         }
         uploadDetail(latest, detailJsonName);
         CdnUtil.updateCdn(latestJsonName, detailJsonName);
-    }
-
-    @TaskAction
-    public void upload() throws IOException, TencentCloudSDKException {
-        uploadBase("latest.json","detail.json");
     }
 }

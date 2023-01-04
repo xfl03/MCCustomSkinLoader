@@ -5,9 +5,9 @@ import org.gradle.api.tasks.TaskAction;
 
 import java.io.IOException;
 
-public class UploadCanaryTask extends UploadBaseTask {
+public class UploadReleaseTask extends UploadBaseTask{
     @TaskAction
-    public void uploadCanary() throws IOException, TencentCloudSDKException {
-        uploadBase("latest-canary.json","detail-canary.json");
+    public void upload() throws IOException, TencentCloudSDKException {
+        uploadBase("latest.json","detail.json");
     }
 }
