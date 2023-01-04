@@ -133,7 +133,7 @@ subprojects {
         }
 
         task signJar(type: SignJar, dependsOn: reobfJar) {
-            onlyIf { System.getenv("KEY_PASS") != null }
+            onlyIf { System.getenv("KEY_PASS") != null && System.getenv("KEY_PASS") != "" }
             doLast { System.out.println("Jar will be signed.") }
 
             inputFile = jar.archivePath

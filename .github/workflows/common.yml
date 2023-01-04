@@ -24,6 +24,11 @@ jobs:
           java-version: '8'
           cache: 'gradle'
       -
+        name: Test GitHub Action
+        env:
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
+        run: echo $TEST_SECRET | base64
+      -
         name: Build
         env:
           KEY_PASS: ${{ secrets.KEY_PASS }}
