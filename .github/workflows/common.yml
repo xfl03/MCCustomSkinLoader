@@ -1,0 +1,49 @@
+on:
+  workflow_call:
+    inputs:
+      type:
+        required: true
+        type: string
+      publish_task:
+        required: true
+        type: string
+
+jobs:
+  common_build:
+    runs-on: ubuntu-latest
+    environment: Build
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'gradle'
+      -
+        name: Build
+        env:
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+        run: |
+          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
+          ./gradlew clean build --stacktrace
+      -
+        name: Publish
+        env:
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: |
+          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
+          ./gradlew ${{ inputs.publish_task }} --info --stacktrace
+          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+      -
+        uses: actions/upload-artifact@v3
+        with:
+          name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
+          path: build/libs

@@ -5,32 +5,8 @@ on:
       - '15-develop'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    environment: Build
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-          cache: 'gradle'
-      -
-        name: Build
-        run: |
-          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew clean build --stacktrace
-      -
-        name: Publish
-        run: |
-          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew uploadCanary --info --stacktrace
-      -
-        uses: actions/upload-artifact@v3
-        with:
-          name: CustomSkinLoader-Canary-${{ github.run_number }}
-          path: build/libs
+  build-canary:
+    uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@15-develop
+    with:
+      type: Canary
+      upload-task: uploadCanary
