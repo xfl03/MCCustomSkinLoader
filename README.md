@@ -7,24 +7,29 @@ It's a mod which can load skins and capes from any online source or from your lo
 ### Release Build
 - [CurseForge](https://minecraft.curseforge.com/projects/customskinloader)
 - [Modrinth](https://modrinth.com/mod/customskinloader)
-- [33 Kit（Chinese/中文）](https://3-3.dev/csl-download)
 
 ### Develop Build
-- [GitHub Action](https://github.com/xfl03/MCCustomSkinLoader/actions) 
+- [GitHub Action](https://github.com/xfl03/MCCustomSkinLoader/actions)
+- [33 Kit（Chinese/中文）](https://3-3.dev/csl-download)
 
 ## Contact Us
-- [Telegram](https://telegram.org/): [@customskinloader](https://t.me/customskinloader)
-- [QQ Group（Chinese/中文）](https://im.qq.com/): [651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)
+- [Telegram: @customskinloader](https://t.me/customskinloader)
+- [QQ Group（Chinese/中文）: 651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)
 
 ## Feature  
 ### Support Plenty of Skin Load API and Customizable Skin Load List  
-Supported Skin Load APIs:  
-- [Mojang API](http://wiki.vg/Mojang_API)  
+Supported skin loading APIs:
+- [MojangAPI](http://wiki.vg/Mojang_API)
 - [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)  
 - CustomSkinAPIPlus (Test Only)  
-- [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)  
-- [ElyByAPI](http://docs.ely.by/api.html)  
+- [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
+- [ElyByAPI](https://docs.ely.by/en/api.html) 
 - Legacy  
+
+Supported special skin sites:
+- **ANY SITE** implements skin loading API above
+- [Glitchless](https://games.glitchless.ru/games/minecraft/)
+- [MinecraftCapes](https://minecraftcapes.net/)
 
 You can use this feature to customize your skin load list so as to load your skins from any skin server you want.  
 If you are the owner of skin server, you can use CustomSkinLoader to load skins from your server if one of the APIs has been actualized by your server.  
@@ -60,13 +65,15 @@ The problem of incorrectly rendering textures has been fixed.
 By using this mod, you can see correct avatar of players in Spectator Menu rather than steve and alex.  
   
 ## Default Load List  
-- [Mojang](http://www.minecraft.net/) (Mojang API)
+- [Mojang](http://www.minecraft.net/) (MojangAPI)
 - [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
 - [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
 - [ElyBy](http://docs.ely.by/) (ElyByAPI)
 - SkinMe (UniSkinAPI)
 - [TLauncher](https://tlauncher.org/) (ElyByAPI)
-- LocalSkin (Legacy)  
+- LocalSkin (Legacy)
+- [Glitchless](https://games.glitchless.ru/games/minecraft/)
+- [MinecraftCapes](https://minecraftcapes.net/)
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
   
 ## To Skin Server Owner  
