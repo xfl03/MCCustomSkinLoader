@@ -13,8 +13,8 @@ It's a mod which can load skins and capes from any online source or from your lo
 - [33 Kit（Chinese/中文）](https://3-3.dev/csl-download)
 
 ## Contact Us
-- [Telegram: @customskinloader](https://t.me/customskinloader)
-- [QQ Group（Chinese/中文）: 651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)
+- [Telegram @customskinloader](https://t.me/customskinloader)
+- [QQ Group（Chinese/中文） 651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)
 
 ## Feature  
 ### Support Plenty of Skin Load API and Customizable Skin Load List  
@@ -74,6 +74,7 @@ By using this mod, you can see correct avatar of players in Spectator Menu rathe
 - LocalSkin (Legacy)
 - [Glitchless](https://games.glitchless.ru/games/minecraft/)
 - [MinecraftCapes](https://minecraftcapes.net/)
+
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
   
 ## To Skin Server Owner  
@@ -102,7 +103,7 @@ You could not earn money with this mod excluding modpack.
 ### Source Code  
 #### Package 'customskinloader'  
 Including some codes from 
-- [AsteriskTeam/TabIconHackForge](http://git.oschina.net/AsteriskTeam/TabIconHackForge) (GPLv3)
+- [AsteriskTeam/TabIconHackForge](https://gitee.com/AsteriskTeam/TabIconHackForge) (GPLv3)
 - [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)  
 - [NekoCaffeine/Alchemy](https://github.com/NekoCaffeine/Alchemy) (GPLv3)  
 
