@@ -3,9 +3,7 @@ package customskinloader.gradle.util;
 import org.gradle.api.Project;
 import org.gradle.util.VersionNumber;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class VersionUtil {
@@ -62,5 +60,15 @@ public class VersionUtil {
         return project.getName().contains("Vanilla") ?
                 ConfigUtil.getConfigString(project, "minecraft_version") :
                 project.getName().replace("/", "");
+    }
+
+    public static List<String> getLoaders(Project project) {
+        String loaderName = project.getName().split("/")[0];
+        List<String> loaders = new ArrayList<>(2);
+        loaders.add(loaderName);
+        if (loaderName.equals("Fabric")) {
+            loaders.add("Quilt");
+        }
+        return loaders;
     }
 }

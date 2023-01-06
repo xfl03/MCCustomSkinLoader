@@ -1,6 +1,5 @@
 package customskinloader.gradle.util;
 
-import java.util.Locale;
 import java.util.Optional;
 
 import com.modrinth.minotaur.TaskModrinthUpload;
@@ -33,7 +32,7 @@ public class ModrinthUtil {
                         task.addGameVersion(gameVersion); // Minecraft Versions
                     }
                 });
-            task.addLoader(project.getName().split("/")[0].toLowerCase(Locale.ENGLISH)); // Loader Version
+            VersionUtil.getLoaders(project).forEach(task::addLoader);
 
             TaskUtil.withTask(project.getRootProject(), "upload", task0 -> task0.finalizedBy(task));
         });

@@ -31,6 +31,10 @@ public abstract class UploadBaseTask extends DefaultTask {
             return null;
         }
         for (File file : files) {
+            if (file.getName().endsWith("-sources.jar")) {
+                //Don't upload sources jar to cos
+                continue;
+            }
             String key = CosUtil.getKey(file.getName());
             if (key == null) {
                 continue;

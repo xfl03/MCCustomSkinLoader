@@ -40,7 +40,7 @@ public class CurseForgeUtil {
                             gameVersionStrings.add("Java " + javaVersion); // Java Versions
                         }
                     });
-            gameVersionStrings.add(project.getName().split("/")[0]); // Loader Version
+            gameVersionStrings.addAll(VersionUtil.getLoaders(project));
             artifact.setGameVersionStrings(gameVersionStrings);
             artifact.setChangelogType("text");
             artifact.setChangelog(System.getenv("GIT_COMMIT_DESC"));
