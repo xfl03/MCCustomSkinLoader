@@ -10,7 +10,7 @@ on:
       - '15-develop'
 
 jobs:
-  build-canary:
+  build-pull-request:
     name: Build Pull Request
     uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@14-develop
     with:
