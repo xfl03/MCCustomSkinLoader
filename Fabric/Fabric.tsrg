@@ -49,6 +49,7 @@ net/minecraft/client/resources/IResourceManager net/minecraft/class_3300
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; method_14486
 net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
+	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; method_4651
 net/minecraft/client/resources/SkinManager$3 net/minecraft/class_1071$3
 	field_152801_c field_152801_c
 	field_152802_d field_152802_d
