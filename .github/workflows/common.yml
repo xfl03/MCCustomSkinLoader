@@ -6,7 +6,7 @@ on:
         required: true
         type: string
       publish-task:
-        required: true
+        required: false
         type: string
 
 jobs:
@@ -34,6 +34,7 @@ jobs:
           ./gradlew clean build --stacktrace
       -
         name: Publish
+        if: ${{ inputs.publish-task }}
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}

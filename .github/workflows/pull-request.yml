@@ -1,0 +1,17 @@
+name: Pull Request
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - '14-develop'
+      - '15-develop'
+
+jobs:
+  build-canary:
+    name: Build Pull Request
+    uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@14-develop
+    with:
+      type: PullRequest
