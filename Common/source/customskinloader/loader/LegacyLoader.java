@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
@@ -14,6 +15,7 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
+import scala.actors.threadpool.Arrays;
 
 public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
@@ -24,7 +26,7 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
     @Override
     public List<IDefaultProfile> getDefaultProfiles() {
-        return Collections.singletonList(new LocalSkin(this));
+        return Lists.newArrayList(new LocalSkin(this), new OptiFineCape(this));
     }
 
     public abstract static class DefaultProfile implements ICustomSkinLoaderPlugin.IDefaultProfile {
@@ -94,15 +96,36 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
         }
     }
 
-    // // Minecrack could not load skin correctly
-    // public static class Minecrack extends LegacyLoader.DefaultProfile {
-    //     public Minecrack(LegacyLoader loader)   { super(loader); }
-    //     @Override public String getName()       { return "Minecrack"; }
-    //     @Override public int getPriority()      { return 600; }
-    //     @Override public String getSkinRoot()   { return "http://minecrack.fr.nf/mc/skinsminecrackd/{USERNAME}.png"; }
-    //     @Override public String getCapeRoot()   { return "http://minecrack.fr.nf/mc/cloaksminecrackd/{USERNAME}.png"; }
-    //     @Override public String getElytraRoot() { return null; }
-    // }
+    public static class OptiFineCape extends LegacyLoader.DefaultProfile {
+        public OptiFineCape(LegacyLoader loader) {
+            super(loader);
+        }
+
+        @Override
+        public String getName() {
+            return "OptiFineCape";
+        }
+
+        @Override
+        public int getPriority() {
+            return 750;
+        }
+
+        @Override
+        public String getSkinRoot() {
+            return null;
+        }
+
+        @Override
+        public String getCapeRoot() {
+            return "https://optifine.net/capes/{USERNAME}.png";
+        }
+
+        @Override
+        public String getElytraRoot() {
+            return null;
+        }
+    }
 
     public static final String USERNAME_PLACEHOLDER = "{USERNAME}";
     public static final String UUID_PLACEHOLDER = "{UUID}";

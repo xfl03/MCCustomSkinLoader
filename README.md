@@ -1,12 +1,12 @@
 # CustomSkinLoader
-![Version](https://img.shields.io/github/v/release/xfl03/MCCustomSkinLoader?label=&logo=V&labelColor=E1F5FE&color=5D87BF&style=for-the-badge)
+[![Version](https://img.shields.io/github/v/release/xfl03/MCCustomSkinLoader?label=&logo=V&labelColor=E1F5FE&color=5D87BF&style=for-the-badge)](https://github.com/xfl03/MCCustomSkinLoader/tags)
 [![CurseForge](https://cf.way2muchnoise.eu/short_CustomSkinLoader.svg?badge_style=for_the_badge)](https://www.curseforge.com/minecraft/mc-mods/customskinloader)
 [![Modrinth](https://img.shields.io/modrinth/dt/idMHQ4n2?label=&logo=Modrinth&labelColor=white&color=00AF5C&style=for-the-badge)](https://modrinth.com/mod/customskinloader)
 [![License](https://img.shields.io/github/license/xfl03/MCCustomSkinLoader?label=&logo=c&style=for-the-badge&color=A8B9CC&labelColor=455A64)](https://github.com/xfl03/MCCustomSkinLoader/blob/14-develop/LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/xfl03/MCCustomSkinLoader/beta.yml?style=for-the-badge&label=&logo=Gradle&labelColor=388E3C)](https://github.com/xfl03/MCCustomSkinLoader/actions)
 [![Star](https://img.shields.io/github/stars/xfl03/MCCustomSkinLoader?label=&logo=GitHub&labelColor=black&color=FAFAFA&style=for-the-badge)](https://github.com/xfl03/MCCustomSkinLoader/stargazers)
 
-![Minecraft Version](https://img.shields.io/badge/Minecraft-1.19%20|%201.18%20|%201.17%20|%201.16%20|%201.15%20|%201.14%20|%201.13%20|%201.12%20|%201.11%20|%201.10%20|%201.9%20|%201.8-green?style=for-the-badge&labelColor=388E3C&color=8BC34A)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-1.19%20|%201.18%20|%201.17%20|%201.16%20|%201.15%20|%201.14%20|%201.13%20|%201.12%20|%201.11%20|%201.10%20|%201.9%20|%201.8-green?style=for-the-badge&labelColor=388E3C&color=8BC34A)](https://github.com/xfl03/MCCustomSkinLoader)
 
 ## What's this?  
 Custom Skin Loader mod for Minecraft.  
@@ -76,12 +76,13 @@ By using this mod, you can see correct avatar of players in Spectator Menu rathe
 ## Default Load List  
 - [Mojang](http://www.minecraft.net/) (MojangAPI)
 - [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
-- [Blessing Skin](http://skin.prinzeugen.net/) (CustomSkinAPI)
+- [BlessingSkin](http://skin.prinzeugen.net/) (CustomSkinAPI)
 - [ElyBy](http://docs.ely.by/) (ElyByAPI)
 - SkinMe (UniSkinAPI)
 - [TLauncher](https://tlauncher.org/) (ElyByAPI)
 - LocalSkin (Legacy)
 - [Glitchless](https://games.glitchless.ru/games/minecraft/)
+- [OptiFineCape](https://optifine.net/home)
 - [MinecraftCapes](https://minecraftcapes.net/)
 
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  

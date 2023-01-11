@@ -30,14 +30,15 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 image = resetImageFormat(image, 22, 0, 46, 22);
                 return image;
             }
-        } catch (IOException | NoSuchElementException ignored) { }
+        } catch (IOException | NoSuchElementException ignored) {
+        }
         return null;
     }
 
     private int loaded = 0;
     private double ratioX = -1;
     private double ratioY = -1;
-    private ResourceLocation location;
+    private final ResourceLocation location;
     private String type = null;
 
     public FakeCapeBuffer(ResourceLocation location) {
@@ -47,11 +48,19 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     @Override
     public FakeImage parseUserSkin(FakeImage image) {
         if (image == null) return null;
-        this.image = image;
+        if (isOptiFineCape(image)) {
+            //OptiFine cape should be converted to standard cape
+            this.image = convertOptiFineCape(image);
+            //OptiFine cape contains elytra texture
+            //this.type = "elytra";//But its elytra texture doesn't work
+        } else {
+            this.image = image;
+        }
 
         // When resource packs were changed, the elytra image needs to be reloaded, and here will be entered again
+        // The first cape which find elytra texture is outdated will reload it
         if (this.loaded == loadedGlobal) {
-            elytraImage = loadElytra(image);
+            elytraImage = loadElytra(this.image);
         }
         this.loaded = loadedGlobal;
         if (elytraImage != null) {
@@ -126,15 +135,16 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
 
     /**
      * Traverse every elytra pixel
-     * @param predicate the predicate with x and y
-     * @param returnValue if the condition flag equals the condition, then return this value
+     *
+     * @param predicate          the predicate with x and y
+     * @param returnValue        if the condition flag equals the condition, then return this value
      * @param defaultReturnValue otherwise return this value
      */
     private <R> R withElytraPixels(BiPredicate<Integer, Integer> predicate, R returnValue, R defaultReturnValue) {
         int startX = (int) Math.ceil(22 * ratioX), endX = (int) Math.ceil(46 * ratioX);
-        int startY = (int) Math.ceil(0  * ratioY), endY = (int) Math.ceil(22 * ratioY);
+        int startY = (int) Math.ceil(0 * ratioY), endY = (int) Math.ceil(22 * ratioY);
         int excludeX0 = (int) Math.ceil(24 * ratioX), excludeX1 = (int) Math.ceil(44 * ratioX);
-        int excludeY  = (int) Math.ceil(2  * ratioY);
+        int excludeY = (int) Math.ceil(2 * ratioY);
         for (int x = startX; x < endX; ++x) {
             for (int y = startY; y < endY; ++y) {
                 if (y < excludeY && (x < excludeX0 || x >= excludeX1)) continue;
@@ -167,24 +177,27 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
 
     /**
      * Scale image
-     * @param image the image to scale.
+     *
+     * @param image         the image to scale.
      * @param closeOldImage whether close old image
-     * @param scaleWidth width enlargement ratio
-     * @param scaleHeight height enlargement ratio
-     * @param ratioX the ratio of 64 of the old image width
-     * @param ratioY the ratio of 32 of the old image height
-     * @param width the width after scaling.
-     * @param height the height after scaling.
-     * @param startX the x where start to copy.
-     * @param startY the y where start to copy.
-     * @param endX the x where end to copy.
-     * @param endY the y where end to copy.
+     * @param scaleWidth    width enlargement ratio
+     * @param scaleHeight   height enlargement ratio
+     * @param ratioX        the ratio of 64 of the old image width
+     * @param ratioY        the ratio of 32 of the old image height
+     * @param width         the width after scaling.
+     * @param height        the height after scaling.
+     * @param startX        the x where start to copy.
+     * @param startY        the y where start to copy.
+     * @param endX          the x where end to copy.
+     * @param endY          the y where end to copy.
      * @return the image after scaling.
      */
     private static FakeImage scaleImage(FakeImage image, boolean closeOldImage, double scaleWidth, double scaleHeight, double ratioX, double ratioY, int width, int height, int startX, int startY, int endX, int endY) {
         FakeImage newImage = image.createImage(width, height);
-        startX = (int) (startX * ratioX); endX = (int) (endX * ratioX);
-        startY = (int) (startY * ratioY); endY = (int) (endY * ratioY);
+        startX = (int) (startX * ratioX);
+        endX = (int) (endX * ratioX);
+        startY = (int) (startY * ratioY);
+        endY = (int) (endY * ratioY);
 
         int x0 = (int) (startX * scaleWidth), x1 = (int) ((startX + 1) * scaleWidth), dx0 = x1 - x0;
         for (int x = startX; x < endX; ++x) {
@@ -196,12 +209,45 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                         newImage.setRGBA(x0 + dx, y0 + dy, rgba);
                     }
                 }
-                y0 = y1; y1 = (int) ((y + 2) * scaleHeight); dy0 = y1 - y0;
+                y0 = y1;
+                y1 = (int) ((y + 2) * scaleHeight);
+                dy0 = y1 - y0;
             }
-            x0 = x1; x1 = (int) ((x + 2) * scaleWidth); dx0 = x1 - x0;
+            x0 = x1;
+            x1 = (int) ((x + 2) * scaleWidth);
+            dx0 = x1 - x0;
         }
         if (closeOldImage)
             image.close();
+        return newImage;
+    }
+
+    /**
+     * Judge OptiFine cape.
+     * OptiFine cape is 46*22 or 92*44 pixels.
+     * <a href="https://optifine.net/capes/Notch.png">46*22 example</a>
+     * <a href="https://optifine.net/capes/OptiFineCape.png">92*44 example</a>
+     *
+     * @param image cape image
+     * @return true if is OptiFine cape
+     * @since 14.16
+     */
+    private static boolean isOptiFineCape(FakeImage image) {
+        int ratio = image.getWidth() / 46;
+        return image.getHeight() == 22 * ratio && image.getWidth() == 46 * ratio;
+    }
+
+    /**
+     * Convert OptiFine cape to standard cape
+     *
+     * @param image OptiFine cape image
+     * @return standard cape image
+     * @since 14.16
+     */
+    private static FakeImage convertOptiFineCape(FakeImage image) {
+        int ratio = image.getWidth() / 46;
+        FakeImage newImage = image.createImage(64 * ratio, 32 * ratio);
+        newImage.copyImageData(image);
         return newImage;
     }
 }

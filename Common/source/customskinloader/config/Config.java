@@ -2,11 +2,7 @@ package customskinloader.config;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
@@ -29,7 +25,7 @@ public class Config {
     public boolean enableDynamicSkull = true;
     public boolean enableTransparentSkin = true;
     public boolean forceIgnoreHttpsCertificate = false;
-    public boolean forceLoadAllTextures = false;
+    public boolean forceLoadAllTextures = true;
     public boolean enableCape = true;
     public int threadPoolSize = 3;
     /**
@@ -233,7 +229,7 @@ public class Config {
                 profiles.addAll(defaultProfiles);
             }
         }
-        profiles.sort((c1, c2) -> Integer.compare(c1.getPriority(), c2.getPriority()));
+        profiles.sort(Comparator.comparingInt(ICustomSkinLoaderPlugin.IDefaultProfile::getPriority));
 
         List<SkinSiteProfile> loadlist = new ArrayList<>();
         for (ICustomSkinLoaderPlugin.IDefaultProfile profile : profiles) {
