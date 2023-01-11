@@ -86,6 +86,9 @@ By using this mod, you can see correct avatar of players in Spectator Menu rathe
 - [MinecraftCapes](https://minecraftcapes.net/)
 - [OptiFineCape](https://optifine.net/home)
 - [Wynntils](https://wynntils.com/)
+- [Cloaks+](https://cloaksplus.com/)
+- [LabyMod](https://www.labymod.net/en)
+- [Cosmetica](https://cosmetica.cc/)
 
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
   

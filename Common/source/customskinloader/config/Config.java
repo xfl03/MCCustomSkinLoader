@@ -27,7 +27,7 @@ public class Config {
     public boolean forceIgnoreHttpsCertificate = false;
     public boolean forceLoadAllTextures = true;
     public boolean enableCape = true;
-    public int threadPoolSize = 3;
+    public int threadPoolSize = 8;
     /**
      * Can logger write message to standard output(System.out).
      * Because standard output won't write to latest.log after Forge 1.17,

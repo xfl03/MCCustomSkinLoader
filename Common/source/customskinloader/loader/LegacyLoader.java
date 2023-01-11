@@ -24,7 +24,12 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
     @Override
     public List<IDefaultProfile> getDefaultProfiles() {
-        return Lists.newArrayList(new LocalSkin(this), new OptiFineCape(this));
+        return Lists.newArrayList(new LocalSkin(this),
+                getCapeProfile(this, "OptiFine", "https://optifine.net/capes/{USERNAME}.png", 810),
+                getCapeProfile(this, "CloakPlus", "http://161.35.130.99/capes/{USERNAME}.png", 840),
+                getCapeProfile(this, "LabyMod", "https://dl.labymod.net/capes/{STANDARD_UUID}", 850),
+                getCapeProfile(this, "Cosmetica", "https://api.cosmetica.cc/get/cloak?username={USERNAME}&uuid={STANDARD_UUID}&nothirdparty", 860)
+                );
     }
 
     public abstract static class DefaultProfile implements ICustomSkinLoaderPlugin.IDefaultProfile {
@@ -95,46 +100,47 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
     }
 
     /**
-     * OptiFine cape
-     * Test player: Notch and OptiFineCape
+     * Get cape Profile¬
      *
      * @since 14.16
      */
+    public static LegacyLoader.DefaultProfile getCapeProfile(LegacyLoader loader, String name, String capeRoot, int priority) {
+        return new DefaultProfile(loader) {
+            @Override
+            public String getSkinRoot() {
+                return null;
+            }
 
-    public static class OptiFineCape extends LegacyLoader.DefaultProfile {
-        public OptiFineCape(LegacyLoader loader) {
-            super(loader);
-        }
+            @Override
+            public String getCapeRoot() {
+                return capeRoot;
+            }
 
-        @Override
-        public String getName() {
-            return "OptiFine";
-        }
+            @Override
+            public String getElytraRoot() {
+                return null;
+            }
 
-        @Override
-        public int getPriority() {
-            return 810;
-        }
+            @Override
+            public String getName() {
+                return name;
+            }
 
-        @Override
-        public String getSkinRoot() {
-            return null;
-        }
-
-        @Override
-        public String getCapeRoot() {
-            return "https://optifine.net/capes/{USERNAME}.png";
-        }
-
-        @Override
-        public String getElytraRoot() {
-            return null;
-        }
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+        };
     }
 
     public static final String USERNAME_PLACEHOLDER = "{USERNAME}";
     public static final String UUID_PLACEHOLDER = "{UUID}";
-    public static final String UUID_STANDARD_PLACEHOLDER = "{UUID_STANDARD}";
+    /**
+     * Mojang UUID with -
+     *
+     * @since 14.16
+     */
+    public static final String STANDARD_UUID_PLACEHOLDER = "{STANDARD_UUID}";
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) {
@@ -216,7 +222,7 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
     private String expandURL(String url, String username) {
         String t = url.replace(USERNAME_PLACEHOLDER, username);
-        if (!t.contains(UUID_PLACEHOLDER) && !t.contains(UUID_STANDARD_PLACEHOLDER)) {
+        if (!t.contains(UUID_PLACEHOLDER) && !t.contains(STANDARD_UUID_PLACEHOLDER)) {
             return t;
         }
         String uuid = MojangAPILoader.getMojangUuidByUsername(username, true);
@@ -225,6 +231,6 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
             return null;
         }
         String styledUuid = uuid.replace("-", "");
-        return t.replace(UUID_PLACEHOLDER, styledUuid).replace(UUID_STANDARD_PLACEHOLDER, uuid);
+        return t.replace(UUID_PLACEHOLDER, styledUuid).replace(STANDARD_UUID_PLACEHOLDER, uuid);
     }
 }
