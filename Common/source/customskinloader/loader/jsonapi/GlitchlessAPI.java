@@ -6,7 +6,6 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
@@ -15,10 +14,24 @@ import customskinloader.profile.UserProfile;
 public class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
 
     public static class GlitchlessGames extends JsonAPILoader.DefaultProfile {
-        public GlitchlessGames(JsonAPILoader loader) { super(loader); }
-        @Override public String getName()            { return "GlitchlessGames"; }
-        @Override public int getPriority()           { return 700; }
-        @Override public String getRoot()            { return "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname="; }
+        public GlitchlessGames(JsonAPILoader loader) {
+            super(loader);
+        }
+
+        @Override
+        public String getName() {
+            return "GlitchlessGames";
+        }
+
+        @Override
+        public int getPriority() {
+            return 700;
+        }
+
+        @Override
+        public String getRoot() {
+            return "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname=";
+        }
     }
 
     @Override
@@ -38,11 +51,6 @@ public class GlitchlessAPI implements JsonAPILoader.IJsonAPI {
             return null;
 
         return ModelManager0.toUserProfile(result.textures);
-    }
-
-    @Override
-    public String getPayload(SkinSiteProfile ssp) {
-        return null;
     }
 
     @Override

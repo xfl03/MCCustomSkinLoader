@@ -39,6 +39,7 @@ Supported special skin sites:
 - **ANY SITE** implements skin loading API above
 - [Glitchless](https://games.glitchless.ru/games/minecraft/)
 - [MinecraftCapes](https://minecraftcapes.net/)
+- [Wynntils](https://wynntils.com/)
 
 You can use this feature to customize your skin load list so as to load your skins from any skin server you want.  
 If you are the owner of skin server, you can use CustomSkinLoader to load skins from your server if one of the APIs has been actualized by your server.  
@@ -80,10 +81,11 @@ By using this mod, you can see correct avatar of players in Spectator Menu rathe
 - [ElyBy](http://docs.ely.by/) (ElyByAPI)
 - SkinMe (UniSkinAPI)
 - [TLauncher](https://tlauncher.org/) (ElyByAPI)
-- LocalSkin (Legacy)
 - [Glitchless](https://games.glitchless.ru/games/minecraft/)
-- [OptiFineCape](https://optifine.net/home)
+- LocalSkin (Legacy)
 - [MinecraftCapes](https://minecraftcapes.net/)
+- [OptiFineCape](https://optifine.net/home)
+- [Wynntils](https://wynntils.com/)
 
 If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
   

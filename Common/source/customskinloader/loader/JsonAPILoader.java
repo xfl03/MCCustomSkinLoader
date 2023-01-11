@@ -22,7 +22,21 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
 
         String toJsonUrl(String root, String username);
 
-        String getPayload(SkinSiteProfile ssp);
+        default String getPayload(SkinSiteProfile ssp) {
+            return null;
+        }
+
+        /**
+         * get JSON API payload, which will make a POST request
+         *
+         * @param ssp      skin site profile
+         * @param username username
+         * @return JSON payload
+         * @since 14.16
+         */
+        default String getPayload(SkinSiteProfile ssp, String username) {
+            return getPayload(ssp);
+        }
 
         UserProfile toUserProfile(String root, String json, boolean local);
 
@@ -93,8 +107,15 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
             }
             json = IOUtils.toString(Files.newInputStream(jsonFile.toPath()), StandardCharsets.UTF_8);
         } else {
-            HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(jsonUrl).setCacheTime(90).setUserAgent(ssp.userAgent).setPayload(this.jsonAPI.getPayload(ssp)));
-            json = responce.content;
+            try {
+                HttpRequestUtil.HttpResponce responce = HttpRequestUtil
+                        .makeHttpRequest(new HttpRequestUtil.HttpRequest(jsonUrl).setCacheTime(90)
+                                .setUserAgent(ssp.userAgent).setPayload(this.jsonAPI.getPayload(ssp, username)));
+                json = responce.content;
+            } catch (ProfileNotFoundException ignored) {
+                CustomSkinLoader.logger.info("Profile not found.");
+                return null;
+            }
         }
         if (json == null || json.equals("")) {
             CustomSkinLoader.logger.info("Profile not found.");
@@ -134,5 +155,12 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
                 //noinspection ResultOfMethodCallIgnored
                 f.mkdirs();
         }
+    }
+
+    /**
+     * When getting payload, this exception can end skin loading
+     * @since 14.16
+     */
+    public static class ProfileNotFoundException extends RuntimeException {
     }
 }

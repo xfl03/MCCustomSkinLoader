@@ -161,6 +161,7 @@ public class HttpRequestUtil {
             }
             if (StringUtils.isNotEmpty(request.payload)) {
                 CustomSkinLoader.logger.info("Payload: " + request.payload);
+                c.setRequestMethod("POST");
                 c.setRequestProperty("Content-Type", "application/json");
                 c.setDoOutput(true);
                 OutputStream os = c.getOutputStream();

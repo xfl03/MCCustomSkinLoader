@@ -1,7 +1,6 @@
 package customskinloader.loader;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -15,7 +14,6 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
-import scala.actors.threadpool.Arrays;
 
 public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
@@ -77,7 +75,7 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
         @Override
         public int getPriority() {
-            return 600;
+            return 710;
         }
 
         @Override
@@ -96,6 +94,13 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
         }
     }
 
+    /**
+     * OptiFine cape
+     * Test player: Notch and OptiFineCape
+     *
+     * @since 14.16
+     */
+
     public static class OptiFineCape extends LegacyLoader.DefaultProfile {
         public OptiFineCape(LegacyLoader loader) {
             super(loader);
@@ -103,12 +108,12 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
         @Override
         public String getName() {
-            return "OptiFineCape";
+            return "OptiFine";
         }
 
         @Override
         public int getPriority() {
-            return 750;
+            return 810;
         }
 
         @Override
@@ -129,6 +134,7 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
     public static final String USERNAME_PLACEHOLDER = "{USERNAME}";
     public static final String UUID_PLACEHOLDER = "{UUID}";
+    public static final String UUID_STANDARD_PLACEHOLDER = "{UUID_STANDARD}";
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) {
@@ -210,14 +216,15 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
 
     private String expandURL(String url, String username) {
         String t = url.replace(USERNAME_PLACEHOLDER, username);
-        if (!t.contains(UUID_PLACEHOLDER)) {
+        if (!t.contains(UUID_PLACEHOLDER) && !t.contains(UUID_STANDARD_PLACEHOLDER)) {
             return t;
         }
-        String uuid = MojangAPILoader.getMojangUuidByUsername(username);
+        String uuid = MojangAPILoader.getMojangUuidByUsername(username, true);
         //If Mojang uuid not found, won't load the texture
         if (uuid == null) {
             return null;
         }
-        return t.replace(UUID_PLACEHOLDER, uuid);
+        String styledUuid = uuid.replace("-", "");
+        return t.replace(UUID_PLACEHOLDER, styledUuid).replace(UUID_STANDARD_PLACEHOLDER, uuid);
     }
 }

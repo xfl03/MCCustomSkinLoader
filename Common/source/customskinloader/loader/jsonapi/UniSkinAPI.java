@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import customskinloader.CustomSkinLoader;
-import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
@@ -16,14 +15,28 @@ import org.apache.commons.lang3.StringUtils;
 public class UniSkinAPI implements JsonAPILoader.IJsonAPI {
 
     public static class SkinMe extends JsonAPILoader.DefaultProfile {
-        public SkinMe(JsonAPILoader loader) { super(loader); }
-        @Override public String getName()   { return "SkinMe"; }
-        @Override public int getPriority()  { return 500; }
-        @Override public String getRoot()   { return "http://www.skinme.cc/uniskin/"; }
+        public SkinMe(JsonAPILoader loader) {
+            super(loader);
+        }
+
+        @Override
+        public String getName() {
+            return "SkinMe";
+        }
+
+        @Override
+        public int getPriority() {
+            return 500;
+        }
+
+        @Override
+        public String getRoot() {
+            return "http://www.skinme.cc/uniskin/";
+        }
     }
 
-    private static final String TEXTURES="textures/";
-    private static final String SUFFIX=".json";
+    private static final String TEXTURES = "textures/";
+    private static final String SUFFIX = ".json";
 
     @Override
     public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
@@ -37,55 +50,54 @@ public class UniSkinAPI implements JsonAPILoader.IJsonAPI {
 
     @Override
     public UserProfile toUserProfile(String root, String json, boolean local) {
-        UniSkinAPIProfile profile=CustomSkinLoader.GSON.fromJson(json, UniSkinAPIProfile.class);
-        UserProfile p=new UserProfile();
-        
-        if(StringUtils.isNotBlank(profile.cape)){
-            p.capeUrl=root+TEXTURES+profile.cape;
-            if(local)
-                p.capeUrl=HttpTextureUtil.getLocalFakeUrl(p.capeUrl);
+        UniSkinAPIProfile profile = CustomSkinLoader.GSON.fromJson(json, UniSkinAPIProfile.class);
+        UserProfile p = new UserProfile();
+
+        if (StringUtils.isNotBlank(profile.cape)) {
+            p.capeUrl = root + TEXTURES + profile.cape;
+            if (local)
+                p.capeUrl = HttpTextureUtil.getLocalFakeUrl(p.capeUrl);
         }
-        
-        if(profile.skins==null||profile.skins.isEmpty())
+
+        if (profile.skins == null || profile.skins.isEmpty())
             return p;
-        if(profile.model_preference==null||profile.model_preference.isEmpty())
+        if (profile.model_preference == null || profile.model_preference.isEmpty())
             return p;
-        
-        boolean hasSkin=false;
-        for(String model:profile.model_preference){
-            ModelManager0.Model enumModel=ModelManager0.getEnumModel(model);
-            if(enumModel==null||StringUtils.isEmpty(profile.skins.get(model)))
+
+        boolean hasSkin = false;
+        for (String model : profile.model_preference) {
+            ModelManager0.Model enumModel = ModelManager0.getEnumModel(model);
+            if (enumModel == null || StringUtils.isEmpty(profile.skins.get(model)))
                 continue;
-            if(ModelManager0.isSkin(enumModel))
-                if(hasSkin)
+            if (ModelManager0.isSkin(enumModel))
+                if (hasSkin)
                     continue;
                 else
-                    hasSkin=true;
-            String url=root+TEXTURES+profile.skins.get(model);
-            if(local)
-                url=HttpTextureUtil.getLocalFakeUrl(url);
+                    hasSkin = true;
+            String url = root + TEXTURES + profile.skins.get(model);
+            if (local)
+                url = HttpTextureUtil.getLocalFakeUrl(url);
             p.put(enumModel, url);
         }
-        
+
         return p;
     }
+
     /**
      * Json profile for UniSkinAPI
-     * Source Code: https://github.com/RecursiveG/UniSkinMod/blob/master/src/main/java/org/devinprogress/uniskinmod/UniSkinApiProfile.java#L18-L22
+     *  <a href="https://github.com/RecursiveG/UniSkinMod/blob/master/src/main/java/org/devinprogress/uniskinmod/UniSkinApiProfile.java#L18-L22">Source Code</a>
+     *
      * @author RecursiveG
      */
-    private class UniSkinAPIProfile{
+    private static class UniSkinAPIProfile {
         public String player_name;
         public long last_update;
         public List<String> model_preference;
-        public Map<String,String> skins;
-        
+        public Map<String, String> skins;
+
         public String cape;
     }
-    @Override
-    public String getPayload(SkinSiteProfile ssp) {
-        return null;
-    }
+
     @Override
     public String getName() {
         return "UniSkinAPI";

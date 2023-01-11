@@ -247,7 +247,23 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     private static FakeImage convertOptiFineCape(FakeImage image) {
         int ratio = image.getWidth() / 46;
         FakeImage newImage = image.createImage(64 * ratio, 32 * ratio);
-        newImage.copyImageData(image);
+        copyImageData(image, newImage);
         return newImage;
+    }
+
+    /**
+     * Copy image data to another image
+     *
+     * @param from from image
+     * @param to   to image
+     */
+    private static void copyImageData(FakeImage from, FakeImage to) {
+        int width = Math.min(from.getWidth(), to.getWidth());
+        int height = Math.min(from.getHeight(), to.getHeight());
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                to.setRGBA(x, y, from.getRGBA(x, y));
+            }
+        }
     }
 }

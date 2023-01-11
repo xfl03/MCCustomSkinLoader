@@ -24,7 +24,6 @@ import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
-import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
@@ -137,14 +136,16 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
      * Get Mojang UUID by username.
      *
      * @param username username to query
+     * @param standard if - in UUID
      * @return UUID in Mojang API style string. Returns {@code null} if username not found in Mojang API.
      */
-    public static String getMojangUuidByUsername(String username) {
+    public static String getMojangUuidByUsername(String username, boolean standard) {
         GameProfile profile = loadGameProfile(getMojangApiRoot(), username);
         if (profile == null) {
             return null;
         }
-        return UUIDTypeAdapter.fromUUID(profile.getId());
+        UUID id = profile.getId();
+        return standard ? id.toString() : UUIDTypeAdapter.fromUUID(id);
     }
 
     //UUID -> Profile
