@@ -50,9 +50,10 @@ body:
     attributes:
       label: 模组加载器
       options:
+        - Quilt
         - Fabric
         - Forge
-        - 无加载器
+        - 不使用加载器
     validations:
       required: true
   - type: dropdown
@@ -63,6 +64,7 @@ body:
         - Windows
         - Linux
         - macOS
+        - 其他操作系统
     validations:
       required: true
   - type: checkboxes
