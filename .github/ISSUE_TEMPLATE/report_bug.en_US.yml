@@ -30,7 +30,7 @@ body:
   - type: input
     id: csl-log
     attributes:
-      label: Link to CustomSkinLoader.log if applicable (  )
+      label: Link to CustomSkinLoader.log if applicable
       description: |
        The path to the file is `./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
        [Generate URL](https://mclo.gs)
