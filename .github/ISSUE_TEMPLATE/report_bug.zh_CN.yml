@@ -47,6 +47,8 @@ body:
         - Fabric
         - Forge
         - 无加载器
+    validations:
+      required: true
   - type: dropdown
     id: operating-systems
     attributes:
