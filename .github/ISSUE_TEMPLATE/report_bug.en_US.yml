@@ -51,6 +51,7 @@ body:
     attributes:
       label: Mod Loader
       options:
+        - Quilt
         - Fabric
         - Forge
         - <without loader>
@@ -64,6 +65,7 @@ body:
         - Windows
         - Linux
         - macOS
+        - Other
     validations:
       required: true
   - type: checkboxes
