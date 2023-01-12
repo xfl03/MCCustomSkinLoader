@@ -24,10 +24,12 @@ body:
     id: crash-report
     attributes:
       label: Link to crash-report if applicable ( https://mclo.gs )
+      description: The files are in the folder `. /.minecraft/crash-reports`
   - type: input
     id: csl-log
     attributes:
       label: Link to CustomSkinLoader.log if applicable ( https://mclo.gs )
+      description: The path to the file is `./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
   - type: input
     id: mod-version
     attributes:
