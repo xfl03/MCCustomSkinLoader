@@ -1,0 +1,22 @@
+name: 反馈或建议
+description: 给CustomSkinLoader这个模组提个建议
+labels: [ enhancement ]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 描述一下
+      description: 简单描述一下该功能/变化是什么。
+    validations:
+      required: true
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: 在提交反馈或建议之前,请先确认...
+      options:
+        - label: |
+            你要提交的反馈或者建议不存在于本模组的最新开发版下. 
+          required: true
+        - label: |
+            以及在issues或者Wiki内搜索过, 并且无结果
+          required: true
