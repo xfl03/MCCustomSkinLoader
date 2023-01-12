@@ -5,7 +5,7 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: Describe the bug
+      label: Describe the bug / 描述问题
       description: |
         A clear and concise description of what the issue is.
         Provide as much information as possible, videos, crash reports, etc. 
@@ -25,9 +25,9 @@ body:
     attributes:
       label: Link to crash-report if applicable ( https://mclo.gs )
   - type: input
-    id: latest-log
+    id: csl-log
     attributes:
-      label: Link to latest.log if applicable ( https://mclo.gs )
+      label: Link to CustomSkinLoader.log if applicable ( https://mclo.gs )
   - type: input
     id: mod-version
     attributes:
@@ -38,6 +38,16 @@ body:
     id: mc-version
     attributes:
       label: Minecraft Version
+    validations:
+      required: true
+  - type: dropdown
+    id: loader-type
+    attributes:
+      label: Mod Loader
+      options:
+        - Fabric
+        - Forge
+        - <without loader>
     validations:
       required: true
   - type: dropdown
