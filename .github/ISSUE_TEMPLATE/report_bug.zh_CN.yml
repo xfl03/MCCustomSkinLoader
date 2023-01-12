@@ -22,11 +22,11 @@ body:
   - type: input
     id: crash-report
     attributes:
-      label: 在此处放入崩溃报告的链接 ( https://mclo.gs )
+      label: 崩溃报告查看地址 ( https://mclo.gs )
   - type: input
-    id: latest-log
+    id: csl-log
     attributes:
-      label: 在此处放入latest.log的链接 ( https://mclo.gs )
+      label: CustomSkinLoader.log查看地址 ( https://mclo.gs )
   - type: input
     id: mod-version
     attributes:
@@ -39,6 +39,14 @@ body:
       label: Minecraft游戏版本
     validations:
       required: true
+  - type: dropdown
+    id: loader-type
+    attributes:
+      label: 模组加载器
+      options:
+        - Fabric
+        - Forge
+        - 无加载器
   - type: dropdown
     id: operating-systems
     attributes:
