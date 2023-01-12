@@ -1,0 +1,63 @@
+name: Report Bug
+description: Report a bug and help us improve CustomSkinLoader
+labels: [ bug ]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug / 描述问题
+      description: |
+        A clear and concise description of what the issue is.
+        Provide as much information as possible, videos, crash reports, etc. 
+        DO NOT PASTE A CRASH REPORT HERE!!!
+    validations:
+      required: true
+  - type: textarea
+    id: reproducing
+    attributes:
+      label: Steps to reproduce 
+      description: How do you trigger this bug? 
+      render: bash
+    validations:
+      required: true
+  - type: input
+    id: crash-report
+    attributes:
+      label: Link to crash-report if applicable ( https://mclo.gs )
+  - type: input
+    id: latest-log
+    attributes:
+      label: Link to latest.log if applicable ( https://mclo.gs )
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+    validations:
+      required: true
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft Version
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-systems
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - Linux
+        - macOS
+    validations:
+      required: true
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before submitting a bug report
+      options:
+        - label: |
+            This bug wasn't already reported (I have searched bug reports on GitHub).
+          required: true
+        - label: |
+            This is a valid bug (I am able to reproduce this on the latest dev build).
+          required: true
