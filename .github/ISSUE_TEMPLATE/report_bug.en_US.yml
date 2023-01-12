@@ -23,13 +23,17 @@ body:
   - type: input
     id: crash-report
     attributes:
-      label: Link to crash-report if applicable ( https://mclo.gs )
-      description: The files are in the folder `. /.minecraft/crash-reports`
+      label: Link to crash-report if applicable
+      description: |
+       The files are in the folder `. /.minecraft/crash-reports`
+       [Generate URL](https://mclo.gs)
   - type: input
     id: csl-log
     attributes:
-      label: Link to CustomSkinLoader.log if applicable ( https://mclo.gs )
-      description: The path to the file is `./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
+      label: Link to CustomSkinLoader.log if applicable (  )
+      description: |
+       The path to the file is `./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
+       [Generate URL](https://mclo.gs)
   - type: input
     id: mod-version
     attributes:
