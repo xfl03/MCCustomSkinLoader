@@ -27,6 +27,7 @@ body:
       description: |
        The files are in the folder `. /.minecraft/crash-reports`
        [Generate URL](https://mclo.gs)
+      placeholder: "https://"
   - type: input
     id: csl-log
     attributes:
@@ -34,6 +35,7 @@ body:
       description: |
        The path to the file is `./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
        [Generate URL](https://mclo.gs)
+      placeholder: "https://"
   - type: input
     id: mod-version
     attributes:
