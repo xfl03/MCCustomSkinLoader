@@ -25,7 +25,7 @@ body:
     attributes:
       label: Link to crash-report if applicable
       description: |
-       The files are in the folder `. /.minecraft/crash-reports`
+       The files are in the folder `<minecraft-directory>/crash-reports`
        [Generate URL](https://mclo.gs)
       placeholder: "https://"
   - type: input
@@ -33,7 +33,7 @@ body:
     attributes:
       label: Link to CustomSkinLoader.log if applicable
       description: |
-       The path to the file is `./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
+       The path to the file is `<minecraft-directory>/CustomSkinLoader/CustomSkinLoader.log`.
        [Generate URL](https://mclo.gs)
       placeholder: "https://"
   - type: input
