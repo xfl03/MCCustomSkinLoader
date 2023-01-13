@@ -7,7 +7,7 @@ on:
 jobs:
   build-beta:
     name: Build Beta
-    uses: .github/workflows/common.yml
+    uses: ./.github/workflows/common.yml
     with:
       type: Beta
       publish-task: uploadBeta

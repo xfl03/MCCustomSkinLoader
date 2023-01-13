@@ -7,7 +7,7 @@ on:
 jobs:
   build-canary:
     name: Build Canary
-    uses: .github/workflows/common.yml
+    uses: ./.github/workflows/common.yml
     with:
       type: Canary
       publish-task: uploadCanary
