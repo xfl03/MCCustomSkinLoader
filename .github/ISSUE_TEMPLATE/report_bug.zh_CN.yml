@@ -24,7 +24,7 @@ body:
     attributes:
       label: 崩溃报告查看地址
       description: |
-       文件在文件夹 `. /.minecraft/crash-reports` 下里面找最近的报告生成时间
+       在游戏目录下的 `crash-reports` 文件夹下,里面找最近的报告生成时间
        [生成连接](https://mclo.gs)
       placeholder: "https://"
   - type: input
@@ -32,7 +32,7 @@ body:
     attributes:
       label: CustomSkinLoader.log 查看地址
       description: |
-       文件路径:`./.minecraft/CustomSkinLoader/CustomSkinLoader.log`.
+       文件路径:`<游戏路径>/CustomSkinLoader/CustomSkinLoader.log`.
        [生成连接](https://mclo.gs)
       placeholder: "https://"
   - type: input
