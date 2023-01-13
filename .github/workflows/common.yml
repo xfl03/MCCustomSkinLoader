@@ -8,6 +8,10 @@ on:
       publish-task:
         required: false
         type: string
+      is-snapshot:
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   build-common:
@@ -29,6 +33,7 @@ jobs:
         name: Build
         env:
           KEY_PASS: ${{ secrets.KEY_PASS }}
+          IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew clean build --stacktrace

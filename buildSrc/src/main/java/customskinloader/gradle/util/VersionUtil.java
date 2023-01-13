@@ -8,8 +8,12 @@ import java.util.stream.Collectors;
 
 public class VersionUtil {
     public static boolean isRelease(Project rootProject) {
-        String s = ConfigUtil.getConfigString(rootProject, "snapshot");
-        return s == null || s.equals("") || s.equals("0");
+        String s = System.getenv("IS_SNAPSHOT");
+        // When we cannot find environment variable, it means we are in development, so it is not a release
+        if (s == null) {
+            return false;
+        }
+        return s.equals("0") || s.equals("false");
     }
 
     public static boolean isSnapshot(Project rootProject) {

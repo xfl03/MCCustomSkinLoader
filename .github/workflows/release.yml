@@ -7,8 +7,9 @@ on:
 jobs:
   build-release:
     name: Build Release
-    uses: xfl03/MCCustomSkinLoader/.github/workflows/common.yml@14-develop
+    uses: .github/workflows/common.yml
     with:
       type: Release
       publish-task: upload
+      is-snapshot: false
     secrets: inherit
