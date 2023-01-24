@@ -102,7 +102,8 @@ public class Logger {
         }
 
         //Format, print and write
-        String sb = String.format("[%s %s] %s", Thread.currentThread().getName(), level.getName(), msg);
+        String sb = String.format("[%s] [%s/%s] [CustomSkinLoader]: %s",
+                DATE_FORMAT.format(new Date()), Thread.currentThread().getName(), level.getName(), msg);
         if (canPrintToStdOut(level)) {
             System.out.println(sb);
         }
@@ -110,7 +111,7 @@ public class Logger {
             return;
         }
         try {
-            String sb2 = String.format("[%s] %s\r\n", DATE_FORMAT.format(new Date()), sb);
+            String sb2 = String.format("%s\r\n", sb);
             writer.write(sb2);
             writer.flush();
         } catch (Exception e) {
