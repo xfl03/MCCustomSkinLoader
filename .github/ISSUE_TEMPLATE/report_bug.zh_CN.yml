@@ -51,7 +51,7 @@ body:
   - type: input
     id: forge-log
     attributes:
-      label: [仅Forge用户] debug.log (=>1.13) 或者 fml-client-latest.log (=<1.12.2) 查看地址
+      label: "[仅Forge用户] debug.log (=>1.13) 或者 fml-client-latest.log (=<1.12.2) 查看地址"
       description: |
        文件路径:`<游戏路径>/logs/debug.log` 或者 `<游戏路径>/logs/fml-client-latest.log`.
        若没有使用 `Forge` 加载器的，可以不填写
