@@ -18,6 +18,8 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.ProfileLoader;
+import customskinloader.log.LogManager;
+import customskinloader.log.Logger;
 import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
@@ -224,7 +226,8 @@ public class CustomSkinLoader {
     }
 
     private static Logger initLogger() {
-        Logger logger = new Logger(LOG_FILE);
+        LogManager.setLogFile(LOG_FILE.toPath());
+        Logger logger = LogManager.getLogger("Core");
         logger.info("CustomSkinLoader " + CustomSkinLoader_FULL_VERSION);
         logger.info("DataDir: " + DATA_DIR.getAbsolutePath());
         logger.info("Operating System: " + System.getProperty("os.name") +

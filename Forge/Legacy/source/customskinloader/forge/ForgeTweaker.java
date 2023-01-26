@@ -5,13 +5,14 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 
-import customskinloader.Logger;
+import customskinloader.log.LogManager;
+import customskinloader.log.Logger;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 public class ForgeTweaker implements ITweaker {
-    public static Logger logger = new Logger(new File("./CustomSkinLoader/ForgePlugin.log"));
+    public static Logger logger = LogManager.getLogger("Forge");
 
     private final static String FML_PLATFORM_INITIALIZER = "customskinloader.forge.platform.IFMLPlatform$FMLPlatformInitializer";
 
@@ -32,7 +33,7 @@ public class ForgeTweaker implements ITweaker {
 
     @Override
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-
+        LogManager.setLogFile(gameDir.toPath().resolve("CustomSkinLoader/CustomSkinLoader.log"));
     }
 
     @Override

@@ -3,7 +3,8 @@ package customskinloader.tweaker;
 import java.io.File;
 import java.util.List;
 
-import customskinloader.Logger;
+import customskinloader.log.LogManager;
+import customskinloader.log.Logger;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.commons.lang3.ArrayUtils;
@@ -17,8 +18,8 @@ public class Tweaker implements ITweaker {
     public static Logger logger = new Logger();
 
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
-        File tweakerLogFile = new File(gameDir,"./CustomSkinLoader/Tweaker.log");
-        logger = new Logger(tweakerLogFile);
+        LogManager.setLogFile(gameDir.toPath().resolve("CustomSkinLoader/CustomSkinLoader.log"));
+        logger = LogManager.getLogger("VanillaTweaker");
 
         logger.info("Using Tweaker");
         logger.info("Tweaker: acceptOptions");
