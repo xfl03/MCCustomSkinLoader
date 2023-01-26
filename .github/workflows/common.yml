@@ -35,6 +35,7 @@ jobs:
           KEY_PASS: ${{ secrets.KEY_PASS }}
           IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
+          echo Snapshot: $IS_SNAPSHOT
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew clean build --stacktrace
       -
@@ -46,6 +47,7 @@ jobs:
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew ${{ inputs.publish-task }} --info --stacktrace
