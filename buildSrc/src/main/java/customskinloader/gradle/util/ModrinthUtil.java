@@ -32,7 +32,7 @@ public class ModrinthUtil {
                         task.addGameVersion(gameVersion); // Minecraft Versions
                     }
                 });
-            VersionUtil.getLoaders(project).forEach(task::addLoader);
+            VersionUtil.getLoaders(project).stream().map(String::toLowerCase).forEach(task::addLoader);
 
             TaskUtil.withTask(project.getRootProject(), "upload", task0 -> task0.finalizedBy(task));
         });
