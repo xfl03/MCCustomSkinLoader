@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -92,7 +93,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
             return ModelManager0.toUserProfile(map);
         }
         String username = gameProfile.getName();
-        GameProfile newGameProfile = loadGameProfile(ssp.apiRoot, username);
+        GameProfile newGameProfile = loadGameProfileCached(ssp.apiRoot, username);
         if (newGameProfile == null) {
             CustomSkinLoader.logger.info("Profile not found.(" + username + "'s profile not found.)");
             return null;
@@ -105,6 +106,13 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         }
         CustomSkinLoader.logger.info("Profile not found.(" + username + " doesn't have skin/cape.)");
         return null;
+    }
+
+    private static final Map<String, GameProfile> gameProfileCache = new ConcurrentHashMap<>();
+
+    public static GameProfile loadGameProfileCached(String apiRoot, String username) {
+        return gameProfileCache.computeIfAbsent(apiRoot + " " + username,
+                ignored -> loadGameProfile(apiRoot, username));
     }
 
     //Username -> UUID
@@ -140,7 +148,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
      * @return UUID in Mojang API style string. Returns {@code null} if username not found in Mojang API.
      */
     public static String getMojangUuidByUsername(String username, boolean standard) {
-        GameProfile profile = loadGameProfile(getMojangApiRoot(), username);
+        GameProfile profile = loadGameProfileCached(getMojangApiRoot(), username);
         if (profile == null) {
             return null;
         }
