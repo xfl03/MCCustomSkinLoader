@@ -55,7 +55,7 @@ body:
       label: "[Only Forge User] Link to debug.log (=>1.12.2) or fml-client-latest.log (=<1.12.2)  if applicable"
       description: |
        The path to the file is `<minecraft-directory>/logs/debug.log` or `<minecraft-directory>/logs/fml-client-latest.log`.
-       if your mod loader isn't `Forge`, the is empty
+       if your mod loader isn't `Forge`, URL can set empty
        [Generate URL](https://mclo.gs)
       placeholder: "https://mclo.gs/xxxxxx"
   - type: input
