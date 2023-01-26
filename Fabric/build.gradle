@@ -49,11 +49,10 @@ tasks.publishModrinth.doFirst {
         // https://github.com/MinecraftForge/ForgeGradle/blob/fc67182a61926f0bdb0d12da5fba7f4322f64d86/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L229
         jsonSlurper.parse(plugin.cacheFile("McManifest.json")).versions.each { version ->
             if (version.type == "snapshot") {
-                // If the first version is a snapshot, assume the target release version is the same as the assets version.
+                // If the first version is a snapshot, since Mojang no longer provides the target version for snapshots,
+                // we assume that new snapshots will not be supported until the next release.
                 if (currentRelease == null) {
-                    currentRelease = jsonSlurper.parse(new URL(version.url)).assets.with {
-                        it.toString().split($/\./$).with { "${it[0]}.${it[1]}" }
-                    }
+                    return
                 }
             } else if (version.type == "release") {
                 currentRelease = version.id.with {
