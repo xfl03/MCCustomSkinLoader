@@ -4,7 +4,7 @@ labels: [ bug ]
 title: "[Bug] "
 body:
   - type: markdown
-     attributes:
+      attributes:
        value: |
         你好，这里是 `CustomSkinLoader`
         标注红色星号的为必填项
