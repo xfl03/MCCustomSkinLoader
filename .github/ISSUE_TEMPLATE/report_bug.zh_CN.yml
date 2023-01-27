@@ -8,7 +8,6 @@ body:
        value: |
         你好，这里是 `CustomSkinLoader`
         标注红色星号的为必填项
-        目前，除了HMCL启动器对forge的日志系统兼容堪忧外，其他的启动器依旧正常
         以及，保持工单干净整洁，不要直接将日志内容粘贴到工单上，比如粘贴到描述内是不行的
   - type: textarea
     id: description
