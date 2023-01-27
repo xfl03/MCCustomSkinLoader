@@ -3,6 +3,13 @@ description: Report a bug and help us improve CustomSkinLoader
 labels: [ bug ]
 title: "[Bug] "
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Here is the Report Bug issue for CustomSkinLoader
+        With a red asterisk for the mandatory items
+        Currently, all launchers are still available except for the HMCL launcher which makes forge's logs unavailable
+        Please keep the work order content neat and tidy, do not paste the contents of the log file directly onto the work order, it will look very messy and unattractive work orders
   - type: textarea
     id: description
     attributes:
