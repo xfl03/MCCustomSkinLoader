@@ -1,7 +1,14 @@
 name: 提交问题
 description: 报告问题以帮助我们改进CustomSkinLoader
 labels: [ bug ]
+title: "[Bug] "
 body:
+  - type: markdown
+    attributes:
+       value: |
+        你好，这里是 `CustomSkinLoader`
+        标注红色星号的为必填项
+        以及，保持工单干净整洁，不要直接将日志内容粘贴到工单上，比如粘贴到描述内是不行的
   - type: textarea
     id: description
     attributes:
@@ -17,6 +24,10 @@ body:
       label: 复现步骤
       description: 请问你是如何触发这个问题的
       render: bash
+      value:  |
+       1. 
+       2. 
+       3. 
     validations:
       required: true
   - type: input
@@ -25,8 +36,9 @@ body:
       label: 崩溃报告查看地址
       description: |
        在游戏目录下的 `crash-reports` 文件夹下,里面找最近的报告生成时间
+       客户端若无崩溃则直接填写 `客户端无崩溃`
        [生成连接](https://mclo.gs)
-      placeholder: "https://"
+      placeholder: "https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
     attributes:
@@ -34,7 +46,24 @@ body:
       description: |
        文件路径:`<游戏路径>/CustomSkinLoader/CustomSkinLoader.log`.
        [生成连接](https://mclo.gs)
-      placeholder: "https://"
+      placeholder: "https://mclo.gs/xxxxxx"
+  - type: input
+    id: latest-log
+    attributes:
+      label: latest.log 查看地址
+      description: |
+       文件路径:`<游戏路径>/logs/latest.log`.
+       [生成连接](https://mclo.gs)
+      placeholder: "https://mclo.gs/xxxxxx"
+  - type: input
+    id: forge-log
+    attributes:
+      label: "[仅Forge用户] debug.log (=>1.12.2) 或者 fml-client-latest.log (=<1.12.2) 查看地址"
+      description: |
+       文件路径:`<游戏路径>/logs/debug.log` 或者 `<游戏路径>/logs/fml-client-latest.log`.
+       若没有使用 `Forge` 加载器的，可以不填写
+       [生成连接](https://mclo.gs)
+      placeholder: "https://mclo.gs/xxxxxx"
   - type: input
     id: mod-version
     attributes:
