@@ -48,23 +48,6 @@ subprojects {
         replaceIn 'CustomSkinLoader.java'
     }
 
-    repositories {
-        maven {
-            name = "sponge"
-            url = "https://repo.spongepowered.org/repository/maven-public/"
-        }
-    }
-
-    // We need to change source dirs for inherited problems.
-    sourceSets.main {
-        java {
-            srcDir "source"
-        }
-        resources {
-            srcDir "resource"
-        }
-    }
-
     jar {
         manifest {
             attributes([
@@ -77,6 +60,10 @@ subprojects {
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
+
+        exclude "net/minecraft/client/renderer/RenderType.class"
+        exclude "net/minecraft/client/renderer/texture/**"
+        exclude "net/minecraft/resources/**"
     }
 
     // For real subprojects
@@ -99,35 +86,21 @@ subprojects {
             }
         }
 
-        // Mixin stuffs
-        if (!project.name.toLowerCase().contains("forge/legacy")) {
-            apply plugin: 'org.spongepowered.mixin'
-
-            apply from: rootProject.file("buildSrc/patch.gradle")
-            patchMixin()
-
-            task genSrgMap {
-                doLast {
-                    if (config.srg_notch_map != null) {
-                        // convert mappings
-                        RemapUtil.tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
-                        RemapUtil.tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
-                    }
+        task genSrgMap {
+            doLast {
+                if (!config.srg_notch_map.isEmpty()) {
+                    // convert mappings
+                    RemapUtil.tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
+                    RemapUtil.tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
                 }
             }
-            deobfCompileDummyTask.dependsOn genSrgMap
+        }
+        deobfCompileDummyTask.dependsOn genSrgMap
 
-            mixin {
-                add sourceSets.main, "mixins.customskinloader.refmap.json"
-                reobfSrgFile = "build/mixin.srg"
-                reobfNotchSrgFile = "build/mixin.srg"
-            }
-
-            reobf {
-                jar {
-                    if (config.srg_notch_map != null) {
-                        mappings = file("build/reobf.srg")
-                    }
+        reobf {
+            jar {
+                if (!config.srg_notch_map.isEmpty()) {
+                    mappings = file("build/reobf.srg")
                 }
             }
         }
@@ -153,44 +126,12 @@ subprojects {
                     from "build/libs"
                     into "${rootDir}/build/libs"
                     include "**/*.jar"
-                    if (project.name.toLowerCase().contains("vanilla")) {
-                        exclude "**/*-sources.jar"
-                    }
                 }
             }
         }
         build.finalizedBy afterBuild
 
-        apply plugin: 'maven-publish'
-        publishing {
-            repositories {
-                maven {
-                    name = "GitHubPackages"
-                    url = uri("https://maven.pkg.github.com/xfl03/MCCustomSkinLoader")
-                    credentials {
-                        username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                        password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-                    }
-                }
-            }
-            publications {
-                gpr(MavenPublication) {
-                    groupId 'customskinloader'
-                    artifactId project.archivesBaseName
-                    from(components.java)
-                }
-            }
-        }
-        tasks.withType(PublishToMavenRepository) {
-            onlyIf { System.getenv("GITHUB_TOKEN") != null }
-        }
-
-        if (project.name.toLowerCase().contains("vanilla/1.")) {
-            apply from: rootProject.file('Vanilla/common.gradle')
-        } else {
-            // Only Fabric and Forge edition should be uploaded to CurseForge and Modrinth
-            CurseForgeUtil.provideCurseForge project
-            ModrinthUtil.provideModrinth project
-        }
+        CurseForgeUtil.provideCurseForge project
+        ModrinthUtil.provideModrinth project
     }
 }

@@ -6,10 +6,7 @@ jar {
         ])
     }
 
-    exclude 'net/minecraft/client/renderer/RenderType.class'
-    exclude 'net/minecraft/client/renderer/texture/**'
     exclude 'net/minecraft/client/resources/**'
-    exclude 'net/minecraft/resources/**'
 }
 sourceJar {
     exclude 'com/**'

@@ -21,23 +21,10 @@ public class CosUtil {
         if (name.indexOf('-') == -1) {
             return null;
         }
-        if (filename.endsWith(".json"))
-            return String.format(
-                    "versions/%s/%s",
-                    name,
-                    filename
-            );
         if (filename.endsWith(".jar")) {
             if (filename.contains("Fabric") || filename.contains("Forge")) {
                 return String.format(
                         "mods/%s",
-                        filename
-                );
-            } else {
-                return String.format(
-                        "libraries/customskinloader/%s/%s/%s",
-                        name.substring(0, name.indexOf('-')),
-                        name.substring(name.indexOf('-') + 1),
                         filename
                 );
             }

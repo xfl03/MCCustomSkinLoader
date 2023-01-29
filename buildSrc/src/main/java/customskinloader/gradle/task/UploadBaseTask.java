@@ -50,8 +50,6 @@ public abstract class UploadBaseTask extends DefaultTask {
 
             if (key.startsWith("mods/") && key.endsWith(".jar") && !key.endsWith("-sources.jar")) {
                 latest.downloads.put(mcversion, url);
-            } else if (key.endsWith(".json")) {
-                latest.launchermeta.put(mcversion, url);
             }
         }
 

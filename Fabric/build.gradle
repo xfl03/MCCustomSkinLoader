@@ -1,22 +1,19 @@
 
 jar {
-    exclude 'customskinloader/tweaker/**'
-    exclude 'net/minecraft/client/renderer/RenderType.class'
-    exclude 'net/minecraft/client/renderer/texture/**'
     exclude 'net/minecraft/client/resources/**'
-    exclude 'net/minecraft/resources/**'
-    exclude 'Profile.json'
 }
 sourceJar {
-    exclude 'customskinloader/tweaker/**'
     exclude 'net/**'
-    exclude 'Profile.json'
 }
 
 repositories {
     maven {
         name = "fabric"
         url = "https://maven.fabricmc.net/"
+    }
+    maven {
+        name = "sponge"
+        url = "https://repo.spongepowered.org/repository/maven-public/"
     }
 }
 
@@ -29,7 +26,18 @@ import customskinloader.gradle.util.RemapUtil
 import customskinloader.gradle.util.SourceUtil
 import groovy.json.JsonSlurper
 
-SourceUtil.addDependencies project, project(":Common"), project(":Vanilla/Common")
+apply plugin: 'org.spongepowered.mixin'
+
+apply from: rootProject.file("buildSrc/patch.gradle")
+patchMixin()
+
+mixin {
+    add sourceSets.main, "mixins.customskinloader.refmap.json"
+    reobfSrgFile = "build/mixin.srg"
+    reobfNotchSrgFile = "build/mixin.srg"
+}
+
+SourceUtil.addDependencies project, project(":Common")
 RemapUtil.remapSources project
 
 // Resolve snapshot versions

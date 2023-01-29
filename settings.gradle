@@ -3,15 +3,6 @@ rootProject.name = "MCCustomSkinLoader"
 //Base Project
 include "Common"
 
-//Vanilla Base Project
-include "Vanilla/Common"
-//Special Vanilla Edition
-include "Vanilla/1.8.9"
-include "Vanilla/1.12.2"
-include "Vanilla/1.16.5"
-include "Vanilla/1.18.2"
-include "Vanilla/1.19.3"
-
 //Forge Base Project
 include "Forge/Common"
 //Forge Edition for [1.8,1.16.5]
