@@ -29,6 +29,10 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
         return this.info.url;
     }
 
+    public String getRawUrl() {
+        return super.getUrl();
+    }
+
     @Override
     public String getHash() {
         return this.info.hash;
