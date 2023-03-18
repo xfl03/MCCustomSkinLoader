@@ -36,13 +36,6 @@ public class DevEnvRemapper extends SimpleRemapper {
             )
         );
         remappedClasses.put(
-            "net.minecraft.class_1060",
-            new AbstractMap.SimpleEntry<>(
-                Lists.newArrayList("customskinloader.fake.itf.IFakeTextureManager$V1", "customskinloader.fake.itf.IFakeTextureManager$V2"),
-                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
-            )
-        );
-        remappedClasses.put(
             "net.minecraft.class_3298",
             new AbstractMap.SimpleEntry<>(
                 Lists.newArrayList("customskinloader.fake.itf.IFakeIResource"),

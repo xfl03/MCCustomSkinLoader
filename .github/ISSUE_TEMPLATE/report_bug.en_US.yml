@@ -1,7 +1,14 @@
 name: Report Bug
 description: Report a bug and help us improve CustomSkinLoader
 labels: [ bug ]
+title: "[Bug] "
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Here is the Report Bug issue for CustomSkinLoader
+        With a red asterisk for the mandatory items
+        Please keep the work order content neat and tidy, do not paste the contents of the log file directly onto the work order, it will look very messy and unattractive work orders
   - type: textarea
     id: description
     attributes:
@@ -18,6 +25,10 @@ body:
       label: Steps to reproduce 
       description: How do you trigger this bug? 
       render: bash
+      value:  |
+       1. 
+       2. 
+       3. 
     validations:
       required: true
   - type: input
@@ -27,7 +38,7 @@ body:
       description: |
        The files are in the folder `<minecraft-directory>/crash-reports`
        [Generate URL](https://mclo.gs)
-      placeholder: "https://"
+      placeholder: "https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
     attributes:
@@ -35,7 +46,24 @@ body:
       description: |
        The path to the file is `<minecraft-directory>/CustomSkinLoader/CustomSkinLoader.log`.
        [Generate URL](https://mclo.gs)
-      placeholder: "https://"
+      placeholder: "https://mclo.gs/xxxxxx"
+  - type: input
+    id: latest-log
+    attributes:
+      label: Link to latest.log if applicable
+      description: |
+       The path to the file is `<minecraft-directory>/logs/latest.log`.
+       [Generate URL](https://mclo.gs)
+      placeholder: "https://mclo.gs/xxxxxx"
+  - type: input
+    id: forge-log
+    attributes:
+      label: "[Only Forge User] Link to debug.log (=>1.12.2) or fml-client-latest.log (=<1.12.2)  if applicable"
+      description: |
+       The path to the file is `<minecraft-directory>/logs/debug.log` or `<minecraft-directory>/logs/fml-client-latest.log`.
+       if your mod loader isn't `Forge`, URL can set empty
+       [Generate URL](https://mclo.gs)
+      placeholder: "https://mclo.gs/xxxxxx"
   - type: input
     id: mod-version
     attributes:
@@ -56,7 +84,7 @@ body:
         - Quilt
         - Fabric
         - Forge
-        - <without loader>
+        - <without mod loader>
     validations:
       required: true
   - type: dropdown

@@ -62,11 +62,11 @@ public class FakeSkinManager {
             FakeMinecraftProfileTexture fakeProfileTexture = (FakeMinecraftProfileTexture) profileTexture;
             ResourceLocation resourcelocation = fakeProfileTexture.getResourceLocation();
             if (fakeProfileTexture.getResourceLocation() != null) {
-                params[0] = ((FakeMinecraftProfileTexture) profileTexture).getCacheFile();
+                params[0] = fakeProfileTexture.getCacheFile();
                 if (params[params.length - 2] instanceof Boolean) {
                     params[params.length - 2] = true;
                 }
-                params[params.length - 1] = fakeManager.new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, profileTexture);
+                params[params.length - 1] = fakeManager.new BaseBuffer(skinAvailableCallback, textureType, resourcelocation, fakeProfileTexture);
             }
         }
         return params;
@@ -139,9 +139,9 @@ public class FakeSkinManager {
         private SkinManager.SkinAvailableCallback callback;
         private MinecraftProfileTexture.Type type;
         private ResourceLocation location;
-        private MinecraftProfileTexture texture;
+        private FakeMinecraftProfileTexture texture;
 
-        public BaseBuffer(SkinManager.SkinAvailableCallback callback, MinecraftProfileTexture.Type type, ResourceLocation location, MinecraftProfileTexture texture) {
+        public BaseBuffer(SkinManager.SkinAvailableCallback callback, MinecraftProfileTexture.Type type, ResourceLocation location, FakeMinecraftProfileTexture texture) {
             switch (type) {
                 case SKIN: this.buffer = new FakeSkinBuffer(); break;
                 case CAPE: this.buffer = new FakeCapeBuffer(location); break;
@@ -169,7 +169,7 @@ public class FakeSkinManager {
                     Map<String, String> metadata = Maps.newHashMap();
                     String type = ((FakeSkinBuffer) buffer).judgeType();
                     metadata.put("model", type);
-                    texture = new MinecraftProfileTexture(texture.getUrl(), metadata);
+                    texture = new FakeMinecraftProfileTexture(texture.getRawUrl(), metadata);
                     FakeSkinManager.this.modelCache.put(location, texture);
                 }
             }
