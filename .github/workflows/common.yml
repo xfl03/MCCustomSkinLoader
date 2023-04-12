@@ -39,7 +39,21 @@ jobs:
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew clean build --stacktrace
       -
-        name: Publish
+        uses: actions/upload-artifact@v3
+        name: Publish to Github Artifact
+        with:
+          name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
+          path: build/libs
+      -
+        uses: svenstaro/upload-release-action@v2
+        name: Publish to Github release
+        if: ${{ inputs.publish-task }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/libs/*
+          tag: ${{ github.ref }}
+      -
+        name: Publish to CurseForge/Modrinth
         if: ${{ inputs.publish-task }}
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
@@ -51,19 +65,4 @@ jobs:
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew ${{ inputs.publish-task }} --info --stacktrace
-          # ./gradlew publishGprPublicationToGitHubPackagesRepository
-      -
-        uses: actions/upload-artifact@v3
-        name: Upload to Github Artifact
-        with:
-          name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
-          path: build/libs
-      -
-        uses: svenstaro/upload-release-action@v2
-        name: Upload to Github release
-        if: ${{ inputs.publish-task }}
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/libs/*
-          tag: ${{ github.ref }}
-        
+          # ./gradlew publishGprPublicationToGitHubPackagesRepository      
