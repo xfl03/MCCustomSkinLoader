@@ -109,3 +109,7 @@ body:
         - label: |
             This is a valid bug (I am able to reproduce this on the latest dev build).
           required: true
+        - label: |
+            This problem is triggered in the latest version of the mod (if not the latest please upgrade the mod first)
+          required: true
+
