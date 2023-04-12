@@ -38,7 +38,7 @@ body:
        在游戏目录下的 `crash-reports` 文件夹下,里面找最近的报告生成时间
        客户端若无崩溃则直接填写 `客户端无崩溃`
        [生成连接](https://mclo.gs)
-      placeholder: "https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
     attributes:
@@ -46,7 +46,7 @@ body:
       description: |
        文件路径:`<游戏路径>/CustomSkinLoader/CustomSkinLoader.log`.
        [生成连接](https://mclo.gs)
-      placeholder: "https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: latest-log
     attributes:
@@ -54,7 +54,7 @@ body:
       description: |
        文件路径:`<游戏路径>/logs/latest.log`.
        [生成连接](https://mclo.gs)
-      placeholder: "https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: forge-log
     attributes:
@@ -74,6 +74,15 @@ body:
     id: mc-version
     attributes:
       label: Minecraft游戏版本
+    validations:
+      required: true
+  - type: input
+    id: mc-launcher-version
+    attributes:
+      label: Minecraft启动器 名称 及 版本
+      description: |
+        若不知道游戏版本 可以只填写游戏启动器的名称
+      placeholder: "Ex: HMCL v3.5.4.232"
     validations:
       required: true
   - type: dropdown
