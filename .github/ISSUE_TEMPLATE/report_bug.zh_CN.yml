@@ -110,5 +110,5 @@ body:
             确认你的模组版本是最新的开发版本,且文件下载正确,没有出现类似forge下载了fabric版的这类基础问题
           required: true
         - label: |
-          这个问题是在最新的mod版本触发(若不是最新的请先升级mod)
+            这个问题是在最新的mod版本触发(若不是最新的请先升级mod)
           required: true
