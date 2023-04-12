@@ -45,13 +45,14 @@ jobs:
           name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
           path: build/libs
       -
-        uses: svenstaro/upload-release-action@v2
+        uses: softprops/action-gh-release@v1
         name: Publish to Github release
         if: ${{ inputs.publish-task }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/libs/*
-          tag: ${{ github.ref }}
+          files: |
+            build/libs/*
+          tag_name: ${{ github.ref }}
       -
         name: Publish to CurseForge/Modrinth
         if: ${{ inputs.publish-task }}
