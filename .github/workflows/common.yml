@@ -58,10 +58,11 @@ jobs:
           name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
           path: build/libs
       -
-        uses: softprops/action-gh-release@v1
-        name: Github release
+        uses: svenstaro/upload-release-action@v2
+        name: Create Github release
         if: ${{ inputs.publish-task }}
         with:
-          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          files: build/libs/*
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/libs/*
+          tag: ${{ github.ref }}
         
