@@ -54,12 +54,13 @@ jobs:
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
       -
         uses: actions/upload-artifact@v3
+        name: Upload to Github Artifact
         with:
           name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
           path: build/libs
       -
         uses: svenstaro/upload-release-action@v2
-        name: Create Github release
+        name: Upload to Github release
         if: ${{ inputs.publish-task }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
