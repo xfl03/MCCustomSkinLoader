@@ -57,3 +57,11 @@ jobs:
         with:
           name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
           path: build/libs
+      -
+        uses: softprops/action-gh-release@v1
+        name: Github release
+        if: ${{ inputs.publish-task }}
+        with:
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          files: build/libs/*
+        
