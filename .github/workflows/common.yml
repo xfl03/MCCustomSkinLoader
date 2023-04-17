@@ -47,7 +47,7 @@ jobs:
       -
         uses: softprops/action-gh-release@v1
         name: Publish to Github release
-        if: ${{ inputs.publish-task }}
+        if: ${{ inputs.is-snapshot == false }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           files: |
