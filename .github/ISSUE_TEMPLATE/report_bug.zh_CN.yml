@@ -38,7 +38,7 @@ body:
        在游戏目录下的 `crash-reports` 文件夹下,里面找最近的报告生成时间
        客户端若无崩溃则直接填写 `客户端无崩溃`
        [生成连接](https://mclo.gs)
-      placeholder: "Ex: https://mclo.gs/xxxxxx"
+      placeholder: "示例 https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
     attributes:
@@ -46,7 +46,7 @@ body:
       description: |
        文件路径:`<游戏路径>/CustomSkinLoader/CustomSkinLoader.log`.
        [生成连接](https://mclo.gs)
-      placeholder: "Ex: https://mclo.gs/xxxxxx"
+      placeholder: "示例 https://mclo.gs/xxxxxx"
   - type: input
     id: latest-log
     attributes:
@@ -54,7 +54,7 @@ body:
       description: |
        文件路径:`<游戏路径>/logs/latest.log`.
        [生成连接](https://mclo.gs)
-      placeholder: "Ex: https://mclo.gs/xxxxxx"
+      placeholder: "示例 https://mclo.gs/xxxxxx"
   - type: input
     id: forge-log
     attributes:
@@ -63,26 +63,26 @@ body:
        文件路径:`<游戏路径>/logs/debug.log` 或者 `<游戏路径>/logs/fml-client-latest.log`.
        若没有使用 `Forge` 加载器的，可以不填写
        [生成连接](https://mclo.gs)
-      placeholder: "Ex: https://mclo.gs/xxxxxx"
+      placeholder: "示例 https://mclo.gs/xxxxxx"
   - type: input
     id: mod-version
     attributes:
       label: 模组版本
-      placeholder: "Ex: 14.16"
+      placeholder: "示例 14.16"
     validations:
       required: true
   - type: input
     id: mc-version
     attributes:
       label: Minecraft游戏版本
-      placeholder: "Ex: 1.19.4"
+      placeholder: "示例 1.19.4"
     validations:
       required: true
   - type: input
     id: mc-launcher-version
     attributes:
       label: Minecraft启动器 名称 及 版本
-      placeholder: "Ex: HMCL v3.5.4.232"
+      placeholder: "示例 HMCL v3.5.4.232"
       description: |
         若不知道游戏版本 可以只填写游戏启动器的名称
     validations:
