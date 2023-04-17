@@ -7,7 +7,7 @@ on:
 jobs:
   build-release:
     name: Build Release
-    uses: ./.github/workflows/common.yml
+    uses: ./.github/worlflows/common.yml
     with:
       type: Release
       publish-task: upload
