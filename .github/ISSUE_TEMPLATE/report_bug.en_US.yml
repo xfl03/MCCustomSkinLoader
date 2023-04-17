@@ -38,7 +38,7 @@ body:
       description: |
        The files are in the folder `<minecraft-directory>/crash-reports`
        [Generate URL](https://mclo.gs)
-      placeholder: "示例 https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
     attributes:
@@ -46,7 +46,7 @@ body:
       description: |
        The path to the file is `<minecraft-directory>/CustomSkinLoader/CustomSkinLoader.log`.
        [Generate URL](https://mclo.gs)
-      placeholder: "示例 https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: latest-log
     attributes:
@@ -54,7 +54,7 @@ body:
       description: |
        The path to the file is `<minecraft-directory>/logs/latest.log`.
        [Generate URL](https://mclo.gs)
-      placeholder: "示例 https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: forge-log
     attributes:
@@ -63,26 +63,26 @@ body:
        The path to the file is `<minecraft-directory>/logs/debug.log` or `<minecraft-directory>/logs/fml-client-latest.log`.
        if your mod loader isn't `Forge`, URL can set empty
        [Generate URL](https://mclo.gs)
-      placeholder: "示例 https://mclo.gs/xxxxxx"
+      placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: mod-version
     attributes:
       label: Mod Version
-      placeholder: "示例 14.16"
+      placeholder: "Ex: 14.16"
     validations:
       required: true
   - type: input
     id: mc-version
     attributes:
       label: Minecraft Version
-      placeholder: "示例 1.19.4"
+      placeholder: "Ex: 1.19.4"
     validations:
       required: true
   - type: input
     id: mc-launcher-version
     attributes:
       label: Minecraft Launcher Name and Version
-      placeholder: "示例 HMCL v3.5.4.232"
+      placeholder: "Ex: HMCL v3.5.4.232"
       description: |
         If you don't know the version of the game, you can just fill in the name of the game launcher
   - type: dropdown
