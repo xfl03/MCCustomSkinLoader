@@ -12,6 +12,6 @@ on:
 jobs:
   build-pull-request:
     name: Build Pull Request
-    uses: ./.github/worlflows/common.yml
+    uses: ./.github/workflows/common.yml
     with:
       type: PullRequest
