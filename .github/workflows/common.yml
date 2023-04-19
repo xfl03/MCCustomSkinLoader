@@ -46,14 +46,18 @@ jobs:
           path: build/libs
       -
         uses: softprops/action-gh-release@v1
-        name: Publish to Github release
-        if: ${{ inputs.publish-task }}
+        name: Publish to Github Release
+        if: ${{ inputs.is-snapshot == false }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: CustomSkinLoader ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          generate_release_notes: true
+          draft: true
           files: |
             build/libs/*
-          tag_name: ${{ github.ref }}
       -
+        # ls build/libs | grep -v sources | grep Fabric
         name: Publish to CurseForge/Modrinth
         if: ${{ inputs.publish-task }}
         env:
