@@ -47,19 +47,19 @@ jobs:
       -
         uses: softprops/action-gh-release@v1
         name: Publish to Github Release
-        if: ${{ inputs.is-snapshot == false }}
+        # if: ${{ inputs.is-snapshot == false }}
+        if: false
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: CustomSkinLoader ${{ github.ref }}
           tag_name: ${{ github.ref }}
           generate_release_notes: true
-          draft: true
           files: |
             build/libs/*
       -
-        # ls build/libs | grep -v sources | grep Fabric
         name: Publish to CurseForge/Modrinth
-        if: ${{ inputs.publish-task }}
+        # if: ${{ inputs.publish-task }}
+        if: false
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
@@ -70,4 +70,72 @@ jobs:
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew ${{ inputs.publish-task }} --info --stacktrace
-          # ./gradlew publishGprPublicationToGitHubPackagesRepository      
+          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+
+  upload:
+    # if: ${{ inputs.publish-task }}
+    name: UploadTo ${{ matrix.website }} (${{ matrix.modtype}}) 
+    needs: build-common
+    continue-on-error: true
+    strategy:
+      matrix:
+        website: [curseforge,modrinth]
+        modtype: [Fabric,Forge-Active,Forge-Legacy]
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout Git Repository
+        uses: actions/checkout@v3
+      - 
+        uses: actions/download-artifact@v3
+        name: Download Artifact Zips
+        with:
+          path: build
+      - 
+        name: Set Upload Env
+        id: cslenv
+        run: |
+          rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
+          ls -lh build
+          output="$(ls build/libs | grep -v "sources")"
+          if [[ "${{ matrix.modtype }}" == "Forge-"* ]]; then
+            modloader="Forge"
+            path=$(echo ${{ matrix.modtype }} | sed "s#-#/#")
+          else
+            modloader=${{ matrix.modtype }}
+            path=${{ matrix.modtype }}
+          fi
+          echo "modloader is $modloader, target folder is $path"
+          echo "path=$path" >> $GITHUB_OUTPUT
+          echo "modloader=$modloader" >> $GITHUB_OUTPUT
+          echo "filename=$(echo $output|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
+          echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//")" >> $GITHUB_OUTPUT
+         
+      -
+        name: Publish to CurseForge
+        # if: ${{ matrix.website == curseforge }}
+        if: false
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          file_path: "build/libs/${{ steps.cslenv.outputs.filename }}"
+          game_endpoint: "minecraft"
+          game_versions: "${{ steps.cslenv.outputs.minecraft_vers }},${{ steps.cslenv.outputs.modloader }}"
+          #project_id: "0"
+          token: ${{ secrets.CURSEFORGE_API_KEY }}
+      - 
+        name: Publish to Modrinth
+        # if: ${{ matrix.website == modrinth }}
+        if: false
+        uses: RubixDev/modrinth-upload@v1
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          file_path: build/libs/${{ steps.cslenv.outputs.filename }}
+          #name: My super cool mod ${{ github.event.release.tag_name }}
+          version: ${{ github.ref }}
+          #changelog: ${{ github.event.release.body }}
+          #relations: P7dR8mSH:required
+          game_versions: ${{ steps.cslenv.outputs.minecraft_vers }}
+          release_type: release
+          loaders: $(echo ${{ steps.cslenv.outputs.modloader }} | sed "y/F/f/")
+          featured: true
+          project_id: idMHQ4n2
