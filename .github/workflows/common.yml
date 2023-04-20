@@ -79,7 +79,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        website: [curseforge,modrinth]
+        website: [CurseForge,Modrinth]
         modtype: [Fabric,Forge-Active,Forge-Legacy]
     runs-on: ubuntu-latest
     steps:
@@ -118,7 +118,7 @@ jobs:
           echo mc_vers=${{ steps.cslenv.outputs.minecraft_vers }}
       -
         name: Publish to CurseForge
-        # if: ${{ matrix.website == curseforge }}
+        # if: ${{ matrix.website == CurseForge }}
         if: false
         uses: itsmeow/curseforge-upload@v3
         with:
@@ -129,7 +129,7 @@ jobs:
           token: ${{ secrets.CURSEFORGE_API_KEY }}
       - 
         name: Publish to Modrinth
-        # if: ${{ matrix.website == modrinth }}
+        # if: ${{ matrix.website == Modrinth }}
         if: false
         uses: RubixDev/modrinth-upload@v1.0.0
         with:
