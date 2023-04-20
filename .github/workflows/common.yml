@@ -131,7 +131,7 @@ jobs:
         name: Publish to Modrinth
         # if: ${{ matrix.website == modrinth }}
         if: false
-        uses: RubixDev/modrinth-upload@v1
+        uses: RubixDev/modrinth-upload@v1.0.0
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           file_path: build/libs/${{ steps.cslenv.outputs.filename }}
