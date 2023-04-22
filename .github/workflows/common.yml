@@ -76,7 +76,7 @@ jobs:
         run: |
           rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
           ls -lh build
-       -
+      -
         name: Publish
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
