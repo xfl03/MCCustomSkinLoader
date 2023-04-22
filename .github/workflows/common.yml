@@ -85,7 +85,7 @@ jobs:
           rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
           ls -lh build
       - 
-        if: ${{ matrix.modtype != All }}
+        if: contains(matrix.modtype,'Fabric') || contains(matrix.modtype,'Forge')
         name: Checking and setting the environment
         id: cslenv
         run: |
@@ -102,7 +102,7 @@ jobs:
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
           echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//")" >> $GITHUB_OUTPUT
       - 
-        if: ${{ matrix.modtype != All }}
+        if: contains(matrix.modtype,'Fabric') || contains(matrix.modtype,'Forge')
         name: Test Placeholder
         run: |
           echo path=${{ steps.cslenv.outputs.path }}
