@@ -47,8 +47,7 @@ jobs:
       -
         uses: softprops/action-gh-release@v1
         name: Publish to Github Release
-        # if: ${{ inputs.is-snapshot == false }}
-        if: false
+        if: ${{ inputs.is-snapshot == false }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: CustomSkinLoader ${{ github.ref }}
@@ -57,15 +56,14 @@ jobs:
           files: |
             build/libs/*
       -
-        name: Publish to CurseForge/Modrinth
-        # if: ${{ inputs.publish-task }}
-        if: false
+        name: Publish to TencentCloud's ObjectStorage
+        if: ${{ inputs.publish-task }}
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          # CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          # MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
