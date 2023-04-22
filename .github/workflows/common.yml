@@ -64,6 +64,10 @@ jobs:
       matrix:
         website: [CurseForge,Modrinth]
         modtype: [Fabric,Forge-Active,Forge-Legacy]
+        include:
+          - 
+            website: TencentCOS
+            modtype: All
     name: UploadTo ${{ matrix.website }} (${{ matrix.modtype}}) 
     runs-on: ubuntu-latest
     steps:
@@ -75,12 +79,16 @@ jobs:
         name: Download Artifact Zips
         with:
           path: build
-      - 
-        name: Set Upload Env
-        id: cslenv
+      -
+        name: Preparation Folder
         run: |
           rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
           ls -lh build
+      - 
+        if: ${{ matrix.modtype != All }}
+        name: Checking and setting the environment
+        id: cslenv
+        run: |
           output="$(ls build/libs | grep -v "sources")"
           if [[ "${{ matrix.modtype }}" == "Forge-"* ]]; then
             modloader="Forge"
@@ -94,6 +102,7 @@ jobs:
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
           echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//")" >> $GITHUB_OUTPUT
       - 
+        if: ${{ matrix.modtype != All }}
         name: Test Placeholder
         run: |
           echo path=${{ steps.cslenv.outputs.path }}
@@ -101,9 +110,21 @@ jobs:
           echo modloader=${{ steps.cslenv.outputs.modloader }}
           echo mc_vers=${{ steps.cslenv.outputs.minecraft_vers }}
       -
+        name: Publish to Tencent COS
+        if: ${{ matrix.website == TencentCOS && inputs.publish-task }}
+        env:
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          IS_SNAPSHOT: ${{ inputs.is-snapshot }}
+        run: |
+          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
+          ./gradlew ${{ inputs.publish-task }} --info --stacktrace
+          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+
+      -
         name: Publish to CurseForge
-        # if: ${{ matrix.website == CurseForge }}
-        if: false
+        if: ${{ matrix.website == CurseForge && inputs.is-snapshot == false }}
         uses: itsmeow/curseforge-upload@v3
         with:
           file_path: "build/libs/${{ steps.cslenv.outputs.filename }}"
@@ -113,8 +134,7 @@ jobs:
           token: ${{ secrets.CURSEFORGE_API_KEY }}
       - 
         name: Publish to Modrinth
-        # if: ${{ matrix.website == Modrinth }}
-        if: false
+        if: ${{ matrix.website == Modrinth && inputs.is-snapshot == false }}
         uses: RubixDev/modrinth-upload@v1.0.0
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
@@ -128,35 +148,3 @@ jobs:
           loaders: $(echo ${{ steps.cslenv.outputs.modloader }} | sed "y/F/f/")
           featured: true
           project_id: idMHQ4n2
-
-  UploadTencent:
-    needs: build-common
-    if: ${{ inputs.publish-task }}
-    name: UploadTo Tencent COS
-    runs-on: ubuntu-latest
-    steps:
-      - 
-        name: Checkout Git Repository
-        uses: actions/checkout@v3
-      - 
-        uses: actions/download-artifact@v3
-        name: Download Artifact Zips
-        with:
-          path: build
-      - 
-        name: Set Upload Env
-        id: cslenv
-        run: |
-          rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
-          ls -lh build
-      -
-        name: Publish
-        env:
-          COS_BUCKET: ${{ secrets.COS_BUCKET }}
-          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
-          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
-          IS_SNAPSHOT: ${{ inputs.is-snapshot }}
-        run: |
-          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew ${{ inputs.publish-task }} --info --stacktrace
-          # ./gradlew publishGprPublicationToGitHubPackagesRepository
