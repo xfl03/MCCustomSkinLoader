@@ -58,7 +58,6 @@ jobs:
 
   Upload:
     needs: build-common
-    if: ${{ inputs.is-snapshot == false }}
     continue-on-error: true
     strategy:
       matrix:
