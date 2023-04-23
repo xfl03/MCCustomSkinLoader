@@ -15,7 +15,7 @@ on:
 
 jobs:
   build-common:
-    name: Build Common
+    name: Build
     runs-on: ubuntu-latest
     environment: Build
     steps:
@@ -44,17 +44,6 @@ jobs:
         with:
           name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
           path: build/libs
-      -
-        uses: softprops/action-gh-release@v1
-        name: Publish to Github Release
-        if: ${{ inputs.is-snapshot == false }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: CustomSkinLoader ${{ github.ref }}
-          tag_name: ${{ github.ref }}
-          generate_release_notes: true
-          files: |
-            build/libs/*
 
   Upload:
     needs: build-common
@@ -67,7 +56,10 @@ jobs:
           - 
             website: TencentCOS
             modtype: All
-    name: UploadTo ${{ matrix.website }} (${{ matrix.modtype}}) 
+          -
+            website: GitHub
+            modtype: All
+    name: ULT ${{ matrix.website }} (${{ matrix.modtype}}) 
     runs-on: ubuntu-latest
     steps:
       - 
@@ -109,8 +101,19 @@ jobs:
           echo modloader=${{ steps.cslenv.outputs.modloader }}
           echo mc_vers=${{ steps.cslenv.outputs.minecraft_vers }}
       -
-        name: Publish to Tencent COS
+        if: ${{ matrix.website == 'GitHub' && inputs.is-snapshot == 'false' }}
+        uses: softprops/action-gh-release@v1
+        name: Publish to Github Release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: CustomSkinLoader ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          generate_release_notes: true
+          files: |
+            build/libs/*
+      -
         if: ${{ matrix.website == 'TencentCOS' && inputs.publish-task }}
+        name: Publish to Tencent COS
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
@@ -122,8 +125,8 @@ jobs:
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       -
-        name: Publish to CurseForge
         if: ${{ matrix.website == 'CurseForge' && inputs.is-snapshot == 'false' }}
+        name: Publish to CurseForge
         uses: itsmeow/curseforge-upload@v3
         with:
           file_path: "build/libs/${{ steps.cslenv.outputs.filename }}"
@@ -132,8 +135,8 @@ jobs:
           #project_id: "0"
           token: ${{ secrets.CURSEFORGE_API_KEY }}
       - 
-        name: Publish to Modrinth
         if: ${{ matrix.website == 'Modrinth' && inputs.is-snapshot == 'false' }}
+        name: Publish to Modrinth
         uses: RubixDev/modrinth-upload@v1.0.0
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
