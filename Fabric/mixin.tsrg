@@ -4,9 +4,11 @@ net/minecraft/client/Minecraft net/minecraft/class_310
 net/minecraft/client/entity/AbstractClientPlayer net/minecraft/class_742
 	getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; method_3120
 	getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; method_3124
+net/minecraft/client/gui/Gui net/minecraft/class_332
 net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
 	renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V method_1919
 	renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V method_1919
+	renderPlayerlist (Lnet/minecraft/client/gui/Gui;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V method_1919
 net/minecraft/client/gui/spectator/PlayerMenuObject net/minecraft/class_530
 net/minecraft/client/model/ModelRenderer net/minecraft/class_630
 net/minecraft/client/renderer/IImageBuffer net/minecraft/class_760
