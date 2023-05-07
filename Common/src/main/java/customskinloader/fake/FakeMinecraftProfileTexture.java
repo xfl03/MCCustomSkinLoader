@@ -36,7 +36,7 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
 
     @Override
     public String getHash() {
-        return Optional.ofNullable(this.info.hash).orElse(super.getHash());
+        return this.info.hash == null ? super.getHash() : this.info.hash;
     }
 
     public File getCacheFile() {
