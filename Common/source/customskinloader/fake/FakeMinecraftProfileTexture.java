@@ -2,6 +2,7 @@ package customskinloader.fake;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.utils.HttpTextureUtil;
@@ -35,7 +36,7 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
 
     @Override
     public String getHash() {
-        return this.info.hash;
+        return this.info.hash == null ? super.getHash() : this.info.hash;
     }
 
     public File getCacheFile() {
