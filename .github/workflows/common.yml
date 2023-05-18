@@ -57,12 +57,15 @@ jobs:
             website: TencentCOS
             modtype: All
           -
-            website: GitHub
+            website: GitHub-Release
+            modtype: All
+          -
+            website: GitHub-PreRelease
             modtype: All
     name: ULT ${{ matrix.website }} (${{ matrix.modtype}}) 
     runs-on: ubuntu-latest
     steps:
-      - 
+      -
         name: Checkout Git Repository
         uses: actions/checkout@v3
       - 
@@ -73,6 +76,7 @@ jobs:
       -
         name: Preparation Folder
         run: |
+          #展开
           rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
           ls -lh build
       - 
@@ -80,6 +84,7 @@ jobs:
         name: Checking and setting the environment
         id: cslenv
         run: |
+          #展开
           output="$(ls build/libs | grep -v "sources")"
           if [[ "${{ matrix.modtype }}" == "Forge-"* ]]; then
             modloader="Forge"
@@ -92,41 +97,80 @@ jobs:
           echo "modloader=$modloader" >> $GITHUB_OUTPUT
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
           echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//")" >> $GITHUB_OUTPUT
-      - 
-        if: ${{ matrix.modtype != 'All' }}
-        name: Test Placeholder
-        run: |
-          echo path=${{ steps.cslenv.outputs.path }}
-          echo filename=${{ steps.cslenv.outputs.filename }}
-          echo modloader=${{ steps.cslenv.outputs.modloader }}
-          echo mc_vers=${{ steps.cslenv.outputs.minecraft_vers }}
       -
-        if: ${{ matrix.website == 'GitHub' && inputs.is-snapshot == 'false' }}
+        if: startsWith(matrix.website, 'GitHub-')
+        name: Settings more strings to Environment
+        id: cslenv-github
+        run: |
+          #展开
+          echo "buildtime=$(TZ=Asia/Shanghai date "+%Y.%m.%d %H:%M")" >> $GITHUB_OUTPUT
+          echo "pathlist="$(find build/libs -type f|grep -v "sources"|grep -v "json")"" >> $GITHUB_OUTPUT
+      - 
+        if: ${{ matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch' }}
+        name: 【GitHub Pre-Release】 Delete
+        uses: 8Mi-Tech/delete-release-assets-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: CI-Build
+          deleteOnlyFromDrafts: false
+      - 
+        if: ${{ matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch' }}
+        name: 【GitHub Pre-Release】 Set CI-Build Text
+        run: |
+          cat > build/ci-build.md << 'EOF'
+          Build Time / 构建时间 : ${{ steps.cslenv-github.outputs.buildtime }}
+          自动同步分支 ${{ github.ref_name }} 的代码，以保持最新
+          Synchronize ${{ github.ref_name }} branch code updates, keeping only the latest version
+          <br>
+          [如何使用 / How to uses?](https://github.com/xfl03/MCCustomSkinLoader/wiki/How-to-Use)
+          EOF
+      -
+        if: ${{ matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch' }}
+        name: 【GitHub Pre-Release】 Upload Tag
+        uses: richardsimko/update-tag@v1
+        with:
+          tag_name: CI-Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
+      - 
+        if: ${{ (matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch') || failure() }}
+        name: 【GitHub Pre-Release】 Publish
         uses: softprops/action-gh-release@v1
-        name: Publish to Github Release
+        with: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: CustomSkinLoader CI-Build
+          tag_name: CI-Build
+          prerelease: true
+          body_path: build/ci-build.md
+          files: build/libs/*
+          #iles: "${{ steps.cslenv-github.outputs.pathlist }}"
+      -
+        if: ${{ matrix.website == 'GitHub-Release' && inputs.type == 'Release' }}
+        uses: softprops/action-gh-release@v1
+        name: 【GitHub Release】 Publish
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: CustomSkinLoader ${{ github.ref }}
           tag_name: ${{ github.ref }}
-          generate_release_notes: true
-          files: |
-            build/libs/*
+          #generate_release_notes: true
+          files: ${{ steps.cslenv-github.outputs.pathlist }}
       -
-        if: ${{ matrix.website == 'TencentCOS' && inputs.publish-task }}
-        name: Publish to Tencent COS
+        if: ${{ matrix.website == 'TencentCOS' && inputs.type == 'Release' }}
+        name: 【TencentCOS】 Publish
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
           IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
+          #展开
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew ${{ inputs.publish-task }} --info --stacktrace
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       -
-        if: ${{ matrix.website == 'CurseForge' && inputs.is-snapshot == 'false' }}
-        name: Publish to CurseForge
+        if: ${{ matrix.website == 'CurseForge' && inputs.type == 'Release' }}
+        name: 【CurseForge】 Publish
         uses: itsmeow/curseforge-upload@v3
         with:
           file_path: "build/libs/${{ steps.cslenv.outputs.filename }}"
@@ -135,8 +179,8 @@ jobs:
           #project_id: "0"
           token: ${{ secrets.CURSEFORGE_API_KEY }}
       - 
-        if: ${{ matrix.website == 'Modrinth' && inputs.is-snapshot == 'false' }}
-        name: Publish to Modrinth
+        if: ${{ matrix.website == 'Modrinth' && inputs.type == 'Release' }}
+        name: 【Modrinth】 Publish
         uses: RubixDev/modrinth-upload@v1.0.0
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
