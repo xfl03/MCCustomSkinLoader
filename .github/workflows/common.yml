@@ -106,7 +106,7 @@ jobs:
           echo "buildtime=$(TZ=Asia/Shanghai date "+%Y.%m.%d %H:%M")" >> $GITHUB_OUTPUT
           echo "pathlist="$(find build/libs -type f|grep -v "sources"|grep -v "json")"" >> $GITHUB_OUTPUT
       - 
-        if: ${{ matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch' }}
+        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Delete
         uses: 8Mi-Tech/delete-release-assets-action@main
         with:
@@ -114,7 +114,7 @@ jobs:
           tag: CI-Build
           deleteOnlyFromDrafts: false
       - 
-        if: ${{ matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch' }}
+        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Set CI-Build Text
         run: |
           cat > build/ci-build.md << 'EOF'
@@ -125,7 +125,7 @@ jobs:
           [如何使用 / How to uses?](https://github.com/xfl03/MCCustomSkinLoader/wiki/How-to-Use)
           EOF
       -
-        if: ${{ matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch' }}
+        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Upload Tag
         uses: richardsimko/update-tag@v1
         with:
@@ -133,7 +133,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
       - 
-        if: ${{ (matrix.website == 'GitHub-PreRelease' && github.ref_type=='branch') || failure() }}
+        if: ${{ (matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads')) || failure() }}
         name: 【GitHub Pre-Release】 Publish
         uses: softprops/action-gh-release@v1
         with: 
