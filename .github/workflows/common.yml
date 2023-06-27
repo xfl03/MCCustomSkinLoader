@@ -46,6 +46,7 @@ jobs:
           path: build/libs
 
   Upload:
+    if: inputs.publish-task
     needs: build-common
     continue-on-error: true
     strategy:
@@ -155,7 +156,7 @@ jobs:
           #generate_release_notes: true
           files: ${{ steps.cslenv-github.outputs.pathlist }}
       -
-        if: ${{ matrix.website == 'TencentCOS' && inputs.publish-task }}
+        if: ${{ matrix.website == 'TencentCOS' }}
         name: 【TencentCOS】 Publish
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
