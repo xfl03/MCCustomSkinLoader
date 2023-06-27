@@ -49,6 +49,7 @@ jobs:
     if: inputs.publish-task
     needs: build-common
     continue-on-error: true
+    environment: Build
     strategy:
       matrix:
         website: [CurseForge,Modrinth]
