@@ -155,7 +155,7 @@ jobs:
           #generate_release_notes: true
           files: ${{ steps.cslenv-github.outputs.pathlist }}
       -
-        if: ${{ matrix.website == 'TencentCOS' && inputs.type == 'Release' }}
+        if: ${{ matrix.website == 'TencentCOS' && inputs.publish-task }}
         name: 【TencentCOS】 Publish
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
