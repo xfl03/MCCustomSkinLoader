@@ -178,7 +178,7 @@ jobs:
           file_path: "build/libs/${{ steps.cslenv.outputs.filename }}"
           game_endpoint: "minecraft"
           game_versions: "${{ steps.cslenv.outputs.minecraft_vers }},${{ steps.cslenv.outputs.modloader }}"
-          #project_id: "0"
+          project_id: "286924"
           token: ${{ secrets.CURSEFORGE_API_KEY }}
       - 
         if: ${{ matrix.website == 'Modrinth' && inputs.type == 'Release' }}
@@ -187,9 +187,9 @@ jobs:
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           file_path: build/libs/${{ steps.cslenv.outputs.filename }}
-          #name: My super cool mod ${{ github.event.release.tag_name }}
+          name: CustomSkinLoader ${{matrix.modtype}} ${{ github.ref }}
           version: ${{ github.ref }}
-          #changelog: ${{ github.event.release.body }}
+          changelog: ${{ github.event.release.body }}
           #relations: P7dR8mSH:required
           game_versions: ${{ steps.cslenv.outputs.minecraft_vers }}
           release_type: release
