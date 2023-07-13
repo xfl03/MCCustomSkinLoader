@@ -181,7 +181,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           curseforge-id: 286924
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
 
           name: CustomSkinLoader_${{matrix.modtype}}_${{ github.event.release.tag_name }}
           version: ${{ github.event.release.tag_name }}
