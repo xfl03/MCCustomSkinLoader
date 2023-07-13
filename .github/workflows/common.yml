@@ -64,7 +64,7 @@ jobs:
           -
             website: GitHub-PreRelease
             modtype: All
-    name: ULT ${{ matrix.website }} (${{ matrix.modtype}}) 
+    name: ${{ matrix.website }} (${{ matrix.modtype}})
     runs-on: ubuntu-latest
     steps:
       -
@@ -86,9 +86,9 @@ jobs:
         name: Checking and setting the environment
         id: cslenv
         run: |
-          #展开
           output="$(ls build/libs | grep -v "sources")"
-          if [[ "${{ matrix.modtype }}" == "Forge-"* ]]; then
+          version=(echo ${{ github.ref_name }}$ | sed "s/v//")
+          if [[ "${{ matrix.modtype }}" == "Forge"* ]]; then
             modloader="Forge"
             path=$(echo ${{ matrix.modtype }} | sed "s#-#/#")
           else
@@ -98,7 +98,8 @@ jobs:
           echo "path=$path" >> $GITHUB_OUTPUT
           echo "modloader=$modloader" >> $GITHUB_OUTPUT
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
-          echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//")" >> $GITHUB_OUTPUT
+          echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//") | sed "s/,/ /g"" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
       -
         if: startsWith(matrix.website, 'GitHub-')
         name: Settings more strings to Environment
@@ -107,7 +108,7 @@ jobs:
           #展开
           echo "buildtime=$(TZ=Asia/Shanghai date "+%Y.%m.%d %H:%M")" >> $GITHUB_OUTPUT
           echo "pathlist="$(find build/libs -type f|grep -v "sources"|grep -v "json")"" >> $GITHUB_OUTPUT
-      - 
+      -
         if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Delete
         uses: 8Mi-Tech/delete-release-assets-action@main
@@ -115,7 +116,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag: CI-Build
           deleteOnlyFromDrafts: false
-      - 
+      -
         if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Set CI-Build Text
         run: |
@@ -133,12 +134,12 @@ jobs:
         with:
           tag_name: CI-Build
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
-      - 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      -
         if: ${{ (matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads')) || failure() }}
         name: 【GitHub Pre-Release】 Publish
         uses: softprops/action-gh-release@v1
-        with: 
+        with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: CustomSkinLoader CI-Build
           tag_name: CI-Build
@@ -165,7 +166,6 @@ jobs:
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
           IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
-          #展开
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
           ./gradlew ${{ inputs.publish-task }} --info --stacktrace
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
@@ -183,12 +183,12 @@ jobs:
           curseforge-id: 286924
           curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
 
-          name: CustomSkinLoader_${{matrix.modtype}}_${{ github.ref_name }}
-          version: ${{ github.ref_name }}
+          name: CustomSkinLoader_${{ matrix.modtype }}_${{ steps.cslenv.outputs.version }}
+          version: ${{ steps.cslenv.outputs.version }}
           version-type: release
           loaders: ${{ steps.cslenv.outputs.modloader }}
           game-versions: |
-            [${{ steps.cslenv.outputs.minecraft_vers }})
+            ${{ steps.cslenv.outputs.minecraft_vers }}
           game-version-filter: none
 
           retry-attempts: 2
