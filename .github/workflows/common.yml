@@ -87,7 +87,7 @@ jobs:
         id: cslenv
         run: |
           output="$(ls build/libs | grep -v "sources")"
-          version=(echo ${{ github.ref_name }}$ | sed "s/v//")
+          version=$(echo ${{ github.ref_name }} | sed "s/v//")
           if [[ "${{ matrix.modtype }}" == "Forge"* ]]; then
             modloader="Forge"
             path=$(echo ${{ matrix.modtype }} | sed "s#-#/#")
@@ -136,7 +136,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       -
-        if: ${{ (matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads')) || failure() }}
+        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Publish
         uses: softprops/action-gh-release@v1
         with:
