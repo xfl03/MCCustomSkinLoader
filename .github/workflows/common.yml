@@ -96,7 +96,7 @@ jobs:
           echo "path=$path" >> $GITHUB_OUTPUT
           echo "modloader=$modloader" >> $GITHUB_OUTPUT
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
-          echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//" | sed "s/,/ /g")" >> $GITHUB_OUTPUT
+          echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//" | sed "s/,/\n/g")" >> $GITHUB_OUTPUT
           echo "version=$(grep "version=" build.properties | grep -v "#" | sed "s/version=//")" >> $GITHUB_OUTPUT
           echo "edition=$(echo ${{ matrix.modtype }} | sed "s/-//")" >> $GITHUB_OUTPUT
       -
