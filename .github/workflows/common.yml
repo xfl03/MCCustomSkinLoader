@@ -58,9 +58,9 @@ jobs:
           - 
             website: TencentCOS
             modtype: All
-          -
-            website: GitHub-Release
-            modtype: All
+#          -
+#            website: GitHub-Release
+#            modtype: All
           -
             website: GitHub-PreRelease
             modtype: All
