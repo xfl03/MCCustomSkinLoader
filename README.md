@@ -6,7 +6,7 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/xfl03/MCCustomSkinLoader/beta.yml?style=for-the-badge&label=&logo=Gradle&labelColor=388E3C)](https://github.com/xfl03/MCCustomSkinLoader/actions)
 [![Star](https://img.shields.io/github/stars/xfl03/MCCustomSkinLoader?label=&logo=GitHub&labelColor=black&color=FAFAFA&style=for-the-badge)](https://github.com/xfl03/MCCustomSkinLoader/stargazers)
 
-[![Minecraft Version](https://img.shields.io/badge/Minecraft-1.19%20|%201.18%20|%201.17%20|%201.16%20|%201.15%20|%201.14%20|%201.13%20|%201.12%20|%201.11%20|%201.10%20|%201.9%20|%201.8-green?style=for-the-badge&labelColor=388E3C&color=8BC34A)](https://github.com/xfl03/MCCustomSkinLoader)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-1.20%20|%201.19%20|%201.18%20|%201.17%20|%201.16%20|%201.15%20|%201.14%20|%201.13%20|%201.12%20|%201.11%20|%201.10%20|%201.9%20|%201.8-green?style=for-the-badge&labelColor=388E3C&color=8BC34A)](https://github.com/xfl03/MCCustomSkinLoader)
 
 ## What's this?  
 Custom Skin Loader mod for Minecraft.  
