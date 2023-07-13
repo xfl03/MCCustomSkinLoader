@@ -171,7 +171,8 @@ jobs:
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       -
-        if: ${{ matrix.website == 'CurseForge_Modrinth' && inputs.type == 'Release' }}
+        #if: ${{ matrix.website == 'CurseForge_Modrinth' && inputs.type == 'Release' }}
+        if: ${{ matrix.website == 'CurseForge_Modrinth' }}
         name: 【CurseForge & Modrinth】 Publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
