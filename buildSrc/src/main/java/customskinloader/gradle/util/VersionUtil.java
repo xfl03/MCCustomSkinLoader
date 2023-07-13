@@ -33,8 +33,7 @@ public class VersionUtil {
     //Example: 14.10a-SNAPSHOT-33
     public static String getCSLVersion(Project rootProject) {
 
-        return ConfigUtil.getConfigString(rootProject, "version") +
-                ConfigUtil.getConfigString(rootProject, "dev_version") +
+        return ConfigUtil.getConfigString(rootProject, "version")  +
                 (isRelease(rootProject) ? "" : ("-SNAPSHOT-" + getBuildNum()));
     }
 
