@@ -1,8 +1,7 @@
 name: Release
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [released]
 
 jobs:
   build-release:
