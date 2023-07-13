@@ -78,7 +78,6 @@ jobs:
       -
         name: Preparation Folder
         run: |
-          #展开
           rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
           ls -lh build
       - 
@@ -87,7 +86,6 @@ jobs:
         id: cslenv
         run: |
           output="$(ls build/libs | grep -v "sources")"
-          version=$(echo ${{ github.ref_name }} | sed "s/v//")
           if [[ "${{ matrix.modtype }}" == "Forge"* ]]; then
             modloader="Forge"
             path=$(echo ${{ matrix.modtype }} | sed "s#-#/#")
@@ -99,7 +97,8 @@ jobs:
           echo "modloader=$modloader" >> $GITHUB_OUTPUT
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
           echo "minecraft_vers=$(grep "minecraft_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/minecraft_full_versions=//") | sed "s/,/ /g"" >> $GITHUB_OUTPUT
-          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "version=$(grep "version=" build.properties | grep -v "#" | sed "s/version=//")" >> $GITHUB_OUTPUT
+          echo "edition=$(echo ${{ matrix.modtype }} | sed "s/-//")" >> $GITHUB_OUTPUT
       -
         if: startsWith(matrix.website, 'GitHub-')
         name: Settings more strings to Environment
@@ -183,7 +182,7 @@ jobs:
           curseforge-id: 286924
           curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
 
-          name: CustomSkinLoader_${{ matrix.modtype }}_${{ steps.cslenv.outputs.version }}
+          name: CustomSkinLoader_${{ steps.cslenv.outputs.edition }}_${{ steps.cslenv.outputs.version }}
           version: ${{ steps.cslenv.outputs.version }}
           version-type: release
           loaders: ${{ steps.cslenv.outputs.modloader }}
