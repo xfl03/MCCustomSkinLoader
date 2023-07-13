@@ -52,7 +52,7 @@ jobs:
     environment: Build
     strategy:
       matrix:
-        website: [CurseForge,Modrinth]
+        website: [CurseForge_Modrinth]
         modtype: [Fabric,Forge-Active,Forge-Legacy]
         include:
           - 
@@ -171,28 +171,29 @@ jobs:
           # ./gradlew publishGprPublicationToGitHubPackagesRepository
 
       -
-        if: ${{ matrix.website == 'CurseForge' && inputs.type == 'Release' }}
-        name: 【CurseForge】 Publish
-        uses: itsmeow/curseforge-upload@v3
+        if: ${{ matrix.website == 'CurseForge_Modrinth' && inputs.type == 'Release' }}
+        name: 【CurseForge & Modrinth】 Publish
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
-          file_path: "build/libs/${{ steps.cslenv.outputs.filename }}"
-          game_endpoint: "minecraft"
-          game_versions: "${{ steps.cslenv.outputs.minecraft_vers }},${{ steps.cslenv.outputs.modloader }}"
-          project_id: "286924"
-          token: ${{ secrets.CURSEFORGE_API_KEY }}
-      - 
-        if: ${{ matrix.website == 'Modrinth' && inputs.type == 'Release' }}
-        name: 【Modrinth】 Publish
-        uses: RubixDev/modrinth-upload@v1.0.0
-        with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
-          file_path: build/libs/${{ steps.cslenv.outputs.filename }}
-          name: CustomSkinLoader ${{matrix.modtype}} ${{ github.ref }}
-          version: ${{ github.ref }}
-          changelog: ${{ github.event.release.body }}
-          #relations: P7dR8mSH:required
-          game_versions: ${{ steps.cslenv.outputs.minecraft_vers }}
-          release_type: release
-          loaders: $(echo ${{ steps.cslenv.outputs.modloader }} | sed "y/F/f/")
-          featured: true
-          project_id: idMHQ4n2
+          modrinth-id: idMHQ4n2
+          modrinth-featured: true
+          modrinth-unfeature-mode: subset
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 286924
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          name: CustomSkinLoader_${{matrix.modtype}}_${{ github.event.release.tag_name }}
+          version: ${{ github.event.release.tag_name }}
+          version-type: release
+          loaders: ${{ steps.cslenv.outputs.modloader }}
+          game-versions: |
+            [${{ steps.cslenv.outputs.minecraft_vers }})
+          game-version-filter: none
+
+          retry-attempts: 2
+          retry-delay: 10000
+          fail-mode: fail
+
+          files: |
+            build/libs/${{ steps.cslenv.outputs.filename }}
