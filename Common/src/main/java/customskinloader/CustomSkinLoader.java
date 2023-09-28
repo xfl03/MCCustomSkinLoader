@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -49,8 +49,7 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache = new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager = new DynamicSkullManager();
 
-    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(
-            config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+    public static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
 
     //Correct thread name in thread pool
     private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
@@ -71,26 +70,28 @@ public class CustomSkinLoader {
         THREAD_POOL.execute(runnable);
     }
 
-    public static void loadProfileLazily(
-            GameProfile gameProfile, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> consumer) {
+    public static Object loadProfileLazily(GameProfile gameProfile, Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> function) {
         String username = gameProfile.getName();
         String credential = MinecraftUtil.getCredential(gameProfile);
         // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
         if (username == null) {
             logger.warning("Could not load profile: username is null.");
-            consumer.accept(Maps.newHashMap());
-            return;
+            return function.apply(Maps.newHashMap());
         }
         String tempName = Thread.currentThread().getName();
         Thread.currentThread().setName(username); // Change Thread Name
         if (profileCache.isLoading(credential)) {
-            profileCache.putLoader(credential, consumer);
+            profileCache.putLoader(credential, function);
             Thread.currentThread().setName(tempName);
-            return;
+            return function.apply(Maps.newHashMap());
         }
-        consumer.accept(loadProfile(gameProfile));
+        Object result = function.apply(loadProfile(gameProfile));
         Thread.currentThread().setName(tempName);
-        profileCache.getLastLoader(credential).ifPresent(c -> loadProfileLazily(gameProfile, c));
+        Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> func = profileCache.getLastLoader(credential);
+        if (func != null) {
+            result = loadProfileLazily(gameProfile, func);
+        }
+        return result;
     }
 
     //For User Skin
@@ -194,8 +195,7 @@ public class CustomSkinLoader {
     }
 
     //For Skull
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(
-            final GameProfile gameProfile) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
         String username = gameProfile.getName();
         String credential = MinecraftUtil.getCredential(gameProfile);
 
@@ -230,12 +230,9 @@ public class CustomSkinLoader {
         Logger logger = LogManager.getLogger("Core");
         logger.info("CustomSkinLoader " + CustomSkinLoader_FULL_VERSION);
         logger.info("DataDir: " + DATA_DIR.getAbsolutePath());
-        logger.info("Operating System: " + System.getProperty("os.name") +
-                " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version"));
-        logger.info("Java Version: " + System.getProperty("java.version") +
-                ", " + System.getProperty("java.vendor"));
-        logger.info("Java VM Version: " + System.getProperty("java.vm.name") +
-                " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor"));
+        logger.info("Operating System: " + System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version"));
+        logger.info("Java Version: " + System.getProperty("java.version") + ", " + System.getProperty("java.vendor"));
+        logger.info("Java VM Version: " + System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor"));
         logger.info("Minecraft: " + MinecraftUtil.getMinecraftMainVersion());
         return logger;
     }

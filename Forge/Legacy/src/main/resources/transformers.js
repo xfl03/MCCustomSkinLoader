@@ -3,7 +3,6 @@ var Handle = getJavaType('org.objectweb.asm.Handle');
 var Opcodes = getJavaType('org.objectweb.asm.Opcodes');
 var Type = getJavaType('org.objectweb.asm.Type');
 var FieldInsnNode = getJavaType('org.objectweb.asm.tree.FieldInsnNode');
-var FieldNode = getJavaType('org.objectweb.asm.tree.FieldNode');
 var InsnNode = getJavaType('org.objectweb.asm.tree.InsnNode');
 var IntInsnNode =  getJavaType('org.objectweb.asm.tree.IntInsnNode');
 var InvokeDynamicInsnNode = getJavaType('org.objectweb.asm.tree.InvokeDynamicInsnNode');
@@ -44,24 +43,13 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/client/resources/SkinManager'
             },
             'transformer': function (cn) {
-                cn.fields.removeIf(function (fn) {
-                    return fn.name.equals("fakeManager") && fn.desc.equals("Lcustomskinloader/fake/FakeSkinManager;");
-                });
-                cn.fields.add(new FieldNode(Opcodes.ACC_PRIVATE, "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;", null, null));
-
                 cn.methods.forEach(function (mn) {
                     if (checkName(mn.name, "<init>") && mn.desc.equals("(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V")) {
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
                             if (node.getOpcode() === Opcodes.RETURN) {
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
-                                mn.instructions.insertBefore(node, new TypeInsnNode(Opcodes.NEW, "customskinloader/fake/FakeSkinManager"));
-                                mn.instructions.insertBefore(node, new InsnNode(Opcodes.DUP));
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1));
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 2));
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 3));
-                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESPECIAL, "customskinloader/fake/FakeSkinManager", "<init>", "(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V", false));
-                                mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.PUTFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
+                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "setSkinCacheDir", "(Ljava/io/File;)V", false));
                             }
                         }
                     } else if (checkName(mn.name, "func_152789_a")
@@ -78,10 +66,8 @@ function initializeCoreMod() {
                                 && (node.owner.equals("net/minecraft/client/resources/SkinManager$SkinAvailableCallback") // 1.13.2-
                                     || node.owner.equals("net/minecraft/client/resources/SkinManager$ISkinAvailableCallback")) // 1.14.2+
                                 && checkName(node.name, "onSkinTextureAvailable") && node.desc.equals("(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V")) {
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
-                                mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 5));
-                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "getModelCache", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcustomskinloader/fake/FakeSkinManager;Lnet/minecraft/util/ResourceLocation;)Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;", false));
+                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "getModelCache", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lnet/minecraft/util/ResourceLocation;)Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;", false));
                             }
 
                             if (node.getOpcode() === Opcodes.INVOKESPECIAL
@@ -101,12 +87,9 @@ function initializeCoreMod() {
                                     mn.instructions.insertBefore(node, new InsnNode(Opcodes.SWAP));
                                 }
                                 mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "com/google/common/collect/ImmutableList", "of", s + ")Lcom/google/common/collect/ImmutableList;", false));
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0));
-                                mn.instructions.insertBefore(node, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1));
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 2));
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 3));
-                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createThreadDownloadImageData", "(Lcom/google/common/collect/ImmutableList;Lcustomskinloader/fake/FakeSkinManager;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)[Ljava/lang/Object;", false));
+                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createThreadDownloadImageData", "(Lcom/google/common/collect/ImmutableList;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)[Ljava/lang/Object;", false));
                                 for (var i = 0; i < args.length; i++) {
                                     mn.instructions.insertBefore(node, new InsnNode(Opcodes.DUP));
                                     mn.instructions.insertBefore(node, new IntInsnNode(Opcodes.BIPUSH, i));
@@ -171,10 +154,8 @@ function initializeCoreMod() {
                         }
                     } else if (checkName(mn.name, "func_152788_a") && mn.desc.equals("(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;")) {
                         var first = mn.instructions.getFirst();
-                        mn.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 0));
-                        mn.instructions.insertBefore(first, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
                         mn.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 1));
-                        mn.instructions.insertBefore(first, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "customskinloader/fake/FakeSkinManager", "loadSkinFromCache", "(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;", false));
+                        mn.instructions.insertBefore(first, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadSkinFromCache", "(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;", false));
                         mn.instructions.insertBefore(first, new InsnNode(Opcodes.ARETURN));
                     }
                 });
@@ -201,6 +182,18 @@ function initializeCoreMod() {
                         }
                     }
                 });
+                return cn;
+            }
+        },
+        'IImageBufferTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/renderer/IImageBuffer'
+            },
+            'transformer': function (cn) {
+                if (!cn.interfaces.contains("customskinloader/fake/itf/IFakeIImageBuffer")) {
+                    cn.interfaces.add("customskinloader/fake/itf/IFakeIImageBuffer");
+                }
                 return cn;
             }
         },

@@ -18,28 +18,19 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class SkinManagerTransformer {
     @TransformerManager.TransformTarget(
-        className = "net.minecraft.client.resources.SkinManager",
-        methodNameSrg = "<init>",
-        desc = "(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V"
+            className = "net.minecraft.client.resources.SkinManager",
+            methodNameSrg = "<init>",
+            desc = "(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V"
     )
     public static class InitTransformer implements TransformerManager.IMethodTransformer {
         @Override
         public MethodNode transform(ClassNode cn, MethodNode mn) {
-            cn.fields.removeIf(fn -> fn.name.equals("fakeManager") && fn.desc.equals("Lcustomskinloader/fake/FakeSkinManager;"));
-            cn.fields.add(new FieldNode(Opcodes.ACC_PRIVATE, "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;", null, null));
-
             for (AbstractInsnNode ain : mn.instructions.toArray()) {
                 if (ain.getOpcode() == Opcodes.RETURN) {
                     InsnList il = new InsnList();
-                    il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                    il.add(new TypeInsnNode(Opcodes.NEW, "customskinloader/fake/FakeSkinManager"));
-                    il.add(new InsnNode(Opcodes.DUP));
-                    il.add(new VarInsnNode(Opcodes.ALOAD, 1));
                     il.add(new VarInsnNode(Opcodes.ALOAD, 2));
-                    il.add(new VarInsnNode(Opcodes.ALOAD, 3));
-                    il.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "customskinloader/fake/FakeSkinManager", "<init>", "(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V", false));
-                    il.add(new FieldInsnNode(Opcodes.PUTFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
-                    mn.instructions.insert(il);
+                    il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "setSkinCacheDir", "(Ljava/io/File;)V", false));
+                    mn.instructions.insertBefore(ain, il);
                 }
             }
             return mn;
@@ -70,10 +61,8 @@ public class SkinManagerTransformer {
                     MethodInsnNode min = (MethodInsnNode) ain;
                     if (TransformerManager.checkClassName(min.owner, "net/minecraft/client/resources/SkinManager$SkinAvailableCallback") && TransformerManager.checkMethodName(min.owner, min.name, min.desc, "func_180521_a") && TransformerManager.checkMethodDesc(min.desc, "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V")) {
                         InsnList il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                        il.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
                         il.add(new VarInsnNode(Opcodes.ALOAD, 4));
-                        il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "getModelCache", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcustomskinloader/fake/FakeSkinManager;Lnet/minecraft/util/ResourceLocation;)Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;", false));
+                        il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "getModelCache", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lnet/minecraft/util/ResourceLocation;)Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;", false));
                         mn.instructions.insertBefore(min, il);
                     }
                 }
@@ -88,13 +77,11 @@ public class SkinManagerTransformer {
                             sb.append("Ljava/lang/Object;");
                         }
                         il0.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/google/common/collect/ImmutableList", "of", sb.append(")Lcom/google/common/collect/ImmutableList;").toString(), false));
-                        il0.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                        il0.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
                         il0.add(new VarInsnNode(Opcodes.ALOAD, 1));
                         il0.add(new VarInsnNode(Opcodes.ALOAD, 2));
                         il0.add(new VarInsnNode(Opcodes.ALOAD, 3));
 
-                        il0.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createThreadDownloadImageData", "(Lcom/google/common/collect/ImmutableList;Lcustomskinloader/fake/FakeSkinManager;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)[Ljava/lang/Object;", false));
+                        il0.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createThreadDownloadImageData", "(Lcom/google/common/collect/ImmutableList;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)[Ljava/lang/Object;", false));
                         for (int i = 0, len = args.length; i < len; i++) {
                             il0.add(new InsnNode(Opcodes.DUP));
                             il0.add(new IntInsnNode(Opcodes.BIPUSH, i));
@@ -152,10 +139,8 @@ public class SkinManagerTransformer {
         @Override
         public MethodNode transform(ClassNode cn, MethodNode mn) {
             InsnList il = new InsnList();
-            il.add(new VarInsnNode(Opcodes.ALOAD, 0));
-            il.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/resources/SkinManager", "fakeManager", "Lcustomskinloader/fake/FakeSkinManager;"));
             il.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            il.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "customskinloader/fake/FakeSkinManager", "loadSkinFromCache", "(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;", false));
+            il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadSkinFromCache", "(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;", false));
             il.add(new InsnNode(Opcodes.ARETURN));
             il.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
             mn.instructions.insert(il);

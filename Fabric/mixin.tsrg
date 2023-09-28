@@ -2,22 +2,17 @@ com/mojang/blaze3d/matrix/MatrixStack net/minecraft/class_4587
 net/minecraft/client/Minecraft net/minecraft/class_310
 	isIntegratedServerRunning ()Z method_1542
 net/minecraft/client/entity/AbstractClientPlayer net/minecraft/class_742
-	getDownloadImageSkin (Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)Lnet/minecraft/client/renderer/ThreadDownloadImageData; method_3120
-	getLocationSkin (Ljava/lang/String;)Lnet/minecraft/util/ResourceLocation; method_3124
 net/minecraft/client/gui/Gui net/minecraft/class_332
 net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
 	renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V method_1919
 	renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V method_1919
 	renderPlayerlist (Lnet/minecraft/client/gui/Gui;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V method_1919
-net/minecraft/client/gui/spectator/PlayerMenuObject net/minecraft/class_530
 net/minecraft/client/model/ModelRenderer net/minecraft/class_630
 net/minecraft/client/renderer/IImageBuffer net/minecraft/class_760
 net/minecraft/client/renderer/IRenderTypeBuffer net/minecraft/class_4597
 net/minecraft/client/renderer/RenderType net/minecraft/class_1921
 	getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; method_23572
 net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_1046
-	bufferedImage field_110560_d
-	textureUploaded field_5215
 	processTask field_20843
 	loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; method_22795
 	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; method_22798
@@ -29,20 +24,25 @@ net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/class_972
 	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V method_4177
 net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
 net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
+net/minecraft/client/resources/PlayerSkin net/minecraft/class_8685
 net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	func_210275_a (Lcom/mojang/authlib/GameProfile;ZLnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V method_4653
-	func_229297_b_ (Ljava/util/Map;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V method_4655
+	func_210276_a (Ljava/util/Map;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V method_4655
+	getInsecureSkin (Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/PlayerSkin; method_52862
+	getOrLoad (Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture; method_52863
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; method_4651
 	loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; method_4654
-net/minecraft/client/resources/SkinManager$3 net/minecraft/class_1071$3
-	run ()V run
-net/minecraft/client/resources/SkinManager$3$1 net/minecraft/class_1071$3$1
-	field_152803_a field_152803_a
-	field_152804_b field_152804_b
-	run ()V run
+net/minecraft/client/resources/SkinManager$1 net/minecraft/class_1071$1
+	lambda$load$0 (Lcom/mojang/authlib/minecraft/MinecraftSessionService;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/SkinManager$TextureInfo; method_52867
+	load (Lnet/minecraft/client/resources/SkinManager$CacheKey;)Ljava/util/concurrent/CompletableFuture; method_52868
+net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/class_1071$class_8686
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
+net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/class_1071$class_8687
+	type field_45641
+	registerTexture (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture; method_52873
+net/minecraft/client/resources/SkinManager$TextureInfo net/minecraft/class_1071$class_8688
 net/minecraft/scoreboard/ScoreObjective net/minecraft/class_266
 net/minecraft/scoreboard/Scoreboard net/minecraft/class_269
 net/minecraft/util/ResourceLocation net/minecraft/class_2960
