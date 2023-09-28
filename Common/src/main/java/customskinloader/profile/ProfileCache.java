@@ -3,10 +3,9 @@ package customskinloader.profile;
 import java.io.File;
 import java.util.Deque;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.CustomSkinLoader;
@@ -18,7 +17,7 @@ public class ProfileCache {
     
     private Map<String, CachedProfile> cachedProfiles = new ConcurrentHashMap<>();
     private Map<String, UserProfile> localProfiles = new ConcurrentHashMap<>();
-    private Map<String, Deque<Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>>> profileLoaders = new ConcurrentHashMap<>();
+    private Map<String, Deque<Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?>>> profileLoaders = new ConcurrentHashMap<>();
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ProfileCache(){
@@ -53,12 +52,12 @@ public class ProfileCache {
             return localProfiles.get(username.toLowerCase());
         return loadLocalProfile(username);
     }
-    public Optional<Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>> getLastLoader(String username) {
-        Deque<Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>>> deque = this.profileLoaders.get(username);
+    public Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> getLastLoader(String username) {
+        Deque<Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?>> deque = this.profileLoaders.get(username);
         if (deque != null) {
-            return Optional.ofNullable(deque.pollLast());
+            return deque.pollLast();
         }
-        return Optional.empty();
+        return null;
     }
     
     public void setLoading(String username,boolean loading){
@@ -75,7 +74,7 @@ public class ProfileCache {
             return;
         saveLocalProfile(username,profile);
     }
-    public void putLoader(String username, Consumer<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>> loader) {
+    public void putLoader(String username, Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> loader) {
         this.profileLoaders.putIfAbsent(username, new ConcurrentLinkedDeque<>());
         this.profileLoaders.get(username).offerLast(loader);
     }

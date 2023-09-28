@@ -2,19 +2,20 @@ package customskinloader.fake;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Optional;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.utils.HttpTextureUtil;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
-    private HttpTextureUtil.HttpTextureInfo info;
+    private final HttpTextureUtil.HttpTextureInfo info;
+    private final Map<String, String> metadata;
     private ResourceLocation resourceLocation;
 
     public FakeMinecraftProfileTexture(String url, Map<String, String> metadata) {
         super(url, metadata);
         this.info = HttpTextureUtil.toHttpTextureInfo(url);
+        this.metadata = metadata;
     }
 
     public void setResourceLocation(ResourceLocation resourceLocation) {
@@ -30,8 +31,10 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
         return this.info.url;
     }
 
-    public String getRawUrl() {
-        return super.getUrl();
+    public void setModule(String module) {
+        if (this.metadata != null) {
+            this.metadata.put("module", module);
+        }
     }
 
     @Override

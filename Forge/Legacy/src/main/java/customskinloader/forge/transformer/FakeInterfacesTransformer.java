@@ -31,6 +31,17 @@ public class FakeInterfacesTransformer {
     }
 
     @TransformerManager.TransformTarget(
+        className = "net.minecraft.client.renderer.IImageBuffer"
+    )
+    public static class IImageBufferTransformer implements TransformerManager.IClassTransformer {
+        @Override
+        public ClassNode transform(ClassNode cn) {
+            cn.interfaces.add("customskinloader/fake/itf/IFakeIImageBuffer");
+            return cn;
+        }
+    }
+
+    @TransformerManager.TransformTarget(
         className = "net.minecraft.client.renderer.ThreadDownloadImageData"
     )
     public static class ThreadDownloadImageDataTransformer implements TransformerManager.IClassTransformer {

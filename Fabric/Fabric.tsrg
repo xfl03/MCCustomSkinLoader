@@ -15,7 +15,6 @@ net/minecraft/client/Minecraft net/minecraft/class_310
 	getSkinManager ()Lnet/minecraft/client/resources/SkinManager; method_1582
 	getTextureManager ()Lnet/minecraft/client/renderer/texture/TextureManager; method_1531
 net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/class_355
-net/minecraft/client/gui/spectator/PlayerMenuObject net/minecraft/class_530
 net/minecraft/client/multiplayer/ServerData net/minecraft/class_642
 	serverIP field_3761
 net/minecraft/client/renderer/RenderType net/minecraft/class_1921
@@ -50,11 +49,12 @@ net/minecraft/client/resources/IResourceManager net/minecraft/class_3300
 net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; method_4656
-net/minecraft/client/resources/SkinManager$3 net/minecraft/class_1071$3
-	field_152801_c field_152801_c
-	field_152802_d field_152802_d
+net/minecraft/client/resources/SkinManager$1 net/minecraft/class_1071$1
+net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/class_1071$class_8686
+	profile ()Lcom/mojang/authlib/GameProfile; comp_1631
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
+net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/class_1071$class_8687
 net/minecraft/resources/IResource net/minecraft/class_3298
 net/minecraft/resources/IResourceManager net/minecraft/class_3300
 net/minecraft/util/ResourceLocation net/minecraft/class_2960
