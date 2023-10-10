@@ -49,7 +49,7 @@ public class DynamicSkullManager {
             staticTextures.put(profile, Maps.newHashMap());
             return;
         }
-        String value = TextureUtil.getPropertyValue(textureProperty);
+        String value = TextureUtil.AuthlibField.PROPERTY_VALUE_FIELD.get(textureProperty);
         if (StringUtils.isBlank(value)) {
             staticTextures.put(profile, Maps.newHashMap());
             return;
