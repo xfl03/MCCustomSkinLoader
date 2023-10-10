@@ -163,8 +163,8 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
 
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
         MinecraftProfilePropertiesResponse propertiesResponce = gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
-        GameProfile newGameProfile = new GameProfile(TextureUtil.AuthlibField.MINECRAFTPROFILEPROPERTIESRESPONSE_ID.get(propertiesResponce), TextureUtil.AuthlibField.MINECRAFTPROFILEPROPERTIESRESPONSE_NAME.get(propertiesResponce));
-        newGameProfile.getProperties().putAll(TextureUtil.AuthlibField.MINECRAFTPROFILEPROPERTIESRESPONSE_PROPERTIES.get(propertiesResponce));
+        GameProfile newGameProfile = new GameProfile(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(propertiesResponce), TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME.get(propertiesResponce));
+        newGameProfile.getProperties().putAll(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(propertiesResponce));
 
         return newGameProfile;
     }
@@ -185,10 +185,10 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
         MinecraftTexturesPayload result = gson.fromJson(json, MinecraftTexturesPayload.class);
 
-        if (result == null || TextureUtil.AuthlibField.MINECRAFTTEXTURESPAYLOAD_TEXTURES.get(result) == null) {
+        if (result == null || TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result) == null) {
             return Maps.newHashMap();
         }
-        return TextureUtil.AuthlibField.MINECRAFTTEXTURESPAYLOAD_TEXTURES.get(result);
+        return TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result);
     }
 
     @Override

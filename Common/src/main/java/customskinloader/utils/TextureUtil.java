@@ -2,10 +2,8 @@ package customskinloader.utils;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.Map;
 import java.util.UUID;
 
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
@@ -43,10 +41,10 @@ public class TextureUtil {
     // resulting in changes to method names, so reflection is used here to be compatible with these changes.
     public enum AuthlibField {
         PROPERTY_VALUE_FIELD(Property.class, "value"),
-        MINECRAFTPROFILEPROPERTIESRESPONSE_ID(MinecraftProfilePropertiesResponse.class, "id"),
-        MINECRAFTPROFILEPROPERTIESRESPONSE_NAME(MinecraftProfilePropertiesResponse.class, "name"),
-        MINECRAFTPROFILEPROPERTIESRESPONSE_PROPERTIES(MinecraftProfilePropertiesResponse.class, "properties"),
-        MINECRAFTTEXTURESPAYLOAD_TEXTURES(MinecraftTexturesPayload.class, "textures");
+        MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID(MinecraftProfilePropertiesResponse.class, "id"),
+        MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME(MinecraftProfilePropertiesResponse.class, "name"),
+        MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES(MinecraftProfilePropertiesResponse.class, "properties"),
+        MINECRAFT_TEXTURES_PAYLOAD_TEXTURES(MinecraftTexturesPayload.class, "textures");
 
         private final Field field;
 
