@@ -163,8 +163,8 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
 
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
         MinecraftProfilePropertiesResponse propertiesResponce = gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
-        GameProfile newGameProfile = new GameProfile(propertiesResponce.getId(), propertiesResponce.getName());
-        newGameProfile.getProperties().putAll(propertiesResponce.getProperties());
+        GameProfile newGameProfile = new GameProfile(TextureUtil.AuthlibField.MINECRAFTPROFILEPROPERTIESRESPONSE_ID.get(propertiesResponce), TextureUtil.AuthlibField.MINECRAFTPROFILEPROPERTIESRESPONSE_NAME.get(propertiesResponce));
+        newGameProfile.getProperties().putAll(TextureUtil.AuthlibField.MINECRAFTPROFILEPROPERTIESRESPONSE_PROPERTIES.get(propertiesResponce));
 
         return newGameProfile;
     }
@@ -177,7 +177,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         if (textureProperty == null) {
             return Maps.newHashMap();
         }
-        String value = TextureUtil.getPropertyValue(textureProperty);
+        String value = TextureUtil.AuthlibField.PROPERTY_VALUE_FIELD.get(textureProperty);
         if (StringUtils.isBlank(value)) {
             return Maps.newHashMap();
         }
@@ -185,10 +185,10 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
         MinecraftTexturesPayload result = gson.fromJson(json, MinecraftTexturesPayload.class);
 
-        if (result == null || TextureUtil.getMinecraftTexturesPayloadTextures(result) == null) {
+        if (result == null || TextureUtil.AuthlibField.MINECRAFTTEXTURESPAYLOAD_TEXTURES.get(result) == null) {
             return Maps.newHashMap();
         }
-        return TextureUtil.getMinecraftTexturesPayloadTextures(result);
+        return TextureUtil.AuthlibField.MINECRAFTTEXTURESPAYLOAD_TEXTURES.get(result);
     }
 
     @Override

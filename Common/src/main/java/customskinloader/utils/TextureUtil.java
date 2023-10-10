@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import customskinloader.CustomSkinLoader;
 import org.apache.commons.codec.binary.Base64;
@@ -40,34 +41,31 @@ public class TextureUtil {
 
     // Some of the classes in Authlib used after Minecraft 23w31a were changed to record classes,
     // resulting in changes to method names, so reflection is used here to be compatible with these changes.
-    private final static Field VALUE_FIELD;
-    private final static Field TEXTURES_FIELD;
+    public enum AuthlibField {
+        PROPERTY_VALUE_FIELD(Property.class, "value"),
+        MINECRAFTPROFILEPROPERTIESRESPONSE_ID(MinecraftProfilePropertiesResponse.class, "id"),
+        MINECRAFTPROFILEPROPERTIESRESPONSE_NAME(MinecraftProfilePropertiesResponse.class, "name"),
+        MINECRAFTPROFILEPROPERTIESRESPONSE_PROPERTIES(MinecraftProfilePropertiesResponse.class, "properties"),
+        MINECRAFTTEXTURESPAYLOAD_TEXTURES(MinecraftTexturesPayload.class, "textures");
 
-    static {
-        try {
-            VALUE_FIELD = Property.class.getDeclaredField("value");
-            VALUE_FIELD.setAccessible(true);
-            TEXTURES_FIELD = MinecraftTexturesPayload.class.getDeclaredField("textures");
-            TEXTURES_FIELD.setAccessible(true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        private final Field field;
+
+        AuthlibField(Class<?> clazz, String name) {
+            try {
+                this.field = clazz.getDeclaredField(name);
+                this.field.setAccessible(true);
+            } catch (Throwable t) {
+                throw new RuntimeException(t);
+            }
         }
-    }
 
-    public static String getPropertyValue(Property property) {
-        try {
-            return (String) VALUE_FIELD.get(property);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getMinecraftTexturesPayloadTextures(MinecraftTexturesPayload payload) {
-        try {
-            return (Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>) TEXTURES_FIELD.get(payload);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        @SuppressWarnings("unchecked")
+        public <T> T get(Object o) {
+            try {
+                return (T) this.field.get(o);
+            } catch (Throwable t) {
+                throw new RuntimeException(t);
+            }
         }
     }
 

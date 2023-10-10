@@ -51,7 +51,7 @@ net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinMa
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; m_118825_
 net/minecraft/client/resources/SkinManager$1 net/minecraft/client/resources/SkinManager$1
 net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/client/resources/SkinManager$CacheKey
-	profile ()Lcom/mojang/authlib/GameProfile; profile
+	profile ()Lcom/mojang/authlib/GameProfile; f_290972_
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/client/resources/SkinManager$SkinTextureCallback
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V m_118856_
 net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/client/resources/SkinManager$TextureCache
