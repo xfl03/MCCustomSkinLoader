@@ -3,7 +3,6 @@ package customskinloader.loader.jsonapi;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
-import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
@@ -31,7 +30,7 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
 
         @Override
         public String getRoot() {
-            return "https://minecraftcapes.net/profile/";
+            return "https://api.minecraftcapes.net/profile/";
         }
     }
 
@@ -62,11 +61,6 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
         profile.capeUrl = TextureUtil.parseBase64Texture(result.textures.cape);
 
         return profile;
-    }
-
-    @Override
-    public String getPayload(SkinSiteProfile ssp) {
-        return null;
     }
 
     @Override
