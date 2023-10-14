@@ -7,8 +7,6 @@ jar {
         ])
     }
 
-    exclude 'net/minecraft/client/resources/IResource.class'
-    exclude 'net/minecraft/client/resources/IResourceManager.class'
     exclude 'net/minecraft/client/resources/SkinManager.class'
     exclude 'net/minecraft/client/resources/SkinManager$ISkinAvailableCallback.class'
 }
