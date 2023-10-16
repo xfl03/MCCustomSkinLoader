@@ -134,7 +134,7 @@ jobs:
       -
         if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
         name: 【GitHub Pre-Release】 Upload Tag
-        uses: richardsimko/update-tag@v1
+        uses: richardsimko/update-tag@v1.0.7
         with:
           tag_name: CI-Build
         env:
