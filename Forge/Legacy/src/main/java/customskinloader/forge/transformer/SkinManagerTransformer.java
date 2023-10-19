@@ -79,9 +79,8 @@ public class SkinManagerTransformer {
                         il0.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/google/common/collect/ImmutableList", "of", sb.append(")Lcom/google/common/collect/ImmutableList;").toString(), false));
                         il0.add(new VarInsnNode(Opcodes.ALOAD, 1));
                         il0.add(new VarInsnNode(Opcodes.ALOAD, 2));
-                        il0.add(new VarInsnNode(Opcodes.ALOAD, 3));
 
-                        il0.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createThreadDownloadImageData", "(Lcom/google/common/collect/ImmutableList;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)[Ljava/lang/Object;", false));
+                        il0.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createThreadDownloadImageData", "(Lcom/google/common/collect/ImmutableList;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)[Ljava/lang/Object;", false));
                         for (int i = 0, len = args.length; i < len; i++) {
                             il0.add(new InsnNode(Opcodes.DUP));
                             il0.add(new IntInsnNode(Opcodes.BIPUSH, i));
