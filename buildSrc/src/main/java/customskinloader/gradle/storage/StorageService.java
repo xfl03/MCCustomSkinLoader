@@ -3,6 +3,7 @@ package customskinloader.gradle.storage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,6 +28,16 @@ public class StorageService {
      */
     public static void put(String key, Path file) {
         storages.forEach(it -> it.put(key, file));
+    }
+
+    /**
+     * Put file to all storage.
+     *
+     * @param key  key
+     * @param file file
+     */
+    public static void put(String key, File file) {
+        put(key, file.toPath());
     }
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
