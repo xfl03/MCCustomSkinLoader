@@ -1,17 +1,18 @@
 package customskinloader.gradle.task;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import customskinloader.gradle.entity.CslDetail;
 import customskinloader.gradle.entity.CslLatest;
+import customskinloader.gradle.storage.StorageService;
 import customskinloader.gradle.util.CdnUtil;
 import customskinloader.gradle.util.ConfigUtil;
-import customskinloader.gradle.util.CosUtil;
+import customskinloader.gradle.util.StorageUtil;
 import customskinloader.gradle.util.VersionUtil;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
+
+import java.io.File;
+import java.io.IOException;
 
 public abstract class UploadBaseTask extends DefaultTask {
     public Project rootProject;
@@ -35,25 +36,25 @@ public abstract class UploadBaseTask extends DefaultTask {
                 //Don't upload sources jar to cos
                 continue;
             }
-            String key = CosUtil.getKey(file.getName());
+            String key = StorageUtil.getKey(file.getName());
             if (key == null) {
                 continue;
             }
-            CosUtil.uploadFile(key, file);
-            String url = CdnUtil.CDN_ROOT + key;
+            StorageService.put(key, file);
             String mcversion = VersionUtil.getMcVersion(file.getName());
             if (mcversion.equals("ForgeLegacy")) {
                 mcversion = "Forge";
             }
             System.out.printf("csl-%s-%s\t%s%n",
-                    mcversion.replace(".", "").toLowerCase(), cslversion, url);
+                    mcversion.replace(".", "").toLowerCase(),
+                    cslversion, CdnUtil.CLOUDFLARE_CDN_ROOT + key);
 
             if (key.startsWith("mods/") && key.endsWith(".jar") && !key.endsWith("-sources.jar")) {
-                latest.downloads.put(mcversion, url);
+                latest.downloads.put(mcversion, StorageService.BASE_URL + key);
             }
         }
 
-        CosUtil.writeAndUploadObject(filename, latest);
+        StorageService.put(filename, latest);
         return latest;
     }
 
@@ -71,7 +72,7 @@ public abstract class UploadBaseTask extends DefaultTask {
                 });
 
         detail.sortDetails();
-        CosUtil.writeAndUploadObject(filename, detail);
+        StorageService.put(filename, detail);
     }
 
     protected void uploadBase(String latestJsonName, String detailJsonName) throws IOException, TencentCloudSDKException {

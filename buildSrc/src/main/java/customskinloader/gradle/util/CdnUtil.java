@@ -9,7 +9,8 @@ import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import java.util.Arrays;
 
 public class CdnUtil {
-    public static final String CDN_ROOT = "https://csl.littleservice.cn/";
+    public static final String TENCENT_CDN_ROOT = "https://csl.littleservice.cn/";
+    public static final String CLOUDFLARE_CDN_ROOT = "https://csl.3-3.dev/";
     private static CdnClient cdnClient;
 
     private static CdnClient getCdnClient() {
@@ -34,7 +35,7 @@ public class CdnUtil {
      * @throws TencentCloudSDKException when Tencent Cloud API has exception
      */
     public static void updateCdn(String... paths) throws TencentCloudSDKException {
-        String[] urls = Arrays.stream(paths).map(it -> CDN_ROOT + it).toArray(String[]::new);
+        String[] urls = Arrays.stream(paths).map(it -> TENCENT_CDN_ROOT + it).toArray(String[]::new);
 
         //Purge CDN cache
         PurgeUrlsCacheRequest purgeReq = new PurgeUrlsCacheRequest();

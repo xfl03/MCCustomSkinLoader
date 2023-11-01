@@ -56,7 +56,7 @@ jobs:
         modtype: [Fabric,Forge-Active,Forge-Legacy]
         include:
           - 
-            website: TencentCOS
+            website: ObjectStorage
             modtype: All
 #          -
 #            website: GitHub-Release
@@ -114,7 +114,7 @@ jobs:
           echo "pathlist="$(find build/libs -type f|grep -v "sources"|grep -v "json")"" >> $GITHUB_OUTPUT
       -
         if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: 【GitHub Pre-Release】 Delete
+        name: "[GitHub Pre-Release] Delete"
         uses: 8Mi-Tech/delete-release-assets-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -133,7 +133,7 @@ jobs:
           EOF
       -
         if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: 【GitHub Pre-Release】 Upload Tag
+        name: "[GitHub Pre-Release] Upload Tag"
         uses: richardsimko/update-tag@v1.0.7
         with:
           tag_name: CI-Build
@@ -141,7 +141,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       -
         if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: 【GitHub Pre-Release】 Publish
+        name: "[GitHub Pre-Release] Publish"
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -154,7 +154,7 @@ jobs:
       -
         if: ${{ matrix.website == 'GitHub-Release' && inputs.type == 'Release' }}
         uses: softprops/action-gh-release@v1
-        name: 【GitHub Release】 Publish
+        name: "[GitHub Release] Publish"
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: CustomSkinLoader ${{ github.ref }}
@@ -162,12 +162,16 @@ jobs:
           #generate_release_notes: true
           files: ${{ steps.cslenv-github.outputs.pathlist }}
       -
-        if: ${{ matrix.website == 'TencentCOS' }}
-        name: 【TencentCOS】 Publish
+        if: ${{ matrix.website == 'ObjectStorage' }}
+        name: "[ObjectStorage] Publish"
         env:
           COS_BUCKET: ${{ secrets.COS_BUCKET }}
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_SECRET_ID: ${{ secrets.R2_SECRET_ID }}
+          R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
           IS_SNAPSHOT: ${{ inputs.is-snapshot }}
         run: |
           export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
@@ -176,7 +180,7 @@ jobs:
 
       -
         if: ${{ matrix.website == 'CurseForge_Modrinth' && inputs.type == 'Release' }}
-        name: 【CurseForge & Modrinth】 Publish
+        name: "[CurseForge & Modrinth] Publish"
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: idMHQ4n2
