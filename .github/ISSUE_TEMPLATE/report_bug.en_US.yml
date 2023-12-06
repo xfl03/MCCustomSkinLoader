@@ -41,6 +41,8 @@ body:
       placeholder: "Ex: https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
+    validations:
+      required: true
     attributes:
       label: Link to CustomSkinLoader.log if applicable
       description: |

@@ -41,6 +41,8 @@ body:
       placeholder: "示例: https://mclo.gs/xxxxxx"
   - type: input
     id: csl-log
+    validations:
+      required: true
     attributes:
       label: CustomSkinLoader.log 查看地址
       description: |
