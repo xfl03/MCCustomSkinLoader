@@ -14,7 +14,7 @@ It's a mod which can load skins and capes from any online source or from your lo
   
 ## Download  
 ### Release Build
-- [CurseForge](https://minecraft.curseforge.com/projects/customskinloader)
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/customskinloader)
 - [Modrinth](https://modrinth.com/mod/customskinloader)
 
 ### Develop Build
