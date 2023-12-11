@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -19,11 +18,7 @@ public class FakeInterfaceManager {
         return ((IFakeIResourceManager) resourceManager).getResource(location);
     }
 
-    public static IResourceManager Minecraft_getResourceManager(Minecraft minecraft) {
+    public static IResourceManager Minecraft_getResourceManager(Object minecraft) {
         return (IResourceManager) ((IFakeMinecraft) minecraft).func_195551_G();
-    }
-
-    public static void ThreadDownloadImageData_resetNewBufferedImage(Object threadDownloadImageData, BufferedImage image) {
-        ((IFakeThreadDownloadImageData) threadDownloadImageData).resetNewBufferedImage(image);
     }
 }

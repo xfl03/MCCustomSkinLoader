@@ -11,6 +11,7 @@
     "MixinMinecraft",
     "MixinRenderPlayer",
     "MixinSkinManager$1",
+    "MixinSkinManager$CacheKey",
     "MixinSkinManager$TextureCache",
     "MixinSkinManager$V1",
     "MixinSkinManager$V2",

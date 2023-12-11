@@ -7,9 +7,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import customskinloader.fake.itf.FakeInterfaceManager;
-import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
-import customskinloader.utils.MinecraftUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -38,12 +36,7 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     private int loaded = 0;
     private double ratioX = -1;
     private double ratioY = -1;
-    private final ResourceLocation location;
     private String type = null;
-
-    public FakeCapeBuffer(ResourceLocation location) {
-        this.location = location;
-    }
 
     @Override
     public FakeImage parseUserSkin(FakeImage image) {
@@ -74,9 +67,6 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
             if ("cape".equals(this.type)) {
                 this.image = resetImageFormat(this.image, 0, 0, 22, 17);
                 this.attachElytra(elytraImage);
-                if (this.image instanceof FakeBufferedImage) { // before 1.12.2
-                    this.refreshTexture((FakeBufferedImage) this.image);
-                }
             }
         }
         return this.image;
@@ -154,16 +144,6 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
             }
         }
         return defaultReturnValue;
-    }
-
-    // TextureID won't be regenerated when changing resource packs before 1.12.2
-    private void refreshTexture(FakeBufferedImage image) {
-        Object textureObj = MinecraftUtil.getTextureManager().getTexture(this.location);
-        if (textureObj != null) {
-            // NOTICE: OptiFine modified the upload process of the texture from ThreadDownloadImageData
-            // Therefore, it may not be correct to simply copy the vanilla behavior
-            FakeInterfaceManager.ThreadDownloadImageData_resetNewBufferedImage(textureObj, image.getImage());
-        }
     }
 
     // Some cape image doesn't support alpha channel, so reset image format to ARGB

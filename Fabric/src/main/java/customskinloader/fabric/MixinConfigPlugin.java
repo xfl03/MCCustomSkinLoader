@@ -61,7 +61,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+
         } else if (mixinClassName.endsWith(".MixinSkinManager$V1")) {
             result = this.world_version <= 3465 && (this.protocol_version <= 763 || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x4000008E)); // 18w43b ~ 1.20.1
-        } else if (mixinClassName.endsWith(".MixinSkinManager$V2") || mixinClassName.endsWith(".MixinSkinManager$1") || mixinClassName.endsWith(".MixinSkinManager$TextureCache")) {
+        } else if (mixinClassName.endsWith(".MixinSkinManager$V2") || mixinClassName.endsWith(".MixinSkinManager$1") || mixinClassName.endsWith(".MixinSkinManager$CacheKey") || mixinClassName.endsWith(".MixinSkinManager$TextureCache")) {
             result = this.world_version >= 3567 &&  ((this.protocol_version > 763 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000090); // 23w31a+
         } else if (mixinClassName.endsWith(".MixinThreadDownloadImageData$V1")) {
             result = (this.world_version >= 2205 && this.world_version <= 2722) && ((this.protocol_version >= 554 && this.protocol_version <= 754) || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x40000022)); // 19w38a ~ 1.17-rc1

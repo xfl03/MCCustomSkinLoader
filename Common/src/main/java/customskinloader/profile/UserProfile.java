@@ -1,5 +1,11 @@
 package customskinloader.profile;
 
+import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+import com.mojang.authlib.properties.Property;
+import customskinloader.utils.TextureUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import customskinloader.profile.ModelManager0.Model;
@@ -68,6 +74,34 @@ public class UserProfile {
                 " , CapeUrl: "+capeUrl+
                 (StringUtils.isBlank(elytraUrl)?" ":" , ElytraUrl: "+elytraUrl)+
                 (expiry==0?"":(" , Expiry: "+expiry))+")";
+    }
+
+    public List<Property> toProperties() {
+        return Lists.newArrayList(
+            new Property("skinUrl"  , nullToValue(this.skinUrl  )),
+            new Property("model"    , nullToValue(this.model    )),
+            new Property("capeUrl"  , nullToValue(this.capeUrl  )),
+            new Property("elytraUrl", nullToValue(this.elytraUrl))
+        );
+    }
+
+    public static UserProfile fromProperties(Collection<Property> properties) {
+        UserProfile profile = new UserProfile();
+        if (properties != null) {
+            for (Property property : properties) {
+                switch ((String) TextureUtil.AuthlibField.PROPERTY_NAME.get(property)) {
+                    case "skinUrl"  : profile.skinUrl   = nullToValue(TextureUtil.AuthlibField.PROPERTY_VALUE.get(property)); break;
+                    case "model"    : profile.model     = nullToValue(TextureUtil.AuthlibField.PROPERTY_VALUE.get(property)); break;
+                    case "capeUrl"  : profile.capeUrl   = nullToValue(TextureUtil.AuthlibField.PROPERTY_VALUE.get(property)); break;
+                    case "elytraUrl": profile.elytraUrl = nullToValue(TextureUtil.AuthlibField.PROPERTY_VALUE.get(property)); break;
+                }
+            }
+        }
+        return profile;
+    }
+
+    private static String nullToValue(String value) {
+        return value == null ? "null" : value.equals("null") ? null : value;
     }
     
     /**

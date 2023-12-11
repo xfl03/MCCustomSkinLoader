@@ -61,6 +61,7 @@ subprojects {
             ])
         }
 
+        exclude "com/**"
         exclude "net/minecraft/client/renderer/RenderType.class"
         exclude "net/minecraft/client/renderer/texture/**"
         exclude "net/minecraft/resources/**"

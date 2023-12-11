@@ -17,7 +17,7 @@ public class ProfileCache {
     
     private Map<String, CachedProfile> cachedProfiles = new ConcurrentHashMap<>();
     private Map<String, UserProfile> localProfiles = new ConcurrentHashMap<>();
-    private Map<String, Deque<Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?>>> profileLoaders = new ConcurrentHashMap<>();
+    private Map<String, Deque<Function<UserProfile, ?>>> profileLoaders = new ConcurrentHashMap<>();
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ProfileCache(){
@@ -52,8 +52,8 @@ public class ProfileCache {
             return localProfiles.get(username.toLowerCase());
         return loadLocalProfile(username);
     }
-    public Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> getLastLoader(String username) {
-        Deque<Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?>> deque = this.profileLoaders.get(username);
+    public Function<UserProfile, ?> getLastLoader(String username) {
+        Deque<Function<UserProfile, ?>> deque = this.profileLoaders.get(username);
         if (deque != null) {
             return deque.pollLast();
         }
@@ -74,7 +74,7 @@ public class ProfileCache {
             return;
         saveLocalProfile(username,profile);
     }
-    public void putLoader(String username, Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> loader) {
+    public void putLoader(String username, Function<UserProfile, ?> loader) {
         this.profileLoaders.putIfAbsent(username, new ConcurrentLinkedDeque<>());
         this.profileLoaders.get(username).offerLast(loader);
     }

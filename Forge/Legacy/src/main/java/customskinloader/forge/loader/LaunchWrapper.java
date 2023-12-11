@@ -19,7 +19,6 @@ public class LaunchWrapper implements IClassTransformer {
     private static final TransformerManager.IClassTransformer[] CLASS_TRANSFORMERS = {
         new FakeInterfacesTransformer.MinecraftTransformer(),
         new FakeInterfacesTransformer.IImageBufferTransformer(),
-        new FakeInterfacesTransformer.ThreadDownloadImageDataTransformer(),
         new FakeInterfacesTransformer.ClientIResourceTransformer(),
         new FakeInterfacesTransformer.ClientIResourceManagerTransformer(),
         new FakeInterfacesTransformer.IResourceTransformer(),

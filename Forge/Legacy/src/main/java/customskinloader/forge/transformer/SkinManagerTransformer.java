@@ -49,26 +49,6 @@ public class SkinManagerTransformer {
             for (AbstractInsnNode ain : mn.instructions.toArray()) {
                 if (ain.getOpcode() == Opcodes.INVOKESPECIAL) {
                     MethodInsnNode min = (MethodInsnNode) ain;
-                    if (TransformerManager.checkClassName(min.owner, "net/minecraft/util/ResourceLocation") && TransformerManager.checkMethodName(min.owner, min.name, min.desc, "<init>") && TransformerManager.checkMethodDesc(min.desc, "(Ljava/lang/String;)V")) {
-                        InsnList il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                        il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "setResourceLocation", "(Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Lnet/minecraft/util/ResourceLocation;", false));
-                        mn.instructions.insert(min, il);
-                    }
-                }
-
-                if (ain.getOpcode() == Opcodes.INVOKEINTERFACE) {
-                    MethodInsnNode min = (MethodInsnNode) ain;
-                    if (TransformerManager.checkClassName(min.owner, "net/minecraft/client/resources/SkinManager$SkinAvailableCallback") && TransformerManager.checkMethodName(min.owner, min.name, min.desc, "func_180521_a") && TransformerManager.checkMethodDesc(min.desc, "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V")) {
-                        InsnList il = new InsnList();
-                        il.add(new VarInsnNode(Opcodes.ALOAD, 4));
-                        il.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "getModelCache", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lnet/minecraft/util/ResourceLocation;)Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;", false));
-                        mn.instructions.insertBefore(min, il);
-                    }
-                }
-
-                if (ain.getOpcode() == Opcodes.INVOKESPECIAL) {
-                    MethodInsnNode min = (MethodInsnNode) ain;
                     if (TransformerManager.checkClassName(min.owner, "net/minecraft/client/renderer/ThreadDownloadImageData") && TransformerManager.checkMethodName(min.owner, min.name, min.desc, "<init>") && TransformerManager.checkMethodDesc(min.desc, "(Ljava/io/File;Ljava/lang/String;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/IImageBuffer;)V")) {
                         InsnList il0 = new InsnList();
                         Type[] args = Type.getType(min.desc).getArgumentTypes();

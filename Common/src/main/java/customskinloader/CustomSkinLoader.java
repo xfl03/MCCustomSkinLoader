@@ -70,24 +70,24 @@ public class CustomSkinLoader {
         THREAD_POOL.execute(runnable);
     }
 
-    public static Object loadProfileLazily(GameProfile gameProfile, Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> function) {
+    public static Object loadProfileLazily(GameProfile gameProfile, Function<UserProfile, ?> function) {
         String username = gameProfile.getName();
         String credential = MinecraftUtil.getCredential(gameProfile);
         // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
         if (username == null) {
             logger.warning("Could not load profile: username is null.");
-            return function.apply(Maps.newHashMap());
+            return function.apply(null);
         }
         String tempName = Thread.currentThread().getName();
         Thread.currentThread().setName(username); // Change Thread Name
         if (profileCache.isLoading(credential)) {
             profileCache.putLoader(credential, function);
             Thread.currentThread().setName(tempName);
-            return function.apply(Maps.newHashMap());
+            return function.apply(null);
         }
         Object result = function.apply(loadProfile(gameProfile));
         Thread.currentThread().setName(tempName);
-        Function<Map<MinecraftProfileTexture.Type, MinecraftProfileTexture>, ?> func = profileCache.getLastLoader(credential);
+        Function<UserProfile, ?> func = profileCache.getLastLoader(credential);
         if (func != null) {
             result = loadProfileLazily(gameProfile, func);
         }
@@ -95,7 +95,7 @@ public class CustomSkinLoader {
     }
 
     //For User Skin
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfile(GameProfile gameProfile) {
+    public static UserProfile loadProfile(GameProfile gameProfile) {
         String credential = MinecraftUtil.getCredential(gameProfile);
         UserProfile profile;
         if (profileCache.isReady(credential)) {
@@ -113,7 +113,7 @@ public class CustomSkinLoader {
             profileCache.setLoading(credential, true);
             profile = loadProfile0(gameProfile, false);
         }
-        return ModelManager0.fromUserProfile(profile);
+        return profile;
     }
 
     //Core

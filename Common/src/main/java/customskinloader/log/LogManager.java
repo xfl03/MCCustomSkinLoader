@@ -29,7 +29,7 @@ public class LogManager {
             }
             //Set new writer
             Files.createDirectories(logFile.getParent());
-            logWriter = Files.newBufferedWriter(logFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+            logWriter = Files.newBufferedWriter(logFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             loggers.forEach((k, v) -> v.setWriter(logWriter));
         } catch (Exception e) {
             e.printStackTrace();
