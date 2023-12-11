@@ -16,14 +16,12 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import customskinloader.fake.FakeSkinManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
-import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Group;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -40,29 +38,6 @@ public abstract class MixinSkinManager {
         )
         private void inject_init(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService, CallbackInfo callbackInfo) {
             FakeSkinManager.setSkinCacheDir(skinCacheDirectory);
-        }
-
-        @ModifyVariable(
-            method = "Lnet/minecraft/client/resources/SkinManager;loadSkin(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation;",
-            at = @At(
-                value = "STORE",
-                ordinal = 0
-            ),
-            ordinal = 0
-        )
-        private ResourceLocation modifyVariable_loadSkin(ResourceLocation resourceLocation, MinecraftProfileTexture profileTexture, MinecraftProfileTexture.Type textureType, SkinManager.SkinAvailableCallback skinAvailableCallback) {
-            return FakeSkinManager.setResourceLocation(resourceLocation, profileTexture);
-        }
-
-        @ModifyArg(
-            method = "Lnet/minecraft/client/resources/SkinManager;loadSkin(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation;",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;skinAvailable(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V"
-            )
-        )
-        private MinecraftProfileTexture modifyArg_loadSkin(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
-            return FakeSkinManager.getModelCache(profileTexture, location);
         }
 
         // 18w43b ~ 19w37a
@@ -250,8 +225,8 @@ public abstract class MixinSkinManager {
                 remap = false
             )
         )
-        private Object redirect_getOrLoad(LoadingCache<?, ?> loadingCache, Object cacheKey) throws Exception {
-            return FakeSkinManager.loadCache(loadingCache, cacheKey);
+        private Object redirect_getOrLoad(LoadingCache<?, ?> loadingCache, Object cacheKey, GameProfile profile) throws Exception {
+            return FakeSkinManager.loadCache(loadingCache, cacheKey, profile);
         }
     }
 }

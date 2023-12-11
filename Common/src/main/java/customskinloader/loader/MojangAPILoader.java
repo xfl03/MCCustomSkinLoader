@@ -109,6 +109,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         return null;
     }
 
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
     private static final Map<String, GameProfile> gameProfileCache = new ConcurrentHashMap<>();
 
     public static GameProfile loadGameProfileCached(String apiRoot, String username) {
@@ -118,14 +119,12 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
     //Username -> UUID
     public static GameProfile loadGameProfile(String apiRoot, String username) {
         //Doc (https://wiki.vg/Mojang_API#Playernames_-.3E_UUIDs)
-        Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-
-        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft").setCacheTime(600).setPayload(gson.toJson(Collections.singletonList(username))));
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft").setCacheTime(600).setPayload(GSON.toJson(Collections.singletonList(username))));
         if (StringUtils.isEmpty(responce.content)) {
             return null;
         }
 
-        GameProfile[] profiles = gson.fromJson(responce.content, GameProfile[].class);
+        GameProfile[] profiles = GSON.fromJson(responce.content, GameProfile[].class);
         if (profiles.length == 0) {
             return null;
         }
@@ -161,8 +160,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
             return profile;
         }
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
-        MinecraftProfilePropertiesResponse propertiesResponce = gson.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
+        MinecraftProfilePropertiesResponse propertiesResponce = GSON.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
         GameProfile newGameProfile = new GameProfile(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(propertiesResponce), TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME.get(propertiesResponce));
         newGameProfile.getProperties().putAll(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(propertiesResponce));
 
@@ -177,13 +175,12 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         if (textureProperty == null) {
             return Maps.newHashMap();
         }
-        String value = TextureUtil.AuthlibField.PROPERTY_VALUE_FIELD.get(textureProperty);
+        String value = TextureUtil.AuthlibField.PROPERTY_VALUE.get(textureProperty);
         if (StringUtils.isBlank(value)) {
             return Maps.newHashMap();
         }
         String json = new String(Base64.decodeBase64(value), StandardCharsets.UTF_8);
-        Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
-        MinecraftTexturesPayload result = gson.fromJson(json, MinecraftTexturesPayload.class);
+        MinecraftTexturesPayload result = GSON.fromJson(json, MinecraftTexturesPayload.class);
 
         if (result == null || TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result) == null) {
             return Maps.newHashMap();

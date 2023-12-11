@@ -35,10 +35,10 @@ net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; method_4654
 net/minecraft/client/resources/SkinManager$1 net/minecraft/class_1071$1
 	lambda$load$0 (Lcom/mojang/authlib/minecraft/MinecraftSessionService;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/SkinManager$TextureInfo; method_52867
+	lambda$load$0 (Lnet/minecraft/client/resources/SkinManager$CacheKey;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)Lcom/mojang/authlib/minecraft/MinecraftProfileTextures; method_54647
 	load (Lnet/minecraft/client/resources/SkinManager$CacheKey;)Ljava/util/concurrent/CompletableFuture; method_52868
 net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/class_1071$class_8686
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/class_1071$class_1072
-	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V onSkinTextureAvailable
 net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/class_1071$class_8687
 	type field_45641
 	registerTexture (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture; method_52873

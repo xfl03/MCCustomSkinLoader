@@ -57,19 +57,6 @@ function initializeCoreMod() {
                             || mn.desc.equals("(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$ISkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation;"))) { // 1.14.2+
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
-                            if (node.getOpcode() === Opcodes.INVOKESPECIAL && node.owner.equals("net/minecraft/util/ResourceLocation") && checkName(node.name, "<init>") && node.desc.equals("(Ljava/lang/String;)V")) {
-                                mn.instructions.insert(node, node = new VarInsnNode(Opcodes.ALOAD, 1));
-                                mn.instructions.insert(node, node = new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "setResourceLocation", "(Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Lnet/minecraft/util/ResourceLocation;", false));
-                            }
-
-                            if (node.getOpcode() === Opcodes.INVOKEINTERFACE
-                                && (node.owner.equals("net/minecraft/client/resources/SkinManager$SkinAvailableCallback") // 1.13.2-
-                                    || node.owner.equals("net/minecraft/client/resources/SkinManager$ISkinAvailableCallback")) // 1.14.2+
-                                && checkName(node.name, "onSkinTextureAvailable") && node.desc.equals("(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V")) {
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 5));
-                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "getModelCache", "(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lnet/minecraft/util/ResourceLocation;)Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;", false));
-                            }
-
                             if (node.getOpcode() === Opcodes.INVOKESPECIAL
                                 && (node.owner.equals("net/minecraft/client/renderer/texture/ThreadDownloadImageData") // 1.13.2-
                                     || node.owner.equals("net/minecraft/client/renderer/texture/DownloadingTexture")) // 1.14.2+

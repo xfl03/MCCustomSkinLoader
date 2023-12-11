@@ -7,6 +7,9 @@ customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeI
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; m_213713_
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
 	func_195551_G ()Lnet/minecraft/resources/IResourceManager; m_91098_
+customskinloader/fake/itf/IFakeSkinManagerCacheKey customskinloader/fake/itf/IFakeSkinManagerCacheKey
+	profile ()Lcom/mojang/authlib/GameProfile; f_290972_
+	packedTextures ()Lcom/mojang/authlib/properties/Property; f_303729_
 net/minecraft/client/Minecraft net/minecraft/client/Minecraft
 	gameDir f_91069_
 	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; m_91089_
@@ -51,7 +54,6 @@ net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinMa
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; m_118825_
 net/minecraft/client/resources/SkinManager$1 net/minecraft/client/resources/SkinManager$1
 net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/client/resources/SkinManager$CacheKey
-	profile ()Lcom/mojang/authlib/GameProfile; f_290972_
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/client/resources/SkinManager$SkinTextureCallback
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V m_118856_
 net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/client/resources/SkinManager$TextureCache

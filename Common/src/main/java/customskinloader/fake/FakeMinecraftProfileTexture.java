@@ -2,15 +2,16 @@ package customskinloader.fake;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.utils.HttpTextureUtil;
-import net.minecraft.util.ResourceLocation;
 
 public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
+    private final static Map<String, String> MODEL_CACHE = new ConcurrentHashMap<>();
+
     private final HttpTextureUtil.HttpTextureInfo info;
     private final Map<String, String> metadata;
-    private ResourceLocation resourceLocation;
 
     public FakeMinecraftProfileTexture(String url, Map<String, String> metadata) {
         super(url, metadata);
@@ -18,22 +19,27 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
         this.metadata = metadata;
     }
 
-    public void setResourceLocation(ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
-    }
-
-    public ResourceLocation getResourceLocation() {
-        return this.resourceLocation;
-    }
-
     @Override
     public String getUrl() {
         return this.info.url;
     }
 
-    public void setModule(String module) {
+    @Override
+    public String getMetadata(final String key) {
+        String value = super.getMetadata(key);
+        if ("model".equals(key) && "auto".equals(value)) {
+            String model = MODEL_CACHE.get(this.getHash());
+            if (model != null) {
+                return model;
+            }
+        }
+        return value;
+    }
+
+    public void setModel(String model) {
         if (this.metadata != null) {
-            this.metadata.put("module", module);
+            MODEL_CACHE.put(this.getHash(), model);
+            this.metadata.put("model", model);
         }
     }
 
