@@ -20,33 +20,6 @@ public class HttpUtil0 {
         return url != null && !url.startsWith("http://") && !url.startsWith("https://");
     }
     
-    //From: http://blog.csdn.net/xiyushiyi/article/details/46685387
-    public static void ignoreHttpsCertificate(){
-        HostnameVerifier doNotVerify = new HostnameVerifier() {
-
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
-        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[] {};
-            }
-            public void checkClientTrusted(X509Certificate[] chain, String authType){}
-            public void checkServerTrusted(X509Certificate[] chain, String authType){}
-        }};
-
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            //HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultSSLSocketFactory(new SSLSocketFactoryFacade());
-            HttpsURLConnection.setDefaultHostnameVerifier(doNotVerify);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
     public static String parseAddress(String address) {
         if(StringUtils.isEmpty(address))
             return null;

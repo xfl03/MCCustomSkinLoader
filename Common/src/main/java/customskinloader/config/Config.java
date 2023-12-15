@@ -24,7 +24,6 @@ public class Config {
     //Function
     public boolean enableDynamicSkull = true;
     public boolean enableTransparentSkin = true;
-    public boolean forceIgnoreHttpsCertificate = false;
     public boolean forceLoadAllTextures = true;
     public boolean enableCape = true;
     public int threadPoolSize = 8;
@@ -76,8 +75,6 @@ public class Config {
         config.updateLoadlist();
         config.initLocalFolder();
         config.threadPoolSize = Math.max(config.threadPoolSize, 1);
-        if (config.forceIgnoreHttpsCertificate)
-            HttpUtil0.ignoreHttpsCertificate();
         if (config.enableCacheAutoClean && !config.enableLocalProfileCache) {
             try {
                 FileUtils.deleteDirectory(HttpRequestUtil.CACHE_DIR);
