@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.properties.Property;
 import customskinloader.fake.FakeSkinManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
@@ -227,6 +228,21 @@ public abstract class MixinSkinManager {
         )
         private Object redirect_getOrLoad(LoadingCache<?, ?> loadingCache, Object cacheKey, GameProfile profile) throws Exception {
             return FakeSkinManager.loadCache(loadingCache, cacheKey, profile);
+        }
+    }
+
+    // 23w42a+
+    @Mixin(SkinManager.class)
+    public abstract static class V3 {
+        @ModifyArg(
+            method = "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;",
+            at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/resources/SkinManager$CacheKey;<init>(Ljava/util/UUID;Lcom/mojang/authlib/properties/Property;)V"
+            )
+        )
+        private Property modifyArg_getOrLoad(Property property) {
+            return FakeSkinManager.createProperty(property);
         }
     }
 }

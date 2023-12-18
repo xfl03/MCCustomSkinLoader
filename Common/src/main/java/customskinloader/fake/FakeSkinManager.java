@@ -53,6 +53,13 @@ public class FakeSkinManager {
     /**
      * Invoked from {@link SkinManager#getOrLoad(GameProfile)}
      */
+    public static Property createProperty(Property property) {
+        return property == null ? new Property(null, null) : new Property(TextureUtil.AuthlibField.PROPERTY_NAME.get(property), TextureUtil.AuthlibField.PROPERTY_VALUE.get(property), TextureUtil.AuthlibField.PROPERTY_SIGNATURE.get(property));
+    }
+
+    /**
+     * Invoked from {@link SkinManager#getOrLoad(GameProfile)}
+     */
     public static Object loadCache(LoadingCache<?, ?> loadingCache, Object cacheKey, GameProfile profile) throws Exception {
         return cacheLoader.load(FakeCacheKey.wrapCacheKey(cacheKey, profile));
     }

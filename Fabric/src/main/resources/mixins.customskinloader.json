@@ -15,6 +15,7 @@
     "MixinSkinManager$TextureCache",
     "MixinSkinManager$V1",
     "MixinSkinManager$V2",
+    "MixinSkinManager$V3",
     "MixinThreadDownloadImageData$V1",
     "MixinThreadDownloadImageData$V2"
   ],

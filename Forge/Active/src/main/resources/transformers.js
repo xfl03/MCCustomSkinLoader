@@ -125,7 +125,9 @@ function initializeCoreMod() {
                     } else if (checkName(mn.name, "m_293351_") && mn.desc.equals("(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;")) { // 1.20.2+
                         for (var iterator = mn.instructions.iterator(); iterator.hasNext();) {
                             var node = iterator.next();
-                            if (node.getOpcode() === Opcodes.INVOKEINTERFACE && node.owner.equals("com/google/common/cache/LoadingCache") && checkName(node.name, "getUnchecked") && node.desc.equals("(Ljava/lang/Object;)Ljava/lang/Object;")) {
+                            if (node.getOpcode() === Opcodes.INVOKESPECIAL && node.owner.equals("net/minecraft/client/resources/SkinManager$CacheKey") && checkName(node.name, "<init>") && node.desc.equals("(Ljava/util/UUID;Lcom/mojang/authlib/properties/Property;)V")) {
+                                mn.instructions.insertBefore(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "createProperty", "(Lcom/mojang/authlib/properties/Property;)Lcom/mojang/authlib/properties/Property;", false))
+                            } else if (node.getOpcode() === Opcodes.INVOKEINTERFACE && node.owner.equals("com/google/common/cache/LoadingCache") && checkName(node.name, "getUnchecked") && node.desc.equals("(Ljava/lang/Object;)Ljava/lang/Object;")) {
                                 mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1));
                                 mn.instructions.set(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadCache", "(Lcom/google/common/cache/LoadingCache;Ljava/lang/Object;Lcom/mojang/authlib/GameProfile;)Ljava/lang/Object;", false));
                             }

@@ -76,14 +76,14 @@ public class CustomSkinLoader {
         // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
         if (username == null) {
             logger.warning("Could not load profile: username is null.");
-            return function.apply(null);
+            return function.apply(new UserProfile());
         }
         String tempName = Thread.currentThread().getName();
         Thread.currentThread().setName(username); // Change Thread Name
         if (profileCache.isLoading(credential)) {
             profileCache.putLoader(credential, function);
             Thread.currentThread().setName(tempName);
-            return function.apply(null);
+            return function.apply(new UserProfile());
         }
         Object result = function.apply(loadProfile(gameProfile));
         Thread.currentThread().setName(tempName);
