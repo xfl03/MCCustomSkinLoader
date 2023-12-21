@@ -113,7 +113,7 @@ public class CustomSkinLoader {
             profileCache.setLoading(credential, true);
             profile = loadProfile0(gameProfile, false);
         }
-        return profile;
+        return profile == null ? new UserProfile() : profile;
     }
 
     //Core
