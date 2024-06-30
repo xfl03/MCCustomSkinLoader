@@ -24,7 +24,6 @@ dependencies {
 
 import customskinloader.gradle.util.RemapUtil
 import customskinloader.gradle.util.SourceUtil
-import groovy.json.JsonSlurper
 
 apply plugin: 'org.spongepowered.mixin'
 
@@ -37,48 +36,5 @@ mixin {
     reobfNotchSrgFile = "build/mixin.srg"
 }
 
-SourceUtil.addDependencies project, project(":Common")
+SourceUtil.addDependencies project, project(":Common"), project(":Vanilla/Common")
 RemapUtil.remapSources project
-
-// Resolve snapshot versions
-tasks.publishModrinth.doFirst {
-    def snapshot = []
-    gameVersions.groupBy { v -> v.endsWith("-Snapshot") }.with {
-        this.tasks.publishModrinth.gameVersions = it[false]
-        snapshot = it[true]
-    }
-
-    // The CustomSkinLoader Fabric edition should support all Minecraft snapshot edition.
-    def jsonSlurper = new JsonSlurper()
-    def officialVersionList = [] as Set
-    plugins.withId "net.minecraftforge.gradle.forge", { plugin ->
-        def currentRelease = null
-        // Get version manifest json.
-        // https://github.com/MinecraftForge/ForgeGradle/blob/fc67182a61926f0bdb0d12da5fba7f4322f64d86/src/main/java/net/minecraftforge/gradle/common/BasePlugin.java#L229
-        jsonSlurper.parse(plugin.cacheFile("McManifest.json")).versions.each { version ->
-            if (version.type == "snapshot") {
-                // If the first version is a snapshot, since Mojang no longer provides the target version for snapshots,
-                // we assume that new snapshots will not be supported until the next release.
-                if (currentRelease == null) {
-                    return
-                }
-            } else if (version.type == "release") {
-                currentRelease = version.id.with {
-                    it.toString().split($/\./$).with { "${it[0]}.${it[1]}" }
-                }
-            } else {
-                // We do not care about other types.
-                return
-            }
-            if (snapshot.contains("${currentRelease}-Snapshot".toString())) {
-                officialVersionList << version.id
-            }
-        }
-    }
-    jsonSlurper.parse(new URL("https://meta.fabricmc.net/v2/versions/game")).each { version ->
-        // Exclude experimental editions which is not support in Modrinth.
-        if (!version.stable && officialVersionList.contains(version.version)) {
-            gameVersions << version.version.replace(" ", "-").replace("Pre-Release-", "pre") // Fix the id of the earlier preview versions of 1.14.
-        }
-    }
-}

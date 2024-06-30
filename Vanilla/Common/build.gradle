@@ -1,0 +1,12 @@
+// This subproject is only to provide dependency for other subprojects.
+
+dependencies {
+    implementation project(':Common')
+    implementation 'org.spongepowered:mixin:0.8.5'
+}
+
+compileJava {
+    // Disable Mixin AP
+    // Since 0.8.4, Mixin no longer provide the jar exclude AP, we should disable them manually
+    options.compilerArgs << "-proc:none"
+}

@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeCapeBuffer extends FakeSkinBuffer {
-    private static final ResourceLocation TEXTURE_ELYTRA = new ResourceLocation("textures/entity/elytra.png");
+    private static final ResourceLocation TEXTURE_ELYTRA = new ResourceLocation("minecraft", "textures/entity/elytra.png");
     private static int loadedGlobal = 0;
     private static FakeImage elytraImage;
 

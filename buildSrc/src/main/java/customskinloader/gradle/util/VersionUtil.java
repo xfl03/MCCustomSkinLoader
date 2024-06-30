@@ -43,9 +43,6 @@ public class VersionUtil {
     }
 
     public static String getMcVersion(String filename) {
-        if (filename.endsWith(".json")) {
-            return filename.substring(0, filename.indexOf('-'));
-        }
         return filename.substring(filename.indexOf('_') + 1, filename.indexOf('-'));
     }
 
@@ -60,18 +57,26 @@ public class VersionUtil {
     }
 
     public static String getEdition(Project project) {
-        return project.getName().contains("Vanilla") ?
-                ConfigUtil.getConfigString(project, "minecraft_version") :
-                project.getName().replace("/", "");
+        return project.getName().replace("/", "");
     }
 
-    public static List<String> getLoaders(Project project) {
-        String loaderName = project.getName().split("/")[0];
-        List<String> loaders = new ArrayList<>(2);
-        loaders.add(loaderName);
-        if (loaderName.equals("Fabric")) {
-            loaders.add("Quilt");
+    public static Map<String, String> parseDependencies(String dependencies) {
+        Map<String, String> map = new LinkedHashMap<>();
+        if (dependencies != null) {
+            String[] loaderVersions = dependencies.split(";");
+            for (String loader : loaderVersions) {
+                String[] mcVersions = loader.split("\\|");
+                map.put(mcVersions[0], mcVersions[1]);
+            }
         }
-        return loaders;
+        return map;
+    }
+
+    public static String getDependencies(String dependencies) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> dependency : parseDependencies(dependencies).entrySet()) {
+            sb.append("\"").append(dependency.getKey()).append("\": \"").append(dependency.getValue()).append("\",\n    ");
+        }
+        return sb.substring(1, sb.length() - 7);
     }
 }

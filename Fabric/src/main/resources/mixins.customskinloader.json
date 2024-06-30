@@ -1,27 +1,27 @@
 {
-  "compatibilityLevel": "JAVA_8",
-  "mixinPriority": 1010,
-  "package": "customskinloader.mixin",
-  "client": [
-    "MixinGuiPlayerTabOverlay",
-    "MixinIImageBuffer",
-    "MixinIResource",
-    "MixinIResourceManager",
-    "MixinLayerCape",
-    "MixinMinecraft",
-    "MixinRenderPlayer",
-    "MixinSkinManager$1",
-    "MixinSkinManager$CacheKey",
-    "MixinSkinManager$TextureCache",
-    "MixinSkinManager$V1",
-    "MixinSkinManager$V2",
-    "MixinSkinManager$V3",
-    "MixinThreadDownloadImageData$V1",
-    "MixinThreadDownloadImageData$V2"
-  ],
-  "refmap": "mixins.customskinloader.refmap.json",
-  "plugin": "customskinloader.fabric.MixinConfigPlugin",
-  "injectors": {
-    "defaultRequire": 1
-  }
+    "compatibilityLevel": "JAVA_8",
+    "mixinPriority": 1010,
+    "package": "customskinloader.mixin",
+    "client": [
+        "MixinGuiPlayerTabOverlay",
+        "MixinIImageBuffer",
+        "MixinIResource",
+        "MixinIResourceManager",
+        "MixinLayerCape",
+        "MixinMinecraft",
+        "MixinRenderPlayer",
+        "MixinSkinManager$1",
+        "MixinSkinManager$CacheKey",
+        "MixinSkinManager$TextureCache",
+        "MixinSkinManager$V1",
+        "MixinSkinManager$V2",
+        "MixinSkinManager$V3",
+        "MixinThreadDownloadImageData$V1",
+        "MixinThreadDownloadImageData$V2"
+    ],
+    "refmap": "mixins.customskinloader.refmap.json",
+    "plugin": "customskinloader.fabric.MixinConfigPlugin",
+    "injectors": {
+        "defaultRequire": 1
+    }
 }

@@ -1,0 +1,37 @@
+
+jar {
+    manifest {
+        attributes([
+                "Automatic-Module-Name" : "customskinloader",
+                "MixinConfigs": "mixins.customskinloader.json"
+        ])
+    }
+
+    exclude 'net/minecraft/client/resources/**'
+}
+sourceJar {
+    exclude 'com/**'
+    exclude 'net/**'
+}
+
+dependencies {
+    implementation project(":Forge/Common")
+}
+
+import customskinloader.gradle.util.RemapUtil
+import customskinloader.gradle.util.SourceUtil
+
+apply plugin: 'org.spongepowered.mixin'
+
+apply from: rootProject.file("buildSrc/patch.gradle")
+patchMixin()
+
+mixin {
+    add sourceSets.main, "mixins.customskinloader.refmap.json"
+    reobfSrgFile = "build/mixin.srg"
+    reobfNotchSrgFile = "build/mixin.srg"
+}
+
+SourceUtil.addDependencies project, project(":Common"), project(":Vanilla/Common")
+RemapUtil.remapSources project
+

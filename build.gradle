@@ -13,8 +13,6 @@ wrapper {
     gradleVersion = "4.9"
 }
 
-import customskinloader.gradle.util.CurseForgeUtil
-import customskinloader.gradle.util.ModrinthUtil
 import customskinloader.gradle.util.RemapUtil
 import customskinloader.gradle.util.VersionUtil
 
@@ -60,11 +58,6 @@ subprojects {
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
-
-        exclude "com/**"
-        exclude "net/minecraft/client/renderer/RenderType.class"
-        exclude "net/minecraft/client/renderer/texture/**"
-        exclude "net/minecraft/resources/**"
     }
 
     // For real subprojects
@@ -76,15 +69,19 @@ subprojects {
                 expand([
                         modVersion         : rootProject.ext.config.version,
                         modFullVersion     : project.version,
-                        modShortFullVersion: shortVersion,
-                        mcVersion          : config.minecraft_version,
-                        mcFullVersions     : config.minecraft_full_versions,
-                        forgeVersion       : config.forge_version,
+                        dependencies       : VersionUtil.getDependencies(project.ext.config.dependencies.toString()),
                         gitVersion         : System.getenv("CIRCLE_SHA1") ?: System.getenv("GITHUB_SHA"),
                         buildUrl           : System.getenv("CIRCLE_BUILD_URL") ?: "https://github.com/xfl03/MCCustomSkinLoader/actions/runs/" + System.getenv("GITHUB_RUN_ID"),
                         releaseTime        : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
                 ])
             }
+        }
+
+        jar {
+            exclude "com/**"
+            exclude "net/minecraft/client/renderer/RenderType.class"
+            exclude "net/minecraft/client/renderer/texture/**"
+            exclude "net/minecraft/resources/**"
         }
 
         task genSrgMap {
@@ -131,8 +128,5 @@ subprojects {
             }
         }
         build.finalizedBy afterBuild
-
-        CurseForgeUtil.provideCurseForge project
-        ModrinthUtil.provideModrinth project
     }
 }

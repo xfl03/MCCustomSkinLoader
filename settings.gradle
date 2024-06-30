@@ -3,12 +3,17 @@ rootProject.name = "MCCustomSkinLoader"
 //Base Project
 include "Common"
 
+//Vanilla Base Project
+include "Vanilla/Common"
+
 //Forge Base Project
 include "Forge/Common"
 //Forge Edition for [1.8,1.16.5]
-include "Forge/Legacy"
-//Forge Edition for [1.17,)
-include "Forge/Active"
+include "Forge/V1"
+//Forge Edition for [1.17,1.20.4]
+include "Forge/V2"
+//Forge Edition for [1.20.5,) and NeoForge Edition for [1.20.2,)
+include "Forge/V3"
 
 //Fabric Edition for [1.14,)
 include "Fabric"

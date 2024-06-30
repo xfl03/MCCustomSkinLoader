@@ -42,9 +42,6 @@ public abstract class UploadBaseTask extends DefaultTask {
             }
             StorageService.put(key, file);
             String mcversion = VersionUtil.getMcVersion(file.getName());
-            if (mcversion.equals("ForgeLegacy")) {
-                mcversion = "Forge";
-            }
             System.out.printf("csl-%s-%s\t%s%n",
                     mcversion.replace(".", "").toLowerCase(),
                     cslversion, CdnUtil.CLOUDFLARE_CDN_ROOT + key);
@@ -66,9 +63,9 @@ public abstract class UploadBaseTask extends DefaultTask {
                 .forEach(project -> {
                     String edition = VersionUtil.getEdition(project);
                     String url = latest.getUrl(edition);
-                    VersionUtil.getMcMajorVersions(
-                                    ConfigUtil.getConfigString(project, "minecraft_full_versions"))
-                            .forEach(mcMajorVersion -> detail.addDetail(mcMajorVersion, edition, url));
+                    VersionUtil.parseDependencies(ConfigUtil.getConfigString(project, "dependencies"))
+                            .forEach((loader, version) -> VersionUtil.getMcMajorVersions(version)
+                                .forEach(mcMajorVersion -> detail.addDetail(mcMajorVersion, loader, url)));
                 });
 
         detail.sortDetails();

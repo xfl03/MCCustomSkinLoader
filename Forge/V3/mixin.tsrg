@@ -1,0 +1,48 @@
+com/mojang/blaze3d/matrix/MatrixStack com/mojang/blaze3d/vertex/PoseStack
+net/minecraft/client/Minecraft net/minecraft/client/Minecraft
+	isIntegratedServerRunning ()Z isLocalServer
+net/minecraft/client/entity/AbstractClientPlayer net/minecraft/client/player/AbstractClientPlayer
+net/minecraft/client/gui/Gui net/minecraft/client/gui/GuiGraphics
+net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/client/gui/components/PlayerTabOverlay
+	renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V render
+	renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V render
+	renderPlayerlist (Lnet/minecraft/client/gui/Gui;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V render
+net/minecraft/client/model/ModelRenderer net/minecraft/client/model/geom/ModelPart
+net/minecraft/client/renderer/IImageBuffer net/minecraft/client/renderer/HttpTextureProcessor
+net/minecraft/client/renderer/IRenderTypeBuffer net/minecraft/client/renderer/MultiBufferSource
+net/minecraft/client/renderer/RenderType net/minecraft/client/renderer/RenderType
+	getEntitySolid (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType; entitySolid
+net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/client/renderer/texture/HttpTexture
+	processTask onDownloaded
+	loadTexture (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; load
+	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/client/renderer/texture/NativeImage; processLegacySkin
+net/minecraft/client/renderer/entity/RenderPlayer net/minecraft/client/renderer/entity/player/PlayerRenderer
+	renderItem (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V renderHand
+	renderItem (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;Lnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V renderHand
+net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/client/renderer/entity/layers/CapeLayer
+	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V render
+	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V render
+net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/NativeImage
+net/minecraft/client/renderer/texture/TextureManager net/minecraft/client/renderer/texture/TextureManager
+net/minecraft/client/resources/PlayerSkin net/minecraft/client/resources/PlayerSkin
+net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinManager
+	func_210275_a (Lcom/mojang/authlib/GameProfile;ZLnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V lambda$registerSkins$4
+	func_210276_a (Ljava/util/Map;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V lambda$registerSkins$2
+	getInsecureSkin (Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/PlayerSkin; getInsecureSkin
+	getOrLoad (Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture; getOrLoad
+	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V registerSkins
+	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; registerTexture
+	loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; getInsecureSkinInformation
+net/minecraft/client/resources/SkinManager$1 net/minecraft/client/resources/SkinManager$1
+	lambda$load$0 (Lcom/mojang/authlib/minecraft/MinecraftSessionService;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/SkinManager$TextureInfo; lambda$load$0
+	lambda$load$0 (Lnet/minecraft/client/resources/SkinManager$CacheKey;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)Lcom/mojang/authlib/minecraft/MinecraftProfileTextures; lambda$load$0
+	load (Lnet/minecraft/client/resources/SkinManager$CacheKey;)Ljava/util/concurrent/CompletableFuture; load
+net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/client/resources/SkinManager$CacheKey
+net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/client/resources/SkinManager$SkinTextureCallback
+net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/client/resources/SkinManager$TextureCache
+	type type
+	registerTexture (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture; registerTexture
+net/minecraft/client/resources/SkinManager$TextureInfo net/minecraft/client/resources/SkinManager$TextureInfo
+net/minecraft/scoreboard/ScoreObjective net/minecraft/world/scores/Objective
+net/minecraft/scoreboard/Scoreboard net/minecraft/world/scores/Scoreboard
+net/minecraft/util/ResourceLocation net/minecraft/resources/ResourceLocation

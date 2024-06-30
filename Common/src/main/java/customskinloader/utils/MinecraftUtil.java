@@ -40,7 +40,7 @@ public class MinecraftUtil {
         }
 
         //version.json can be found in 1.14+
-        URL versionFile = MinecraftUtil.class.getResource("/version.json");
+        URL versionFile = ClassLoader.getSystemClassLoader().getResource("version.json");
         if (versionFile != null) {
             try (
                     InputStream is = versionFile.openStream();

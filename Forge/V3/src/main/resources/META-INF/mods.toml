@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[0,)" # The javafml version number for neoforge is 1
+license="GPL-3.0-only"
+issueTrackerURL="https://github.com/xfl03/MCCustomSkinLoader/issues"
+clientSideOnly=true # added by forge
+[[mods]]
+modId="customskinloader"
+version="${modFullVersion}"
+displayName="CustomSkinLoader"
+displayTest="IGNORE_ALL_VERSION" # neoforge 1.20.4+
+description='''
+Custom Skin Loader for Minecraft
+'''
+displayURL="https://github.com/xfl03/MCCustomSkinLoader"
+authors=["xfl03", "JLChnToZ"]
+[[dependencies.customskinloader]]
+modId="forge"
+mandatory=false
+type="optional" # added by neoforge 1.20.4+
+versionRange="[50,)"
+ordering="NONE"
+side="CLIENT"
+[[dependencies.customskinloader]]
+modId="neoforge"
+mandatory=false
+type="required" # added by neoforge 1.20.4+
+versionRange="[20.2,)"
+ordering="NONE"
+side="CLIENT"
+[[dependencies.customskinloader]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.2,)"
+ordering="NONE"
+side="CLIENT"

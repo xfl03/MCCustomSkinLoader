@@ -2,9 +2,9 @@
   "name": "CustomSkinLoader",
   "version": "${modVersion}",
   "fullVersion": "${modFullVersion}",
-  "mcVersion": "${mcVersion}",
-  "mcFullVersions": "${mcFullVersions}",
-  "forgeVersion": "${forgeVersion}",
+  "dependencies": {
+    "${dependencies}"
+  },
   "gitVersion": "${gitVersion}",
   "buildUrl": "${buildUrl}",
   "buildTime": "${releaseTime}"

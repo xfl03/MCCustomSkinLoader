@@ -16,5 +16,6 @@
   "environment": "client",
   "mixins": [
     "mixins.customskinloader.json"
-  ]
+  ],
+  "accessWidener": "customskinloader.accesswidener"
 }

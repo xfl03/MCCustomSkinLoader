@@ -2,7 +2,11 @@ package customskinloader.config;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 import customskinloader.CustomSkinLoader;
 import customskinloader.loader.ProfileLoader;
@@ -10,7 +14,6 @@ import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.plugin.PluginLoader;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
-import customskinloader.utils.HttpUtil0;
 import customskinloader.utils.Version;
 import org.apache.commons.io.FileUtils;
 

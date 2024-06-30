@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Function;
 
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.CustomSkinLoader;
 import customskinloader.utils.TimeUtil;
 import org.apache.commons.io.FileUtils;

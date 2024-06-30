@@ -14,8 +14,7 @@ public class CslLatest {
     }
 
     public String getUrl(String edition) {
-        String e = edition.replace("ForgeLegacy", "Forge");
-        return Optional.ofNullable(downloads.get(e))
-                .orElseGet(() -> launchermeta.get(e));
+        return Optional.ofNullable(downloads.get(edition))
+                .orElseGet(() -> launchermeta.get(edition));
     }
 }
