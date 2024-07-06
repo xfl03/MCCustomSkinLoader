@@ -86,15 +86,29 @@ jobs:
         id: cslenv
         run: |
           output="$(ls build/libs | grep -v "sources")"
-          if [[ "${{ matrix.modtype }}" == "Forge"* ]]; then
-            modloader="Forge"
-            path=$(echo ${{ matrix.modtype }} | sed "s#-#/#")
-          else
-            modloader=${{ matrix.modtype }}
-            path=${{ matrix.modtype }}
-          fi
+          
+          case "${{ matrix.modtype }}" in
+              "ForgeV1")
+                  modloader="Forge"
+                  ;;
+              "ForgeV2" | "ForgeV3")
+                  modloader=$(cat <<EOF
+          Forge
+          NeoForge
+          EOF
+          )
+                  ;;
+              "Fabric")
+                  modloader="Fabric"
+                  ;;
+              *)
+                  echo "Unsupported modtype: ${{ matrix.modtype }}"
+                  exit 1
+                  ;;
+          esac
+          
           echo "path=$path" >> $GITHUB_OUTPUT
-          echo "modloader=$modloader" >> $GITHUB_OUTPUT
+          echo "modloader="$modloader"" >> $GITHUB_OUTPUT
           echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
           echo "version=$(grep "version=" build.properties | grep -v "#" | sed "s/version=//")" >> $GITHUB_OUTPUT
           echo "edition=$(echo ${{ matrix.modtype }} | sed "s/-//")" >> $GITHUB_OUTPUT
