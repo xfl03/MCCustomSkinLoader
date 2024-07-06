@@ -53,7 +53,7 @@ jobs:
     strategy:
       matrix:
         website: [CurseForge_Modrinth]
-        modtype: [Fabric,Forge-Active,Forge-Legacy]
+        modtype: [Fabric,ForgeV1,ForgeV2,ForgeV3]
         include:
           - 
             website: ObjectStorage
