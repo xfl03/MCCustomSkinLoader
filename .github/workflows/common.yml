@@ -90,6 +90,7 @@ jobs:
           case "${{ matrix.modtype }}" in
               "ForgeV1")
                   modloader="Forge"
+                  path=`echo "${{ matrix.modtype }}" | sed 's#V#/V#'`
                   ;;
               "ForgeV2" | "ForgeV3")
                   modloader=$(cat <<EOF
@@ -97,9 +98,11 @@ jobs:
           NeoForge
           EOF
           )
+                  path=`echo "${{ matrix.modtype }}" | sed 's#V#/V#'`
                   ;;
               "Fabric")
                   modloader="Fabric"
+                  path="${{ matrix.modtype }}"
                   ;;
               *)
                   echo "Unsupported modtype: ${{ matrix.modtype }}"
