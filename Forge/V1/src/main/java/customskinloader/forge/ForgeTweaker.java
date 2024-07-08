@@ -33,6 +33,9 @@ public class ForgeTweaker implements ITweaker {
 
     @Override
     public void acceptOptions(List<String> args, File gameDir, File assetsDir, String profile) {
+        if (gameDir == null) {
+            gameDir = new File(".");
+        }
         LogManager.setLogFile(gameDir.toPath().resolve("CustomSkinLoader/CustomSkinLoader.log"));
     }
 

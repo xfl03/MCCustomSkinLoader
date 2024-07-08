@@ -85,7 +85,6 @@ public class MinecraftUtil {
     }
 
     public static String getCredential(GameProfile profile) {
-        return (profile == null || profile.hashCode() == 0) ? null :
-                (profile.getId() == null ? profile.getName() : String.format("%s-%s", profile.getName(), profile.getId()));
+        return profile == null ? null : String.format("%s-%s", profile.getName(), profile.getId());
     }
 }
