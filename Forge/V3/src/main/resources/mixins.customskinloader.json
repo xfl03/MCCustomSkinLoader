@@ -8,6 +8,7 @@
         "MixinIResourceManager",
         "MixinLayerCape",
         "MixinMinecraft",
+        "MixinNativeImage",
         "MixinRenderPlayer",
         "MixinSkinManager$1",
         "MixinSkinManager$CacheKey",

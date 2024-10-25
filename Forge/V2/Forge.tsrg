@@ -7,6 +7,8 @@ customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeI
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; m_213713_
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
 	func_195551_G ()Lnet/minecraft/resources/IResourceManager; m_91098_
+customskinloader/fake/itf/IFakeNativeImage customskinloader/fake/itf/IFakeNativeImage
+	getPixel (II)I getPixel
 customskinloader/fake/itf/IFakeSkinManagerCacheKey customskinloader/fake/itf/IFakeSkinManagerCacheKey
 	profile ()Lcom/mojang/authlib/GameProfile; f_290972_
 	packedTextures ()Lcom/mojang/authlib/properties/Property; f_303729_

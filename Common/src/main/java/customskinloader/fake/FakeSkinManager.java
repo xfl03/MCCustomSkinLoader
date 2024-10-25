@@ -16,7 +16,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import customskinloader.CustomSkinLoader;
-import customskinloader.fake.itf.IFakeSkinManagerCacheKey;
+import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
@@ -217,21 +217,17 @@ public class FakeSkinManager {
 
     public static class FakeCacheKey {
         public static Object wrapCacheKey(Object cacheKey, GameProfile profile) {
-            IFakeSkinManagerCacheKey fakeCacheKey = (IFakeSkinManagerCacheKey) cacheKey;
-            if (fakeCacheKey.profile() != null) {
-                return cacheKey; // 23w31a ~ 23w41a
-            } else {
-                TextureUtil.AuthlibField.PROPERTY_SIGNATURE.set(fakeCacheKey.packedTextures(), MojangAPILoader.GSON.toJson(profile, GameProfile.class));
-                return fakeCacheKey; // 23w42a+
+            if (FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey) == null) { // 23w42a+
+                TextureUtil.AuthlibField.PROPERTY_SIGNATURE.set(FakeInterfaceManager.SkinManagerCacheKey_packedTextures(cacheKey), MojangAPILoader.GSON.toJson(profile, GameProfile.class));
             }
+            return cacheKey;
         }
 
         public static GameProfile unwrapCacheKey(Object cacheKey) {
-            IFakeSkinManagerCacheKey fakeCacheKey = (IFakeSkinManagerCacheKey) cacheKey;
-            if (fakeCacheKey.profile() != null) {
-                return fakeCacheKey.profile(); // 23w31a ~ 23w41a
+            if (FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey) != null) {
+                return FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey); // 23w31a ~ 23w41a
             } else {
-                return unwrapProperty(fakeCacheKey.packedTextures()); // 23w42a+
+                return unwrapProperty(FakeInterfaceManager.SkinManagerCacheKey_packedTextures(cacheKey)); // 23w42a+
             }
         }
 

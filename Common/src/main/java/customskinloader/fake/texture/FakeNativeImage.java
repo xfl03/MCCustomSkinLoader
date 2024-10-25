@@ -2,6 +2,7 @@ package customskinloader.fake.texture;
 
 import java.io.InputStream;
 
+import customskinloader.fake.itf.FakeInterfaceManager;
 import net.minecraft.client.renderer.texture.NativeImage;
 
 public class FakeNativeImage implements FakeImage {
@@ -36,7 +37,7 @@ public class FakeNativeImage implements FakeImage {
     }
 
     public int getRGBA(int x, int y) {
-        return image.func_195709_a(x, y);
+        return FakeInterfaceManager.NativeImage_getPixel(image, x, y);
     }
 
     public void setRGBA(int x, int y, int rgba) {

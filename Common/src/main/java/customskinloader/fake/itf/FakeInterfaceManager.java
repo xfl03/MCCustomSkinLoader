@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -19,5 +21,17 @@ public class FakeInterfaceManager {
 
     public static IResourceManager Minecraft_getResourceManager(Object minecraft) {
         return (IResourceManager) ((IFakeMinecraft) minecraft).func_195551_G();
+    }
+
+    public static int NativeImage_getPixel(Object nativeImage, int x, int y) {
+        return ((IFakeNativeImage) nativeImage).getPixel(x, y);
+    }
+
+    public static GameProfile SkinManagerCacheKey_profile(Object skinManagerCacheKey) {
+        return ((IFakeSkinManagerCacheKey) skinManagerCacheKey).profile();
+    }
+
+    public static Property SkinManagerCacheKey_packedTextures(Object skinManagerCacheKey) {
+        return ((IFakeSkinManagerCacheKey) skinManagerCacheKey).packedTextures();
     }
 }
