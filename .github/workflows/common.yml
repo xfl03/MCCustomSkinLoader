@@ -101,7 +101,10 @@ jobs:
                   path=`echo "${{ matrix.modtype }}" | sed 's#V#/V#'`
                   ;;
               "Fabric")
-                  modloader="Fabric"
+                  modloader=$(cat <<EOF
+          Fabric
+          Quilt
+          EOF
                   path="${{ matrix.modtype }}"
                   ;;
               *)
