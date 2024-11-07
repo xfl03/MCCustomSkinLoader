@@ -184,6 +184,18 @@ function initializeCoreMod() {
                 return cn;
             }
         },
+        'NativeImageTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'net/minecraft/client/renderer/texture/NativeImage'
+            },
+            'transformer': function (cn) {
+                if (!cn.interfaces.contains("customskinloader/fake/itf/IFakeNativeImage")) {
+                    cn.interfaces.add("customskinloader/fake/itf/IFakeNativeImage");
+                }
+                return cn;
+            }
+        },
 
         // For 1.14+
         'MinecraftTransformer': {

@@ -227,6 +227,18 @@ function initializeCoreMod() {
                 return cn;
             }
         },
+        'NativeImageTransformer': {
+            'target': {
+                'type': 'CLASS',
+                'name': 'com/mojang/blaze3d/platform/NativeImage'
+            },
+            'transformer': function (cn) {
+                if (!cn.interfaces.contains("customskinloader/fake/itf/IFakeNativeImage")) {
+                    cn.interfaces.add("customskinloader/fake/itf/IFakeNativeImage");
+                }
+                return cn;
+            }
+        },
         'PlayerTabOverlayTransformer': {
             'target': {
                 'type': 'CLASS',
