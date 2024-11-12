@@ -36,9 +36,16 @@ public class DevEnvRemapper extends SimpleRemapper {
             )
         );
         remappedClasses.put(
+            "net.minecraft.class_1011",
+            new AbstractMap.SimpleEntry<>(
+                Lists.newArrayList("customskinloader.fake.itf.IFakeNativeImage"),
+                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
+            )
+        );
+        remappedClasses.put(
             "net.minecraft.class_3298",
             new AbstractMap.SimpleEntry<>(
-                Lists.newArrayList("customskinloader.fake.itf.IFakeIResource"),
+                Lists.newArrayList("customskinloader.fake.itf.IFakeIResource$V1", "customskinloader.fake.itf.IFakeIResource$V2"),
                 Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
             )
         );
@@ -46,6 +53,13 @@ public class DevEnvRemapper extends SimpleRemapper {
             "net.minecraft.class_3300",
             new AbstractMap.SimpleEntry<>(
                 Lists.newArrayList("customskinloader.fake.itf.IFakeIResourceManager"),
+                Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
+            )
+        );
+        remappedClasses.put(
+            "net.minecraft.class_1071$class_8686",
+            new AbstractMap.SimpleEntry<>(
+                Lists.newArrayList("customskinloader.fake.itf.IFakeSkinManagerCacheKey"),
                 Lists.newArrayList("customskinloader.fake.itf.FakeInterfaceManager")
             )
         );

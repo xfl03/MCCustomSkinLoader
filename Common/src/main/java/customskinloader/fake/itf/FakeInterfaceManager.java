@@ -27,6 +27,10 @@ public class FakeInterfaceManager {
         return ((IFakeNativeImage) nativeImage).getPixel(x, y);
     }
 
+    public static void NativeImage_setPixel(Object nativeImage, int x, int y, int color) {
+        ((IFakeNativeImage) nativeImage).setPixel(x, y, color);
+    }
+
     public static GameProfile SkinManagerCacheKey_profile(Object skinManagerCacheKey) {
         return ((IFakeSkinManagerCacheKey) skinManagerCacheKey).profile();
     }

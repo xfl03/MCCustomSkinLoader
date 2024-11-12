@@ -41,7 +41,7 @@ public class FakeNativeImage implements FakeImage {
     }
 
     public void setRGBA(int x, int y, int rgba) {
-        image.func_195700_a(x, y, rgba);
+        FakeInterfaceManager.NativeImage_setPixel(image, x, y, rgba);
     }
 
     public void copyImageData(FakeImage image) {

@@ -9,6 +9,7 @@ customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraf
 	func_195551_G ()Lnet/minecraft/resources/IResourceManager; m_91098_
 customskinloader/fake/itf/IFakeNativeImage customskinloader/fake/itf/IFakeNativeImage
 	getPixel (II)I getPixel
+	setPixel (III)V setPixel
 customskinloader/fake/itf/IFakeSkinManagerCacheKey customskinloader/fake/itf/IFakeSkinManagerCacheKey
 	profile ()Lcom/mojang/authlib/GameProfile; f_290972_
 	packedTextures ()Lcom/mojang/authlib/properties/Property; f_303729_
