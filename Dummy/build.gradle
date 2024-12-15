@@ -1,0 +1,7 @@
+// This subproject is only to provide dependency for other subprojects.
+
+reobf {
+    jar {
+        mappings = file("Dummy.srg")
+    }
+}

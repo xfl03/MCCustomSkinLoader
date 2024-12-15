@@ -12,7 +12,7 @@ description='''
 Custom Skin Loader for Minecraft
 '''
 displayURL="https://github.com/xfl03/MCCustomSkinLoader"
-authors=["xfl03", "JLChnToZ", "ZekerZhayard"]
+authors="xfl03, JLChnToZ, ZekerZhayard"
 [[dependencies.customskinloader]]
 modId="forge"
 mandatory=false

@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -15,7 +16,6 @@ import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import customskinloader.CustomSkinLoader;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import sun.misc.Unsafe;
 
 public class TextureUtil {
     /**
@@ -44,11 +44,17 @@ public class TextureUtil {
 
     private final static MethodHandles.Lookup IMPL_LOOKUP = ((Supplier<MethodHandles.Lookup>) () -> {
         try {
-            Field theUnsafeField = Unsafe.class.getDeclaredField("theUnsafe");
+            Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
+            Field theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
             theUnsafeField.setAccessible(true);
-            Unsafe theUnsafe = (Unsafe) theUnsafeField.get(null);
+            Object theUnsafe = theUnsafeField.get(null);
+
+            Method getObjectMethod = unsafeClass.getMethod("getObject", Object.class, long.class);
+            Method staticFieldBaseMethod = unsafeClass.getMethod("staticFieldBase", Field.class);
+            Method staticFieldOffsetMethod = unsafeClass.getMethod("staticFieldOffset", Field.class);
+
             Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
-            return (MethodHandles.Lookup) theUnsafe.getObject(theUnsafe.staticFieldBase(implLookupField), theUnsafe.staticFieldOffset(implLookupField));
+            return (MethodHandles.Lookup) getObjectMethod.invoke(theUnsafe, staticFieldBaseMethod.invoke(theUnsafe, implLookupField), staticFieldOffsetMethod.invoke(theUnsafe, implLookupField));
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }

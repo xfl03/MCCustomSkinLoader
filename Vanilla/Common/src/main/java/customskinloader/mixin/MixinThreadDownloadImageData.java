@@ -34,7 +34,7 @@ public abstract class MixinThreadDownloadImageData {
         }
     }
 
-    @Mixin(ThreadDownloadImageData.class) // 1.17-rc2+
+    @Mixin(ThreadDownloadImageData.class) // 1.17-rc2 ~ 24w45a
     public abstract static class V2 {
         @Final
         @Shadow

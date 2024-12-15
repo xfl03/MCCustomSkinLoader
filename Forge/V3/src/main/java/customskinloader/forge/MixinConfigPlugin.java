@@ -6,6 +6,7 @@ import java.lang.module.Configuration;
 import java.lang.module.ModuleReference;
 import java.lang.module.ResolvedModule;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -19,16 +20,21 @@ import java.util.function.Supplier;
 import com.google.common.collect.ImmutableList;
 import cpw.mods.cl.JarModuleFinder;
 import cpw.mods.jarhandling.SecureJar;
-import sun.misc.Unsafe;
 
 public class MixinConfigPlugin extends customskinloader.mixin.core.MixinConfigPlugin {
     private final static MethodHandles.Lookup IMPL_LOOKUP = ((Supplier<MethodHandles.Lookup>) () -> {
         try {
-            Field theUnsafeField = Unsafe.class.getDeclaredField("theUnsafe");
+            Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
+            Field theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
             theUnsafeField.setAccessible(true);
-            Unsafe theUnsafe = (Unsafe) theUnsafeField.get(null);
+            Object theUnsafe = theUnsafeField.get(null);
+
+            Method getObjectMethod = unsafeClass.getMethod("getObject", Object.class, long.class);
+            Method staticFieldBaseMethod = unsafeClass.getMethod("staticFieldBase", Field.class);
+            Method staticFieldOffsetMethod = unsafeClass.getMethod("staticFieldOffset", Field.class);
+
             Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
-            return (MethodHandles.Lookup) theUnsafe.getObject(theUnsafe.staticFieldBase(implLookupField), theUnsafe.staticFieldOffset(implLookupField));
+            return (MethodHandles.Lookup) getObjectMethod.invoke(theUnsafe, staticFieldBaseMethod.invoke(theUnsafe, implLookupField), staticFieldOffsetMethod.invoke(theUnsafe, implLookupField));
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }

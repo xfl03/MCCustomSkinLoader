@@ -1,6 +1,7 @@
 package customskinloader.fake;
 
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -8,19 +9,31 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
 import customskinloader.fake.texture.FakeNativeImage;
+import customskinloader.fake.texture.FakeThreadDownloadImageData;
 import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.resources.IResourceManager;
 
 public class FakeSkinBuffer implements IImageBuffer {
     private int ratio = 1;
     FakeImage image = null;
 
-    //parseUserSkin for 1.15+
+    /**
+     * 19w38a ~ 24w45a
+     * Invoked from {@link ThreadDownloadImageData#loadTexture(InputStream)}
+     *
+     * 24w46a+
+     * Invoked from {@link FakeThreadDownloadImageData#loadContents(IResourceManager)}
+     */
     public static NativeImage processLegacySkin(NativeImage image, Runnable processTask, Function<NativeImage, NativeImage> processLegacySkin) {
         if (processTask instanceof IImageBuffer) {
             return ((IImageBuffer) processTask).func_195786_a(image);
+        } else if (processLegacySkin != null) {
+            return processLegacySkin.apply(image);
+        } else {
+            return image;
         }
-        return processLegacySkin.apply(image);
     }
 
     //parseUserSkin for 1.13+

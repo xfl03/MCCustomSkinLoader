@@ -1,0 +1,5 @@
+// This subproject is only to provide dependency for other subprojects.
+
+dependencies {
+    implementation project(':Dummy')
+}

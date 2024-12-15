@@ -2,24 +2,27 @@ package customskinloader.fake;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.NoSuchElementException;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
+import customskinloader.CustomSkinLoader;
 import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.fake.texture.FakeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeCapeBuffer extends FakeSkinBuffer {
-    private static final ResourceLocation TEXTURE_ELYTRA = new ResourceLocation("minecraft", "textures/entity/elytra.png");
+    private static final ResourceLocation TEXTURE_ELYTRA_V1 = new ResourceLocation("minecraft", "textures/entity/elytra.png");
+    private static final ResourceLocation TEXTURE_ELYTRA_V2 = new ResourceLocation("minecraft", "textures/entity/equipment/wings/elytra.png");
     private static int loadedGlobal = 0;
     private static FakeImage elytraImage;
 
     private static FakeImage loadElytra(FakeImage originalImage) {
         loadedGlobal++;
         try {
-            InputStream is = FakeInterfaceManager.IResource_getInputStream(FakeInterfaceManager.IResourceManager_getResource(FakeInterfaceManager.Minecraft_getResourceManager(Minecraft.getMinecraft()), TEXTURE_ELYTRA).get());
+            Object resourceManager = FakeInterfaceManager.Minecraft_getResourceManager(Minecraft.getMinecraft());
+            InputStream is = FakeInterfaceManager.IResource_getInputStream(FakeInterfaceManager.IResourceManager_getResource(resourceManager, TEXTURE_ELYTRA_V1)
+                .orElseGet(() -> FakeInterfaceManager.IResourceManager_getResource(resourceManager, TEXTURE_ELYTRA_V2).orElse(null)));
             if (is != null) {
                 FakeImage image = originalImage.createImage(is);
                 if (image.getWidth() % 64 != 0 || image.getHeight() % 32 != 0) { // wtf?
@@ -28,7 +31,8 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
                 image = resetImageFormat(image, 22, 0, 46, 22);
                 return image;
             }
-        } catch (IOException | NoSuchElementException ignored) {
+        } catch (IOException e) {
+            CustomSkinLoader.logger.warning(e);
         }
         return null;
     }

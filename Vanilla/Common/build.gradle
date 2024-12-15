@@ -2,6 +2,7 @@
 
 dependencies {
     implementation project(':Common')
+    implementation project(':Dummy')
     implementation 'org.spongepowered:mixin:0.8.5'
 }
 

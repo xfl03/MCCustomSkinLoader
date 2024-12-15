@@ -22,14 +22,23 @@ net/minecraft/client/renderer/entity/RenderPlayer net/minecraft/client/renderer/
 net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/client/renderer/entity/layers/CapeLayer
 	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V render
 	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V render
+	doRenderLayer (Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/renderer/entity/state/PlayerRenderState;FF)V render
+net/minecraft/client/renderer/entity/state/PlayerRenderState net/minecraft/client/renderer/entity/state/PlayerRenderState
+net/minecraft/client/renderer/texture/AbstractTexture net/minecraft/client/renderer/texture/AbstractTexture
 net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/NativeImage
+net/minecraft/client/renderer/texture/SkinTextureDownloader net/minecraft/client/renderer/texture/SkinTextureDownloader
+	downloadAndRegisterSkin (Lnet/minecraft/util/ResourceLocation;Ljava/nio/file/Path;Ljava/lang/String;Z)Ljava/util/concurrent/CompletableFuture; downloadAndRegisterSkin
+	lambda$registerTextureInManager$2 (Lnet/minecraft/client/Minecraft;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/util/ResourceLocation; lambda$registerTextureInManager$2
 net/minecraft/client/renderer/texture/TextureManager net/minecraft/client/renderer/texture/TextureManager
+	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V register
 net/minecraft/client/resources/PlayerSkin net/minecraft/client/resources/PlayerSkin
+net/minecraft/client/resources/PlayerSkin$Model net/minecraft/client/resources/PlayerSkin$Model
 net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinManager
 	func_210275_a (Lcom/mojang/authlib/GameProfile;ZLnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V lambda$registerSkins$4
 	func_210276_a (Ljava/util/Map;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)V lambda$registerSkins$2
 	getInsecureSkin (Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/PlayerSkin; getInsecureSkin
 	getOrLoad (Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture; getOrLoad
+	lambda$registerTextures$1 (Ljava/util/concurrent/CompletableFuture;Ljava/lang/String;Ljava/util/concurrent/CompletableFuture;Ljava/util/concurrent/CompletableFuture;Lnet/minecraft/client/resources/PlayerSkin$Model;Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;Ljava/lang/Void;)Lnet/minecraft/client/resources/PlayerSkin; lambda$registerTextures$1
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V registerSkins
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;)Lnet/minecraft/util/ResourceLocation; registerTexture
 	loadSkinFromCache (Lcom/mojang/authlib/GameProfile;)Ljava/util/Map; getInsecureSkinInformation

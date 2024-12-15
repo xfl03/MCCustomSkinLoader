@@ -1,2 +1,4 @@
 accessWidener v2 intermediary
 accessible method net/minecraft/class_2960 <init> (Ljava/lang/String;Ljava/lang/String;)V # 24w18a+
+accessible method net/minecraft/class_10538 method_65863 (Lnet/minecraft/class_1011;Ljava/lang/String;)Lnet/minecraft/class_1011; # 24w46a+
+accessible method net/minecraft/class_10538 method_65866 (Ljava/nio/file/Path;Ljava/lang/String;Z)Lnet/minecraft/class_1011; # 24w46a+

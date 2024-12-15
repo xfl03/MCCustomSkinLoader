@@ -8,8 +8,8 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import customskinloader.fake.FakeSkinManager;
-import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.resources.SkinManager$1;
+import net.minecraft.client.resources.SkinManager$CacheKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
@@ -28,7 +28,7 @@ public abstract class MixinSkinManager$1 {
             remap = false
         )
     )
-    private void modifyArgs_load(Args args, SkinManager.CacheKey cacheKey) {
+    private void modifyArgs_load(Args args, SkinManager$CacheKey cacheKey) {
         Object[] argsArr = new Object[args.size()];
         for (int i = 0; i < argsArr.length; i++) {
             argsArr[i] = args.get(i);

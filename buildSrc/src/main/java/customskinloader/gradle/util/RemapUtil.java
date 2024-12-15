@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -22,6 +23,8 @@ import org.cadixdev.lorenz.io.srg.SrgReader;
 import org.cadixdev.lorenz.io.srg.SrgWriter;
 import org.cadixdev.lorenz.io.srg.tsrg.TSrgReader;
 import org.cadixdev.lorenz.model.ClassMapping;
+import org.cadixdev.lorenz.model.FieldMapping;
+import org.cadixdev.lorenz.model.MethodMapping;
 import org.cadixdev.mercury.Mercury;
 import org.cadixdev.mercury.remapper.MercuryRemapper;
 import org.gradle.api.Project;
@@ -105,26 +108,37 @@ public class RemapUtil {
     }
 
     public static class SrgWriterWithoutFilter extends SrgWriter {
-        private final static Field classesField;
-
-        static {
-            try {
-                classesField = SrgWriter.class.getDeclaredField("classes");
-                classesField.setAccessible(true);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+        private final List<String> classes = new ArrayList<>();
+        private final List<String> fields = new ArrayList<>();
+        private final List<String> methods = new ArrayList<>();
 
         public SrgWriterWithoutFilter(Writer writer) {
             super(writer);
         }
 
         @Override
+        public void write(final MappingSet mappings) {
+            // Write class mappings
+            mappings.getTopLevelClassMappings().stream()
+                .sorted(this.getConfig().getClassMappingComparator())
+                .forEach(this::writeClassMapping);
+
+            // Write everything to the print writer
+            this.classes.forEach(this.writer::println);
+            this.fields.forEach(this.writer::println);
+            this.methods.forEach(this.writer::println);
+
+            // Clear out the lists, to ensure that mappings aren't written twice (or more)
+            this.classes.clear();
+            this.fields.clear();
+            this.methods.clear();
+        }
+
+        @Override
         protected void writeClassMapping(ClassMapping<?, ?> mapping) {
             // Write class mappings without checking
             try {
-                ((List<String>) classesField.get(this)).add(String.format("CL: %s %s", mapping.getFullObfuscatedName(), mapping.getFullDeobfuscatedName()));
+                this.classes.add(String.format("CL: %s %s", mapping.getFullObfuscatedName(), mapping.getFullDeobfuscatedName()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -143,6 +157,18 @@ public class RemapUtil {
             mapping.getMethodMappings().stream()
                 .sorted(this.getConfig().getMethodMappingComparator())
                 .forEach(this::writeMethodMapping);
+        }
+
+        @Override
+        protected void writeFieldMapping(final FieldMapping mapping) {
+            this.fields.add(String.format("FD: %s %s", mapping.getFullObfuscatedName(), mapping.getFullDeobfuscatedName()));
+        }
+
+        @Override
+        protected void writeMethodMapping(final MethodMapping mapping) {
+            this.methods.add(String.format("MD: %s %s %s %s",
+                mapping.getFullObfuscatedName(), mapping.getObfuscatedDescriptor(),
+                mapping.getFullDeobfuscatedName(), mapping.getDeobfuscatedDescriptor()));
         }
     }
 }

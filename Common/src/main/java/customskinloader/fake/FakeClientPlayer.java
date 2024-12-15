@@ -7,7 +7,6 @@ import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
-
 import customskinloader.CustomSkinLoader;
 import customskinloader.utils.MinecraftUtil;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
@@ -16,15 +15,15 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
-import net.minecraft.client.resources.SkinManager.SkinAvailableCallback;
+import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 
 public class FakeClientPlayer {
     /**
-     * Invoked from {@link SkinManager#loadSkin(MinecraftProfileTexture, MinecraftProfileTexture.Type, SkinManager.SkinAvailableCallback)}
+     * Invoked from {@link SkinManager#loadSkin(MinecraftProfileTexture, MinecraftProfileTexture.Type, SkinManager$SkinAvailableCallback)}
      */
-    public static ThreadDownloadImageData putCache(ThreadDownloadImageData threaddownloadimagedata, SkinManager.SkinAvailableCallback skinAvailableCallback, ResourceLocation resourcelocation) {
+    public static ThreadDownloadImageData putCache(ThreadDownloadImageData threaddownloadimagedata, SkinManager$SkinAvailableCallback skinAvailableCallback, ResourceLocation resourcelocation) {
         if (skinAvailableCallback instanceof FakeClientPlayer.LegacyBuffer) {//Cache for client player
             textureCache.put(resourcelocation, threaddownloadimagedata);
         }
@@ -69,7 +68,7 @@ public class FakeClientPlayer {
 
     public static Map<ResourceLocation, ITextureObject> textureCache = Maps.newHashMap();
 
-    public static class LegacyBuffer implements SkinAvailableCallback {
+    public static class LegacyBuffer implements SkinManager$SkinAvailableCallback {
         ResourceLocation resourceLocationIn;
         boolean loaded = false;
 

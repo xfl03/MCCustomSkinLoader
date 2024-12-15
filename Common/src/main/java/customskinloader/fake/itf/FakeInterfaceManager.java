@@ -15,7 +15,7 @@ public class FakeInterfaceManager {
         return ((IFakeIResource.V2) resource).open();
     }
 
-    public static Optional<IResource> IResourceManager_getResource(Object resourceManager, ResourceLocation location) throws IOException {
+    public static Optional<IResource> IResourceManager_getResource(Object resourceManager, ResourceLocation location) {
         return ((IFakeIResourceManager) resourceManager).getResource(location);
     }
 
@@ -29,6 +29,14 @@ public class FakeInterfaceManager {
 
     public static void NativeImage_setPixel(Object nativeImage, int x, int y, int color) {
         ((IFakeNativeImage) nativeImage).setPixel(x, y, color);
+    }
+
+    public static Object ResourceLocation_getTexture(Object location) {
+        return ((IFakeResourceLocation) location).customskinloader$getTexture();
+    }
+
+    public static void ResourceLocation_setTexture(Object location, Object texture) {
+        ((IFakeResourceLocation) location).customskinloader$setTexture(texture);
     }
 
     public static GameProfile SkinManagerCacheKey_profile(Object skinManagerCacheKey) {

@@ -15,8 +15,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinLayerCape {
     @Redirect(
         method = {
-            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", // 19w39a~19w44a
-            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V" // 19w45a+
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", // 19w39a ~ 19w44a
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V", // 19w45a ~ 1.21.1
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/renderer/entity/state/PlayerRenderState;FF)V" // 24w33a+
         },
         at = @At(
             value = "INVOKE",

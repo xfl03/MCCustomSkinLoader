@@ -32,6 +32,7 @@ net/minecraft/client/renderer/IImageBuffer customskinloader/fake/IFakeImageBuffe
 net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/client/renderer/texture/HttpTexture
 net/minecraft/client/renderer/entity/RenderPlayer net/minecraft/client/renderer/entity/player/PlayerRenderer
 net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/client/renderer/entity/layers/CapeLayer
+net/minecraft/client/renderer/texture/AbstractTexture net/minecraft/client/renderer/texture/AbstractTexture
 net/minecraft/client/renderer/texture/ITextureObject net/minecraft/client/renderer/texture/ITextureObject
 net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/NativeImage
 	func_195699_a (IIIIIIZZ)V m_85025_
@@ -42,16 +43,26 @@ net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/Na
 	func_195713_a (Ljava/io/InputStream;)Lnet/minecraft/client/renderer/texture/NativeImage; m_85058_
 	func_195714_b ()I m_85084_
 	func_195715_a (IIIII)V m_84997_
+net/minecraft/client/renderer/texture/ReloadableTexture net/minecraft/client/renderer/texture/ReloadableTexture
+net/minecraft/client/renderer/texture/SkinTextureDownloader net/minecraft/client/renderer/texture/SkinTextureDownloader
+	lambda$downloadAndRegisterSkin$0 (Ljava/nio/file/Path;Ljava/lang/String;Z)Lnet/minecraft/client/renderer/texture/NativeImage; lambda$downloadAndRegisterSkin$0
+	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;Ljava/lang/String;)Lnet/minecraft/client/renderer/texture/NativeImage; processLegacySkin
 net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/client/renderer/texture/SimpleTexture
+	loadContents (Lnet/minecraft/client/resources/IResourceManager;)Lnet/minecraft/client/renderer/texture/TextureContents; loadContents
+net/minecraft/client/renderer/texture/TextureContents net/minecraft/client/renderer/texture/TextureContents
 net/minecraft/client/renderer/texture/TextureManager net/minecraft/client/renderer/texture/TextureManager
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; func_110581_b
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z func_110579_a
+	registerAndLoad (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V registerAndLoad
 net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/client/resources/DefaultPlayerSkin
 	getDefaultSkin (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; m_118627_
 net/minecraft/client/resources/IResource net/minecraft/server/packs/resources/Resource
 	getInputStream ()Ljava/io/InputStream; m_6679_
 net/minecraft/client/resources/IResourceManager net/minecraft/server/packs/resources/ResourceManager
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; m_142591_
+net/minecraft/client/resources/PlayerSkin net/minecraft/client/resources/PlayerSkin
+net/minecraft/client/resources/PlayerSkin$Model net/minecraft/client/resources/PlayerSkin$Model
+	byName (Ljava/lang/String;)Lnet/minecraft/client/resources/PlayerSkin$Model; byName
 net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinManager
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V m_118817_
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; m_118825_
@@ -60,6 +71,7 @@ net/minecraft/client/resources/SkinManager$CacheKey net/minecraft/client/resourc
 net/minecraft/client/resources/SkinManager$SkinAvailableCallback net/minecraft/client/resources/SkinManager$SkinTextureCallback
 	skinAvailable (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)V m_118856_
 net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/client/resources/SkinManager$TextureCache
+net/minecraft/client/resources/data/TextureMetadataSection net/minecraft/client/resources/metadata/texture/TextureMetadataSection
 net/minecraft/resources/IResource net/minecraft/server/packs/resources/Resource
 net/minecraft/resources/IResourceManager net/minecraft/server/packs/resources/ResourceManager
 net/minecraft/util/ResourceLocation net/minecraft/resources/ResourceLocation

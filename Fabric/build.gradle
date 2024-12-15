@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':Dummy')
     // This is the minimum version number that the mod should dependent in the development environment.
     implementation "net.fabricmc:fabric-loader:0.12.0"
 }

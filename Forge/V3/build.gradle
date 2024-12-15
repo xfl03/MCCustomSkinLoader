@@ -15,6 +15,7 @@ sourceJar {
 }
 
 dependencies {
+    implementation project(':Dummy')
     implementation project(":Forge/Common")
 }
 

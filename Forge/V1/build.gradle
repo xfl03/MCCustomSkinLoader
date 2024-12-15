@@ -6,9 +6,6 @@ jar {
                 "TweakOrder": -10
         ])
     }
-
-    exclude 'net/minecraft/client/resources/SkinManager.class'
-    exclude 'net/minecraft/client/resources/SkinManager$ISkinAvailableCallback.class'
 }
 sourceJar {
     exclude 'net/**'
@@ -20,6 +17,7 @@ tasks.signJar {
 }
 
 dependencies {
+    implementation project(':Dummy')
     implementation project(":Forge/Common")
 }
 
