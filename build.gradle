@@ -44,6 +44,8 @@ subprojects {
         replace '@MOD_FULL_VERSION@', project.version
         replace '@MOD_BUILD_NUMBER@', VersionUtil.getBuildNum()
         replaceIn 'CustomSkinLoader.java'
+
+        makeObfSourceJar = false
     }
 
     if (project.name != "Dummy") {
