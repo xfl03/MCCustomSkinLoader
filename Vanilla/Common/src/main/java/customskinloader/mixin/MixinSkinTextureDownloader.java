@@ -21,6 +21,11 @@ public abstract class MixinSkinTextureDownloader {
         )
     )
     private static void redirect_lambda$registerTextureInManager$2(TextureManager manager, ResourceLocation location, AbstractTexture texture) {
-        manager.registerAndLoad(location, (ReloadableTexture) FakeInterfaceManager.ResourceLocation_getTexture(location));
+        Object texture0 = FakeInterfaceManager.ResourceLocation_getTexture(location);
+        if (texture0 != null) {
+            manager.registerAndLoad(location, (ReloadableTexture) texture0);
+        } else {
+            manager.loadTexture(location, texture);
+        }
     }
 }

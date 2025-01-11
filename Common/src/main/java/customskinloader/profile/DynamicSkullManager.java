@@ -123,7 +123,8 @@ public class DynamicSkullManager {
         MinecraftProfileTexture skin = textures.get(MinecraftProfileTexture.Type.SKIN);
         String skinUrl = skin.getUrl();
         if (!HttpUtil0.isLocal(skinUrl))
-            return textures;
+            // Wrap MinecraftProfileTexture to FakeMinecraftProfileTexture
+            return ModelManager0.fromUserProfile(ModelManager0.toUserProfile(textures));
         File skinFile = new File(CustomSkinLoader.DATA_DIR, skinUrl);
         if (!skinFile.isFile())
             return Maps.newHashMap();

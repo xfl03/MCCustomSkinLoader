@@ -182,10 +182,14 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         String json = new String(Base64.decodeBase64(value), StandardCharsets.UTF_8);
         MinecraftTexturesPayload result = GSON.fromJson(json, MinecraftTexturesPayload.class);
 
-        if (result == null || TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result) == null) {
+        if (result == null) {
             return Maps.newHashMap();
         }
-        return TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result);
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures = TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result);
+        if (textures == null) {
+            return Maps.newHashMap();
+        }
+        return textures;
     }
 
     @Override
