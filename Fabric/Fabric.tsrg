@@ -52,6 +52,7 @@ net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/class_1049
 net/minecraft/client/renderer/texture/TextureContents net/minecraft/class_10539
 net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; method_4619
+	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V method_4616
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z method_4616
 	registerAndLoad (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V method_65876
 net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/class_1068

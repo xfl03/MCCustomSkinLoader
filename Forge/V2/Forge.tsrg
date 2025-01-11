@@ -52,6 +52,7 @@ net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/client/rendere
 net/minecraft/client/renderer/texture/TextureContents net/minecraft/client/renderer/texture/TextureContents
 net/minecraft/client/renderer/texture/TextureManager net/minecraft/client/renderer/texture/TextureManager
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; func_110581_b
+	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V m_118495_
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z func_110579_a
 	registerAndLoad (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V registerAndLoad
 net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/client/resources/DefaultPlayerSkin
