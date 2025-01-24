@@ -180,7 +180,7 @@ public class CustomSkinLoader {
 
         if (config.enableLocalProfileCache) {
             UserProfile profile = profileCache.getLocalProfile(credential);
-            if (profile == null) {
+            if (profile == null || profile.equals(UserProfile.NULL)) {
                 logger.info(username + "'s LocalProfile not found.");
             } else {
                 profileCache.updateCache(credential, profile, false);

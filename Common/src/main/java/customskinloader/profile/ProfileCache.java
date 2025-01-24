@@ -89,7 +89,7 @@ public class ProfileCache {
     private UserProfile loadLocalProfile(String username){
         File localProfile=new File(PROFILE_CACHE_DIR,username.toLowerCase()+".json");
         if(!localProfile.exists()){
-            localProfiles.put(username.toLowerCase(), null);
+            localProfiles.put(username.toLowerCase(), UserProfile.NULL);
         }
         try{
             String json = FileUtils.readFileToString(localProfile, "UTF-8");
@@ -99,9 +99,9 @@ public class ProfileCache {
             return profile;
         }catch(Exception e){
             CustomSkinLoader.logger.info("Failed to load LocalProfile.("+e.toString()+")");
-            localProfiles.put(username.toLowerCase(), null);
+            localProfiles.put(username.toLowerCase(), UserProfile.NULL);
         }
-        return null;
+        return UserProfile.NULL;
     }
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void saveLocalProfile(String username, UserProfile profile){

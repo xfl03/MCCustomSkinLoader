@@ -15,6 +15,8 @@ import customskinloader.profile.ModelManager0.Model;
  * @since 13.1
  */
 public class UserProfile {
+
+    public final static UserProfile NULL = new UserProfile();
     
     /**
      * Direct url for skin.
