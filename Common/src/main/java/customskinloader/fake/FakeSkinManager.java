@@ -27,7 +27,10 @@ import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.TextureUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.renderer.texture.ReloadableTexture;
+import net.minecraft.client.renderer.texture.SkinTextureDownloader;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.PlayerSkin$Model;
 import net.minecraft.client.resources.SkinManager;
@@ -35,11 +38,12 @@ import net.minecraft.client.resources.SkinManager$1;
 import net.minecraft.client.resources.SkinManager$CacheKey;
 import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
 import net.minecraft.client.resources.SkinManager$TextureCache;
+import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager {
     /**
      * 1.20.1-
-     * Invoked from {@link SkinManager(TextureManager , File, MinecraftSessionService)}
+     * Invoked from {@link SkinManager(TextureManager, File, MinecraftSessionService)}
      */
     public static void setSkinCacheDir(File skinCacheDirectory) {
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory;
@@ -106,6 +110,29 @@ public class FakeSkinManager {
             }
         }
         return params;
+    }
+
+    /**
+     * 24w46a+
+     * Invoked from {@link SkinManager$TextureCache#registerTexture(MinecraftProfileTexture)}
+     */
+    public static CompletableFuture<?> clearCachedFuture(CompletableFuture<?> future) {
+        CompletableFuture<Object> completableFuture = new CompletableFuture<>();
+        future.thenAccept(completableFuture::complete);
+        return completableFuture;
+    }
+
+    /**
+     * 24w46a+
+     * Invoked from {@link SkinTextureDownloader#lambda$registerTextureInManager$2(Minecraft, ResourceLocation, NativeImage)}
+     */
+    public static void registerTextureInManager(TextureManager manager, ResourceLocation location, AbstractTexture texture) {
+        Object texture0 = FakeInterfaceManager.ResourceLocation_getTexture(location);
+        if (texture0 != null) {
+            manager.registerAndLoad(location, (ReloadableTexture) texture0);
+        } else {
+            manager.loadTexture(location, texture);
+        }
     }
 
 

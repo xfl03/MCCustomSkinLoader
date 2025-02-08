@@ -1,5 +1,7 @@
 package customskinloader.mixin;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.fake.FakeSkinManager;
@@ -7,7 +9,9 @@ import net.minecraft.client.resources.SkinManager$TextureCache;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 public abstract class MixinSkinManager$TextureCache {
@@ -39,6 +43,15 @@ public abstract class MixinSkinManager$TextureCache {
     public abstract static class V2 {
         @Shadow
         private MinecraftProfileTexture.Type type;
+
+        @Inject(
+            method = "Lnet/minecraft/client/resources/SkinManager$TextureCache;registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture;",
+            at = @At("RETURN"),
+            cancellable = true
+        )
+        private void inject_registerTexture(CallbackInfoReturnable<CompletableFuture<?>> cir) {
+            cir.setReturnValue(FakeSkinManager.clearCachedFuture(cir.getReturnValue()));
+        }
 
         @ModifyArgs(
             method = "Lnet/minecraft/client/resources/SkinManager$TextureCache;registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture;",

@@ -1,8 +1,7 @@
 package customskinloader.mixin;
 
-import customskinloader.fake.itf.FakeInterfaceManager;
+import customskinloader.fake.FakeSkinManager;
 import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.ReloadableTexture;
 import net.minecraft.client.renderer.texture.SkinTextureDownloader;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
@@ -21,11 +20,6 @@ public abstract class MixinSkinTextureDownloader {
         )
     )
     private static void redirect_lambda$registerTextureInManager$2(TextureManager manager, ResourceLocation location, AbstractTexture texture) {
-        Object texture0 = FakeInterfaceManager.ResourceLocation_getTexture(location);
-        if (texture0 != null) {
-            manager.registerAndLoad(location, (ReloadableTexture) texture0);
-        } else {
-            manager.loadTexture(location, texture);
-        }
+        FakeSkinManager.registerTextureInManager(manager, location, texture);
     }
 }
