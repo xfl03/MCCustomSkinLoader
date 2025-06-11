@@ -119,7 +119,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
     //Username -> UUID
     public static GameProfile loadGameProfile(String apiRoot, String username) {
         //Doc (https://minecraft.wiki/w/Mojang_API#Query_player_UUIDs_in_batch)
-        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft").setCacheTime(600).setPayload(GSON.toJson(Collections.singletonList(username))));
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(apiRoot + "minecraft/profile/lookup/bulk/byname").setCacheTime(600).setPayload(GSON.toJson(Collections.singletonList(username))));
         if (StringUtils.isEmpty(responce.content)) {
             return null;
         }
@@ -212,7 +212,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
     }
 
     // Prevent authlib-injector (https://github.com/yushijinhun/authlib-injector) from modifying these strings
-    private static final String MOJANG_API_ROOT = "https://api{DO_NOT_MODIFY}.mojang.com/";
+    private static final String MOJANG_API_ROOT = "https://api{DO_NOT_MODIFY}.minecraftservices.com/";
     private static final String MOJANG_SESSION_ROOT = "https://sessionserver{DO_NOT_MODIFY}.mojang.com/";
 
     public static String getMojangApiRoot() {
