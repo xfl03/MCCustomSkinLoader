@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import customskinloader.CustomSkinLoader;
 import customskinloader.fake.FakeMinecraftProfileTexture;
 import org.apache.commons.lang3.StringUtils;
 
@@ -98,9 +99,9 @@ public class ModelManager0 {
      * @since 13.1
      */
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> fromUserProfile(UserProfile profile) {
-        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = Maps.newHashMap();
         if (profile == null)
-            return map;
+            return CustomSkinLoader.INCOMPLETED;
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = Maps.newHashMap();
         if (profile.skinUrl != null) {
             Map<String, String> metadata = null;
             if ("slim".equals(profile.model) || "auto".equals(profile.model)) {

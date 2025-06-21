@@ -136,7 +136,7 @@ public class DynamicSkullManager {
         if (staticTextures.get(profile) != null)
             return staticTextures.get(profile);
         if (loadingList.contains(profile))
-            return Maps.newHashMap();
+            return CustomSkinLoader.INCOMPLETED;
         if (dynamicTextures.containsKey(profile)) {
             SkullTexture texture = dynamicTextures.get(profile);
             long time = System.currentTimeMillis() - texture.startTime;
@@ -153,6 +153,6 @@ public class DynamicSkullManager {
         });
         loadThread.setName("Skull " + profile.hashCode());
         loadThread.start();
-        return Maps.newHashMap();
+        return CustomSkinLoader.INCOMPLETED;
     }
 }

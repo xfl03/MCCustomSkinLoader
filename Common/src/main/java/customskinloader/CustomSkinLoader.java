@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -194,6 +194,7 @@ public class CustomSkinLoader {
         return null;
     }
 
+    public final static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> INCOMPLETED = ImmutableMap.of();
     //For Skull
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
         String username = gameProfile.getName();
@@ -222,7 +223,7 @@ public class CustomSkinLoader {
                 threadPool.execute(loadThread);
             }
         }
-        return Maps.newHashMap();
+        return INCOMPLETED;
     }
 
     private static Logger initLogger() {

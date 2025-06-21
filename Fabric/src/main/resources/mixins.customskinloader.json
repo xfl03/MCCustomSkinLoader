@@ -21,6 +21,7 @@
         "MixinSkinManager$V3",
         "MixinSkinManager$V4",
         "MixinSkinManager$V5",
+        "MixinSkinManager$V6",
         "MixinSkinTextureDownloader",
         "MixinThreadDownloadImageData$V1",
         "MixinThreadDownloadImageData$V2"

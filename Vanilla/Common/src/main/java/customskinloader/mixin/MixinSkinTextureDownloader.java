@@ -13,7 +13,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @SuppressWarnings("target")
 public abstract class MixinSkinTextureDownloader {
     @Redirect(
-        method = "Lnet/minecraft/client/renderer/texture/SkinTextureDownloader;lambda$registerTextureInManager$2(Lnet/minecraft/client/Minecraft;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/util/ResourceLocation;",
+        method = {
+            "Lnet/minecraft/client/renderer/texture/SkinTextureDownloader;lambda$registerTextureInManager$2(Lnet/minecraft/client/Minecraft;Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/NativeImage;)Lnet/minecraft/util/ResourceLocation;", // 23w46a ~ 1.21.5
+            "Lnet/minecraft/client/renderer/texture/SkinTextureDownloader;lambda$registerTextureInManager$2(Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/NativeImage;Lnet/minecraft/client/Minecraft;)Lnet/minecraft/util/ResourceLocation;" // 25w15a+
+        },
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/renderer/texture/TextureManager;loadTexture(Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V"
