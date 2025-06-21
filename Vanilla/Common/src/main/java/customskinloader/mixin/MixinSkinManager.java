@@ -3,6 +3,7 @@ package customskinloader.mixin;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -18,6 +19,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import customskinloader.fake.FakeSkinManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.PlayerSkin$Model;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
@@ -285,6 +287,27 @@ public abstract class MixinSkinManager {
         )
         private static PlayerSkin$Model modifyVariable_lambda$registerTextures$1(PlayerSkin$Model model, CompletableFuture<?> skin, String url, CompletableFuture<?> cape, CompletableFuture<?> elytra, PlayerSkin$Model _model, MinecraftProfileTextures textures) {
             return FakeSkinManager.loadSkinModel(model, textures);
+        }
+    }
+
+    // 1.21.6-pre1+
+    @Mixin(SkinManager.class)
+    public abstract static class V6 {
+        @Inject(
+            method = "Lnet/minecraft/client/resources/SkinManager;getInsecureSkin(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/PlayerSkin;)Lnet/minecraft/client/resources/PlayerSkin;",
+            at = @At("HEAD")
+        )
+        private void inject_getInsecureSkin(GameProfile profile, PlayerSkin skin, CallbackInfoReturnable<?> callbackInfoReturnable) {
+            FakeSkinManager.setSkullType(profile);
+        }
+
+        @Inject(
+            method = "Lnet/minecraft/client/resources/SkinManager;registerTextures(Ljava/util/UUID;Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;)Ljava/util/concurrent/CompletableFuture;",
+            at = @At("RETURN"),
+            cancellable = true
+        )
+        private void inject_registerTextures(UUID uuid, MinecraftProfileTextures textures, CallbackInfoReturnable<CompletableFuture<?>> callbackInfoReturnable) {
+            callbackInfoReturnable.setReturnValue(FakeSkinManager.checkIncompleted(textures, callbackInfoReturnable.getReturnValue()));
         }
     }
 }

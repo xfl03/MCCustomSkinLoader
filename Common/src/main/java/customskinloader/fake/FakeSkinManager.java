@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
@@ -238,6 +239,18 @@ public class FakeSkinManager {
         return FakeCacheKey.createMinecraftProfileTextures(loadSkinFromCache(sessionService, FakeCacheKey.unwrapProperty(property), false));
     }
 
+    private final static CompletableFuture<?> INCOMPLETED = new CompletableFuture<>();
+    /**
+     * 1.21.6-pre1+
+     * Invoked from {@link SkinManager#registerTextures(UUID, MinecraftProfileTextures)}
+     */
+    public static CompletableFuture<?> checkIncompleted(MinecraftProfileTextures textures, CompletableFuture<?> future) {
+        if (textures == FakeCacheKey.IncompletedContainer.INCOMPLETED) {
+            return INCOMPLETED;
+        }
+        return future;
+    }
+
     private static boolean shouldJudgeType(MinecraftProfileTexture texture) {
         return texture != null && "auto".equals(texture.getMetadata("model"));
     }
@@ -305,7 +318,14 @@ public class FakeSkinManager {
             return MojangAPILoader.GSON.fromJson((String) TextureUtil.AuthlibField.PROPERTY_SIGNATURE.get(property), GameProfile.class); // 23w42a+
         }
 
+        public static class IncompletedContainer {
+            public final static Object INCOMPLETED = new MinecraftProfileTextures(null, null, null, SignatureState.SIGNED);
+        }
+
         public static Object createMinecraftProfileTextures(Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures) {
+            if (textures == CustomSkinLoader.INCOMPLETED) {
+                return IncompletedContainer.INCOMPLETED;
+            }
             return new MinecraftProfileTextures(textures.get(MinecraftProfileTexture.Type.SKIN), textures.get(MinecraftProfileTexture.Type.CAPE), textures.get(MinecraftProfileTexture.Type.ELYTRA), SignatureState.SIGNED);
         }
     }

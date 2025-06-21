@@ -27,30 +27,42 @@ There are the available versions in different environments below:
    ```
 1. Create these folders in the new project directory, then copy the built jar and source jar into it:
    ```
-   Forge 1.8    ~ 1.16.5:  ./local-repo/mods/CustomSkinLoader_ForgeLegacy/${version}
-   Forge 1.17.1 ~ latest:  ./local-repo/mods/CustomSkinLoader_ForgeActive/${version}
-   Fabric:                 ./local-repo/mods/CustomSkinLoader_Fabric/${version}
+   Forge 1.8    ~ 1.16.5:                            ./local-repo/mods/CustomSkinLoader_ForgeV1/${version}
+   Forge 1.17.1 ~ 1.20.4 / NeoForge 1.20.1:          ./local-repo/mods/CustomSkinLoader_ForgeV2/${version}
+   Forge 1.20.6 ~ latest / NeoForge 1.20.2 ~ latest: ./local-repo/mods/CustomSkinLoader_ForgeV3/${version}
+   Fabric:                                           ./local-repo/mods/CustomSkinLoader_Fabric/${version}
    ```
    *`${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually*
 1. Create a pom file in the same folder:
-   - Forge 1.8 ~ 1.16.5: `CustomSkinLoader_ForgeLegacy-${version}.pom`
+   - Forge 1.8 ~ 1.16.5: `CustomSkinLoader_ForgeV1-${version}.pom`
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <modelVersion>4.0.0</modelVersion>
        <groupId>mods</groupId>
-       <artifactId>CustomSkinLoader_ForgeLegacy</artifactId>
+       <artifactId>CustomSkinLoader_ForgeV1</artifactId>
        <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
    ```
-   - Forge 1.17.1 ~ latest: `CustomSkinLoader_ForgeActive-${version}.pom`
+   - Forge 1.17.1 ~ 1.20.4 / NeoForge 1.20.1: `CustomSkinLoader_ForgeV2-${version}.pom`
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
    <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <modelVersion>4.0.0</modelVersion>
        <groupId>mods</groupId>
-       <artifactId>CustomSkinLoader_ForgeActive</artifactId>
+       <artifactId>CustomSkinLoader_ForgeV2</artifactId>
+       <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
+       <version>${version}</version>
+   </project>
+   ```
+   - Forge 1.20.6 ~ latest / NeoForge 1.20.2 ~ latest: `CustomSkinLoader_ForgeV3-${version}.pom`
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+       <modelVersion>4.0.0</modelVersion>
+       <groupId>mods</groupId>
+       <artifactId>CustomSkinLoader_ForgeV3</artifactId>
        <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
        <version>${version}</version>
    </project>
@@ -81,7 +93,7 @@ There are the available versions in different environments below:
 1. Run `./gradlew setupDecompWorkspace` command.
 1. Then you can debug the mod in IDE or through `./gradlew runClient` command.
 
-### For ForgeGradle 3.x ~ 5.x ( forge-1.12.2-14.23.5.2851 ~ latest )
+### For ForgeGradle 3.x ~ latest ( forge-1.12.2-14.23.5.2851 ~ latest )
 1. Add below contents to `build.gradle`:
    ```gradle
    dependencies {
@@ -107,12 +119,9 @@ There are the available versions in different environments below:
        modImplementation "mods:CustomSkinLoader_Fabric:15.0-SNAPSHOT-00"
    }
 
-   tasks.runClient {
-	   args += ["--username", "<Your username>"]
-   }
+   loom.runs.client.programArgs "--username", "<Your username>"
    ```
-1. Add `--username <Your username>` to CLI arguments in `Run/Debug Configurations` dialog.
-1. Run the game in IDE or through `./gradlew runClient` command..
+1. Setup the development environment and run the game as usual.
 
 ## Depend on release builds
 1. Check the latest version in https://littlesk.in/csl-latest .
@@ -145,5 +154,4 @@ There are the available versions in different environments below:
 
 ## Developing
 - CustomSkinLoader is based on forge-1.12.2-14.23.5.2768 currently, including Fabric edition. We use custom reobfuscation mappings such as [Fabric.tsrg](Fabric/Fabric.tsrg) and [mixin.tsrg](Fabric/mixin.tsrg) to generate different editions jar and Mixin reference jsons.
-- The source codes are all in `${projectDir}/sources` and resource files are in `${projectDir}/resources` instead of `src/main/java` and `src/main/resources`.
 - Do not add other required mods.
