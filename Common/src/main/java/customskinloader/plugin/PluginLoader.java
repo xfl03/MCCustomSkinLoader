@@ -9,6 +9,7 @@ import java.util.ServiceLoader;
 
 import com.google.common.collect.Lists;
 import customskinloader.CustomSkinLoader;
+import customskinloader.loader.GameProfileLoader;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.loader.LegacyLoader;
 import customskinloader.loader.MojangAPILoader;
@@ -17,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 
 public class PluginLoader {
     public static final ICustomSkinLoaderPlugin[] DEFAULT_PLUGINS = new ICustomSkinLoaderPlugin[]{
+            new GameProfileLoader(),
             new MojangAPILoader(),
             new LegacyLoader(),
             new JsonAPILoader(new CustomSkinAPI()),
