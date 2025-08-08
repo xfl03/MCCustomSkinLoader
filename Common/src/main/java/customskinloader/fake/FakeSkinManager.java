@@ -21,7 +21,7 @@ import com.mojang.authlib.properties.Property;
 import customskinloader.CustomSkinLoader;
 import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.fake.texture.FakeThreadDownloadImageData;
-import customskinloader.loader.MojangAPILoader;
+import customskinloader.loader.GameProfileLoader;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
@@ -301,7 +301,7 @@ public class FakeSkinManager {
     public static class FakeCacheKey {
         public static Object wrapCacheKey(Object cacheKey, GameProfile profile) {
             if (FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey) == null) { // 23w42a+
-                TextureUtil.AuthlibField.PROPERTY_SIGNATURE.set(FakeInterfaceManager.SkinManagerCacheKey_packedTextures(cacheKey), MojangAPILoader.GSON.toJson(profile, GameProfile.class));
+                TextureUtil.AuthlibField.PROPERTY_SIGNATURE.set(FakeInterfaceManager.SkinManagerCacheKey_packedTextures(cacheKey), GameProfileLoader.GSON.toJson(profile, GameProfile.class));
             }
             return cacheKey;
         }
@@ -315,7 +315,7 @@ public class FakeSkinManager {
         }
 
         public static GameProfile unwrapProperty(Property property) {
-            return MojangAPILoader.GSON.fromJson((String) TextureUtil.AuthlibField.PROPERTY_SIGNATURE.get(property), GameProfile.class); // 23w42a+
+            return GameProfileLoader.GSON.fromJson((String) TextureUtil.AuthlibField.PROPERTY_SIGNATURE.get(property), GameProfile.class); // 23w42a+
         }
 
         public static class IncompletedContainer {
