@@ -3,8 +3,11 @@ package customskinloader.fake;
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import customskinloader.CustomSkinLoader;
 import customskinloader.utils.HttpTextureUtil;
 
 public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
@@ -12,6 +15,7 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
 
     private final HttpTextureUtil.HttpTextureInfo info;
     private final Map<String, String> metadata;
+    private final CountDownLatch latch = new CountDownLatch(1);
 
     public FakeMinecraftProfileTexture(String url, Map<String, String> metadata) {
         super(url, metadata);
@@ -25,12 +29,24 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
     }
 
     @Override
-    public String getMetadata(final String key) {
+    public String getMetadata(String key) {
+        return this.getMetadata(key, true);
+    }
+
+    public String getMetadata(String key, boolean lock) {
         String value = super.getMetadata(key);
         if ("model".equals(key) && "auto".equals(value)) {
             String model = MODEL_CACHE.get(this.getHash());
             if (model != null) {
                 return model;
+            } else {
+                try {
+                    if (lock && this.latch.await(60L * CustomSkinLoader.config.loadlist.size(), TimeUnit.SECONDS)) {
+                        return this.getMetadata(key, false);
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return value;
@@ -40,6 +56,7 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
         if (this.metadata != null) {
             MODEL_CACHE.put(this.getHash(), model);
             this.metadata.put("model", model);
+            this.latch.countDown();
         }
     }
 

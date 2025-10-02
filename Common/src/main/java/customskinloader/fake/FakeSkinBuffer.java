@@ -2,6 +2,7 @@ package customskinloader.fake;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -9,22 +10,34 @@ import customskinloader.CustomSkinLoader;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
 import customskinloader.fake.texture.FakeNativeImage;
-import customskinloader.fake.texture.FakeThreadDownloadImageData;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.renderer.texture.SkinTextureDownloader;
 
 public class FakeSkinBuffer implements IImageBuffer {
-    private int ratio = 1;
     FakeImage image = null;
+
+    /**
+     * 24w46a+
+     * Invoked from {@link SkinTextureDownloader#lambda$downloadAndRegisterSkin$0(Path, String, boolean)}
+     */
+    public static NativeImage processLegacySkin(NativeImage image, String url) {
+        if (image == null)
+            return null;
+
+        FakeImage img = parseUserSkin0(new FakeNativeImage(image));
+        if (img instanceof FakeNativeImage) {
+            return FakeNativeImage.Extended.create((FakeNativeImage) img);
+        }
+
+        CustomSkinLoader.logger.warning("Failed to parseUserSkin(downloadAndRegisterSkin).");
+        return null;
+    }
 
     /**
      * 19w38a ~ 24w45a
      * Invoked from {@link ThreadDownloadImageData#loadTexture(InputStream)}
-     *
-     * 24w46a+
-     * Invoked from {@link FakeThreadDownloadImageData#loadContents(IResourceManager)}
      */
     public static NativeImage processLegacySkin(NativeImage image, Runnable processTask, Function<NativeImage, NativeImage> processLegacySkin) {
         if (processTask instanceof IImageBuffer) {
@@ -63,8 +76,12 @@ public class FakeSkinBuffer implements IImageBuffer {
     }
 
     public FakeImage parseUserSkin(FakeImage image) {
+        return this.image = parseUserSkin0(image);
+    }
+
+    public static FakeImage parseUserSkin0(FakeImage image) {
         if (image == null) return null;
-        this.ratio = image.getWidth() / 64;
+        int ratio = image.getWidth() / 64;
 
         if (image.getHeight() != image.getWidth()) {//Single Layer
             //Create a new image and copy origin image data
@@ -90,26 +107,31 @@ public class FakeSkinBuffer implements IImageBuffer {
             image.copyArea(52 * ratio, 20 * ratio, -8 * ratio, 32 * ratio, 4 * ratio, 12 * ratio, true, false);//Back
         }
 
-        this.image = image;
-        setAreaDueToConfig(0 * ratio, 0 * ratio, 32 * ratio, 16 * ratio);//Head - 1
-        setAreaTransparent(32 * ratio, 0 * ratio, 64 * ratio, 16 * ratio);//Head - 2
-        setAreaDueToConfig(16 * ratio, 16 * ratio, 40 * ratio, 32 * ratio);//Body - 1
-        setAreaTransparent(16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);//Body - 2
+        setAreaDueToConfig(image, 0 * ratio, 0 * ratio, 32 * ratio, 16 * ratio);//Head - 1
+        setAreaTransparent(image, 32 * ratio, 0 * ratio, 64 * ratio, 16 * ratio);//Head - 2
+        setAreaDueToConfig(image, 16 * ratio, 16 * ratio, 40 * ratio, 32 * ratio);//Body - 1
+        setAreaTransparent(image, 16 * ratio, 32 * ratio, 40 * ratio, 48 * ratio);//Body - 2
 
-        setAreaDueToConfig(40 * ratio, 16 * ratio, 56 * ratio, 32 * ratio);//Right Arm - 1
-        setAreaTransparent(40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);//Right Arm - 2
-        setAreaDueToConfig(0 * ratio, 16 * ratio, 16 * ratio, 32 * ratio);//Right Leg - 1
-        setAreaTransparent(0 * ratio, 32 * ratio, 16 * ratio, 48 * ratio);//Right Leg - 2
+        setAreaDueToConfig(image, 40 * ratio, 16 * ratio, 56 * ratio, 32 * ratio);//Right Arm - 1
+        setAreaTransparent(image, 40 * ratio, 32 * ratio, 56 * ratio, 48 * ratio);//Right Arm - 2
+        setAreaDueToConfig(image, 0 * ratio, 16 * ratio, 16 * ratio, 32 * ratio);//Right Leg - 1
+        setAreaTransparent(image, 0 * ratio, 32 * ratio, 16 * ratio, 48 * ratio);//Right Leg - 2
 
-        setAreaDueToConfig(32 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);//Left Arm - 1
-        setAreaTransparent(48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);//Left Arm - 2
-        setAreaDueToConfig(16 * ratio, 48 * ratio, 32 * ratio, 64 * ratio);//Left Leg - 1
-        setAreaTransparent(0 * ratio, 48 * ratio, 16 * ratio, 64 * ratio);//Left Leg - 2
+        setAreaDueToConfig(image, 32 * ratio, 48 * ratio, 48 * ratio, 64 * ratio);//Left Arm - 1
+        setAreaTransparent(image, 48 * ratio, 48 * ratio, 64 * ratio, 64 * ratio);//Left Arm - 2
+        setAreaDueToConfig(image, 16 * ratio, 48 * ratio, 32 * ratio, 64 * ratio);//Left Leg - 1
+        setAreaTransparent(image, 0 * ratio, 48 * ratio, 16 * ratio, 64 * ratio);//Left Leg - 2
+
+        image.setRatio(ratio);
         return image;
     }
 
     /** Judge if the color is transparent or same with background */
     static final Function<Integer, Predicate<Integer>> EQU_BG = bgColor -> getA(bgColor) == 0 ? (c) -> getA(c) == 0 : (c) -> c.equals(bgColor);
+
+    public String judgeType() {
+        return judgeType0(this.image);
+    }
 
     /**
      * Judge the type of skin
@@ -118,9 +140,10 @@ public class FakeSkinBuffer implements IImageBuffer {
      * @return type of skin (slim / default)
      * @since 14.9
      */
-    public String judgeType() {
-        if (this.image == null)
+    public static String judgeType0(FakeImage image) {
+        if (image == null)
             return "default";
+        int ratio = image.getRatio();
         int bgColor = image.getRGBA(63 * ratio, 20 * ratio);
         /*
          * If background is transparent, all the pixels in ((54, 20), (55, 31)) areas is transparent,
@@ -147,7 +170,7 @@ public class FakeSkinBuffer implements IImageBuffer {
     private static final int WHITE = getARGB(255, 255, 255, 255);
     private static final int BLACK = getARGB(255, 0, 0, 0);
 
-    private boolean isFilled(int x0, int y0, int x1, int y1) {
+    private static boolean isFilled(FakeImage image, int x0, int y0, int x1, int y1) {
         int data = image.getRGBA(x0, y0);
         if (data != WHITE && data != BLACK)
             return false;
@@ -158,8 +181,8 @@ public class FakeSkinBuffer implements IImageBuffer {
         return true;
     }
 
-    private void setAreaTransparent(int x0, int y0, int x1, int y1) {
-        if (!isFilled(x0, y0, x1, y1))
+    private static void setAreaTransparent(FakeImage image, int x0, int y0, int x1, int y1) {
+        if (!isFilled(image, x0, y0, x1, y1))
             return;
         for (int x = x0; x < x1; ++x)
             for (int y = y0; y < y1; ++y)
@@ -172,17 +195,17 @@ public class FakeSkinBuffer implements IImageBuffer {
      *  11111111 00000000 00000000 00000000 */
     private static final int B = -16777216;
 
-    private void setAreaOpaque(int x0, int y0, int x1, int y1) {
+    private static void setAreaOpaque(FakeImage image, int x0, int y0, int x1, int y1) {
         for (int x = x0; x < x1; ++x)
             for (int y = y0; y < y1; ++y)
                 image.setRGBA(x, y, image.getRGBA(x, y) | B);
     }
 
-    private void setAreaDueToConfig(int x0, int y0, int x1, int y1) {
+    private static void setAreaDueToConfig(FakeImage image, int x0, int y0, int x1, int y1) {
         if (customskinloader.CustomSkinLoader.config.enableTransparentSkin)
-            setAreaTransparent(x0, y0, x1, y1);
+            setAreaTransparent(image, x0, y0, x1, y1);
         else
-            setAreaOpaque(x0, y0, x1, y1);
+            setAreaOpaque(image, x0, y0, x1, y1);
     }
 
     public void skinAvailable() {

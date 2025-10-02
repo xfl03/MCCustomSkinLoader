@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinRenderPlayer {
     @Redirect(
         method = {
-            "Lnet/minecraft/client/renderer/entity/RenderPlayer;renderItem(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;Lnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V", // 19w39a~19w44a
-            "Lnet/minecraft/client/renderer/entity/RenderPlayer;renderItem(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V" // 19w45a+
+            "Lnet/minecraft/client/renderer/entity/RenderPlayer;renderItem(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;Lnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V", // 19w39a ~ 19w44a
+            "Lnet/minecraft/client/renderer/entity/RenderPlayer;renderItem(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;Lnet/minecraft/client/model/ModelRenderer;Lnet/minecraft/client/model/ModelRenderer;)V" // 19w45a ~ 1.21.1
         },
         at = @At(
             value = "INVOKE",

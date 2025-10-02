@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
@@ -78,7 +79,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) {
-        String username = gameProfile.getName();
+        String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
         GameProfile newGameProfile = loadGameProfileCached(ssp.apiRoot, username);
         if (newGameProfile == null) {
             CustomSkinLoader.logger.info("Profile not found.(" + username + "'s profile not found.)");
@@ -87,7 +88,6 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         newGameProfile = fillGameProfile(ssp.sessionRoot, newGameProfile);
         Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = GameProfileLoader.getTextures(newGameProfile);
         if (!map.isEmpty()) {
-            gameProfile.getProperties().putAll(newGameProfile.getProperties());
             return ModelManager0.toUserProfile(map);
         }
         CustomSkinLoader.logger.info("Profile not found.(" + username + " doesn't have skin/cape.)");
@@ -108,16 +108,17 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
             return null;
         }
 
-        GameProfile[] profiles = GameProfileLoader.GSON.fromJson(responce.content, GameProfile[].class);
+        MinecraftProfilePropertiesResponse[] profiles = GameProfileLoader.GSON.fromJson(responce.content, MinecraftProfilePropertiesResponse[].class);
         if (profiles.length == 0) {
             return null;
         }
-        GameProfile gameProfile = profiles[0];
+        GameProfile gameProfile = createGameProfile(profiles[0]);
 
-        if (gameProfile.getId() == null) {
+        UUID id = TextureUtil.AuthlibField.GAME_PROFILE_ID.get(gameProfile);
+        if (id == null) {
             return null;
         }
-        return new GameProfile(gameProfile.getId(), gameProfile.getName());
+        return new GameProfile(id, TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile));
     }
 
     /**
@@ -132,23 +133,27 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         if (profile == null) {
             return null;
         }
-        UUID id = profile.getId();
+        UUID id = TextureUtil.AuthlibField.GAME_PROFILE_ID.get(profile);
         return standard ? id.toString() : TextureUtil.fromUUID(id);
     }
 
     //UUID -> Profile
     public static GameProfile fillGameProfile(String sessionRoot, GameProfile profile) {
         //Doc (https://minecraft.wiki/w/Mojang_API#Query_player's_skin_and_cape)
-        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/" + TextureUtil.fromUUID(profile.getId())).setCacheTime(90));
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/" + TextureUtil.fromUUID(TextureUtil.AuthlibField.GAME_PROFILE_ID.get(profile))).setCacheTime(90));
         if (StringUtils.isEmpty(responce.content)) {
             return profile;
         }
+        return createGameProfile(GameProfileLoader.GSON.fromJson(responce.content, MinecraftProfilePropertiesResponse.class));
+    }
 
-        MinecraftProfilePropertiesResponse propertiesResponce = GameProfileLoader.GSON.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
-        GameProfile newGameProfile = new GameProfile(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(propertiesResponce), TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME.get(propertiesResponce));
-        newGameProfile.getProperties().putAll(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(propertiesResponce));
-
-        return newGameProfile;
+    public static GameProfile createGameProfile(MinecraftProfilePropertiesResponse response) {
+        GameProfile profile = new GameProfile(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(response), TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME.get(response));
+        PropertyMap map = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(response);
+        if (map != null) {
+            TextureUtil.AuthlibField.PROPERTY_MAP_PROPERTIES.set(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.get(profile), TextureUtil.AuthlibField.PROPERTY_MAP_PROPERTIES.get(map));
+        }
+        return profile;
     }
 
     @Override

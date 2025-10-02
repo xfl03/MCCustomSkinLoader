@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,7 +25,9 @@ import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
 import customskinloader.profile.UserProfile;
+import customskinloader.utils.LIFOBlockingQueue;
 import customskinloader.utils.MinecraftUtil;
+import customskinloader.utils.TextureUtil;
 
 /**
  * Custom skin loader mod for Minecraft.
@@ -49,7 +52,7 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache = new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager = new DynamicSkullManager();
 
-    public static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+    public static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LIFOBlockingQueue<>(new LinkedBlockingDeque<>()));
 
     //Correct thread name in thread pool
     private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
@@ -70,33 +73,18 @@ public class CustomSkinLoader {
         THREAD_POOL.execute(runnable);
     }
 
-    public static Object loadProfileLazily(GameProfile gameProfile, Function<UserProfile, ?> function) {
-        String username = gameProfile.getName();
+    //For User Skin
+    public static UserProfile loadProfile(GameProfile gameProfile) {
+        String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
         String credential = MinecraftUtil.getCredential(gameProfile);
         // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
         if (username == null) {
             logger.warning("Could not load profile: username is null.");
-            return function.apply(new UserProfile());
+            return new UserProfile();
         }
+
         String tempName = Thread.currentThread().getName();
         Thread.currentThread().setName(username); // Change Thread Name
-        if (profileCache.isLoading(credential)) {
-            profileCache.putLoader(credential, function);
-            Thread.currentThread().setName(tempName);
-            return function.apply(new UserProfile());
-        }
-        Object result = function.apply(loadProfile(gameProfile));
-        Thread.currentThread().setName(tempName);
-        Function<UserProfile, ?> func = profileCache.getLastLoader(credential);
-        if (func != null) {
-            result = loadProfileLazily(gameProfile, func);
-        }
-        return result;
-    }
-
-    //For User Skin
-    public static UserProfile loadProfile(GameProfile gameProfile) {
-        String credential = MinecraftUtil.getCredential(gameProfile);
         UserProfile profile;
         if (profileCache.isReady(credential)) {
             logger.info("Cached profile will be used.");
@@ -113,12 +101,13 @@ public class CustomSkinLoader {
             profileCache.setLoading(credential, true);
             profile = loadProfile0(gameProfile, false);
         }
+        Thread.currentThread().setName(tempName);
         return profile == null ? new UserProfile() : profile;
     }
 
     //Core
     public static UserProfile loadProfile0(GameProfile gameProfile, boolean isSkull) {
-        String username = gameProfile.getName();
+        String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
         String credential = MinecraftUtil.getCredential(gameProfile);
 
         profileCache.setLoading(credential, true);
@@ -197,7 +186,7 @@ public class CustomSkinLoader {
     public final static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> INCOMPLETED = ImmutableMap.of();
     //For Skull
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
-        String username = gameProfile.getName();
+        String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
         String credential = MinecraftUtil.getCredential(gameProfile);
 
         //CustomSkinLoader needs username to load standard skin, if username not exist, only textures in NBT can be used

@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 public class FakeBufferedImage implements FakeImage {
     private BufferedImage image;
     private Graphics graphics;
+    private int ratio;
 
     public FakeBufferedImage(int width, int height) {
         this(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB));
@@ -31,6 +32,16 @@ public class FakeBufferedImage implements FakeImage {
 
     public FakeImage createImage(InputStream is) throws IOException {
         return new FakeBufferedImage(ImageIO.read(is));
+    }
+
+    @Override
+    public int getRatio() {
+        return this.ratio;
+    }
+
+    @Override
+    public void setRatio(int ratio) {
+        this.ratio = ratio;
     }
 
     public int getWidth() {

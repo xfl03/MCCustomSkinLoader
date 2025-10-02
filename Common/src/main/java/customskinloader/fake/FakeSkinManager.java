@@ -5,12 +5,9 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.SignatureState;
@@ -19,26 +16,18 @@ import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import customskinloader.CustomSkinLoader;
-import customskinloader.fake.itf.FakeInterfaceManager;
-import customskinloader.fake.texture.FakeThreadDownloadImageData;
-import customskinloader.loader.GameProfileLoader;
+import customskinloader.fake.texture.FakeResourceLocation;
 import customskinloader.profile.ModelManager0;
-import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpTextureUtil;
-import customskinloader.utils.TextureUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.renderer.texture.ReloadableTexture;
-import net.minecraft.client.renderer.texture.SkinTextureDownloader;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.PlayerSkin$Model;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.resources.SkinManager$1;
 import net.minecraft.client.resources.SkinManager$CacheKey;
 import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
 import net.minecraft.client.resources.SkinManager$TextureCache;
+import net.minecraft.server.Services;
 import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager {
@@ -51,36 +40,28 @@ public class FakeSkinManager {
     }
 
     /**
-     * 23w31a+
+     * 23w31a ~ 23w45a
      * Invoked from {@link SkinManager(TextureManager, Path, MinecraftSessionService, Executor)}
+     *
+     * 23w46a ~ 25w33a
+     * Invoked from {@link SkinManager(Path, MinecraftSessionService, Executor)}
+     *
+     * 25w34a+
+     * Invoked from {@link SkinManager(Path, Services, Executor)}
      */
     public static void setSkinCacheDir(Path skinCacheDirectory) {
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory.toFile();
     }
 
-    private static CacheLoader<Object, ?> cacheLoader;
     /**
-     * 23w31a+
-     * Invoked from {@link SkinManager(TextureManager, Path, MinecraftSessionService, Executor)}
-     */
-    public static CacheLoader<Object, ?> setCacheLoader(CacheLoader<Object, ?> loader) {
-        return cacheLoader = loader;
-    }
-
-    /**
-     * 23w42a+
+     * 23w42a ~ 25w33a
      * Invoked from {@link SkinManager#getOrLoad(GameProfile)}
+     *
+     * 25w34a+
+     * Invoked from {@link SkinManager#get(GameProfile)}
      */
     public static Property createProperty(Property property) {
-        return property == null ? new Property(null, null) : new Property(TextureUtil.AuthlibField.PROPERTY_NAME.get(property), TextureUtil.AuthlibField.PROPERTY_VALUE.get(property), TextureUtil.AuthlibField.PROPERTY_SIGNATURE.get(property));
-    }
-
-    /**
-     * 23w31a+
-     * Invoked from {@link SkinManager#getOrLoad(GameProfile)}
-     */
-    public static Object loadCache(LoadingCache<?, ?> loadingCache, Object cacheKey, GameProfile profile) throws Exception {
-        return cacheLoader.load(FakeCacheKey.wrapCacheKey(cacheKey, profile));
+        return property == null ? new Property(null, null) : property;
     }
 
     /**
@@ -97,9 +78,10 @@ public class FakeSkinManager {
             File cacheFile = fakeProfileTexture.getCacheFile();
             if (params.length == 4) {
                 if (params[3] instanceof Boolean) { // 24w46a+
-                    FakeInterfaceManager.ResourceLocation_setTexture(params[0], FakeThreadDownloadImageData.createTexture(params[0], cacheFile.toPath(), params[2], false, new BaseBuffer(null, textureType, fakeProfileTexture)));
+                    if ((Boolean) params[3]) {
+                        params[0] = FakeResourceLocation.create((ResourceLocation) params[0], fakeProfileTexture);
+                    }
                     params[1] = cacheFile.toPath();
-                    params[3] = false;
                 } else { // 19w37a-
                     params[0] = cacheFile;
                     params[3] = new BaseBuffer((Runnable) params[3], textureType, fakeProfileTexture);
@@ -113,62 +95,21 @@ public class FakeSkinManager {
         return params;
     }
 
-    /**
-     * 24w46a+
-     * Invoked from {@link SkinManager$TextureCache#registerTexture(MinecraftProfileTexture)}
-     */
-    public static CompletableFuture<?> clearCachedFuture(CompletableFuture<?> future) {
-        CompletableFuture<Object> completableFuture = new CompletableFuture<>();
-        future.thenAccept(completableFuture::complete);
-        return completableFuture;
-    }
 
-    /**
-     * 24w46a+
-     * Invoked from {@link SkinTextureDownloader#lambda$registerTextureInManager$2(Minecraft, ResourceLocation, NativeImage)}
-     */
-    public static void registerTextureInManager(TextureManager manager, ResourceLocation location, AbstractTexture texture) {
-        Object texture0 = FakeInterfaceManager.ResourceLocation_getTexture(location);
-        if (texture0 != null) {
-            manager.registerAndLoad(location, (ReloadableTexture) texture0);
-        } else {
-            manager.loadTexture(location, texture);
-        }
-    }
-
-
-    private final static String KEY = "CustomSkinLoaderInfo";
     /**
      * 1.20.1-
      * Invoked from {@link SkinManager#loadProfileTextures(GameProfile, SkinManager$SkinAvailableCallback, boolean)}
      */
-    public static void loadProfileTextures(Runnable runnable, GameProfile profile) {
-        CustomSkinLoader.loadProfileTextures(() -> CustomSkinLoader.loadProfileLazily(profile, p -> {
-            profile.getProperties().putAll(KEY, p.toProperties());
-            runnable.run();
-            return null;
-        }));
+    public static void loadProfileTextures(Runnable runnable) {
+        CustomSkinLoader.loadProfileTextures(runnable);
     }
 
     /**
      * 23w31a+
      * Invoked from {@link SkinManager$1#load(SkinManager$CacheKey)}
      */
-    public static Object[] loadProfileTextures(ImmutableList<Object> list, Object cacheKey) {
-        Object[] params = list.toArray();
-        GameProfile profile = FakeCacheKey.unwrapCacheKey(cacheKey);
-        if (!profile.getProperties().containsKey(SKULL_KEY)) {
-            final Supplier<?> supplier = (Supplier<?>) params[0];
-            params[0] = (Supplier<?>) () -> CustomSkinLoader.loadProfileLazily(profile, p -> {
-                profile.getProperties().putAll(KEY, p.toProperties());
-                FakeCacheKey.wrapCacheKey(cacheKey, profile);
-                return supplier.get();
-            });
-            params[1] = CustomSkinLoader.THREAD_POOL;
-        } else {
-            params[1] = Minecraft.getMinecraft();
-        }
-        return params;
+    public static Executor loadProfileTextures(Executor executor) {
+        return CustomSkinLoader.THREAD_POOL;
     }
 
     /**
@@ -176,7 +117,7 @@ public class FakeSkinManager {
      * Invoked from {@link SkinManager#func_210275_a(GameProfile, boolean, SkinManager$SkinAvailableCallback)}
      */
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getUserProfile(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
-        return ModelManager0.fromUserProfile(UserProfile.fromProperties(profile.getProperties().values()));
+        return ModelManager0.fromUserProfile(CustomSkinLoader.loadProfile(profile));
     }
 
     /**
@@ -193,27 +134,9 @@ public class FakeSkinManager {
     }
 
     /**
-     * 24w46a+
-     * Invoked from {@link SkinManager#lambda$registerTextures$1(CompletableFuture, String, CompletableFuture, CompletableFuture, PlayerSkin$Model, MinecraftProfileTextures, Void)}
+     * 1.20.1-
+     * Invoked from {@link SkinManager#loadSkinFromCache(GameProfile)}
      */
-    public static PlayerSkin$Model loadSkinModel(PlayerSkin$Model model, MinecraftProfileTextures textures) {
-        MinecraftProfileTexture texture = textures.skin();
-        if (texture != null) {
-            model = PlayerSkin$Model.byName(texture.getMetadata("model"));
-        }
-        return model;
-    }
-
-    private final static String SKULL_KEY = "CSL$IsSkull";
-    /**
-     * 23w31a+
-     * Invoked from {@link SkinManager#getInsecureSkin(GameProfile)}
-     */
-    public static void setSkullType(GameProfile profile) {
-        profile.getProperties().removeAll(SKULL_KEY);
-        profile.getProperties().put(SKULL_KEY, new Property(SKULL_KEY, "true"));
-    }
-
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile) {
         return CustomSkinLoader.loadProfileFromCache(profile);
     }
@@ -223,39 +146,24 @@ public class FakeSkinManager {
      * Invoked from {@link SkinManager$1#lambda$load$0(MinecraftSessionService, GameProfile)}
      */
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
-        if (profile.getProperties().containsKey(SKULL_KEY)) {
-            profile.getProperties().removeAll(SKULL_KEY);
-            return CustomSkinLoader.loadProfileFromCache(profile);
-        } else {
-            return getUserProfile(sessionService, profile, requireSecure);
-        }
+        return getUserProfile(sessionService, profile, requireSecure);
     }
 
     /**
-     * 23w42a+
+     * 23w42a ~ 25w33a
      * Invoked from {@link SkinManager$1#lambda$load$0(SkinManager$CacheKey, MinecraftSessionService)}
+     *
+     * 25w34a+
+     * Invoked from {@link SkinManager$1#lambda$load$0(SkinManager$CacheKey, Services)}
      */
-    public static Object loadSkinFromCache(MinecraftSessionService sessionService, Property property) {
-        return FakeCacheKey.createMinecraftProfileTextures(loadSkinFromCache(sessionService, FakeCacheKey.unwrapProperty(property), false));
-    }
-
-    private final static CompletableFuture<?> INCOMPLETED = new CompletableFuture<>();
-    /**
-     * 1.21.6-pre1+
-     * Invoked from {@link SkinManager#registerTextures(UUID, MinecraftProfileTextures)}
-     */
-    public static CompletableFuture<?> checkIncompleted(MinecraftProfileTextures textures, CompletableFuture<?> future) {
-        if (textures == FakeCacheKey.IncompletedContainer.INCOMPLETED) {
-            return INCOMPLETED;
+    public static Object loadSkinFromCache(MinecraftSessionService sessionService, Property property, SkinManager$CacheKey cacheKey) {
+        if (cacheKey instanceof FakeCacheKey) {
+            return FakeCacheKey.createMinecraftProfileTextures(loadSkinFromCache(sessionService, ((FakeCacheKey) cacheKey).profile(), false));
         }
-        return future;
+        return sessionService.unpackTextures(property);
     }
 
-    private static boolean shouldJudgeType(MinecraftProfileTexture texture) {
-        return texture != null && "auto".equals(texture.getMetadata("model"));
-    }
-
-    private static class BaseBuffer implements IImageBuffer {
+    public static class BaseBuffer implements IImageBuffer {
         private IImageBuffer buffer;
 
         private final Runnable callback;
@@ -273,22 +181,20 @@ public class FakeSkinManager {
 
         @Override
         public NativeImage func_195786_a(NativeImage image) {
-            return buffer instanceof FakeSkinBuffer ? ((FakeSkinBuffer) buffer).func_195786_a(image) : image;
+            return this.buffer instanceof FakeSkinBuffer ? this.buffer.func_195786_a(image) : image;
         }
 
         @Override
         public BufferedImage parseUserSkin(BufferedImage image) {
-            return buffer instanceof FakeSkinBuffer ? ((FakeSkinBuffer) buffer).parseUserSkin(image) : image;
+            return this.buffer instanceof FakeSkinBuffer ? this.buffer.parseUserSkin(image) : image;
         }
 
         @Override
         public void skinAvailable() {
-            if (buffer != null) {
-                buffer.skinAvailable();
-                if (shouldJudgeType(texture) && buffer instanceof FakeSkinBuffer) {
-                    //Auto judge skin type
-                    String type = ((FakeSkinBuffer) buffer).judgeType();
-                    texture.setModel(type);
+            if (this.buffer != null) {
+                this.buffer.skinAvailable();
+                if (this.buffer instanceof FakeSkinBuffer) {
+                    judgeType(this.texture, () -> ((FakeSkinBuffer) this.buffer).judgeType());
                 }
             }
 
@@ -296,36 +202,43 @@ public class FakeSkinManager {
                 this.callback.run();
             }
         }
+
+        public static void judgeType(FakeMinecraftProfileTexture texture, Supplier<String> type) {
+            if (shouldJudgeType(texture)) {
+                //Auto judge skin type
+                texture.setModel(type.get());
+            }
+        }
+
+        private static boolean shouldJudgeType(FakeMinecraftProfileTexture texture) {
+            return texture != null && "auto".equals(texture.getMetadata("model", false));
+        }
     }
 
-    public static class FakeCacheKey {
-        public static Object wrapCacheKey(Object cacheKey, GameProfile profile) {
-            if (FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey) == null) { // 23w42a+
-                TextureUtil.AuthlibField.PROPERTY_SIGNATURE.set(FakeInterfaceManager.SkinManagerCacheKey_packedTextures(cacheKey), GameProfileLoader.GSON.toJson(profile, GameProfile.class));
-            }
-            return cacheKey;
+    public static class FakeCacheKey extends SkinManager$CacheKey {
+        private final GameProfile profile;
+
+        public FakeCacheKey(UUID uuid, Property property, GameProfile profile) {
+            super(uuid, property);
+            this.profile = profile;
         }
 
-        public static GameProfile unwrapCacheKey(Object cacheKey) {
-            if (FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey) != null) {
-                return FakeInterfaceManager.SkinManagerCacheKey_profile(cacheKey); // 23w31a ~ 23w41a
-            } else {
-                return unwrapProperty(FakeInterfaceManager.SkinManagerCacheKey_packedTextures(cacheKey)); // 23w42a+
-            }
+        public GameProfile profile() {
+            return this.profile;
         }
 
-        public static GameProfile unwrapProperty(Property property) {
-            return GameProfileLoader.GSON.fromJson((String) TextureUtil.AuthlibField.PROPERTY_SIGNATURE.get(property), GameProfile.class); // 23w42a+
-        }
-
-        public static class IncompletedContainer {
-            public final static Object INCOMPLETED = new MinecraftProfileTextures(null, null, null, SignatureState.SIGNED);
+        /**
+         * 23w42a ~ 25w33a
+         * Invoked from {@link SkinManager#getOrLoad(GameProfile)}
+         *
+         * 25w34a+
+         * Invoked from {@link SkinManager#get(GameProfile)}
+         */
+        public static SkinManager$CacheKey createFakeCacheKey(UUID uuid, Property property, GameProfile profile) {
+            return new FakeCacheKey(uuid, property, profile);
         }
 
         public static Object createMinecraftProfileTextures(Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures) {
-            if (textures == CustomSkinLoader.INCOMPLETED) {
-                return IncompletedContainer.INCOMPLETED;
-            }
             return new MinecraftProfileTextures(textures.get(MinecraftProfileTexture.Type.SKIN), textures.get(MinecraftProfileTexture.Type.CAPE), textures.get(MinecraftProfileTexture.Type.ELYTRA), SignatureState.SIGNED);
         }
     }

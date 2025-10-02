@@ -14,6 +14,7 @@ import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpTextureUtil;
 import customskinloader.utils.HttpUtil0;
+import customskinloader.utils.TextureUtil;
 
 public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IProfileLoader {
 
@@ -160,13 +161,12 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
         return profile;
     }
 
-    private void getTextureUrl(
-            SkinSiteProfile ssp, GameProfile gameProfile, String baseUrl, Consumer<String> onSuccess) {
+    private void getTextureUrl(SkinSiteProfile ssp, GameProfile gameProfile, String baseUrl, Consumer<String> onSuccess) {
         //Base URL is empty
         if (baseUrl == null || baseUrl.isEmpty()) {
             return;
         }
-        String url = expandURL(baseUrl, gameProfile.getName());
+        String url = expandURL(baseUrl, TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile));
         //No texture can be loaded
         if (url == null) {
             return;

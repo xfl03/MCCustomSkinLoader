@@ -10,9 +10,6 @@ customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraf
 customskinloader/fake/itf/IFakeNativeImage customskinloader/fake/itf/IFakeNativeImage
 	getPixel (II)I method_61940
 	setPixel (III)V method_61941
-customskinloader/fake/itf/IFakeSkinManagerCacheKey customskinloader/fake/itf/IFakeSkinManagerCacheKey
-	profile ()Lcom/mojang/authlib/GameProfile; comp_1631
-	packedTextures ()Lcom/mojang/authlib/properties/Property; comp_2011
 net/minecraft/client/Minecraft net/minecraft/class_310
 	gameDir field_1697
 	getCurrentServerData ()Lnet/minecraft/client/multiplayer/ServerData; method_1558
@@ -45,8 +42,6 @@ net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
 	func_195715_a (IIIII)V method_4326
 net/minecraft/client/renderer/texture/ReloadableTexture net/minecraft/class_10537
 net/minecraft/client/renderer/texture/SkinTextureDownloader net/minecraft/class_10538
-	lambda$downloadAndRegisterSkin$0 (Ljava/nio/file/Path;Ljava/lang/String;Z)Lnet/minecraft/client/renderer/texture/NativeImage; method_65866
-	processLegacySkin (Lnet/minecraft/client/renderer/texture/NativeImage;Ljava/lang/String;)Lnet/minecraft/client/renderer/texture/NativeImage; method_65863
 net/minecraft/client/renderer/texture/SimpleTexture net/minecraft/class_1049
 	loadContents (Lnet/minecraft/client/resources/IResourceManager;)Lnet/minecraft/client/renderer/texture/TextureContents; method_65809
 net/minecraft/client/renderer/texture/TextureContents net/minecraft/class_10539
@@ -61,9 +56,6 @@ net/minecraft/client/resources/IResource net/minecraft/class_3298
 	getInputStream ()Ljava/io/InputStream; method_14482
 net/minecraft/client/resources/IResourceManager net/minecraft/class_3300
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; method_14486
-net/minecraft/client/resources/PlayerSkin net/minecraft/class_8685
-net/minecraft/client/resources/PlayerSkin$Model net/minecraft/class_8685$class_7920
-	byName (Ljava/lang/String;)Lnet/minecraft/client/resources/PlayerSkin$Model; method_52857
 net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
 	loadSkin (Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/util/ResourceLocation; method_4656
@@ -75,6 +67,7 @@ net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/class_1071
 net/minecraft/client/resources/data/TextureMetadataSection net/minecraft/class_1084
 net/minecraft/resources/IResource net/minecraft/class_3298
 net/minecraft/resources/IResourceManager net/minecraft/class_3300
+net/minecraft/server/Services net/minecraft/class_7497
 net/minecraft/util/ResourceLocation net/minecraft/class_2960
 net/minecraft/util/StringUtils net/minecraft/class_3544
 	stripControlCodes (Ljava/lang/String;)Ljava/lang/String; method_15440

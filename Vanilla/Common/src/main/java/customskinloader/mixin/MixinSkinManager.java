@@ -4,32 +4,26 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import customskinloader.fake.FakeSkinManager;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.client.resources.PlayerSkin$Model;
 import net.minecraft.client.resources.SkinManager;
+import net.minecraft.client.resources.SkinManager$CacheKey;
 import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Group;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -37,17 +31,68 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @SuppressWarnings("target")
 public abstract class MixinSkinManager {
-    // 18w43b ~ 1.20.1
+    // 18w43b+
     @Mixin(SkinManager.class)
     public abstract static class V1 {
+        // 18w43b ~ 1.20.1
+        @Group(
+            name = "inject_init",
+            min = 1
+        )
         @Inject(
             method = "Lnet/minecraft/client/resources/SkinManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/io/File;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)V",
             at = @At("RETURN")
         )
-        private void inject_init(TextureManager textureManagerInstance, File skinCacheDirectory, MinecraftSessionService sessionService, CallbackInfo callbackInfo) {
+        private void inject_init(@Coerce Object textureManager, File skinCacheDirectory, @Coerce Object service, CallbackInfo callbackInfo) {
             FakeSkinManager.setSkinCacheDir(skinCacheDirectory);
         }
 
+        // 23w31a ~ 24w45a
+        @Group(
+            name = "inject_init",
+            min = 1
+        )
+        @Inject(
+            method = "Lnet/minecraft/client/resources/SkinManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/nio/file/Path;Lcom/mojang/authlib/minecraft/MinecraftSessionService;Ljava/util/concurrent/Executor;)V",
+            at = @At("RETURN")
+        )
+        private void inject_init(@Coerce Object textureManager, Path path, @Coerce Object service, @Coerce Object executor, CallbackInfo callbackInfo) {
+            FakeSkinManager.setSkinCacheDir(path);
+        }
+
+        // 24w46a ~ 25w34b
+        @Group(
+            name = "inject_init",
+            min = 1
+        )
+        @Inject(
+            method = {
+                "Lnet/minecraft/client/resources/SkinManager;<init>(Ljava/nio/file/Path;Lcom/mojang/authlib/minecraft/MinecraftSessionService;Ljava/util/concurrent/Executor;)V", // 24w46a ~ 25w33a
+                "Lnet/minecraft/client/resources/SkinManager;<init>(Ljava/nio/file/Path;Lnet/minecraft/server/Services;Ljava/util/concurrent/Executor;)V" // 25w34a ~ 25w34b
+            },
+            at = @At("RETURN")
+        )
+        private void inject_init(Path path, @Coerce Object service, @Coerce Object executor, CallbackInfo callbackInfo) {
+            FakeSkinManager.setSkinCacheDir(path);
+        }
+
+        // 25w35a+
+        @Group(
+            name = "inject_init",
+            min = 1
+        )
+        @Inject(
+            method = "Lnet/minecraft/client/resources/SkinManager;<init>(Ljava/nio/file/Path;Lnet/minecraft/server/Services;Lnet/minecraft/client/renderer/texture/SkinTextureDownloader;Ljava/util/concurrent/Executor;)V",
+            at = @At("RETURN")
+        )
+        private void inject_init(Path path, @Coerce Object service, @Coerce Object downloader, @Coerce Object executor, CallbackInfo callbackInfo) {
+            FakeSkinManager.setSkinCacheDir(path);
+        }
+    }
+
+    // 18w43b ~ 1.20.1
+    @Mixin(SkinManager.class)
+    public abstract static class V2 {
         // 18w43b ~ 19w37a
         @Group(
             name = "modifyArgs_loadSkin",
@@ -98,8 +143,8 @@ public abstract class MixinSkinManager {
                 remap = false
             )
         )
-        private Future<?> redirect_loadProfileTextures_0(ExecutorService executor, Runnable task, GameProfile profile, SkinManager$SkinAvailableCallback skinAvailableCallback, boolean requireSecure) {
-            FakeSkinManager.loadProfileTextures(task, profile);
+        private Future<?> redirect_loadProfileTextures_0(ExecutorService executor, Runnable task) {
+            FakeSkinManager.loadProfileTextures(task);
             return null;
         }
 
@@ -116,8 +161,8 @@ public abstract class MixinSkinManager {
                 remap = false
             )
         )
-        private void redirect_loadProfileTextures_1(Executor executor, Runnable task, GameProfile profile, SkinManager$SkinAvailableCallback skinAvailableCallback, boolean requireSecure) {
-            FakeSkinManager.loadProfileTextures(task, profile);
+        private void redirect_loadProfileTextures_1(Executor executor, Runnable task) {
+            FakeSkinManager.loadProfileTextures(task);
         }
 
         // 21w37a ~ 1.20.1
@@ -133,8 +178,8 @@ public abstract class MixinSkinManager {
                 remap = false
             )
         )
-        private void redirect_loadProfileTextures_2(ExecutorService executor, Runnable task, GameProfile profile, SkinManager$SkinAvailableCallback skinAvailableCallback, boolean requireSecure) {
-            FakeSkinManager.loadProfileTextures(task, profile);
+        private void redirect_loadProfileTextures_2(ExecutorService executor, Runnable task) {
+            FakeSkinManager.loadProfileTextures(task);
         }
 
         @Inject(
@@ -194,59 +239,14 @@ public abstract class MixinSkinManager {
         }
     }
 
-    // 23w31a ~ 23w45a
-    @Mixin(SkinManager.class)
-    public abstract static class V2 {
-        @Inject(
-            method = "Lnet/minecraft/client/resources/SkinManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/nio/file/Path;Lcom/mojang/authlib/minecraft/MinecraftSessionService;Ljava/util/concurrent/Executor;)V",
-            at = @At("RETURN")
-        )
-        private void inject_init(TextureManager textureManager, Path path, MinecraftSessionService minecraftSessionService, Executor executor, CallbackInfo callbackInfo) {
-            FakeSkinManager.setSkinCacheDir(path);
-        }
-
-        @ModifyArg(
-            method = "Lnet/minecraft/client/resources/SkinManager;<init>(Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/nio/file/Path;Lcom/mojang/authlib/minecraft/MinecraftSessionService;Ljava/util/concurrent/Executor;)V",
-            at = @At(
-                value = "INVOKE",
-                target = "Lcom/google/common/cache/CacheBuilder;build(Lcom/google/common/cache/CacheLoader;)Lcom/google/common/cache/LoadingCache;",
-                remap = false
-            )
-        )
-        private CacheLoader<Object, ?> modifyArg_init(CacheLoader<Object, ?> cacheLoader) {
-            return FakeSkinManager.setCacheLoader(cacheLoader);
-        }
-    }
-
-    // 23w31a+
-    @Mixin(SkinManager.class)
-    public abstract static class V3 {
-        @Inject(
-            method = "Lnet/minecraft/client/resources/SkinManager;getInsecureSkin(Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/PlayerSkin;",
-            at = @At("HEAD")
-        )
-        private void inject_getInsecureSkin(GameProfile profile, CallbackInfoReturnable<?> callbackInfoReturnable) {
-            FakeSkinManager.setSkullType(profile);
-        }
-
-        @Redirect(
-            method = "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;",
-            at = @At(
-                value = "INVOKE",
-                target = "Lcom/google/common/cache/LoadingCache;getUnchecked(Ljava/lang/Object;)Ljava/lang/Object;",
-                remap = false
-            )
-        )
-        private Object redirect_getOrLoad(LoadingCache<?, ?> loadingCache, Object cacheKey, GameProfile profile) throws Exception {
-            return FakeSkinManager.loadCache(loadingCache, cacheKey, profile);
-        }
-    }
-
     // 23w42a+
     @Mixin(SkinManager.class)
-    public abstract static class V4 {
+    public abstract static class V3 {
         @ModifyArg(
-            method = "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;",
+            method = {
+                "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;", // 23w42a ~ 25w33a
+                "Lnet/minecraft/client/resources/SkinManager;get(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;" // 25w34a+
+            },
             at = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/client/resources/SkinManager$CacheKey;<init>(Ljava/util/UUID;Lcom/mojang/authlib/properties/Property;)V"
@@ -255,59 +255,19 @@ public abstract class MixinSkinManager {
         private Property modifyArg_getOrLoad(Property property) {
             return FakeSkinManager.createProperty(property);
         }
-    }
 
-    // 23w46a+
-    @Mixin(SkinManager.class)
-    public abstract static class V5 {
-        @Inject(
-            method = "Lnet/minecraft/client/resources/SkinManager;<init>(Ljava/nio/file/Path;Lcom/mojang/authlib/minecraft/MinecraftSessionService;Ljava/util/concurrent/Executor;)V",
-            at = @At("RETURN")
-        )
-        private void inject_init(Path path, MinecraftSessionService minecraftSessionService, Executor executor, CallbackInfo callbackInfo) {
-            FakeSkinManager.setSkinCacheDir(path);
-        }
-
-        @ModifyArg(
-            method = "Lnet/minecraft/client/resources/SkinManager;<init>(Ljava/nio/file/Path;Lcom/mojang/authlib/minecraft/MinecraftSessionService;Ljava/util/concurrent/Executor;)V",
+        @Redirect(
+            method = {
+                "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;", // 23w42a ~ 25w33a
+                "Lnet/minecraft/client/resources/SkinManager;get(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;" // 25w34a+
+            },
             at = @At(
-                value = "INVOKE",
-                target = "Lcom/google/common/cache/CacheBuilder;build(Lcom/google/common/cache/CacheLoader;)Lcom/google/common/cache/LoadingCache;",
-                remap = false
+                value = "NEW",
+                target = "(Ljava/util/UUID;Lcom/mojang/authlib/properties/Property;)Lnet/minecraft/client/resources/SkinManager$CacheKey;"
             )
         )
-        private CacheLoader<Object, ?> modifyArg_init(CacheLoader<Object, ?> cacheLoader) {
-            return FakeSkinManager.setCacheLoader(cacheLoader);
-        }
-
-        @ModifyVariable(
-            method = "Lnet/minecraft/client/resources/SkinManager;lambda$registerTextures$1(Ljava/util/concurrent/CompletableFuture;Ljava/lang/String;Ljava/util/concurrent/CompletableFuture;Ljava/util/concurrent/CompletableFuture;Lnet/minecraft/client/resources/PlayerSkin$Model;Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;Ljava/lang/Void;)Lnet/minecraft/client/resources/PlayerSkin;",
-            at = @At("HEAD"),
-            argsOnly = true
-        )
-        private static PlayerSkin$Model modifyVariable_lambda$registerTextures$1(PlayerSkin$Model model, CompletableFuture<?> skin, String url, CompletableFuture<?> cape, CompletableFuture<?> elytra, PlayerSkin$Model _model, MinecraftProfileTextures textures) {
-            return FakeSkinManager.loadSkinModel(model, textures);
-        }
-    }
-
-    // 1.21.6-pre1+
-    @Mixin(SkinManager.class)
-    public abstract static class V6 {
-        @Inject(
-            method = "Lnet/minecraft/client/resources/SkinManager;getInsecureSkin(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/PlayerSkin;)Lnet/minecraft/client/resources/PlayerSkin;",
-            at = @At("HEAD")
-        )
-        private void inject_getInsecureSkin(GameProfile profile, PlayerSkin skin, CallbackInfoReturnable<?> callbackInfoReturnable) {
-            FakeSkinManager.setSkullType(profile);
-        }
-
-        @Inject(
-            method = "Lnet/minecraft/client/resources/SkinManager;registerTextures(Ljava/util/UUID;Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;)Ljava/util/concurrent/CompletableFuture;",
-            at = @At("RETURN"),
-            cancellable = true
-        )
-        private void inject_registerTextures(UUID uuid, MinecraftProfileTextures textures, CallbackInfoReturnable<CompletableFuture<?>> callbackInfoReturnable) {
-            callbackInfoReturnable.setReturnValue(FakeSkinManager.checkIncompleted(textures, callbackInfoReturnable.getReturnValue()));
+        private SkinManager$CacheKey redirect_getOrLoad(UUID uuid, Property property, GameProfile profile) {
+            return FakeSkinManager.FakeCacheKey.createFakeCacheKey(uuid, property, profile);
         }
     }
 }
