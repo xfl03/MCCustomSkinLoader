@@ -17,7 +17,8 @@ public abstract class MixinLayerCape {
         method = {
             "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFFF)V", // 19w39a ~ 19w44a
             "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/entity/AbstractClientPlayer;FFFFFF)V", // 19w45a ~ 1.21.1
-            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/renderer/entity/state/PlayerRenderState;FF)V" // 24w33a+
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ILnet/minecraft/client/renderer/entity/state/PlayerRenderState;FF)V", // 24w33a ~ 1.21.8
+            "Lnet/minecraft/client/renderer/entity/layers/LayerCape;doRenderLayer(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V" // 25w31a+
         },
         at = @At(
             value = "INVOKE",

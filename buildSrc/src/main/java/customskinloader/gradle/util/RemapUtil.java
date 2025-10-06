@@ -18,7 +18,11 @@ import com.google.common.collect.Sets;
 import net.minecraftforge.srg2source.ast.RangeExtractor;
 import net.minecraftforge.srg2source.util.io.InputSupplier;
 import org.apache.commons.io.FileUtils;
+import org.cadixdev.bombe.type.ArrayType;
+import org.cadixdev.bombe.type.FieldType;
+import org.cadixdev.bombe.type.ObjectType;
 import org.cadixdev.lorenz.MappingSet;
+import org.cadixdev.lorenz.impl.MappingSetImpl;
 import org.cadixdev.lorenz.io.srg.SrgReader;
 import org.cadixdev.lorenz.io.srg.SrgWriter;
 import org.cadixdev.lorenz.io.srg.tsrg.TSrgReader;
@@ -39,7 +43,7 @@ public class RemapUtil {
         if (!tsrg.exists()) return;
         if (!srg.getParentFile().exists()) srg.getParentFile().mkdirs();
 
-        MappingSet set = MappingSet.create();
+        MappingSet set = new MappingSetImplWithoutInnerClass();
 
         try (
             Reader reader = Files.newBufferedReader(tsrg.toPath(), StandardCharsets.UTF_8);
@@ -105,6 +109,42 @@ public class RemapUtil {
             }
         }
         return new String(chars);
+    }
+
+    public static class MappingSetImplWithoutInnerClass extends MappingSetImpl {
+        @Override
+        public Optional<? extends ClassMapping<?, ?>> getClassMapping(String obfuscatedName) {
+            return this.getTopLevelClassMapping(obfuscatedName);
+        }
+
+        @Override
+        public Optional<? extends ClassMapping<?, ?>> computeClassMapping(final String obfuscatedName) {
+            return this.getTopLevelClassMapping(obfuscatedName);
+        }
+
+        @Override
+        public ClassMapping<?, ?> getOrCreateClassMapping(final String obfuscatedName) {
+            return this.getOrCreateTopLevelClassMapping(obfuscatedName);
+        }
+
+        @Override
+        public FieldType deobfuscate(final FieldType type) {
+            if (type instanceof ArrayType) {
+                final ArrayType arr = (ArrayType) type;
+                final FieldType component = this.deobfuscate(arr.getComponent());
+                return component == arr.getComponent() ? arr : new ArrayType(arr.getDimCount(), component);
+            } else if (type instanceof ObjectType) {
+                final ObjectType obj = (ObjectType) type;
+
+                ClassMapping<?, ?> currentClass = this.getClassMapping(obj.getClassName()).orElse(null);
+                if (currentClass == null) {
+                    return type;
+                }
+
+                return new ObjectType(currentClass.getFullDeobfuscatedName());
+            }
+            return type;
+        }
     }
 
     public static class SrgWriterWithoutFilter extends SrgWriter {

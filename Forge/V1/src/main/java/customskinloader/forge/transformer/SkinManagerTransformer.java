@@ -99,8 +99,7 @@ public class SkinManagerTransformer {
                 if (ain.getOpcode() == Opcodes.INVOKEINTERFACE) {
                     MethodInsnNode min = (MethodInsnNode) ain;
                     if (TransformerManager.checkClassName(min.owner, "java/util/concurrent/ExecutorService") && TransformerManager.checkMethodName(min.owner, min.name, min.desc, "submit") && TransformerManager.checkMethodDesc(min.desc, "(Ljava/lang/Runnable;)Ljava/util/concurrent/Future;")) {
-                        mn.instructions.insertBefore(min, new VarInsnNode(Opcodes.ALOAD, 1));
-                        mn.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadProfileTextures", "(Ljava/lang/Runnable;Lcom/mojang/authlib/GameProfile;)V", false));
+                        mn.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadProfileTextures", "(Ljava/lang/Runnable;)V", false));
                     }
                 }
             }

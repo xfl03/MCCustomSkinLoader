@@ -12,6 +12,7 @@ import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.UserProfile;
 import customskinloader.utils.HttpRequestUtil;
 import customskinloader.utils.HttpUtil0;
+import customskinloader.utils.TextureUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -86,7 +87,7 @@ public class JsonAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPr
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
-        String username = gameProfile.getName();
+        String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
         if (StringUtils.isEmpty(ssp.root)) {
             CustomSkinLoader.logger.info("Root not defined.");
             return null;

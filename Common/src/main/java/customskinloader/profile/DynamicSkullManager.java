@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.util.UUIDTypeAdapter;
 import customskinloader.CustomSkinLoader;
 import customskinloader.utils.HttpRequestUtil;
@@ -44,7 +45,7 @@ public class DynamicSkullManager {
     private List<GameProfile> loadingList = Lists.newArrayList();
 
     private void parseGameProfile(GameProfile profile) {
-        Property textureProperty = Iterables.getFirst(profile.getProperties().get("textures"), null);
+        Property textureProperty = Iterables.getFirst(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.<PropertyMap>get(profile).get("textures"), null);
         if (textureProperty == null) {
             staticTextures.put(profile, Maps.newHashMap());
             return;

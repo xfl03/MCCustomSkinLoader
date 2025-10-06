@@ -89,7 +89,7 @@ public class GameProfileLoader implements ICustomSkinLoaderPlugin, ProfileLoader
         if (gameProfile == null) {
             return Maps.newHashMap();
         }
-        Property textureProperty = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
+        Property textureProperty = Iterables.getFirst(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.<PropertyMap>get(gameProfile).get("textures"), null);
         if (textureProperty == null) {
             return Maps.newHashMap();
         }

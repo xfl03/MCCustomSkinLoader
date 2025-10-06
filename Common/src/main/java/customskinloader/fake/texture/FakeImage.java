@@ -8,6 +8,10 @@ public interface FakeImage {
 
     FakeImage createImage(InputStream is) throws IOException;
 
+    int getRatio();
+
+    void setRatio(int ratio);
+
     int getWidth();
 
     int getHeight();

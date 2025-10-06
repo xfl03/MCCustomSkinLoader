@@ -53,7 +53,7 @@ public class MixinConfigPlugin extends customskinloader.mixin.core.MixinConfigPl
     private static void fixMixinModifyArgs() throws Throwable {
         ClassLoader loader = MixinConfigPlugin.class.getClassLoader();
         Map<String, MethodHandle> handles = findPackageLookup(loader.getClass());
-        if (handles != null) {
+        if (handles != null && handles.get("packageLookup") != null) {
             Map<String, Object> packageToOurModules = (Map<String, Object>) handles.get("packageLookup").invokeWithArguments(loader);
             String packageName = "org.spongepowered.asm.synthetic.args";
             if (packageToOurModules.get(packageName) == null) {

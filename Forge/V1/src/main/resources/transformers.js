@@ -100,11 +100,10 @@ function initializeCoreMod() {
                             if (node.getOpcode() === Opcodes.INVOKEINTERFACE
                                 && ((node.owner.equals("java/util/concurrent/ExecutorService") && checkName(node.name, "submit") && node.desc.equals("(Ljava/lang/Runnable;)Ljava/util/concurrent/Future;")) // 1.14.4-
                                     || (node.owner.equals("java/util/concurrent/Executor") && checkName(node.name, "execute") && node.desc.equals("(Ljava/lang/Runnable;)V")))) { // 1.15+
-                                mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1));
                                 if (node.desc.endsWith("V")) {
                                     mn.instructions.insert(node, new InsnNode(Opcodes.POP));
                                 }
-                                mn.instructions.set(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadProfileTextures", "(Ljava/lang/Runnable;Lcom/mojang/authlib/GameProfile;)V", false));
+                                mn.instructions.set(node, new MethodInsnNode(Opcodes.INVOKESTATIC, "customskinloader/fake/FakeSkinManager", "loadProfileTextures", "(Ljava/lang/Runnable;)V", false));
                             }
                         }
                     } else if (((checkName(mn.name, "func_210275_a") || checkName(mn.name, "lambda$loadProfileTextures$1")) // 1.14.4-

@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.texture.NativeImage;
 
 public class FakeNativeImage implements FakeImage {
     private NativeImage image;
+    private int ratio;
 
     public FakeNativeImage(int width, int height) {
         this(new NativeImage(width, height, true));
@@ -26,6 +27,16 @@ public class FakeNativeImage implements FakeImage {
 
     public FakeImage createImage(InputStream is) {
         return new FakeNativeImage(NativeImage.func_195713_a(is));
+    }
+
+    @Override
+    public int getRatio() {
+        return this.ratio;
+    }
+
+    @Override
+    public void setRatio(int ratio) {
+        this.ratio = ratio;
     }
 
     public int getWidth() {
@@ -58,5 +69,24 @@ public class FakeNativeImage implements FakeImage {
     }
 
     public void close() {
+        image.close();
+    }
+
+    public static class Extended extends NativeImage {
+        public static NativeImage create(FakeNativeImage fakeImage) {
+            return new FakeNativeImage.Extended(fakeImage);
+        }
+
+        private final FakeNativeImage fakeImage;
+
+        public Extended(FakeNativeImage fakeImage) {
+            super(fakeImage.getWidth(), fakeImage.getHeight(), true);
+            this.func_195703_a(fakeImage.getImage());
+            this.fakeImage = fakeImage;
+        }
+
+        public FakeNativeImage getFakeImage() {
+            return this.fakeImage;
+        }
     }
 }
