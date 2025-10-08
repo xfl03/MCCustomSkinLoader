@@ -65,7 +65,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         } else if (mixinClassName.endsWith(".MixinSkinManager$V3")) {
             result = this.world_version >= 3684 && ((this.protocol_version >= 765 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x4000009D); // 23w42a+
         } else if (mixinClassName.endsWith(".MixinSkinManager$1") || mixinClassName.endsWith(".MixinSkinManager$TextureCache")) {
-            result = this.world_version >= 3567 &&  ((this.protocol_version >= 764 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000090); // 23w31a+
+            result = this.world_version >= 3567 && ((this.protocol_version >= 764 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000090); // 23w31a+
         } else if (mixinClassName.endsWith(".MixinSkinTextureDownloader")) {
             result = this.world_version >= 4178 && ((this.protocol_version >= 769 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x400000DE); // 24w46a+
         } else if (mixinClassName.endsWith(".MixinThreadDownloadImageData$V1")) {
