@@ -1,15 +1,11 @@
 package customskinloader;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -25,7 +21,6 @@ import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
 import customskinloader.profile.UserProfile;
-import customskinloader.utils.LIFOBlockingQueue;
 import customskinloader.utils.MinecraftUtil;
 import customskinloader.utils.TextureUtil;
 
@@ -52,22 +47,7 @@ public class CustomSkinLoader {
     private static final ProfileCache profileCache = new ProfileCache();
     private static final DynamicSkullManager dynamicSkullManager = new DynamicSkullManager();
 
-    public static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LIFOBlockingQueue<>(new LinkedBlockingDeque<>()));
-
-    //Correct thread name in thread pool
-    private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
-    private static final ThreadFactory customFactory = r -> {
-        Thread t = defaultFactory.newThread(r);
-        if (r instanceof Thread) {
-            t.setName(((Thread) r).getName());
-        }
-        return t;
-    };
-    //Thread pool will discard oldest task when queue reaches 333 tasks
-    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
-            config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES,
-            new LinkedBlockingQueue<>(333), customFactory, new ThreadPoolExecutor.DiscardOldestPolicy()
-    );
+    public static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
     public static void loadProfileTextures(Runnable runnable) {
         THREAD_POOL.execute(runnable);
@@ -117,10 +97,12 @@ public class CustomSkinLoader {
             return null;
         }
 
+        int size = config.loadlist.size();
+        LinkedList<CompletableFuture<UserProfile>> profileGetters = new LinkedList<>();
         UserProfile profile0 = new UserProfile();
-        for (int i = 0; i < config.loadlist.size(); i++) {
+        for (int i = 0; i < size; i++) {
             SkinSiteProfile ssp = config.loadlist.get(i);
-            logger.info((i + 1) + "/" + config.loadlist.size() + " Try to load profile from '" + ssp.name + "'.");
+            logger.info((i + 1) + "/" + size + " Try to load profile from '" + ssp.name + "'.");
             if (ssp.type == null) {
                 logger.info("The type of '" + ssp.name + "' is null.");
                 continue;
@@ -130,17 +112,27 @@ public class CustomSkinLoader {
                 logger.info("Type '" + ssp.type + "' is not defined.");
                 continue;
             }
-            UserProfile profile = null;
-            try {
-                profile = loader.loadProfile(ssp, gameProfile);
-            } catch (Exception e) {
-                logger.warning("Exception occurs while loading.");
-                logger.warning(e);
-                if (e.getCause() != null) {
-                    logger.warning("Caused By:");
-                    logger.warning(e.getCause());
+            profileGetters.add(CompletableFuture.supplyAsync(() -> {
+                String tempName = Thread.currentThread().getName();
+                Thread.currentThread().setName(username + " (" + ssp.name + ")"); // Change Thread Name
+                UserProfile profile = null;
+                try {
+                    profile = loader.loadProfile(ssp, gameProfile);
+                } catch (Exception e) {
+                    logger.warning("Exception occurs while loading.");
+                    logger.warning(e);
+                    if (e.getCause() != null) {
+                        logger.warning("Caused By:");
+                        logger.warning(e.getCause());
+                    }
                 }
-            }
+                Thread.currentThread().setName(tempName);
+                return profile;
+            }, THREAD_POOL));
+        }
+
+        for (CompletableFuture<UserProfile> profileGetter : profileGetters) {
+            UserProfile profile = profileGetter.join();
             if (profile == null) {
                 continue;
             }
@@ -155,6 +147,7 @@ public class CustomSkinLoader {
                 break;
             }
         }
+
         if (!profile0.isEmpty()) {
             logger.info(username + "'s profile loaded.");
             if (!config.enableCape) {
@@ -206,11 +199,7 @@ public class CustomSkinLoader {
                 loadProfile0(gameProfile, true);//Load in thread
                 Thread.currentThread().setName(tempName);
             };
-            if (config.forceUpdateSkull) {
-                new Thread(loadThread).start();
-            } else {
-                threadPool.execute(loadThread);
-            }
+            THREAD_POOL.execute(loadThread);
         }
         return INCOMPLETED;
     }

@@ -29,7 +29,6 @@ public class Config {
     public boolean enableTransparentSkin = true;
     public boolean forceLoadAllTextures = true;
     public boolean enableCape = true;
-    public int threadPoolSize = 8;
     /**
      * Can logger write message to standard output(System.out).
      * Because standard output won't write to latest.log after Forge 1.17,
@@ -77,7 +76,6 @@ public class Config {
         config.loadExtraList();
         config.updateLoadlist();
         config.initLocalFolder();
-        config.threadPoolSize = Math.max(config.threadPoolSize, 1);
         if (config.enableCacheAutoClean && !config.enableLocalProfileCache) {
             try {
                 FileUtils.deleteDirectory(HttpRequestUtil.CACHE_DIR);
