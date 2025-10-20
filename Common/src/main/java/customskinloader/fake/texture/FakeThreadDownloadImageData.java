@@ -25,22 +25,29 @@ public class FakeThreadDownloadImageData extends SimpleTexture {
             }
             return function.apply(_image);
         } : _image -> function.apply(_image).thenApply(_location -> {
-            Minecraft.getMinecraft().getTextureManager().registerAndLoad(location, new FakeThreadDownloadImageData(location, _image));
+            Minecraft.getMinecraft().getTextureManager().registerAndLoad(location, new FakeThreadDownloadImageData(location, copyImage(new FakeNativeImage(_image))));
             return _location;
         });
     }
 
-    public FakeThreadDownloadImageData(ResourceLocation location, NativeImage image) {
+    public FakeThreadDownloadImageData(ResourceLocation location, FakeNativeImage image) {
         super(location);
         this.buffer = new FakeCapeBuffer();
-        this.image = new FakeNativeImage(image);
+        this.image = image;
     }
 
     @Override
     public TextureContents loadContents(IResourceManager resourceManager) {
         this.image = (FakeNativeImage) this.buffer.parseUserSkin(this.image);
-        FakeNativeImage local = (FakeNativeImage) this.image.createImage(this.image.getWidth(), this.image.getHeight());
-        local.copyImageData(this.image);
-        return new TextureContents(local.getImage(), null);
+        return new TextureContents(copyImage(this.image).getImage(), null);
+    }
+
+    /**
+     * Protects cached NativeImage instances from external interference (e.g. accidental close operations). All lifecycle management is handled internally by this cache.
+     */
+    private static FakeNativeImage copyImage(FakeNativeImage from) {
+        FakeNativeImage local = (FakeNativeImage) from.createImage(from.getWidth(), from.getHeight());
+        local.copyImageData(from);
+        return local;
     }
 }
