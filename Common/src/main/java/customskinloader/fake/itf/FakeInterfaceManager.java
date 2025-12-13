@@ -3,6 +3,7 @@ package customskinloader.fake.itf;
 import java.io.InputStream;
 import java.util.Optional;
 
+import customskinloader.fake.FakeMinecraftProfileTexture;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -12,8 +13,11 @@ public class FakeInterfaceManager {
         return ((IFakeIResource.V2) resource).open();
     }
 
-    public static Optional<IResource> IResourceManager_getResource(Object resourceManager, ResourceLocation location) {
-        return ((IFakeIResourceManager) resourceManager).getResource(location);
+    public static Optional<IResource> IResourceManager_getResource(Object resourceManager, Object location) {
+        if (resourceManager instanceof IFakeIResourceManager.V2) {
+            return ((IFakeIResourceManager.V2) resourceManager).getResource((IFakeResourceLocation) location);
+        }
+        return ((IFakeIResourceManager.V1) resourceManager).getResource((ResourceLocation) location);
     }
 
     public static IResourceManager Minecraft_getResourceManager(Object minecraft) {
@@ -26,5 +30,13 @@ public class FakeInterfaceManager {
 
     public static void NativeImage_setPixel(Object nativeImage, int x, int y, int color) {
         ((IFakeNativeImage) nativeImage).setPixel(x, y, color);
+    }
+
+    public static FakeMinecraftProfileTexture ResourceLocation_getTexture(Object location) {
+        return ((IFakeResourceLocation) location).getTexture();
+    }
+
+    public static void ResourceLocation_setTexture(Object location, FakeMinecraftProfileTexture texture) {
+        ((IFakeResourceLocation) location).setTexture(texture);
     }
 }

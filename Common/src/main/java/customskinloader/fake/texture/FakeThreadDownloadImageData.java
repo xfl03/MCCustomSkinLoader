@@ -6,11 +6,13 @@ import java.util.function.Function;
 import customskinloader.fake.FakeCapeBuffer;
 import customskinloader.fake.FakeSkinBuffer;
 import customskinloader.fake.FakeSkinManager;
+import customskinloader.fake.itf.FakeInterfaceManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureContents;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ResourceLocation;
 
 // 24w46a+
@@ -18,20 +20,37 @@ public class FakeThreadDownloadImageData extends SimpleTexture {
     private FakeCapeBuffer buffer;
     private FakeNativeImage image;
 
-    public static Function<NativeImage, CompletableFuture<?>> createTexture(Function<NativeImage, CompletableFuture<?>> function, ResourceLocation location, boolean bl) {
-        return bl ? _image -> {
-            if (location instanceof FakeResourceLocation && _image instanceof FakeNativeImage.Extended) {
-                FakeSkinManager.BaseBuffer.judgeType(((FakeResourceLocation) location).getTexture(), () -> FakeSkinBuffer.judgeType0(((FakeNativeImage.Extended) _image).getFakeImage()));
-            }
-            return function.apply(_image);
-        } : _image -> function.apply(_image).thenApply(_location -> {
+    public static Function<NativeImage, CompletableFuture<?>> createTextureV1(Function<NativeImage, CompletableFuture<?>> function, ResourceLocation location, boolean bl) {
+        return createTexture(function, _image -> _location -> {
             Minecraft.getMinecraft().getTextureManager().registerAndLoad(location, new FakeThreadDownloadImageData(location, copyImage(new FakeNativeImage(_image))));
             return _location;
-        });
+        }, location, bl);
+    }
+
+    public static Function<NativeImage, CompletableFuture<?>> createTextureV2(Function<NativeImage, CompletableFuture<?>> function, Identifier identifier, boolean bl) {
+        return createTexture(function, _image -> _location -> {
+            Minecraft.getMinecraft().getTextureManager().registerAndLoad(identifier, new FakeThreadDownloadImageData(identifier, copyImage(new FakeNativeImage(_image)), null));
+            return _location;
+        }, identifier, bl);
+    }
+
+    public static Function<NativeImage, CompletableFuture<?>> createTexture(Function<NativeImage, CompletableFuture<?>> function, Function<NativeImage, Function<Object, Object>> cape, Object location, boolean bl) {
+        return bl ? _image -> {
+            if (FakeInterfaceManager.ResourceLocation_getTexture(location) != null && _image instanceof FakeNativeImage.Extended) {
+                FakeSkinManager.BaseBuffer.judgeType(FakeInterfaceManager.ResourceLocation_getTexture(location), () -> FakeSkinBuffer.judgeType0(((FakeNativeImage.Extended) _image).getFakeImage()));
+            }
+            return function.apply(_image);
+        } : _image -> function.apply(_image).thenApply(cape.apply(_image));
     }
 
     public FakeThreadDownloadImageData(ResourceLocation location, FakeNativeImage image) {
         super(location);
+        this.buffer = new FakeCapeBuffer();
+        this.image = image;
+    }
+
+    public FakeThreadDownloadImageData(Identifier identifier, FakeNativeImage image, Object o) {
+        super(identifier);
         this.buffer = new FakeCapeBuffer();
         this.image = image;
     }

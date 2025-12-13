@@ -190,7 +190,7 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/server/packs/resources/ResourceManager'
             },
             'transformer': function (cn) {
-                cn.interfaces.add("customskinloader/fake/itf/IFakeIResourceManager");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResourceManager$V1");
                 return cn;
             }
         },

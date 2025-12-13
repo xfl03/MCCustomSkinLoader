@@ -16,7 +16,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import customskinloader.CustomSkinLoader;
-import customskinloader.fake.texture.FakeResourceLocation;
+import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.utils.HttpTextureUtil;
 import net.minecraft.client.renderer.IImageBuffer;
@@ -28,7 +28,6 @@ import net.minecraft.client.resources.SkinManager$CacheKey;
 import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
 import net.minecraft.client.resources.SkinManager$TextureCache;
 import net.minecraft.server.Services;
-import net.minecraft.util.ResourceLocation;
 
 public class FakeSkinManager {
     /**
@@ -79,7 +78,7 @@ public class FakeSkinManager {
             if (params.length == 4) {
                 if (params[3] instanceof Boolean) { // 24w46a+
                     if ((Boolean) params[3]) {
-                        params[0] = FakeResourceLocation.create((ResourceLocation) params[0], fakeProfileTexture);
+                        FakeInterfaceManager.ResourceLocation_setTexture(params[0], fakeProfileTexture);
                     }
                     params[1] = cacheFile.toPath();
                 } else { // 19w37a-

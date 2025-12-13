@@ -37,7 +37,7 @@ public abstract class MixinSkinManager$TextureCache {
         args.setAll(argsArr);
     }
 
-    // 23w46a+
+    // 24w46a ~ 25w45a
     @Group(
         name = "modifyArgs_registerTexture",
         min = 1
@@ -50,6 +50,27 @@ public abstract class MixinSkinManager$TextureCache {
         )
     )
     private void modifyArgs_registerTexture_1(Args args, MinecraftProfileTexture profileTexture) {
+        Object[] argsArr = new Object[args.size()];
+        for (int i = 0; i < argsArr.length; i++) {
+            argsArr[i] = args.get(i);
+        }
+        argsArr = FakeSkinManager.createThreadDownloadImageData(ImmutableList.copyOf(argsArr), profileTexture, this.type);
+        args.setAll(argsArr);
+    }
+
+    // 25w46a+
+    @Group(
+        name = "modifyArgs_registerTexture",
+        min = 1
+    )
+    @ModifyArgs(
+        method = "Lnet/minecraft/client/resources/SkinManager$TextureCache;registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture;",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/renderer/texture/SkinTextureDownloader;downloadAndRegisterSkin(Lnet/minecraft/resources/Identifier;Ljava/nio/file/Path;Ljava/lang/String;Z)Ljava/util/concurrent/CompletableFuture;"
+        )
+    )
+    private void modifyArgs_registerTexture_2(Args args, MinecraftProfileTexture profileTexture) {
         Object[] argsArr = new Object[args.size()];
         for (int i = 0; i < argsArr.length; i++) {
             argsArr[i] = args.get(i);
