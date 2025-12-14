@@ -2,7 +2,7 @@ customskinloader/fake/itf/IFakeIResource$V1 customskinloader/fake/itf/IFakeIReso
 	func_199027_b ()Ljava/io/InputStream; getInputStream
 customskinloader/fake/itf/IFakeIResource$V2 customskinloader/fake/itf/IFakeIResource$V2
 	open ()Ljava/io/InputStream; open
-customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
+customskinloader/fake/itf/IFakeIResourceManager$V1 customskinloader/fake/itf/IFakeIResourceManager$V1
 	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; getResource
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; getResource
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
@@ -29,6 +29,9 @@ net/minecraft/client/renderer/IImageBuffer customskinloader/fake/IFakeImageBuffe
 net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/client/renderer/texture/HttpTexture
 net/minecraft/client/renderer/entity/RenderPlayer net/minecraft/client/renderer/entity/player/PlayerRenderer
 net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/client/renderer/entity/layers/CapeLayer
+net/minecraft/client/renderer/rendertype/RenderType net/minecraft/client/renderer/rendertype/RenderType
+net/minecraft/client/renderer/rendertype/RenderTypes net/minecraft/client/renderer/rendertype/RenderTypes
+	entityTranslucent (Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType; entityTranslucent
 net/minecraft/client/renderer/texture/AbstractTexture net/minecraft/client/renderer/texture/AbstractTexture
 net/minecraft/client/renderer/texture/ITextureObject net/minecraft/client/renderer/texture/ITextureObject
 net/minecraft/client/renderer/texture/NativeImage com/mojang/blaze3d/platform/NativeImage
@@ -49,12 +52,14 @@ net/minecraft/client/renderer/texture/TextureManager net/minecraft/client/render
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; getTexture
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V register
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z register
+	registerAndLoad (Lnet/minecraft/resources/Identifier;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V registerAndLoad
 	registerAndLoad (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V registerAndLoad
 net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/client/resources/DefaultPlayerSkin
 	getDefaultSkin (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; getDefaultSkin
 net/minecraft/client/resources/IResource net/minecraft/server/packs/resources/Resource
 	getInputStream ()Ljava/io/InputStream; getInputStream
 net/minecraft/client/resources/IResourceManager net/minecraft/server/packs/resources/ResourceManager
+	getResource (Lnet/minecraft/resources/Identifier;)Ljava/util/Optional; getResource
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; getResource
 net/minecraft/client/resources/SkinManager net/minecraft/client/resources/SkinManager
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V registerSkins
@@ -67,6 +72,8 @@ net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/client/res
 net/minecraft/client/resources/data/TextureMetadataSection net/minecraft/client/resources/metadata/texture/TextureMetadataSection
 net/minecraft/resources/IResource net/minecraft/server/packs/resources/Resource
 net/minecraft/resources/IResourceManager net/minecraft/server/packs/resources/ResourceManager
+net/minecraft/resources/Identifier net/minecraft/resources/Identifier
+	fromNamespaceAndPath (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier; fromNamespaceAndPath
 net/minecraft/server/Services net/minecraft/server/Services
 net/minecraft/util/ResourceLocation net/minecraft/resources/ResourceLocation
 net/minecraft/util/StringUtils net/minecraft/util/StringUtil

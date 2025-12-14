@@ -2,7 +2,7 @@ customskinloader/fake/itf/IFakeIResource$V1 customskinloader/fake/itf/IFakeIReso
 	func_199027_b ()Ljava/io/InputStream; method_14482
 customskinloader/fake/itf/IFakeIResource$V2 customskinloader/fake/itf/IFakeIResource$V2
 	open ()Ljava/io/InputStream; method_14482
-customskinloader/fake/itf/IFakeIResourceManager customskinloader/fake/itf/IFakeIResourceManager
+customskinloader/fake/itf/IFakeIResourceManager$V1 customskinloader/fake/itf/IFakeIResourceManager$V1
 	func_199002_a (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/resources/IResource; method_14486
 	getResource (Lnet/minecraft/util/ResourceLocation;)Ljava/util/Optional; method_14486
 customskinloader/fake/itf/IFakeMinecraft customskinloader/fake/itf/IFakeMinecraft
@@ -29,6 +29,9 @@ net/minecraft/client/renderer/IImageBuffer net/minecraft/class_760
 net/minecraft/client/renderer/ThreadDownloadImageData net/minecraft/class_1046
 net/minecraft/client/renderer/entity/RenderPlayer net/minecraft/class_1007
 net/minecraft/client/renderer/entity/layers/LayerCape net/minecraft/class_972
+net/minecraft/client/renderer/rendertype/RenderType net/minecraft/class_1921
+net/minecraft/client/renderer/rendertype/RenderTypes net/minecraft/class_12249
+	entityTranslucent (Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType; method_76000
 net/minecraft/client/renderer/texture/AbstractTexture net/minecraft/class_1044
 net/minecraft/client/renderer/texture/ITextureObject net/minecraft/class_1062
 net/minecraft/client/renderer/texture/NativeImage net/minecraft/class_1011
@@ -49,12 +52,14 @@ net/minecraft/client/renderer/texture/TextureManager net/minecraft/class_1060
 	getTexture (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/texture/ITextureObject; method_4619
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V method_4616
 	loadTexture (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ITextureObject;)Z method_4616
+	registerAndLoad (Lnet/minecraft/resources/Identifier;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V method_65876
 	registerAndLoad (Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V method_65876
 net/minecraft/client/resources/DefaultPlayerSkin net/minecraft/class_1068
 	getDefaultSkin (Ljava/util/UUID;)Lnet/minecraft/util/ResourceLocation; method_4648
 net/minecraft/client/resources/IResource net/minecraft/class_3298
 	getInputStream ()Ljava/io/InputStream; method_14482
 net/minecraft/client/resources/IResourceManager net/minecraft/class_3300
+	getResource (Lnet/minecraft/resources/Identifier;)Ljava/util/Optional; method_14486
 	getResource (Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource; method_14486
 net/minecraft/client/resources/SkinManager net/minecraft/class_1071
 	loadProfileTextures (Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinAvailableCallback;Z)V method_4652
@@ -67,6 +72,8 @@ net/minecraft/client/resources/SkinManager$TextureCache net/minecraft/class_1071
 net/minecraft/client/resources/data/TextureMetadataSection net/minecraft/class_1084
 net/minecraft/resources/IResource net/minecraft/class_3298
 net/minecraft/resources/IResourceManager net/minecraft/class_3300
+net/minecraft/resources/Identifier net/minecraft/class_2960
+	fromNamespaceAndPath (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier; method_60655
 net/minecraft/server/Services net/minecraft/class_7497
 net/minecraft/util/ResourceLocation net/minecraft/class_2960
 net/minecraft/util/StringUtils net/minecraft/class_3544

@@ -225,7 +225,7 @@ function initializeCoreMod() {
                 'name': 'net/minecraft/resources/IResourceManager'
             },
             'transformer': function (cn) {
-                cn.interfaces.add("customskinloader/fake/itf/IFakeIResourceManager");
+                cn.interfaces.add("customskinloader/fake/itf/IFakeIResourceManager$V1");
                 cn.interfaces.add("net/minecraft/client/resources/IResourceManager");
                 return cn;
             }

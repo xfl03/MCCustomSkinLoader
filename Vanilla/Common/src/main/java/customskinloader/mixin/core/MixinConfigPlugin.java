@@ -54,8 +54,10 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         boolean result = true;
         if (mixinClassName.endsWith(".MixinIImageBuffer")) {
             result = (this.world_version >= 0 && this.world_version <= 2204) && (this.protocol_version >= 0 && this.protocol_version <= 553); // 18w43b ~ 19w37a
-        } else if (mixinClassName.endsWith(".MixinLayerCape")) {
-            result = this.world_version >= 2210 && this.protocol_version >= 558; // 19w41a+
+        } else if (mixinClassName.endsWith(".MixinLayerCape$V1")) {
+            result = (this.world_version >= 2210 && this.world_version <= 4654) && ((this.protocol_version >= 558 && this.protocol_version <= 773) || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x40000112)); // 19w41a ~ 25w42a
+        } else if (mixinClassName.endsWith(".MixinLayerCape$V2")) {
+            result = this.world_version >= 4655 && ((this.protocol_version >= 774 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000113); // 25w43a+
         } else if (mixinClassName.endsWith(".MixinRenderPlayer")) {
             result = (this.world_version >= 2210 && this.world_version <= 3955) && ((this.protocol_version >= 558 && this.protocol_version <= 767) || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x400000CC)); // 19w41a ~ 1.21.1
         } else if (mixinClassName.endsWith(".MixinSkinManager$V1")) {
@@ -66,8 +68,12 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             result = this.world_version >= 3684 && ((this.protocol_version >= 765 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x4000009D); // 23w42a+
         } else if (mixinClassName.endsWith(".MixinSkinManager$1") || mixinClassName.endsWith(".MixinSkinManager$TextureCache")) {
             result = this.world_version >= 3567 && ((this.protocol_version >= 764 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000090); // 23w31a+
-        } else if (mixinClassName.endsWith(".MixinSkinTextureDownloader")) {
+        } else if (mixinClassName.endsWith(".MixinSkinTextureDownloader$V1") || mixinClassName.endsWith(".MixinResourceLocation$V1")) {
+            result = (this.world_version >= 4178 && this.world_version <= 4659) && ((this.protocol_version >= 769 && this.protocol_version <= 773) || (this.protocol_version >= 0x400000DE && this.protocol_version <= 0x40000114)); // 24w46a ~ 25w44a
+        } else if (mixinClassName.endsWith(".MixinSkinTextureDownloader$V2")) {
             result = this.world_version >= 4178 && ((this.protocol_version >= 769 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x400000DE); // 24w46a+
+        } else if (mixinClassName.endsWith(".MixinSkinTextureDownloader$V3") || mixinClassName.endsWith(".MixinIResourceManager$V2") || mixinClassName.endsWith(".MixinResourceLocation$V2")) {
+            result = this.world_version >= 4660 && ((this.protocol_version >= 774 && this.protocol_version < 801) || (this.protocol_version > 803 && this.protocol_version < 0x40000001) || this.protocol_version >= 0x40000115); // 25w45a+
         } else if (mixinClassName.endsWith(".MixinThreadDownloadImageData$V1")) {
             result = (this.world_version >= 2205 && this.world_version <= 2722) && ((this.protocol_version >= 554 && this.protocol_version <= 754) || (this.protocol_version >= 801 && this.protocol_version <= 803) || (this.protocol_version >= 0x40000001 && this.protocol_version <= 0x40000022)); // 19w38a ~ 1.17-rc1
         } else if (mixinClassName.endsWith(".MixinThreadDownloadImageData$V2")) {

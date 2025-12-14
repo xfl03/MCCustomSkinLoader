@@ -7,13 +7,20 @@ import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
 public interface IFakeIResourceManager {
-    // 1.13.2 ~ 22w13a
-    default IResource func_199002_a(ResourceLocation location) {
-        return (IResource) ((IResourceManager) this).getResource(location);
+    interface V1 {
+        // 1.13.2 ~ 22w13a
+        default IResource func_199002_a(ResourceLocation location) {
+            return (IResource) ((IResourceManager) this).getResource(location);
+        }
+
+        // 22w14a ~ 25w44a
+        default Optional getResource(ResourceLocation location) {
+            return Optional.ofNullable(this.func_199002_a(location));
+        }
     }
 
-    // 22w14a+
-    default Optional getResource(ResourceLocation location) {
-        return Optional.ofNullable(this.func_199002_a(location));
+    interface V2 {
+        // 25w45a+
+        Optional getResource(IFakeResourceLocation location);
     }
 }
