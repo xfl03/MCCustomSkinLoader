@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Group;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -242,20 +241,6 @@ public abstract class MixinSkinManager {
     // 23w42a+
     @Mixin(SkinManager.class)
     public abstract static class V3 {
-        @ModifyArg(
-            method = {
-                "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;", // 23w42a ~ 25w33a
-                "Lnet/minecraft/client/resources/SkinManager;get(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;" // 25w34a+
-            },
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/resources/SkinManager$CacheKey;<init>(Ljava/util/UUID;Lcom/mojang/authlib/properties/Property;)V"
-            )
-        )
-        private Property modifyArg_getOrLoad(Property property) {
-            return FakeSkinManager.createProperty(property);
-        }
-
         @Redirect(
             method = {
                 "Lnet/minecraft/client/resources/SkinManager;getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;", // 23w42a ~ 25w33a
