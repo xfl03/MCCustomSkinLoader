@@ -53,17 +53,6 @@ public class FakeSkinManager {
     }
 
     /**
-     * 23w42a ~ 25w33a
-     * Invoked from {@link SkinManager#getOrLoad(GameProfile)}
-     *
-     * 25w34a+
-     * Invoked from {@link SkinManager#get(GameProfile)}
-     */
-    public static Property createProperty(Property property) {
-        return property == null ? new Property(null, null) : property;
-    }
-
-    /**
      * 1.20.1-
      * Invoked from {@link SkinManager#loadSkin(MinecraftProfileTexture, MinecraftProfileTexture.Type, SkinManager$SkinAvailableCallback)}
      *
@@ -234,7 +223,7 @@ public class FakeSkinManager {
          * Invoked from {@link SkinManager#get(GameProfile)}
          */
         public static SkinManager$CacheKey createFakeCacheKey(UUID uuid, Property property, GameProfile profile) {
-            return new FakeCacheKey(uuid, property, profile);
+            return new FakeCacheKey(uuid, property == null ? new Property(null, null) : property, profile);
         }
 
         public static Object createMinecraftProfileTextures(Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures) {

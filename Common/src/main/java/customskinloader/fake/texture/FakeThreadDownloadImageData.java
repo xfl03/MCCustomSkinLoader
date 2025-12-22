@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import customskinloader.fake.FakeCapeBuffer;
+import customskinloader.fake.FakeMinecraftProfileTexture;
 import customskinloader.fake.FakeSkinBuffer;
 import customskinloader.fake.FakeSkinManager;
 import customskinloader.fake.itf.FakeInterfaceManager;
@@ -36,8 +37,10 @@ public class FakeThreadDownloadImageData extends SimpleTexture {
 
     public static Function<NativeImage, CompletableFuture<?>> createTexture(Function<NativeImage, CompletableFuture<?>> function, Function<NativeImage, Function<Object, Object>> cape, Object location, boolean bl) {
         return bl ? _image -> {
-            if (FakeInterfaceManager.ResourceLocation_getTexture(location) != null && _image instanceof FakeNativeImage.Extended) {
-                FakeSkinManager.BaseBuffer.judgeType(FakeInterfaceManager.ResourceLocation_getTexture(location), () -> FakeSkinBuffer.judgeType0(((FakeNativeImage.Extended) _image).getFakeImage()));
+            FakeMinecraftProfileTexture texture = FakeInterfaceManager.ResourceLocation_getTexture(location);
+            FakeNativeImage image = FakeInterfaceManager.NativeImage_getFakeImage(_image);
+            if (texture != null && image != null) {
+                FakeSkinManager.BaseBuffer.judgeType(texture, () -> FakeSkinBuffer.judgeType0(image));
             }
             return function.apply(_image);
         } : _image -> function.apply(_image).thenApply(cape.apply(_image));

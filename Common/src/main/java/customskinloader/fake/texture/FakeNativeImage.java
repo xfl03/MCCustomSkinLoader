@@ -71,22 +71,4 @@ public class FakeNativeImage implements FakeImage {
     public void close() {
         image.close();
     }
-
-    public static class Extended extends NativeImage {
-        public static NativeImage create(FakeNativeImage fakeImage) {
-            return new FakeNativeImage.Extended(fakeImage);
-        }
-
-        private final FakeNativeImage fakeImage;
-
-        public Extended(FakeNativeImage fakeImage) {
-            super(fakeImage.getWidth(), fakeImage.getHeight(), true);
-            this.func_195703_a(fakeImage.getImage());
-            this.fakeImage = fakeImage;
-        }
-
-        public FakeNativeImage getFakeImage() {
-            return this.fakeImage;
-        }
-    }
 }

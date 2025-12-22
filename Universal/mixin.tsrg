@@ -3,10 +3,12 @@ net/minecraft/client/Minecraft net/minecraft/client/Minecraft
 	isIntegratedServerRunning ()Z isLocalServer
 net/minecraft/client/entity/AbstractClientPlayer net/minecraft/client/player/AbstractClientPlayer
 net/minecraft/client/gui/Gui net/minecraft/client/gui/GuiGraphics
+net/minecraft/client/gui/GuiGraphicsExtractor net/minecraft/client/gui/GuiGraphicsExtractor
 net/minecraft/client/gui/GuiPlayerTabOverlay net/minecraft/client/gui/components/PlayerTabOverlay
 	renderPlayerlist (ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V render
 	renderPlayerlist (Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V render
 	renderPlayerlist (Lnet/minecraft/client/gui/Gui;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V render
+	renderPlayerlist (Lnet/minecraft/client/gui/GuiGraphicsExtractor;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V extractRenderState
 net/minecraft/client/model/ModelRenderer net/minecraft/client/model/geom/ModelPart
 net/minecraft/client/renderer/IImageBuffer net/minecraft/client/renderer/HttpTextureProcessor
 net/minecraft/client/renderer/IRenderTypeBuffer net/minecraft/client/renderer/MultiBufferSource

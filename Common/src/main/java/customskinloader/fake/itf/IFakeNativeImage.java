@@ -1,5 +1,6 @@
 package customskinloader.fake.itf;
 
+import customskinloader.fake.texture.FakeNativeImage;
 import net.minecraft.client.renderer.texture.NativeImage;
 
 public interface IFakeNativeImage {
@@ -10,4 +11,8 @@ public interface IFakeNativeImage {
     default void setPixel(int x, int y, int color) {
         ((NativeImage) this).func_195700_a(x, y, color);
     }
+
+    FakeNativeImage getFakeImage();
+
+    void setFakeImage(FakeNativeImage fakeImage);
 }

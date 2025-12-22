@@ -13,7 +13,8 @@ public abstract class MixinGuiPlayerTabOverlay {
         method = {
             "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V", // 20w16a-
             "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(Lcom/mojang/blaze3d/matrix/MatrixStack;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V", // 20w17a ~ 23w14a
-            "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(Lnet/minecraft/client/gui/Gui;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V" // 23w16a+
+            "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(Lnet/minecraft/client/gui/Gui;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V", // 23w16a ~ 26.1-snapshot-11
+            "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(Lnet/minecraft/client/gui/GuiGraphicsExtractor;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V" // 26.1-pre-1+
         },
         at = @At(
             value = "INVOKE",
