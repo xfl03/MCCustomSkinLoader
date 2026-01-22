@@ -41,13 +41,10 @@ public class TextureUtil {
     // Some of the classes in Authlib used after Minecraft 23w31a were changed to record classes,
     // resulting in changes to method names, so reflection is used here to be compatible with these changes.
     public enum AuthlibField {
-        GAME_PROFILE_ID(GameProfile.class, "id"),
         GAME_PROFILE_NAME(GameProfile.class, "name"),
         GAME_PROFILE_PROPERTIES(GameProfile.class, "properties"),
         PROPERTY_VALUE(Property.class, "value"),
-        PROPERTY_MAP_PROPERTIES(PropertyMap.class, "properties"),
         MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID(MinecraftProfilePropertiesResponse.class, "id"),
-        MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME(MinecraftProfilePropertiesResponse.class, "name"),
         MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES(MinecraftProfilePropertiesResponse.class, "properties"),
         MINECRAFT_TEXTURES_PAYLOAD_TEXTURES(MinecraftTexturesPayload.class, "textures");
 
