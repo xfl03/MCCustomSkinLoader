@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import customskinloader.CustomSkinLoader;
@@ -41,6 +40,7 @@ public class TextureUtil {
     // Some of the classes in Authlib used after Minecraft 23w31a were changed to record classes,
     // resulting in changes to method names, so reflection is used here to be compatible with these changes.
     public enum AuthlibField {
+        GAME_PROFILE_ID(GameProfile.class, "id"),
         GAME_PROFILE_NAME(GameProfile.class, "name"),
         GAME_PROFILE_PROPERTIES(GameProfile.class, "properties"),
         PROPERTY_VALUE(Property.class, "value"),
