@@ -28,6 +28,7 @@ It's a mod which can load skins and capes from any online source or from your lo
 ## Feature  
 ### Support Plenty of Skin Load API and Customizable Skin Load List  
 Supported skin loading APIs:
+- GameProfile
 - [MojangAPI](http://wiki.vg/Mojang_API)
 - [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)  
 - CustomSkinAPIPlus (Test Only)  
@@ -75,6 +76,7 @@ The problem of incorrectly rendering textures has been fixed.
 By using this mod, you can see correct avatar of players in Spectator Menu rather than steve and alex.  
   
 ## Default Load List  
+- GameProfile
 - [Mojang](https://minecraft.wiki/w/Mojang_API) (MojangAPI)
 - [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
 - [BlessingSkin](http://skin.prinzeugen.net/) (CustomSkinAPI)
