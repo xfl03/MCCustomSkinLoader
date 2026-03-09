@@ -61,11 +61,12 @@ public class GameProfileLoader implements ICustomSkinLoaderPlugin, ProfileLoader
 
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) throws Exception {
-        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = getTextures(gameProfile);
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = getTextures(Iterables.getFirst(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.<PropertyMap>get(gameProfile).get("textures"), null));
         if (!map.isEmpty()) {
             CustomSkinLoader.logger.info("Default profile will be used.");
             return ModelManager0.toUserProfile(map);
         }
+        CustomSkinLoader.logger.info("Profile not found.");
         return null;
     }
 
@@ -85,11 +86,7 @@ public class GameProfileLoader implements ICustomSkinLoaderPlugin, ProfileLoader
     }
 
     public static final Gson GSON = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getTextures(GameProfile gameProfile) {
-        if (gameProfile == null) {
-            return Maps.newHashMap();
-        }
-        Property textureProperty = Iterables.getFirst(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.<PropertyMap>get(gameProfile).get("textures"), null);
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getTextures(Property textureProperty) {
         if (textureProperty == null) {
             return Maps.newHashMap();
         }

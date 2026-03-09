@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import customskinloader.CustomSkinLoader;
@@ -45,9 +44,7 @@ public class TextureUtil {
         GAME_PROFILE_NAME(GameProfile.class, "name"),
         GAME_PROFILE_PROPERTIES(GameProfile.class, "properties"),
         PROPERTY_VALUE(Property.class, "value"),
-        PROPERTY_MAP_PROPERTIES(PropertyMap.class, "properties"),
         MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID(MinecraftProfilePropertiesResponse.class, "id"),
-        MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME(MinecraftProfilePropertiesResponse.class, "name"),
         MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES(MinecraftProfilePropertiesResponse.class, "properties"),
         MINECRAFT_TEXTURES_PAYLOAD_TEXTURES(MinecraftTexturesPayload.class, "textures");
 

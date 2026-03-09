@@ -3,6 +3,7 @@ package customskinloader.loader.jsonapi;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
+import com.google.gson.annotations.SerializedName;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
@@ -53,12 +54,12 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
     @Override
     public UserProfile toUserProfile(String root, String json, boolean local) {
         MinecraftCapesApiResponse result = new Gson().fromJson(json, MinecraftCapesApiResponse.class);
-        if (result.textures == null || result.textures.cape == null) {
+        if (result.capeUrl == null) {
             return null;
         }
 
         UserProfile profile = new UserProfile();
-        profile.capeUrl = TextureUtil.parseBase64Texture(result.textures.cape);
+        profile.capeUrl = result.capeUrl;
 
         return profile;
     }
@@ -69,14 +70,7 @@ public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
     }
 
     public static class MinecraftCapesApiResponse {
-        public boolean animatedCape;
-        public boolean capeGlint;
-        public boolean upsideDown;
-        public MinecraftCapesApiTexture textures;
-
-        public static class MinecraftCapesApiTexture {
-            public String cape;
-            public String ears;
-        }
+        @SerializedName("cape_url")
+        public String capeUrl;
     }
 }

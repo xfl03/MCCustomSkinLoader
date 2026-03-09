@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -80,28 +81,30 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
     @Override
     public UserProfile loadProfile(SkinSiteProfile ssp, GameProfile gameProfile) {
         String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
-        GameProfile newGameProfile = loadGameProfileCached(ssp.apiRoot, username);
-        if (newGameProfile == null) {
+        MinecraftProfilePropertiesResponse newProfile = loadGameProfileCached(ssp.apiRoot, username);
+        if (newProfile == null) {
             CustomSkinLoader.logger.info("Profile not found.(" + username + "'s profile not found.)");
             return null;
         }
-        newGameProfile = fillGameProfile(ssp.sessionRoot, newGameProfile);
-        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = GameProfileLoader.getTextures(newGameProfile);
-        if (!map.isEmpty()) {
-            return ModelManager0.toUserProfile(map);
+        PropertyMap propertyMap = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(fillProfile(ssp.sessionRoot, newProfile));
+        if (propertyMap != null) {
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = GameProfileLoader.getTextures(Iterables.getFirst(propertyMap.get("textures"), null));
+            if (!map.isEmpty()) {
+                return ModelManager0.toUserProfile(map);
+            }
         }
         CustomSkinLoader.logger.info("Profile not found.(" + username + " doesn't have skin/cape.)");
         return null;
     }
 
-    private static final Map<String, GameProfile> gameProfileCache = new ConcurrentHashMap<>();
+    private static final Map<String, MinecraftProfilePropertiesResponse> gameProfileCache = new ConcurrentHashMap<>();
 
-    public static GameProfile loadGameProfileCached(String apiRoot, String username) {
+    public static MinecraftProfilePropertiesResponse loadGameProfileCached(String apiRoot, String username) {
         return gameProfileCache.computeIfAbsent(apiRoot + " " + username, ignored -> loadGameProfile(apiRoot, username));
     }
 
     //Username -> UUID
-    public static GameProfile loadGameProfile(String apiRoot, String username) {
+    public static MinecraftProfilePropertiesResponse loadGameProfile(String apiRoot, String username) {
         //Doc (https://minecraft.wiki/w/Mojang_API#Query_player_UUIDs_in_batch)
         HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(apiRoot + "profiles/minecraft").setCacheTime(600).setPayload(GameProfileLoader.GSON.toJson(Collections.singletonList(username))));
         if (StringUtils.isEmpty(responce.content)) {
@@ -112,13 +115,12 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         if (profiles.length == 0) {
             return null;
         }
-        GameProfile gameProfile = createGameProfile(profiles[0]);
 
-        UUID id = TextureUtil.AuthlibField.GAME_PROFILE_ID.get(gameProfile);
+        UUID id = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(profiles[0]);
         if (id == null) {
             return null;
         }
-        return new GameProfile(id, TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile));
+        return profiles[0];
     }
 
     /**
@@ -129,31 +131,22 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
      * @return UUID in Mojang API style string. Returns {@code null} if username not found in Mojang API.
      */
     public static String getMojangUuidByUsername(String username, boolean standard) {
-        GameProfile profile = loadGameProfileCached(getMojangApiRoot(), username);
+        MinecraftProfilePropertiesResponse profile = loadGameProfileCached(getMojangApiRoot(), username);
         if (profile == null) {
             return null;
         }
-        UUID id = TextureUtil.AuthlibField.GAME_PROFILE_ID.get(profile);
+        UUID id = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(profile);
         return standard ? id.toString() : TextureUtil.fromUUID(id);
     }
 
     //UUID -> Profile
-    public static GameProfile fillGameProfile(String sessionRoot, GameProfile profile) {
+    public static MinecraftProfilePropertiesResponse fillProfile(String sessionRoot, MinecraftProfilePropertiesResponse profile) {
         //Doc (https://minecraft.wiki/w/Mojang_API#Query_player's_skin_and_cape)
-        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/" + TextureUtil.fromUUID(TextureUtil.AuthlibField.GAME_PROFILE_ID.get(profile))).setCacheTime(90));
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/" + TextureUtil.fromUUID(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(profile))).setCacheTime(90));
         if (StringUtils.isEmpty(responce.content)) {
             return profile;
         }
-        return createGameProfile(GameProfileLoader.GSON.fromJson(responce.content, MinecraftProfilePropertiesResponse.class));
-    }
-
-    public static GameProfile createGameProfile(MinecraftProfilePropertiesResponse response) {
-        GameProfile profile = new GameProfile(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(response), TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_NAME.get(response));
-        PropertyMap map = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(response);
-        if (map != null) {
-            TextureUtil.AuthlibField.PROPERTY_MAP_PROPERTIES.set(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.get(profile), TextureUtil.AuthlibField.PROPERTY_MAP_PROPERTIES.get(map));
-        }
-        return profile;
+        return GameProfileLoader.GSON.fromJson(responce.content, MinecraftProfilePropertiesResponse.class);
     }
 
     @Override
