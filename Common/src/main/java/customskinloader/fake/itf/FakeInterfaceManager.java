@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.Optional;
 
 import customskinloader.fake.FakeMinecraftProfileTexture;
+import customskinloader.fake.texture.FakeNativeImage;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +31,14 @@ public class FakeInterfaceManager {
 
     public static void NativeImage_setPixel(Object nativeImage, int x, int y, int color) {
         ((IFakeNativeImage) nativeImage).setPixel(x, y, color);
+    }
+
+    public static FakeNativeImage NativeImage_getFakeImage(Object nativeImage) {
+        return ((IFakeNativeImage) nativeImage).getFakeImage();
+    }
+
+    public static void NativeImage_setFakeImage(Object nativeImage, Object fakeImage) {
+        ((IFakeNativeImage) nativeImage).setFakeImage((FakeNativeImage) fakeImage);
     }
 
     public static FakeMinecraftProfileTexture ResourceLocation_getTexture(Object location) {

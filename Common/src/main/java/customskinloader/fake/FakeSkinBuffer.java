@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import customskinloader.CustomSkinLoader;
+import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
 import customskinloader.fake.texture.FakeNativeImage;
@@ -28,7 +29,9 @@ public class FakeSkinBuffer implements IImageBuffer {
 
         FakeImage img = parseUserSkin0(new FakeNativeImage(image));
         if (img instanceof FakeNativeImage) {
-            return FakeNativeImage.Extended.create((FakeNativeImage) img);
+            image = ((FakeNativeImage) img).getImage();
+            FakeInterfaceManager.NativeImage_setFakeImage(image, img);
+            return image;
         }
 
         CustomSkinLoader.logger.warning("Failed to parseUserSkin(downloadAndRegisterSkin).");

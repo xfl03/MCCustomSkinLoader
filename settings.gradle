@@ -13,8 +13,9 @@ include "Forge/Common"
 include "Forge/V1"
 //Forge Edition for [1.17,1.20.4]
 include "Forge/V2"
-//Forge Edition for [1.20.5,) and NeoForge Edition for [1.20.2,)
-include "Forge/V3"
 
-//Fabric Edition for [1.14,)
+//Fabric Edition for [26.1,), Forge Edition for [1.20.6,) and NeoForge Edition for [1.20.2,)
+include "Universal"
+
+//Fabric Edition for [1.14,1.21.11]
 include "Fabric"

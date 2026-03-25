@@ -1,6 +1,5 @@
 accessWidener v2 intermediary
 extendable class net/minecraft/class_1011 # 24w46a+
 extendable class net/minecraft/class_1071$class_8686 # 23w31a+
-extendable class net/minecraft/class_2960 # 24w46a+
 accessible method net/minecraft/class_1071$class_8686 <init> (Ljava/util/UUID;Lcom/mojang/authlib/properties/Property;)V # 23w42a+
 accessible method net/minecraft/class_2960 <init> (Ljava/lang/String;Ljava/lang/String;)V # 24w18a+
