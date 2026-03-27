@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.properties.Property;
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.loader.ProfileLoader;
@@ -76,7 +77,7 @@ public class CustomSkinLoader {
     //For User Skin
     public static UserProfile loadProfile(GameProfile gameProfile) {
         String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
-        String credential = MinecraftUtil.getCredential(gameProfile);
+        String credential = getUniqueCredential(gameProfile);
         // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
         if (username == null) {
             logger.warning("Could not load profile: username is null.");
@@ -108,7 +109,7 @@ public class CustomSkinLoader {
     //Core
     public static UserProfile loadProfile0(GameProfile gameProfile, boolean isSkull) {
         String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
-        String credential = MinecraftUtil.getCredential(gameProfile);
+        String credential = getUniqueCredential(gameProfile);
 
         profileCache.setLoading(credential, true);
         logger.info("Loading " + username + "'s profile.");
@@ -187,7 +188,7 @@ public class CustomSkinLoader {
     //For Skull
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadProfileFromCache(final GameProfile gameProfile) {
         String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
-        String credential = MinecraftUtil.getCredential(gameProfile);
+        String credential = getUniqueCredential(gameProfile);
 
         //CustomSkinLoader needs username to load standard skin, if username not exist, only textures in NBT can be used
         //Authlib 3.11.50 makes empty username to " "
@@ -237,5 +238,27 @@ public class CustomSkinLoader {
         Config config = Config.loadConfig0();
         logger.enableLogStdOut = config.enableLogStdOut;
         return config;
+    }
+
+    private static String getUniqueCredential(GameProfile gameProfile) {
+        String credential = MinecraftUtil.getCredential(gameProfile);
+        if (credential != null) {
+            try {
+                Property textureProperty = null;
+                for (Property property :  gameProfile.getProperties().get("textures")) {
+                    textureProperty = property;
+                    break;
+                }
+                if (textureProperty != null) {
+                    String textureValue = TextureUtil.AuthlibField.PROPERTY_VALUE.get(textureProperty);
+                    if (textureValue != null && !textureValue.isEmpty()) {
+                        credential = credential + "-" + Integer.toHexString(textureValue.hashCode());
+                    }
+                }
+            } catch (Exception ignored) {
+                // If texture extraction fails, just use standard credential
+            }
+        }
+        return credential;
     }
 }
