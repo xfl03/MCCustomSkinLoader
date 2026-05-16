@@ -8,25 +8,20 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.SignatureState;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
+import com.mojang.blaze3d.platform.NativeImage;
 import customskinloader.CustomSkinLoader;
-import customskinloader.fake.itf.FakeInterfaceManager;
+import customskinloader.fake.itf.FakeHttpTextureProcessor;
 import customskinloader.profile.ModelManager0;
 import customskinloader.utils.HttpTextureUtil;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
-import net.minecraft.client.resources.SkinManager$1;
 import net.minecraft.client.resources.SkinManager$CacheKey;
-import net.minecraft.client.resources.SkinManager$SkinAvailableCallback;
-import net.minecraft.client.resources.SkinManager$TextureCache;
 import net.minecraft.server.Services;
 
 public class FakeSkinManager {
@@ -54,39 +49,7 @@ public class FakeSkinManager {
 
     /**
      * 1.20.1-
-     * Invoked from {@link SkinManager#loadSkin(MinecraftProfileTexture, MinecraftProfileTexture.Type, SkinManager$SkinAvailableCallback)}
-     *
-     * 23w31a+
-     * Invoked from {@link SkinManager$TextureCache#registerTexture(MinecraftProfileTexture)}
-     */
-    public static Object[] createThreadDownloadImageData(ImmutableList<Object> list, MinecraftProfileTexture profileTexture, MinecraftProfileTexture.Type textureType) {
-        Object[] params = list.toArray();
-        if (profileTexture instanceof FakeMinecraftProfileTexture) {
-            FakeMinecraftProfileTexture fakeProfileTexture = (FakeMinecraftProfileTexture) profileTexture;
-            File cacheFile = fakeProfileTexture.getCacheFile();
-            if (params.length == 4) {
-                if (params[3] instanceof Boolean) { // 24w46a+
-                    if ((Boolean) params[3]) {
-                        FakeInterfaceManager.ResourceLocation_setTexture(params[0], fakeProfileTexture);
-                    }
-                    params[1] = cacheFile.toPath();
-                } else { // 19w37a-
-                    params[0] = cacheFile;
-                    params[3] = new BaseBuffer((Runnable) params[3], textureType, fakeProfileTexture);
-                }
-            } else if (params.length == 5) { // 19w38a ~ 24w45a
-                params[0] = cacheFile;
-                params[3] = true;
-                params[4] = new BaseBuffer((Runnable) params[4], textureType, fakeProfileTexture);
-            }
-        }
-        return params;
-    }
-
-
-    /**
-     * 1.20.1-
-     * Invoked from {@link SkinManager#loadProfileTextures(GameProfile, SkinManager$SkinAvailableCallback, boolean)}
+     * Invoked from {@link SkinManager#registerSkins(GameProfile, SkinManager$SkinTextureCallback, boolean)}
      */
     public static void loadProfileTextures(Runnable runnable) {
         CustomSkinLoader.loadProfileTextures(runnable);
@@ -102,7 +65,7 @@ public class FakeSkinManager {
 
     /**
      * 1.20.1-
-     * Invoked from {@link SkinManager#func_210275_a(GameProfile, boolean, SkinManager$SkinAvailableCallback)}
+     * Invoked from {@link SkinManager#lambda$registerSkins$4(GameProfile, boolean, SkinManager$SkinTextureCallback)}
      */
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getUserProfile(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
         return ModelManager0.fromUserProfile(CustomSkinLoader.loadProfile(profile));
@@ -110,20 +73,7 @@ public class FakeSkinManager {
 
     /**
      * 1.20.1-
-     * Invoked from {@link SkinManager#func_210276_a(Map, SkinManager$SkinAvailableCallback)}
-     */
-    public static void loadElytraTexture(SkinManager skinManager, Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map, SkinManager$SkinAvailableCallback skinAvailableCallback) {
-        for (int i = 2; i < MinecraftProfileTexture.Type.values().length; i++) {
-            MinecraftProfileTexture.Type type = MinecraftProfileTexture.Type.values()[i];
-            if (map.containsKey(type)) {
-                skinManager.loadSkin(map.get(type), type, skinAvailableCallback);
-            }
-        }
-    }
-
-    /**
-     * 1.20.1-
-     * Invoked from {@link SkinManager#loadSkinFromCache(GameProfile)}
+     * Invoked from {@link SkinManager#getInsecureSkinInformation(GameProfile)}
      */
     public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(GameProfile profile) {
         return CustomSkinLoader.loadProfileFromCache(profile);
@@ -151,8 +101,8 @@ public class FakeSkinManager {
         return sessionService.unpackTextures(property);
     }
 
-    public static class BaseBuffer implements IImageBuffer {
-        private IImageBuffer buffer;
+    public static class BaseBuffer implements FakeHttpTextureProcessor {
+        private FakeHttpTextureProcessor buffer;
 
         private final Runnable callback;
         private final FakeMinecraftProfileTexture texture;
@@ -168,19 +118,19 @@ public class FakeSkinManager {
         }
 
         @Override
-        public NativeImage func_195786_a(NativeImage image) {
-            return this.buffer instanceof FakeSkinBuffer ? this.buffer.func_195786_a(image) : image;
+        public NativeImage process(NativeImage image) {
+            return this.buffer instanceof FakeSkinBuffer ? this.buffer.process(image) : image;
         }
 
         @Override
-        public BufferedImage parseUserSkin(BufferedImage image) {
-            return this.buffer instanceof FakeSkinBuffer ? this.buffer.parseUserSkin(image) : image;
+        public BufferedImage process(BufferedImage image) {
+            return this.buffer instanceof FakeSkinBuffer ? this.buffer.process(image) : image;
         }
 
         @Override
-        public void skinAvailable() {
+        public void onTextureDownloaded() {
             if (this.buffer != null) {
-                this.buffer.skinAvailable();
+                this.buffer.onTextureDownloaded();
                 if (this.buffer instanceof FakeSkinBuffer) {
                     judgeType(this.texture, () -> ((FakeSkinBuffer) this.buffer).judgeType());
                 }

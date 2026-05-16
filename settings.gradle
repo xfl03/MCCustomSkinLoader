@@ -1,21 +1,14 @@
-rootProject.name = "MCCustomSkinLoader"
+rootProject.name = 'CustomSkinLoader-Universal'
 
-//Base Project
-include "Common"
-include "Dummy"
-
-//Vanilla Base Project
-include "Vanilla/Common"
-
-//Forge Base Project
-include "Forge/Common"
-//Forge Edition for [1.8,1.16.5]
-include "Forge/V1"
-//Forge Edition for [1.17,1.20.4]
-include "Forge/V2"
-
-//Fabric Edition for [26.1,), Forge Edition for [1.20.6,) and NeoForge Edition for [1.20.2,)
-include "Universal"
-
-//Fabric Edition for [1.14,1.21.11]
-include "Fabric"
+include(
+        'Bootstrap',
+        'Bootstrap:Core',
+        'Bootstrap:FabricV1',
+        'Bootstrap:ForgeV1',
+        'Bootstrap:ForgeV2',
+        'Bootstrap:NeoForgeV1',
+        'Bootstrap:NeoForgeV2',
+        'Common',
+        'Dummy:Bootstrap',
+        'Dummy:Common'
+)

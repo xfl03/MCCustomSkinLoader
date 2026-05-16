@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class WynntilsAPI implements JsonAPILoader.IJsonAPI {
 
-    public static class Wynntils extends JsonAPILoader.DefaultProfile {
+    /*public static class Wynntils extends JsonAPILoader.DefaultProfile {
         public Wynntils(JsonAPILoader loader) {
             super(loader);
         }
@@ -40,11 +40,11 @@ public class WynntilsAPI implements JsonAPILoader.IJsonAPI {
         public String getRoot() {
             return "https://athena.wynntils.com/user/getInfo";
         }
-    }
+    }*/
 
     @Override
     public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
-        return Lists.newArrayList(new Wynntils(loader));
+        return Lists.newArrayList(/*new Wynntils(loader)*/);
     }
 
     @Override

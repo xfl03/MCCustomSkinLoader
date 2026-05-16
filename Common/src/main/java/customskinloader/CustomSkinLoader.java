@@ -1,15 +1,10 @@
 package customskinloader;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -18,16 +13,16 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import customskinloader.config.Config;
 import customskinloader.config.SkinSiteProfile;
+import customskinloader.loader.GameProfileLoader;
 import customskinloader.loader.ProfileLoader;
 import customskinloader.log.LogManager;
 import customskinloader.log.Logger;
-import customskinloader.profile.DynamicSkullManager;
 import customskinloader.profile.ModelManager0;
 import customskinloader.profile.ProfileCache;
 import customskinloader.profile.UserProfile;
-import customskinloader.utils.LIFOBlockingQueue;
 import customskinloader.utils.MinecraftUtil;
 import customskinloader.utils.TextureUtil;
+import customskinloader.utils.ThreadPoolFactory;
 
 /**
  * Custom skin loader mod for Minecraft.
@@ -50,24 +45,9 @@ public class CustomSkinLoader {
     public static final Config config = initConfig();
 
     private static final ProfileCache profileCache = new ProfileCache();
-    private static final DynamicSkullManager dynamicSkullManager = new DynamicSkullManager();
 
-    public static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES, new LIFOBlockingQueue<>(new LinkedBlockingDeque<>()));
-
-    //Correct thread name in thread pool
-    private static final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
-    private static final ThreadFactory customFactory = r -> {
-        Thread t = defaultFactory.newThread(r);
-        if (r instanceof Thread) {
-            t.setName(((Thread) r).getName());
-        }
-        return t;
-    };
-    //Thread pool will discard oldest task when queue reaches 333 tasks
-    private static final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
-            config.threadPoolSize, config.threadPoolSize, 1L, TimeUnit.MINUTES,
-            new LinkedBlockingQueue<>(333), customFactory, new ThreadPoolExecutor.DiscardOldestPolicy()
-    );
+    public static final ExecutorService THREAD_POOL = ThreadPoolFactory.create(config.threadPoolSize, false);
+    public static final ExecutorService PROFILE_THREAD_POOL = ThreadPoolFactory.create(config.loadlist.size() * config.threadPoolSize, true);
 
     public static void loadProfileTextures(Runnable runnable) {
         THREAD_POOL.execute(runnable);
@@ -77,14 +57,15 @@ public class CustomSkinLoader {
     public static UserProfile loadProfile(GameProfile gameProfile) {
         String username = TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(gameProfile);
         String credential = MinecraftUtil.getCredential(gameProfile);
-        // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
-        if (username == null) {
-            logger.warning("Could not load profile: username is null.");
-            return new UserProfile();
-        }
 
         String tempName = Thread.currentThread().getName();
-        Thread.currentThread().setName(username); // Change Thread Name
+        Thread.currentThread().setName(username + " <" + TextureUtil.AuthlibField.GAME_PROFILE_ID.get(gameProfile) + ">"); // Change Thread Name
+
+        // Fix: http://hopper.minecraft.net/crashes/minecraft/MCX-2773713
+        if (username == null || username.isEmpty() || username.equals(" ")) {
+            return ModelManager0.toUserProfile(GameProfileLoader.getTextures(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.get(gameProfile)));
+        }
+
         UserProfile profile;
         if (profileCache.isReady(credential)) {
             logger.info("Cached profile will be used.");
@@ -111,16 +92,19 @@ public class CustomSkinLoader {
         String credential = MinecraftUtil.getCredential(gameProfile);
 
         profileCache.setLoading(credential, true);
+        long time = System.currentTimeMillis();
         logger.info("Loading " + username + "'s profile.");
         if (config.loadlist == null || config.loadlist.isEmpty()) {
             logger.info("LoadList is Empty.");
             return null;
         }
 
+        int size = config.loadlist.size();
+        LinkedList<CompletableFuture<UserProfile>> profileGetters = new LinkedList<>();
         UserProfile profile0 = new UserProfile();
-        for (int i = 0; i < config.loadlist.size(); i++) {
+        for (int i = 0; i < size; i++) {
             SkinSiteProfile ssp = config.loadlist.get(i);
-            logger.info((i + 1) + "/" + config.loadlist.size() + " Try to load profile from '" + ssp.name + "'.");
+            logger.info((i + 1) + "/" + size + " Try to load profile from '" + ssp.name + "'.");
             if (ssp.type == null) {
                 logger.info("The type of '" + ssp.name + "' is null.");
                 continue;
@@ -130,17 +114,27 @@ public class CustomSkinLoader {
                 logger.info("Type '" + ssp.type + "' is not defined.");
                 continue;
             }
-            UserProfile profile = null;
-            try {
-                profile = loader.loadProfile(ssp, gameProfile);
-            } catch (Exception e) {
-                logger.warning("Exception occurs while loading.");
-                logger.warning(e);
-                if (e.getCause() != null) {
-                    logger.warning("Caused By:");
-                    logger.warning(e.getCause());
+            profileGetters.add(CompletableFuture.supplyAsync(() -> {
+                String tempName = Thread.currentThread().getName();
+                Thread.currentThread().setName(username + " <" + TextureUtil.AuthlibField.GAME_PROFILE_ID.get(gameProfile) + "> (" + ssp.name + ")"); // Change Thread Name
+                UserProfile profile = null;
+                try {
+                    profile = loader.loadProfile(ssp, gameProfile);
+                } catch (Exception e) {
+                    logger.warning("Exception occurs while loading.");
+                    logger.warning(e);
+                    if (e.getCause() != null) {
+                        logger.warning("Caused By:");
+                        logger.warning(e.getCause());
+                    }
                 }
-            }
+                Thread.currentThread().setName(tempName);
+                return profile;
+            }, PROFILE_THREAD_POOL));
+        }
+
+        for (CompletableFuture<UserProfile> profileGetter : profileGetters) {
+            UserProfile profile = profileGetter.join();
             if (profile == null) {
                 continue;
             }
@@ -155,8 +149,9 @@ public class CustomSkinLoader {
                 break;
             }
         }
+
         if (!profile0.isEmpty()) {
-            logger.info(username + "'s profile loaded.");
+            logger.info(username + "'s profile loaded. (" + (System.currentTimeMillis() - time) + "ms)");
             if (!config.enableCape) {
                 profile0.capeUrl = null;
             }
@@ -165,7 +160,7 @@ public class CustomSkinLoader {
             logger.info(profile0.toString(profileCache.getExpiry(credential)));
             return profile0;
         }
-        logger.info(username + "'s profile not found in load list.");
+        logger.info(username + "'s profile not found in load list. (" + (System.currentTimeMillis() - time) + "ms)");
 
         if (config.enableLocalProfileCache) {
             UserProfile profile = profileCache.getLocalProfile(credential);
@@ -192,7 +187,7 @@ public class CustomSkinLoader {
         //CustomSkinLoader needs username to load standard skin, if username not exist, only textures in NBT can be used
         //Authlib 3.11.50 makes empty username to " "
         if (username == null || username.isEmpty() || username.equals(" ") || credential == null) {
-            return dynamicSkullManager.getTexture(gameProfile);
+            return GameProfileLoader.getTextures(TextureUtil.AuthlibField.GAME_PROFILE_PROPERTIES.get(gameProfile));
         }
         if (config.forceUpdateSkull ? profileCache.isReady(credential) : profileCache.isExist(credential)) {
             UserProfile profile = profileCache.getProfile(credential);
@@ -209,7 +204,7 @@ public class CustomSkinLoader {
             if (config.forceUpdateSkull) {
                 new Thread(loadThread).start();
             } else {
-                threadPool.execute(loadThread);
+                THREAD_POOL.execute(loadThread);
             }
         }
         return INCOMPLETED;

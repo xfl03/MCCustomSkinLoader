@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "customskinloader.bootstrap.fabric.v1.mixin",
+  "plugin": "customskinloader.bootstrap.fabric.v1.MixinConfigPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "DummyMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

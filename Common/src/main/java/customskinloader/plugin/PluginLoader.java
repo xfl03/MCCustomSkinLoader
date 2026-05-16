@@ -25,7 +25,6 @@ public class PluginLoader {
             new JsonAPILoader(new CustomSkinAPIPlus()),
             new JsonAPILoader(new UniSkinAPI()),
             new JsonAPILoader(new ElyByAPI()),
-            new JsonAPILoader(new GlitchlessAPI()),
             new JsonAPILoader(new MinecraftCapesAPI()),
             new JsonAPILoader(new WynntilsAPI()),
     };

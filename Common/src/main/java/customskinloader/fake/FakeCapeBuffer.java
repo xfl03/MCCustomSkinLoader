@@ -2,7 +2,6 @@ package customskinloader.fake;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -11,12 +10,10 @@ import customskinloader.fake.itf.FakeInterfaceManager;
 import customskinloader.fake.texture.FakeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.ResourceLocation;
 
 public class FakeCapeBuffer extends FakeSkinBuffer {
-    private static final CompletableFuture<Object> TEXTURE_ELYTRA_V2 = CompletableFuture.supplyAsync(() -> (Object) new ResourceLocation("minecraft", "textures/entity/equipment/wings/elytra.png"));
-    private static final CompletableFuture<Object> TEXTURE_ELYTRA_V3 = CompletableFuture.supplyAsync(() -> (Object) Identifier.fromNamespaceAndPath("minecraft", "textures/entity/equipment/wings/elytra.png")).exceptionally(t -> TEXTURE_ELYTRA_V2.join());
-    private static final CompletableFuture<Object> TEXTURE_ELYTRA_V1 = CompletableFuture.supplyAsync(() -> (Object) new ResourceLocation("minecraft", "textures/entity/elytra.png")).exceptionally(t -> TEXTURE_ELYTRA_V3.join());
+    private static final Identifier TEXTURE_ELYTRA_V1 = new Identifier("minecraft", "textures/entity/elytra.png");
+    private static final Identifier TEXTURE_ELYTRA_V2 = new Identifier("minecraft", "textures/entity/equipment/wings/elytra.png");
 
     private static int loadedGlobal = 0;
     private static FakeImage elytraImage;
@@ -24,9 +21,9 @@ public class FakeCapeBuffer extends FakeSkinBuffer {
     private static FakeImage loadElytra(FakeImage originalImage) {
         loadedGlobal++;
         try {
-            Object resourceManager = FakeInterfaceManager.Minecraft_getResourceManager(Minecraft.getMinecraft());
-            InputStream is = FakeInterfaceManager.IResource_getInputStream(FakeInterfaceManager.IResourceManager_getResource(resourceManager, TEXTURE_ELYTRA_V1.join())
-                .orElseGet(() -> FakeInterfaceManager.IResourceManager_getResource(resourceManager, TEXTURE_ELYTRA_V2.join()).orElse(null)));
+            Object resourceManager = Minecraft.getInstance().getResourceManager();
+            InputStream is = FakeInterfaceManager.IResource_getInputStream(FakeInterfaceManager.IResourceManager_getResource(resourceManager, TEXTURE_ELYTRA_V1)
+                .orElseGet(() -> FakeInterfaceManager.IResourceManager_getResource(resourceManager, TEXTURE_ELYTRA_V2).orElse(null)));
             if (is != null) {
                 FakeImage image = originalImage.createImage(is);
                 if (image.getWidth() % 64 != 0 || image.getHeight() % 32 != 0) { // wtf?

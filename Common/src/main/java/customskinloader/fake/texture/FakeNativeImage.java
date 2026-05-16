@@ -3,11 +3,10 @@ package customskinloader.fake.texture;
 import java.io.InputStream;
 
 import customskinloader.fake.itf.FakeInterfaceManager;
-import net.minecraft.client.renderer.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 
 public class FakeNativeImage implements FakeImage {
     private NativeImage image;
-    private int ratio;
 
     public FakeNativeImage(int width, int height) {
         this(new NativeImage(width, height, true));
@@ -26,25 +25,15 @@ public class FakeNativeImage implements FakeImage {
     }
 
     public FakeImage createImage(InputStream is) {
-        return new FakeNativeImage(NativeImage.func_195713_a(is));
-    }
-
-    @Override
-    public int getRatio() {
-        return this.ratio;
-    }
-
-    @Override
-    public void setRatio(int ratio) {
-        this.ratio = ratio;
+        return new FakeNativeImage(NativeImage.read(is));
     }
 
     public int getWidth() {
-        return image.func_195702_a();
+        return image.getWidth();
     }
 
     public int getHeight() {
-        return image.func_195714_b();
+        return image.getHeight();
     }
 
     public int getRGBA(int x, int y) {
@@ -57,15 +46,15 @@ public class FakeNativeImage implements FakeImage {
 
     public void copyImageData(FakeImage image) {
         if (!(image instanceof FakeNativeImage)) return;
-        this.image.func_195703_a(((FakeNativeImage) image).getImage());
+        this.image.copyFrom(((FakeNativeImage) image).getImage());
     }
 
     public void fillArea(int x0, int y0, int width, int height) {
-        image.func_195715_a(x0, y0, width, height, 0);
+        image.fillRect(x0, y0, width, height, 0);
     }
 
     public void copyArea(int x0, int y0, int dx, int dy, int width, int height, boolean reversex, boolean reversey) {
-        image.func_195699_a(x0, y0, dx, dy, width, height, reversex, reversey);
+        image.copyRect(x0, y0, dx, dy, width, height, reversex, reversey);
     }
 
     public void close() {

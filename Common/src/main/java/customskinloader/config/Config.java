@@ -25,7 +25,6 @@ public class Config {
     public List<SkinSiteProfile> loadlist;
 
     //Function
-    public boolean enableDynamicSkull = true;
     public boolean enableTransparentSkin = true;
     public boolean forceLoadAllTextures = true;
     public boolean enableCape = true;
@@ -77,7 +76,7 @@ public class Config {
         config.loadExtraList();
         config.updateLoadlist();
         config.initLocalFolder();
-        config.threadPoolSize = Math.max(config.threadPoolSize, 1);
+        config.threadPoolSize = Math.max(config.threadPoolSize, 2);
         if (config.enableCacheAutoClean && !config.enableLocalProfileCache) {
             try {
                 FileUtils.deleteDirectory(HttpRequestUtil.CACHE_DIR);

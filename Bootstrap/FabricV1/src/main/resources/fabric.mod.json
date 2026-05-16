@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "customskinloader-bootstrap",
+  "version": "${modFullVersion}",
+
+  "name": "CustomSkinLoader Bootstrap",
+  "description": "Custom Skin Loader for Minecraft",
+  "authors": ["xfl03", "JLChnToZ", "ZekerZhayard"],
+  "contact": {
+    "homepage": "https://github.com/xfl03/MCCustomSkinLoader",
+    "issues": "https://github.com/xfl03/MCCustomSkinLoader/issues",
+    "sources": "https://github.com/xfl03/MCCustomSkinLoader"
+  },
+  "license": "GPL-3.0-only",
+
+  "environment": "client",
+  "mixins": [
+    "customskinloader.bootstrap.fabric.v1.mixins.json"
+  ]
+}

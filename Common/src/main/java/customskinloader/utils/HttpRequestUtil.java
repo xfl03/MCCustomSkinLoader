@@ -142,8 +142,8 @@ public class HttpRequestUtil {
                 CustomSkinLoader.logger.debug("Encoded URL: " + url);
             }
             HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
-            c.setReadTimeout(1000 * 10);
-            c.setConnectTimeout(1000 * 10);
+            c.setReadTimeout(1000 * 5);
+            c.setConnectTimeout(1000 * 5);
             c.setDoInput(true);
             c.setUseCaches(false);
             c.setInstanceFollowRedirects(true);

@@ -1,142 +1,119 @@
-apply plugin: 'base'
-apply plugin: 'customskinloader'
+import org.apache.tools.ant.filters.ReplaceTokens
+import org.gradle.api.attributes.java.TargetJvmVersion
 
-ext.configFile = file "build.properties"
-configFile.withReader {
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
+def buildPropertiesFile = rootProject.file('build.properties')
+
+if (!buildPropertiesFile) {
+    throw new GradleException('Missing build.properties')
 }
 
-wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = "4.9"
+def buildProperties = new Properties()
+buildPropertiesFile.withInputStream { buildProperties.load(it) }
+
+def requireBuildProperty = { String propertyName ->
+    def propertyValue = buildProperties.getProperty(propertyName)?.trim()
+    if (!propertyValue) {
+        throw new GradleException("Missing ${propertyName} in ${buildPropertiesFile}")
+    }
+    propertyValue
 }
 
-import customskinloader.gradle.util.RemapUtil
-import customskinloader.gradle.util.VersionUtil
+def isTruthy = { String value ->
+    if (value == null) {
+        return true
+    }
+
+    value.trim().toLowerCase(Locale.ROOT) == 'true'
+}
+
+def releaseName = requireBuildProperty('name')
+def releaseGroup = requireBuildProperty('group')
+def releaseVersion = requireBuildProperty('version')
+def releaseBuildNumber = System.getenv('GITHUB_RUN_NUMBER')?.trim() ?: '0'
+def releaseIsSnapshot = isTruthy(System.getenv('IS_SNAPSHOT'))
+def releaseFullVersion = (releaseIsSnapshot ? "${releaseVersion}-SNAPSHOT-${releaseBuildNumber}" : releaseVersion).toString()
+
+group = releaseGroup
+version = releaseFullVersion
+
+ext {
+    modName = releaseName
+    modVersion = releaseVersion
+    modBuildNumber = releaseBuildNumber
+    modFullVersion = releaseFullVersion
+    releaseArchiveBaseName = "${releaseName}_Universal".toString()
+}
+
+def macroValues = {
+    [
+            modVersion     : rootProject.ext.modVersion.toString(),
+            modFullVersion : rootProject.ext.modFullVersion.toString(),
+            modBuildNumber : rootProject.ext.modBuildNumber.toString()
+    ]
+}
+
+def javaMacroTokens = {
+    def values = macroValues()
+    [
+            MOD_VERSION      : values.modVersion,
+            MOD_FULL_VERSION : values.modFullVersion,
+            MOD_BUILD_NUMBER : values.modBuildNumber
+    ]
+}
+
+def resourceMacroTokens = {
+    macroValues()
+}
 
 subprojects {
-    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'java'
+    apply plugin: 'customskinloader.manifest-libraries'
 
-    ext.configFile = file "build.properties"
-    configFile.withReader {
-        def prop = new Properties()
-        prop.load(it)
-        project.ext.config = new ConfigSlurper().parse prop
+    manifestLibraries {
+        // Share Bootstrap's dependency set with all packaged child modules.
+        add 'https://raw.githubusercontent.com/PrismLauncher/meta-launcher/refs/heads/master/net.minecraft/26.1.2.json'
     }
 
-    version = VersionUtil.getCSLVersion(rootProject)
-    group = "customskinloader"
-    ext.shortVersion = VersionUtil.getShortVersion(rootProject)
+    repositories {
+        mavenCentral()
+    }
 
-    sourceCompatibility = targetCompatibility = 1.8
+    def generatedJavaDir = layout.buildDirectory.dir('generated/sources/java-macros/main/java').get().asFile
+
+    def generateJavaMacros = tasks.register('generateJavaMacros', Sync) {
+        inputs.properties(javaMacroTokens())
+
+        from('src/main/java') {
+            include '**/*.java'
+            filteringCharset = 'UTF-8'
+            filter(ReplaceTokens, tokens: javaMacroTokens())
+        }
+
+        into(generatedJavaDir)
+    }
+
+    configurations.configureEach { configuration ->
+        if (configuration.canBeResolved) {
+            configuration.attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+        }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     compileJava {
-        sourceCompatibility = targetCompatibility = 1.8
+        dependsOn(generateJavaMacros)
+        source = generatedJavaDir
     }
 
-    minecraft {
-        version = config.forge_mc_version + "-" + config.forge_version
-        runDir = "run"
-        mappings = config.mappings_version
+    processResources {
+        inputs.properties(resourceMacroTokens())
+        filteringCharset = 'UTF-8'
 
-        replace '@MOD_VERSION@', rootProject.ext.config.version
-        replace '@MOD_FULL_VERSION@', project.version
-        replace '@MOD_BUILD_NUMBER@', VersionUtil.getBuildNum()
-        replaceIn 'CustomSkinLoader.java'
-
-        makeObfSourceJar = false
-    }
-
-    if (project.name != "Dummy") {
-        configurations {
-            configureEach {
-                exclude module: "forgeSrc"
-            }
+        filesMatching(['**/*.json', '**/*.toml', '**/mcmod.info']) {
+            filter(ReplaceTokens, beginToken: '${', endToken: '}', tokens: resourceMacroTokens())
         }
-    }
-
-    jar {
-        manifest {
-            attributes([
-                    "Specification-Title"     : "CustomSkinLoader",
-                    "Specification-Vendor"    : "xfl03",
-                    "Specification-Version"   : "1",
-                    "Implementation-Title"    : "CustomSkinLoader",
-                    "Implementation-Version"  : "${version}",
-                    "Implementation-Vendor"   : "xfl03",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-            ])
-        }
-    }
-
-    // For real subprojects
-    if (!config.is_real_project || Boolean.parseBoolean(config.is_real_project.toString())) {
-        archivesBaseName = "CustomSkinLoader_${-> VersionUtil.getEdition(project)}"
-
-        processResources {
-            filesNotMatching(["**/*.js", "**/accesstransformer.cfg", "customskinloader.accesswidener", "mixins.*.json"]) {
-                expand([
-                        modVersion         : rootProject.ext.config.version,
-                        modFullVersion     : project.version,
-                        dependencies       : VersionUtil.getDependencies(project.ext.config.dependencies.toString()),
-                        gitVersion         : System.getenv("CIRCLE_SHA1") ?: System.getenv("GITHUB_SHA"),
-                        buildUrl           : System.getenv("CIRCLE_BUILD_URL") ?: "https://github.com/xfl03/MCCustomSkinLoader/actions/runs/" + System.getenv("GITHUB_RUN_ID"),
-                        releaseTime        : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-                ])
-            }
-        }
-
-        jar {
-            exclude "com/**"
-            exclude "net/minecraft/client/renderer/RenderType.class"
-            exclude "net/minecraft/client/renderer/texture/**"
-            exclude "net/minecraft/resources/**"
-        }
-
-        task genSrgMap {
-            doLast {
-                if (!config.srg_notch_map.isEmpty()) {
-                    // convert mappings
-                    RemapUtil.tsrg2srg file(config.srg_notch_map), file("build/reobf.srg")
-                    RemapUtil.tsrg2srg file("mixin.tsrg"), file("build/mixin.srg")
-                }
-            }
-        }
-        deobfCompileDummyTask.dependsOn genSrgMap
-
-        reobf {
-            jar {
-                if (!config.srg_notch_map.isEmpty()) {
-                    mappings = file("build/reobf.srg")
-                }
-            }
-        }
-
-        task signJar(type: SignJar, dependsOn: reobfJar) {
-            onlyIf { System.getenv("KEY_PASS") != null && System.getenv("KEY_PASS") != "" }
-            doLast { System.out.println("Jar will be signed.") }
-
-            inputFile = jar.archivePath
-            outputFile = jar.archivePath
-
-            keyStore = "${rootDir}/Common/CustomSkinLoader.jks"
-            alias = 'CustomSkinLoader'
-            storePass = System.getenv("KEY_PASS")
-            keyPass = System.getenv("KEY_PASS")
-        }
-        build.dependsOn signJar
-
-        task afterBuild {
-            doLast {
-                //copyBuildFile
-                copy {
-                    from "build/libs"
-                    into "${rootDir}/build/libs"
-                    include "**/*.jar"
-                }
-            }
-        }
-        build.finalizedBy afterBuild
     }
 }

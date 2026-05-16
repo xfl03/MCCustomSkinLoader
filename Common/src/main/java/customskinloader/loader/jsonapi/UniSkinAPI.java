@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class UniSkinAPI implements JsonAPILoader.IJsonAPI {
 
-    public static class SkinMe extends JsonAPILoader.DefaultProfile {
+    /*public static class SkinMe extends JsonAPILoader.DefaultProfile {
         public SkinMe(JsonAPILoader loader) {
             super(loader);
         }
@@ -33,14 +33,14 @@ public class UniSkinAPI implements JsonAPILoader.IJsonAPI {
         public String getRoot() {
             return "http://www.skinme.cc/uniskin/";
         }
-    }
+    }*/
 
     private static final String TEXTURES = "textures/";
     private static final String SUFFIX = ".json";
 
     @Override
     public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
-        return Lists.newArrayList(new SkinMe(loader));
+        return Lists.newArrayList(/*new SkinMe(loader)*/);
     }
 
     @Override

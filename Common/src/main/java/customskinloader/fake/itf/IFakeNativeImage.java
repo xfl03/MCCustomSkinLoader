@@ -1,18 +1,13 @@
 package customskinloader.fake.itf;
 
-import customskinloader.fake.texture.FakeNativeImage;
-import net.minecraft.client.renderer.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 
 public interface IFakeNativeImage {
     default int getPixel(int x, int y) {
-        return ((NativeImage) this).func_195709_a(x, y);
+        return ((NativeImage) this).getPixelRGBA(x, y);
     }
 
     default void setPixel(int x, int y, int color) {
-        ((NativeImage) this).func_195700_a(x, y, color);
+        ((NativeImage) this).setPixelRGBA(x, y, color);
     }
-
-    FakeNativeImage getFakeImage();
-
-    void setFakeImage(FakeNativeImage fakeImage);
 }
