@@ -1,17 +1,78 @@
 name: Release
-
 on:
   release:
     types: [released]
 
+permissions:
+  contents: write
+
 jobs:
-  build-release:
-    name: Build Release
-    uses: ./.github/workflows/common.yml
-    with:
-      type: Release
-      release: true
-      latest-json: latest.json
-      detail-json: detail.json
-      is-snapshot: false
-    secrets: inherit
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - uses: ./.github/actions/build
+        with:
+          is-snapshot: 'false'
+          artifact-name: CustomSkinLoader-Release-${{ github.run_number }}
+
+  publish:
+    name: Publish
+    needs: build
+    runs-on: windows-latest
+    environment: Build
+    env:
+      IS_SNAPSHOT: 'false'
+      R2_SECRET_ID: ${{ secrets.R2_SECRET_ID }}
+      R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+      COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+      COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+      COS_BUCKET: ${{ secrets.COS_BUCKET }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: CustomSkinLoader-Release-${{ github.run_number }}
+          path: artifact
+
+      - uses: ./.github/actions/publish
+        with:
+          artifact-dir: artifact
+          type: release
+
+      - name: Get publish info from gradle.properties
+        id: info
+        shell: pwsh
+        run: .github/scripts/Get-PublishInfo.ps1
+
+      - uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: idMHQ4n2
+          modrinth-featured: true
+          modrinth-unfeature-mode: subset
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 286924
+          curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
+          name: CustomSkinLoader_Universal_${{ steps.info.outputs.short-version }}
+          version: ${{ steps.info.outputs.short-version }}-Universal
+          version-type: release
+          loaders: |
+            ${{ steps.info.outputs.loaders }}
+          game-versions: |
+            ${{ steps.info.outputs.game-versions }}
+          game-version-filter: releases
+          java: |
+            ${{ steps.info.outputs.java }}
+          retry-attempts: 2
+          retry-delay: 10000
+          fail-mode: fail
+          files: |
+            artifact/*.jar
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifact/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

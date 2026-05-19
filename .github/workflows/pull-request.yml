@@ -1,18 +1,14 @@
 name: Pull Request
-
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+    types: [opened, synchronize, reopened]
+    branches: [15-develop]
 
 jobs:
-  build-pull-request:
-    name: Build Pull Request
-    uses: ./.github/workflows/common.yml
-    with:
-      type: PullRequest
-      publish: false
-      release: false
-      is-snapshot: true
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - uses: ./.github/actions/build
+        with:
+          artifact-name: CustomSkinLoader-PR-${{ github.run_number }}

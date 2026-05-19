@@ -90,7 +90,7 @@ Keep pull requests focused. If a cleanup is unrelated to the bug or feature, sen
 
 Pull requests run the shared GitHub Actions build on `windows-latest` with PowerShell and Java 25. This is a CI choice; local builds should remain portable across Windows, Linux, and macOS.
 
-Publishing jobs generate the Universal jar plus metadata files from `build.properties`. Beta builds publish moving beta metadata, release builds publish release metadata and upload to distribution platforms. Object-storage upload is optional and is skipped when the required secrets are not configured.
+Publishing jobs generate the Universal jar plus metadata files from `gradle.properties`. Beta builds publish moving beta metadata, release builds publish release metadata and upload to distribution platforms. Object-storage upload is optional and is skipped when the required secrets are not configured.
 
 To generate publish metadata locally without uploading, first build the project, then run:
 

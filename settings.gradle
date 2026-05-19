@@ -1,4 +1,4 @@
-rootProject.name = 'CustomSkinLoader-Universal'
+rootProject.name = 'MCCustomSkinLoader'
 
 include(
         'Bootstrap',

@@ -1,19 +1,10 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.attributes.java.TargetJvmVersion
 
-def buildPropertiesFile = rootProject.file('build.properties')
-
-if (!buildPropertiesFile) {
-    throw new GradleException('Missing build.properties')
-}
-
-def buildProperties = new Properties()
-buildPropertiesFile.withInputStream { buildProperties.load(it) }
-
 def requireBuildProperty = { String propertyName ->
-    def propertyValue = buildProperties.getProperty(propertyName)?.trim()
+    def propertyValue = rootProject.findProperty(propertyName)?.toString()?.trim()
     if (!propertyValue) {
-        throw new GradleException("Missing ${propertyName} in ${buildPropertiesFile}")
+        throw new GradleException("Missing ${propertyName} in gradle.properties")
     }
     propertyValue
 }
@@ -26,9 +17,9 @@ def isTruthy = { String value ->
     value.trim().toLowerCase(Locale.ROOT) == 'true'
 }
 
-def releaseName = requireBuildProperty('name')
-def releaseGroup = requireBuildProperty('group')
-def releaseVersion = requireBuildProperty('version')
+def releaseName = requireBuildProperty('mod_name')
+def releaseGroup = requireBuildProperty('mod_group')
+def releaseVersion = requireBuildProperty('mod_version')
 def releaseBuildNumber = System.getenv('GITHUB_RUN_NUMBER')?.trim() ?: '0'
 def releaseIsSnapshot = isTruthy(System.getenv('IS_SNAPSHOT'))
 def releaseFullVersion = (releaseIsSnapshot ? "${releaseVersion}-SNAPSHOT-${releaseBuildNumber}" : releaseVersion).toString()
@@ -71,7 +62,7 @@ subprojects {
 
     manifestLibraries {
         // Share Bootstrap's dependency set with all packaged child modules.
-        add 'https://raw.githubusercontent.com/PrismLauncher/meta-launcher/refs/heads/master/net.minecraft/26.1.2.json'
+        add "https://raw.githubusercontent.com/PrismLauncher/meta-launcher/refs/heads/master/net.minecraft/${minecraft_version}.json"
     }
 
     repositories {
