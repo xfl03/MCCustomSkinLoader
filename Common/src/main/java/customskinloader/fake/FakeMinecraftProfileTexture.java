@@ -2,12 +2,10 @@ package customskinloader.fake;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import customskinloader.CustomSkinLoader;
 import customskinloader.utils.HttpTextureUtil;
 
 public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
@@ -15,7 +13,7 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
 
     private final HttpTextureUtil.HttpTextureInfo info;
     private final Map<String, String> metadata;
-    private final CountDownLatch latch = new CountDownLatch(1);
+    private final CompletableFuture<Object> model = new CompletableFuture<>();
 
     public FakeMinecraftProfileTexture(String url, Map<String, String> metadata) {
         super(url, metadata);
@@ -40,12 +38,8 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
             if (model != null) {
                 return model;
             } else {
-                try {
-                    if (lock && this.latch.await(60L * CustomSkinLoader.config.loadlist.size(), TimeUnit.SECONDS)) {
-                        return this.getMetadata(key, false);
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if (lock && this.model.isDone()) {
+                    return this.getMetadata(key, false);
                 }
             }
         }
@@ -56,7 +50,7 @@ public class FakeMinecraftProfileTexture extends MinecraftProfileTexture {
         if (this.metadata != null) {
             MODEL_CACHE.put(this.getHash(), model);
             this.metadata.put("model", model);
-            this.latch.countDown();
+            this.model.complete(null);
         }
     }
 

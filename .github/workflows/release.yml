@@ -1,4 +1,5 @@
 name: Release
+
 on:
   release:
     types: [released]
@@ -9,6 +10,8 @@ jobs:
     uses: ./.github/workflows/common.yml
     with:
       type: Release
-      publish-task: upload
+      release: true
+      latest-json: latest.json
+      detail-json: detail.json
       is-snapshot: false
     secrets: inherit

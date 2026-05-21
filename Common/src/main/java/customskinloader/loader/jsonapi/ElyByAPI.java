@@ -56,9 +56,30 @@ public class ElyByAPI implements JsonAPILoader.IJsonAPI {
         }
     }
 
+    public static class GlitchlessGames extends JsonAPILoader.DefaultProfile {
+        public GlitchlessGames(JsonAPILoader loader) {
+            super(loader);
+        }
+
+        @Override
+        public String getName() {
+            return "GlitchlessGames";
+        }
+
+        @Override
+        public int getPriority() {
+            return 700;
+        }
+
+        @Override
+        public String getRoot() {
+            return "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname=";
+        }
+    }
+
     @Override
     public List<ICustomSkinLoaderPlugin.IDefaultProfile> getDefaultProfiles(JsonAPILoader loader) {
-        return Lists.newArrayList(new ElyBy(loader), new TLauncher(loader));
+        return Lists.newArrayList(new ElyBy(loader), new TLauncher(loader), new GlitchlessGames(loader));
     }
 
     @Override

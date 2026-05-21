@@ -1,33 +1,25 @@
 plugins {
-    id("java")
+    id 'java-gradle-plugin'
 }
-
-group = "customskinloader"
-version = "1.0.0"
 
 repositories {
     mavenCentral()
-    maven {
-        url = "https://plugins.gradle.org/m2/"
-    }
-    maven {
-        url = "https://maven.minecraftforge.net/"
-    }
-    maven {
-        url = "https://repo.spongepowered.org/repository/maven-public/"
-    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    implementation("com.qcloud:cos_api:5.6.98")
-    implementation("com.tencentcloudapi:tencentcloud-sdk-java-cdn:3.1.559")
-    implementation("com.google.code.gson:gson:2.9.0")
-    implementation("net.minecraftforge.gradle:ForgeGradle:2.3.+")
-    implementation("gradle.plugin.com.matthewprenger:CurseGradle:1.4.0")
-    implementation("gradle.plugin.com.modrinth.minotaur:Minotaur:1.2.1")
-    implementation("org.spongepowered:mixingradle:0.6-SNAPSHOT")
-    implementation("software.amazon.awssdk:s3:2.21.10")
+    implementation localGroovy()
 }
 
-apply from: file("patch.gradle")
-patchMercury()
+gradlePlugin {
+    plugins {
+        manifestLibraries {
+            id = 'customskinloader.manifest-libraries'
+            implementationClass = 'customskinloader.gradle.ManifestLibrariesPlugin'
+        }
+    }
+}

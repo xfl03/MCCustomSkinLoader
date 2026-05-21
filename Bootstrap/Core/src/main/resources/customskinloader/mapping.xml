@@ -1,0 +1,457 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mapping>
+    <class name="com/mojang/blaze3d/platform/NativeImage">
+        <name type="srg" version="[404,754]">net/minecraft/client/renderer/texture/NativeImage</name> <!-- 1.13.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1011</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="copyFrom(Lcom/mojang/blaze3d/platform/NativeImage;)V">
+            <name type="srg" version="[404,754]">func_195703_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_85054_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4317</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="copyRect(IIIIIIZZ)V">
+            <name type="srg" version="[404,754]">func_195699_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_85025_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4304</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="fillRect(IIIII)V">
+            <name type="srg" version="[404,754]">func_195715_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_84997_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4326</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getHeight()I">
+            <name type="srg" version="[404,754]">func_195714_b</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_85084_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4323</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getPixelRGBA(II)I">
+            <name type="srg" version="[404,754]">func_195709_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_84985_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4315</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getWidth()I">
+            <name type="srg" version="[404,754]">func_195702_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_84982_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4307</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="read(Ljava/io/InputStream;)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="srg" version="[404,754]">func_195713_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_85058_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4309</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="setPixelRGBA(III)V">
+            <name type="srg" version="[404,754]">func_195700_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_84988_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_4305</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="com/mojang/blaze3d/vertex/PoseStack">
+        <name type="srg" version="[404,754]">com/mojang/blaze3d/matrix/MatrixStack</name> <!-- 1.13.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_4587</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="customskinloader/fake/itf/FakeHttpTextureProcessor"> <!-- net/minecraft/client/renderer/HttpTextureProcessor -->
+        <name type="srg" version="[,553]">net/minecraft/client/renderer/IImageBuffer</name> <!-- 19w37a- (1.14.4-) -->
+        <name type="intermediary" version="[441,553]">net/minecraft/class_760</name> <!-- 18w43b ~ 19w37a (1.14 ~ 1.14.4) -->
+        <method name="onTextureDownloaded()V">
+            <name type="srg" version="[,553]">func_152634_a</name> <!-- 19w37a- (1.14.4-) -->
+            <name type="intermediary" version="[441,553]">method_3238</name> <!-- 18w43b ~ 19w37a (1.14 ~ 1.14.4) -->
+        </method>
+        <method name="process(Lcom/mojang/blaze3d/platform/NativeImage;)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="srg" version="[404,553]">func_195786_a</name> <!-- 1.13.2 ~ 19w37a (1.13.2 ~ 1.14.4) -->
+            <name type="intermediary" version="[441,553]">method_3237</name> <!-- 18w43b ~ 19w37a (1.14 ~ 1.14.4) -->
+        </method>
+        <method name="process(Ljava/awt/image/BufferedImage;)Ljava/awt/image/BufferedImage;">
+            <name type="srg" version="[,340]">func_78432_a</name> <!-- 1.12.2- -->
+        </method>
+    </class>
+    <class name="customskinloader/fake/itf/IFakeIResource$V1">
+        <method name="getInputStream()Ljava/io/InputStream;">
+            <name type="srg" version="[,340]">func_110527_b</name> <!-- 1.12.2- -->
+            <name type="srg" version="[404,754]">func_199027_b</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,758]">m_6679_</name> <!-- 1.17.1 ~ 1.18.2 -->
+            <name type="intermediary" version="[441,758],[801,803],[0x40000001,0x4000004C]">method_14482</name> <!-- 18w43b ~ 22w13a (1.14 ~ 1.18.2) -->
+        </method>
+    </class>
+    <class name="customskinloader/fake/itf/IFakeIResource$V2">
+        <method name="open()Ljava/io/InputStream;">
+            <name type="srg" version="[759,765]">m_215507_</name> <!-- 1.19 ~ 1.20.4 -->
+            <name type="intermediary" version="[759,774],[0x4000004E,0x4000011E]">method_14482</name> <!-- 22w14a ~ 1.21.11 (1.19 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="customskinloader/fake/itf/IFakeIResourceManager$V1">
+        <method name="getResource(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/server/packs/resources/Resource;">
+            <name type="srg" version="[,340]">func_110536_a</name> <!-- 1.12.2- -->
+            <name type="srg" version="[404,754]">func_199002_a</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,758]">m_142591_</name> <!-- 1.17.1 ~ 1.18.2 -->
+            <name type="intermediary" version="[441,758],[801,803],[0x40000001,0x4000004C]">method_14486</name> <!-- 18w43b ~ 22w13a (1.14 ~ 1.18.2) -->
+        </method>
+    </class>
+    <class name="customskinloader/fake/itf/IFakeIResourceManager$V2">
+        <method name="getResource(Lnet/minecraft/resources/Identifier;)Ljava/util/Optional;">
+            <name type="srg" version="[759,765]">m_213713_</name> <!-- 1.19 ~ 1.20.4 -->
+            <name type="intermediary" version="[759,774],[0x4000004E,0x4000011E]">method_14486</name> <!-- 22w14a ~ 1.21.11 (1.19 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="customskinloader/fake/itf/IFakeNativeImage">
+        <method name="getPixel(II)I">
+            <name type="intermediary" version="[768,774],[0x400000CD,0x4000011E]">method_61940</name> <!-- 24w33a ~ 1.21.11 (1.21.2 ~ 1.21.11) -->
+        </method>
+        <method name="setPixel(III)V">
+            <name type="intermediary" version="[768,774],[0x400000CD,0x4000011E]">method_61941</name> <!-- 24w33a ~ 1.21.11 (1.21.2 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/Minecraft">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_310</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <field name="gameDirectory">
+            <name type="srg" version="[,754]">field_71412_D</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">f_91069_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">field_1697</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </field>
+        <method name="getCurrentServer()Lnet/minecraft/client/multiplayer/ServerData;">
+            <name type="srg" version="[,754]">func_147104_D</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">m_91089_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_1558</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getInstance()Lnet/minecraft/client/Minecraft;">
+            <name type="srg" version="[,754]">func_71410_x</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">m_91087_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_1551</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getResourceManager()Lnet/minecraft/server/packs/resources/ResourceManager;">
+            <name type="srg" version="[,340]">func_110442_L</name> <!-- 1.12.2- -->
+            <name type="srg" version="[404,754]">func_195551_G</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_91098_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_1478</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getSkinManager()Lnet/minecraft/client/resources/SkinManager;">
+            <name type="srg" version="[,754]">func_152342_ad</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">m_91109_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_1582</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="getTextureManager()Lnet/minecraft/client/renderer/texture/TextureManager;">
+            <name type="srg" version="[,754]">func_110434_K</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">m_91097_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_1531</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="isLocalServer()Z">
+            <name type="srg" version="[,754]">func_71387_A</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">m_91090_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_1542</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/gui/GuiGraphics">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_332</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/gui/GuiGraphicsExtractor" />
+    <class name="net/minecraft/client/gui/components/PlayerTabOverlay">
+        <name type="srg" version="[,754]">net/minecraft/client/gui/GuiPlayerTabOverlay</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_355</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V" />
+        <method name="render(ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V">
+            <name type="srg" version="[,578]">func_175249_a</name> <!-- 1.15.2- -->
+            <name type="intermediary" version="[441,712]">method_1919</name> <!-- 18w43b ~ 20w16a (1.14 ~ 1.15.2) -->
+        </method>
+        <method name="render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V">
+            <name type="srg" version="[736,754]">func_238523_a_</name> <!-- 1.16.1 ~ 1.16.5 -->
+            <name type="srg" version="[756,762]">m_94544_</name> <!-- 1.17.1 ~ 1.19.4 -->
+            <name type="intermediary" version="[713,762],[801,803],[0x40000001,0x40000082]">method_1919</name> <!-- 20w17a ~ 23w14a (1.16 ~ 1.19.4) -->
+        </method>
+        <method name="render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V">
+            <name type="srg" version="[763,765]">m_280406_</name> <!-- 1.20 ~ 1.20.4 -->
+            <name type="intermediary" version="[763,774],[0x40000083,0x4000011E]">method_1919</name> <!-- 23w16a ~ 1.21.11 (1.20 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/model/geom/ModelPart">
+        <name type="srg" version="[,754]">net/minecraft/client/renderer/model/ModelRenderer</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_630</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/multiplayer/ClientPacketListener">
+        <name type="srg" version="[,404]">net/minecraft/client/network/NetHandlerPlayClient</name> <!-- 1.13.2- -->
+        <name type="srg" version="[485,754]">net/minecraft/client/network/play/ClientPlayNetHandler</name> <!-- 1.14.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_634</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="onlineMode()Z" />
+    </class>
+    <class name="net/minecraft/client/multiplayer/ServerData">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_642</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <field name="ip">
+            <name type="srg" version="[,754]">field_78845_b</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">f_105363_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">field_3761</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </field>
+    </class>
+    <class name="net/minecraft/client/player/AbstractClientPlayer">
+        <name type="srg" version="[,404]">net/minecraft/client/entity/AbstractClientPlayer</name> <!-- 1.13.2- -->
+        <name type="srg" version="[485,754]">net/minecraft/client/entity/player/AbstractClientPlayerEntity</name> <!-- 1.14.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_742</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/MultiBufferSource">
+        <name type="srg" version="[,754]">net/minecraft/client/renderer/IRenderTypeBuffer</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_4597</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/SubmitNodeCollector">
+        <name type="intermediary" version="[773,774],[0x40000104,0x4000011E]">net/minecraft/class_11659</name> <!-- 25w31a ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/entity/layers/CapeLayer">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_972</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V">
+            <name type="srg" version="[573,754]">func_225628_a_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_6494_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[573,767],[801,803],[0x40000001,0x400000CC]">method_4177</name> <!-- 1.15 ~ 1.21.1 -->
+        </method>
+        <method name="render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFFF)V">
+            <name type="intermediary" version="[556,560]">method_4177</name> <!-- 19w39a ~ 19w44a -->
+        </method>
+        <method name="render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/state/PlayerRenderState;FF)V">
+            <name type="intermediary" version="[768,772],[0x400000CD,0x40000103]">method_4177</name> <!-- 24w33a ~ 1.21.8 (1.21.2 ~ 1.21.8) -->
+        </method>
+        <method name="submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V">
+            <name type="intermediary" version="[773,774],[0x40000104,0x4000011E]">method_4177</name> <!-- 25w31a ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/entity/player/PlayerRenderer">
+        <name type="srg" version="[,754]">net/minecraft/client/renderer/entity/PlayerRenderer</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1007</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="renderHand(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;)V">
+            <name type="srg" version="[573,754]">func_229145_a_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_117775_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[573,767],[801,803],[0x40000001,0x400000CC]">method_23205</name> <!-- 1.15 ~ 1.21.1 -->
+        </method>
+        <method name="renderHand(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;)V">
+            <name type="intermediary" version="[556,560]">method_23205</name> <!-- 19w39a ~ 19w44a -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/entity/state/AvatarRenderState">
+        <name type="intermediary" version="773,774,[0x40000104,0x4000011E]">net/minecraft/class_10055</name> <!-- 25w31a ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/entity/state/PlayerRenderState">
+        <name type="intermediary" version="[768,772],[0x400000CD,0x40000103]">net/minecraft/class_10055</name> <!-- 24w33a ~ 1.21.8 (1.21.2 ~ 1.21.8) -->
+    </class>
+    <class name="net/minecraft/client/renderer/rendertype/RenderType">
+        <name type="srg" version="[573,773]">net/minecraft/client/renderer/RenderType</name> <!-- 1.15 ~ 1.21.10 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1921</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <name type="official" version="[764,773]">net/minecraft/client/renderer/RenderType</name> <!-- 1.20.2 ~ 1.21.10 -->
+        <method name="entitySolid(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;">
+            <name type="srg" version="[573,754]">func_228634_a_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_110446_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[558,773],[801,803],[0x40000001,0x40000112]">method_23572</name> <!-- 19w41a ~ 25w42a (1.15 ~ 1.21.10) -->
+        </method>
+        <method name="entityTranslucent(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;">
+            <name type="srg" version="[573,754]">func_228644_e_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_110473_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[558,773],[801,803],[0x40000001,0x40000112]">method_23580</name> <!-- 19w41a ~ 25w42a (1.15 ~ 1.21.10) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/rendertype/RenderTypes">
+        <name type="intermediary" version="774,[0x40000113,0x4000011E]">net/minecraft/class_12249</name> <!-- 25w43a ~ 1.21.11 (1.21.11) -->
+        <method name="entitySolid(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;">
+            <name type="intermediary" version="774,[0x40000113,0x4000011E]">method_75982</name> <!-- 25w43a ~ 1.21.11 (1.21.11) -->
+        </method>
+        <method name="entityTranslucent(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;">
+            <name type="intermediary" version="774,[0x40000113,0x4000011E]">method_76000</name> <!-- 25w43a ~ 1.21.11 (1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/texture/AbstractTexture">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1044</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/texture/HttpTexture">
+        <name type="srg" version="[,340]">net/minecraft/client/renderer/ThreadDownloadImageData</name> <!-- 1.12.2- -->
+        <name type="srg" version="404">net/minecraft/client/renderer/texture/ThreadDownloadImageData</name> <!-- 1.13.2 -->
+        <name type="srg" version="[485,754]">net/minecraft/client/renderer/texture/DownloadingTexture</name> <!-- 1.14.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,768],[801,803],[0x40000001,0x400000DD]">net/minecraft/class_1046</name> <!-- 18w43b ~ 24w45a (1.14 ~ 1.21.3) -->
+        <field name="onDownloaded">
+            <name type="srg" version="[573,754]">field_229155_i_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">f_117997_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[554,774],[801,803],[0x40000001,0x4000011E]">field_20843</name> <!-- 19w38a ~ 1.21.11 (1.15 ~ 1.21.11) -->
+        </field>
+        <field name="uploaded">
+            <name type="srg" version="[,754]">field_110559_g</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">f_117999_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,768],[801,803],[0x40000001,0x400000DD]">field_5215</name> <!-- 18w43b ~ 24w45a (1.14 ~ 1.21.3) -->
+        </field>
+        <method name="load(Ljava/io/InputStream;)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="srg" version="[404,754]">func_229159_a_</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_118018_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_22795</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="processLegacySkin(Lcom/mojang/blaze3d/platform/NativeImage;)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="srg" version="[404,754]">func_229163_c_</name> <!-- 1.13.2 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_118032_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_22798</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+        <method name="upload(Ljava/awt/image/BufferedImage;)V">
+            <name type="srg" version="[,340]">func_147641_a</name> <!-- 1.12.2- -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/texture/ReloadableTexture">
+        <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">net/minecraft/class_10537</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/texture/SimpleTexture">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1049</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="loadContents(Lnet/minecraft/server/packs/resources/ResourceManager;)Lnet/minecraft/client/renderer/texture/TextureContents;">
+            <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">method_65809</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/texture/SkinTextureDownloader">
+        <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">net/minecraft/class_10538</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+        <method name="downloadAndRegisterSkin(Lnet/minecraft/resources/Identifier;Ljava/nio/file/Path;Ljava/lang/String;Z)Ljava/util/concurrent/CompletableFuture;">
+            <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">method_65861</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+        </method>
+        <method name="lambda$downloadAndRegisterSkin$0(Ljava/nio/file/Path;Ljava/lang/String;Z)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="intermediary" version="[769,772],[0x400000DE,0x4000010C]">method_65866</name> <!-- 24w46a ~ 25w37a (1.21.4 ~ 1.21.8) -->
+        </method>
+        <method name="lambda$downloadAndRegisterSkin$0(Ljava/nio/file/Path;Lnet/minecraft/core/ClientAsset$DownloadedTexture;Z)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="intermediary" version="773,774,[0x4000010D,0x4000011E]">method_65866</name> <!-- 1.21.9-pre1 ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+        </method>
+        <method name="processLegacySkin(Lcom/mojang/blaze3d/platform/NativeImage;Ljava/lang/String;)Lcom/mojang/blaze3d/platform/NativeImage;">
+            <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">method_65863</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/renderer/texture/TextureContents">
+        <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">net/minecraft/class_10539</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/renderer/texture/TextureManager">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1060</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="register(Lnet/minecraft/resources/Identifier;Lnet/minecraft/client/renderer/texture/AbstractTexture;)V">
+            <name type="srg" version="[573,754]">func_229263_a_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,765]">m_118495_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[556,774],[801,803],[0x40000001,0x4000011E]">method_4616</name> <!-- 19w39a ~ 1.21.11 (1.15 ~ 1.21.11) -->
+        </method>
+        <method name="registerAndLoad(Lnet/minecraft/resources/Identifier;Lnet/minecraft/client/renderer/texture/ReloadableTexture;)V">
+            <name type="intermediary" version="[769,774],[0x400000DE,0x4000011E]">method_65876</name> <!-- 24w46a ~ 1.21.11 (1.21.4 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/resources/SkinManager">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1071</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <field name="skinTextureDownloader">
+            <name type="intermediary" version="773,774,[0x40000109,0x4000011E]">field_62487</name> <!-- 25w35a ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+        </field>
+        <method name="get(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;">
+            <name type="intermediary" version="773,774,[0x40000107,0x4000011E]">method_52863</name> <!-- 25w34a ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+        </method>
+        <method name="getInsecureSkinInformation(Lcom/mojang/authlib/GameProfile;)Ljava/util/Map;">
+            <name type="srg" version="[,754]">func_152788_a</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,763]">m_118815_</name> <!-- 1.17.1 ~ 1.20.1 -->
+            <name type="intermediary" version="[441,763],[801,803],[0x40000001,0x4000008E]">method_4654</name> <!-- 18w43b ~ 1.20.1 (1.14 ~ 1.20.1) -->
+        </method>
+        <method name="getOrLoad(Lcom/mojang/authlib/GameProfile;)Ljava/util/concurrent/CompletableFuture;">
+            <name type="srg" version="764,765">m_293351_</name> <!-- 1.20.2 ~ 1.20.4 -->
+            <name type="intermediary" version="[764,772],[0x40000090,0x40000106]">method_52863</name> <!-- 23w31a ~ 25w33a (1.20.2 ~ 1.21.8) -->
+        </method>
+        <method name="lambda$registerSkins$4(Lcom/mojang/authlib/GameProfile;ZLnet/minecraft/client/resources/SkinManager$SkinTextureCallback;)V">
+            <name type="srg" version="[404,498]">func_210275_a</name> <!-- 1.13.2 ~ 1.14.4 -->
+            <name type="srg" version="[573,754]">func_229293_a_</name> <!-- 1.15 ~ 1.16.5 -->
+            <name type="srg" version="[756,763]">m_118821_</name> <!-- 1.17.1 ~ 1.20.1 -->
+            <name type="intermediary" version="[441,763],[801,803],[0x40000001,0x4000008E]">method_4653</name> <!-- 18w43b ~ 1.20.1 (1.14 ~ 1.20.1) -->
+        </method>
+        <method name="registerSkins(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/resources/SkinManager$SkinTextureCallback;Z)V">
+            <name type="srg" version="[,754]">func_152790_a</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,763]">m_118817_</name> <!-- 1.17.1 ~ 1.20.1 -->
+            <name type="intermediary" version="[441,763],[801,803],[0x40000001,0x4000008E]">method_4652</name> <!-- 18w43b ~ 1.20.1 (1.14 ~ 1.20.1) -->
+        </method>
+        <method name="registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;)Lnet/minecraft/resources/Identifier;">
+            <name type="srg" version="[,754]">func_152792_a</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,763]">m_118825_</name> <!-- 1.17.1 ~ 1.20.1 -->
+            <name type="intermediary" version="[441,763],[801,803],[0x40000001,0x4000008E]">method_4656</name> <!-- 18w43b ~ 1.20.1 (1.14 ~ 1.20.1) -->
+        </method>
+        <method name="registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;Lcom/mojang/authlib/minecraft/MinecraftProfileTexture$Type;Lnet/minecraft/client/resources/SkinManager$SkinTextureCallback;)Lnet/minecraft/resources/Identifier;">
+            <name type="srg" version="[,754]">func_152789_a</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,763]">m_118828_</name> <!-- 1.17.1 ~ 1.20.1 -->
+            <name type="intermediary" version="[441,763],[801,803],[0x40000001,0x4000008E]">method_4651</name> <!-- 18w43b ~ 1.20.1 (1.14 ~ 1.20.1) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/resources/SkinManager$1">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1071$1</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="lambda$load$0(Lcom/mojang/authlib/minecraft/MinecraftSessionService;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/client/resources/SkinManager$TextureInfo;">
+            <name type="srg" version="764">m_293645_</name> <!-- 1.20.2 -->
+            <name type="intermediary" version="764,[0x40000090,0x4000009C]">method_52867</name> <!-- 23w31a ~ 23w41a (1.20.2) -->
+        </method>
+        <method name="lambda$load$0(Lnet/minecraft/client/resources/SkinManager$CacheKey;Lcom/mojang/authlib/minecraft/MinecraftSessionService;)Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;">
+            <name type="srg" version="765">m_304063_</name> <!-- 1.20.3 ~ 1.20.4 -->
+            <name type="intermediary" version="[765,772],[0x4000009D,0x40000106]">method_54647</name> <!-- 23w42a ~ 25w33a (1.20.3 ~ 1.21.8) -->
+        </method>
+        <method name="lambda$load$0(Lnet/minecraft/client/resources/SkinManager$CacheKey;Lnet/minecraft/server/Services;)Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;">
+            <name type="intermediary" version="773,774,[0x40000107,0x4000011E]">method_54647</name> <!-- 25w34a ~ 1.21.11 (1.21.9 ~ 1.21.11) -->
+        </method>
+        <method name="load(Lnet/minecraft/client/resources/SkinManager$CacheKey;)Ljava/util/concurrent/CompletableFuture;">
+            <name type="intermediary" version="[764,774],[0x40000090,0x4000011E]">method_52868</name> <!-- 23w31a ~ 1.21.11 (1.20.2 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/resources/SkinManager$CacheKey">
+        <name type="intermediary" version="[764,774],[0x40000090,0x4000011E]">net/minecraft/class_1071$class_8686</name> <!-- 23w31a ~ 1.21.11 (1.20.2 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/client/resources/SkinManager$SkinTextureCallback">
+        <name type="srg" version="[,404]">net/minecraft/client/resources/SkinManager$SkinAvailableCallback</name> <!-- 1.13.2- -->
+        <name type="srg" version="[485,754]">net/minecraft/client/resources/SkinManager$ISkinAvailableCallback</name> <!-- 1.14.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,763],[801,803],[0x40000001,0x4000008E]">net/minecraft/class_1071$class_1072</name> <!-- 18w43b ~ 1.20.1 (1.14 ~ 1.20.1) -->
+    </class>
+    <class name="net/minecraft/client/resources/SkinManager$TextureCache">
+        <name type="intermediary" version="[764,774],[0x40000090,0x4000011E]">net/minecraft/class_1071$class_8687</name> <!-- 23w31a ~ 1.21.11 (1.20.2 ~ 1.21.11) -->
+        <field name="type">
+            <name type="srg" version="764,765">f_291290_</name> <!-- 1.20.2 ~ 1.20.4 -->
+            <name type="intermediary" version="[764,774],[0x40000090,0x4000011E]">field_45641</name> <!-- 23w31a ~ 1.21.11 (1.20.2 ~ 1.21.11) -->
+        </field>
+        <method name="registerTexture(Lcom/mojang/authlib/minecraft/MinecraftProfileTexture;)Ljava/util/concurrent/CompletableFuture;">
+            <name type="srg" version="764,765">m_294542_</name> <!-- 1.20.2 ~ 1.20.4 -->
+            <name type="intermediary" version="[764,774],[0x40000090,0x4000011E]">method_52873</name> <!-- 23w31a ~ 1.21.11 (1.20.2 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/client/resources/SkinManager$TextureInfo">
+        <name type="intermediary" version="764,[0x40000090,0x4000009C]">net/minecraft/class_1071$class_8688</name> <!-- 23w31a ~ 23w41a (1.20.2) -->
+    </class>
+    <class name="net/minecraft/client/resources/metadata/texture/TextureMetadataSection">
+        <name type="srg" version="[,754]">net/minecraft/client/resources/data/TextureMetadataSection</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_1084</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/core/ClientAsset$DownloadedTexture">
+        <name type="intermediary" version="[765,774],[0x4000009C,0x4000011E]">net/minecraft/class_12079$class_12080</name> <!-- 23w41a ~ 1.21.11 (1.20.3 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/resources/Identifier">
+        <name type="srg" version="[,754]">net/minecraft/util/ResourceLocation</name> <!-- 1.16.5- -->
+        <name type="srg" version="[756,773]">net/minecraft/resources/ResourceLocation</name> <!-- 1.17.1 ~ 1.21.10 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_2960</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <name type="official" version="[764,773]">net/minecraft/resources/ResourceLocation</name> <!-- 1.20.2 ~ 1.21.10 -->
+    </class>
+    <class name="net/minecraft/server/Services">
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_7497</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/server/packs/resources/Resource">
+        <name type="srg" version="[,340]">net/minecraft/client/resources/IResource</name> <!-- 1.12.2- -->
+        <name type="srg" version="[404,754]">net/minecraft/resources/IResource</name> <!-- 1.13.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_3298</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="open()Ljava/io/InputStream;">
+            <name type="srg" version="[,754]">func_199027_b</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,758]">m_6679_</name> <!-- 1.17.1 ~ 1.18.2 -->
+            <name type="srg" version="[759,765]">m_215507_</name> <!-- 1.19 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_14482</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/server/packs/resources/ResourceManager">
+        <name type="srg" version="[,340]">net/minecraft/client/resources/IResourceManager</name> <!-- 1.12.2- -->
+        <name type="srg" version="[404,754]">net/minecraft/resources/IResourceManager</name> <!-- 1.13.2 ~ 1.16.5 -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_3300</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="getResource(Lnet/minecraft/resources/Identifier;)Ljava/util/Optional;">
+            <name type="intermediary" version="[759,774],[0x4000004E,0x4000011E]">method_14486</name> <!-- 22w14a ~ 1.21.11 (1.19 ~ 1.21.11) -->
+        </method>
+        <method name="getResource(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/server/packs/resources/Resource;">
+            <name type="srg" version="[,754]">func_199002_a</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,758]">m_142591_</name> <!-- 1.17.1 ~ 1.18.2 -->
+            <name type="intermediary" version="[441,758],[801,803],[0x40000001,0x4000004C]">method_14486</name> <!-- 18w43b ~ 22w13a (1.14 ~ 1.18.2) -->
+        </method>
+    </class>
+    <class name="net/minecraft/util/StringUtil">
+        <name type="srg" version="[,754]">net/minecraft/util/StringUtils</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_3544</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        <method name="stripColor(Ljava/lang/String;)Ljava/lang/String;">
+            <name type="srg" version="[,754]">func_76338_a</name> <!-- 1.16.5- -->
+            <name type="srg" version="[756,765]">m_14406_</name> <!-- 1.17.1 ~ 1.20.4 -->
+            <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">method_15440</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+        </method>
+    </class>
+    <class name="net/minecraft/world/scores/Objective">
+        <name type="srg" version="[,754]">net/minecraft/scoreboard/ScoreObjective</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_266</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+    <class name="net/minecraft/world/scores/Scoreboard">
+        <name type="srg" version="[,754]">net/minecraft/scoreboard/Scoreboard</name> <!-- 1.16.5- -->
+        <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_269</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
+    </class>
+</mapping>

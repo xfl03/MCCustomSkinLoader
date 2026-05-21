@@ -2,21 +2,19 @@ package customskinloader.fake.itf;
 
 import java.io.InputStream;
 
-import net.minecraft.client.resources.IResource;
+import net.minecraft.server.packs.resources.Resource;
 
-/** {@link IResource} is no longer an interface since 22w14a */
+/** {@link Resource} is no longer an interface since 22w14a */
 public interface IFakeIResource {
-    // 1.13.2 ~ 22w13a
+    // 22w13a- (1.18.2-)
     interface V1 {
-        default InputStream func_199027_b() {
-            return ((IResource) this).getInputStream();
-        }
+        InputStream getInputStream();
     }
 
-    // 22w14a+
+    // 22w14a+ (1.19+)
     interface V2 {
         default InputStream open() {
-            return ((IFakeIResource.V1) this).func_199027_b();
+            return ((IFakeIResource.V1) this).getInputStream();
         }
     }
 }

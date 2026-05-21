@@ -1,215 +1,149 @@
 name: Common
+
 on:
   workflow_call:
     inputs:
       type:
         required: true
         type: string
-      publish-task:
+      publish:
+        required: false
+        type: boolean
+        default: false
+      release:
+        required: false
+        type: boolean
+        default: false
+      prerelease-tag:
         required: false
         type: string
+        default: ""
+      prerelease-name:
+        required: false
+        type: string
+        default: ""
+      latest-json:
+        required: false
+        type: string
+        default: latest-beta.json
+      detail-json:
+        required: false
+        type: string
+        default: detail-beta.json
       is-snapshot:
         required: false
         type: boolean
         default: true
 
-jobs:
-  build-common:
-    name: Build
-    runs-on: ubuntu-latest
-    environment: Build
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '8'
-          cache: 'gradle'
-      -
-        name: Build
-        env:
-          KEY_PASS: ${{ secrets.KEY_PASS }}
-          IS_SNAPSHOT: ${{ inputs.is-snapshot }}
-        run: |
-          echo Snapshot: $IS_SNAPSHOT
-          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew clean build --stacktrace
-      -
-        uses: actions/upload-artifact@v4
-        name: Publish to Github Artifact
-        with:
-          name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
-          path: build/libs
+permissions:
+  contents: write
 
-  Upload:
-    if: inputs.publish-task
-    needs: build-common
-    continue-on-error: true
-    environment: Build
-    strategy:
-      matrix:
-        website: [CurseForge_Modrinth]
-        modtype: [Fabric,ForgeV1,ForgeV2,ForgeV3]
-        include:
-          - 
-            website: ObjectStorage
-            modtype: All
-#          -
-#            website: GitHub-Release
-#            modtype: All
-          -
-            website: GitHub-PreRelease
-            modtype: All
-    name: ${{ matrix.website }} (${{ matrix.modtype}})
-    runs-on: ubuntu-latest
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
     steps:
-      -
-        name: Checkout Git Repository
+      - name: Checkout
         uses: actions/checkout@v4
-      - 
-        uses: actions/download-artifact@v4
-        name: Download Artifact Zips
-        with:
-          path: build
-      -
-        name: Preparation Folder
-        run: |
-          rsync -avz "build/$(ls build|grep "CustomSkinLoader")/" build/libs/
-          ls -lh build
-      - 
-        if: ${{ matrix.modtype != 'All' }}
-        name: Checking and setting the environment
-        id: cslenv
-        run: |
-          output="$(ls build/libs | grep -v "sources")"
-          
-          case "${{ matrix.modtype }}" in
-              "ForgeV1")
-                  modloader="Forge"
-                  path=`echo "${{ matrix.modtype }}" | sed 's#V#/V#'`
-                  ;;
-              "ForgeV2" | "ForgeV3")
-                  modloader=$(cat <<EOF
-          Forge
-          NeoForge
-          EOF
-          )
-                  path=`echo "${{ matrix.modtype }}" | sed 's#V#/V#'`
-                  ;;
-              "Fabric")
-                  modloader=$(cat <<EOF
-          Fabric
-          Quilt
-          EOF
-          )
-                  path="${{ matrix.modtype }}"
-                  ;;
-              *)
-                  echo "Unsupported modtype: ${{ matrix.modtype }}"
-                  exit 1
-                  ;;
-          esac
-          
-          echo "path=$path" >> $GITHUB_OUTPUT
-          echo "modloader="$modloader"" >> $GITHUB_OUTPUT
-          echo "filename=$(echo "$output"|grep $(echo ${{ matrix.modtype }}|sed "s#-##") )" >> $GITHUB_OUTPUT
-          echo "version=$(grep "version=" build.properties | grep -v "#" | sed "s/version=//")" >> $GITHUB_OUTPUT
-          echo "edition=$(echo ${{ matrix.modtype }} | sed "s/-//")" >> $GITHUB_OUTPUT
-          echo "minecraft_vers<<EOF" >> $GITHUB_OUTPUT
-          grep "dependencies=" "$path"/build.properties | grep -v "#" | awk -F '|' '{print $2}' | sed 's#\;\\##' | sed "s/,/\n/g" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "java_vers<<EOF" >> $GITHUB_OUTPUT
-          grep "java_full_versions=" "$path"/build.properties | grep -v "#" | sed "s/java_full_versions=//" | sed "s/,/\n/g" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-      -
-        if: startsWith(matrix.website, 'GitHub-')
-        name: Settings more strings to Environment
-        id: cslenv-github
-        run: |
-          #展开
-          echo "buildtime=$(TZ=Asia/Shanghai date "+%Y.%m.%d %H:%M")" >> $GITHUB_OUTPUT
-          echo "pathlist="$(find build/libs -type f|grep -v "sources"|grep -v "json")"" >> $GITHUB_OUTPUT
-      -
-        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: "[GitHub Pre-Release] Delete"
-        uses: 8Mi-Tech/delete-release-assets-action@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: CI-Build
-          deleteOnlyFromDrafts: false
-      -
-        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: 【GitHub Pre-Release】 Set CI-Build Text
-        run: |
-          cat > build/ci-build.md << 'EOF'
-          Build Time / 构建时间 : ${{ steps.cslenv-github.outputs.buildtime }}
-          自动同步分支 ${{ github.ref_name }} 的代码，以保持最新
-          Synchronize ${{ github.ref_name }} branch code updates, keeping only the latest version
-          <br>
-          [如何使用 / How to uses?](https://github.com/xfl03/MCCustomSkinLoader/wiki/How-to-Use)
-          EOF
-      -
-        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: "[GitHub Pre-Release] Upload Tag"
-        uses: richardsimko/update-tag@v1
-        with:
-          tag_name: CI-Build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      -
-        if: ${{ matrix.website == 'GitHub-PreRelease' && startsWith(github.ref, 'refs/heads') }}
-        name: "[GitHub Pre-Release] Publish"
-        uses: softprops/action-gh-release@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: CustomSkinLoader CI-Build
-          tag_name: CI-Build
-          prerelease: true
-          body_path: build/ci-build.md
-          files: build/libs/*
-          #files: "${{ steps.cslenv-github.outputs.pathlist }}"
-      -
-        if: ${{ matrix.website == 'GitHub-Release' && inputs.type == 'Release' }}
-        uses: softprops/action-gh-release@v1
-        name: "[GitHub Release] Publish"
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: CustomSkinLoader ${{ github.ref }}
-          tag_name: ${{ github.ref }}
-          #generate_release_notes: true
-          files: ${{ steps.cslenv-github.outputs.pathlist }}
-      -
-        if: ${{ matrix.website == 'ObjectStorage' }}
-        name: "[ObjectStorage] Force JDK 8"
+
+      - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '8'
-          cache: 'gradle'
-      -
-        if: ${{ matrix.website == 'ObjectStorage' }}
-        name: "[ObjectStorage] Publish"
+          distribution: liberica
+          java-version: "25"
+          cache: gradle
+
+      - name: Build
         env:
-          COS_BUCKET: ${{ secrets.COS_BUCKET }}
-          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
-          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          IS_SNAPSHOT: ${{ inputs['is-snapshot'] }}
+        run: ./.github/scripts/build.ps1
+
+      - name: Install publish CLIs
+        if: ${{ inputs.publish || inputs.release }}
+        run: ./.github/scripts/install-publish-clis.ps1
+
+      - name: Prepare publish artifacts
+        id: publish-artifacts
+        if: ${{ inputs.publish || inputs.release }}
+        env:
+          IS_SNAPSHOT: ${{ inputs['is-snapshot'] }}
+          PUBLISH_CHANNEL: ${{ inputs.type }}
+          LATEST_JSON_NAME: ${{ inputs['latest-json'] }}
+          DETAIL_JSON_NAME: ${{ inputs['detail-json'] }}
           R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_SECRET_ID: ${{ secrets.R2_SECRET_ID }}
           R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
-          IS_SNAPSHOT: ${{ inputs.is-snapshot }}
-        run: |
-          export GIT_COMMIT_DESC=$(git log --format=%B -n 1 $GITHUB_SHA)
-          ./gradlew ${{ inputs.publish-task }} --info --stacktrace
-          # ./gradlew publishGprPublicationToGitHubPackagesRepository
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_REGION: ${{ secrets.COS_REGION }}
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          TENCENT_CDN_ROOT: ${{ secrets.TENCENT_CDN_ROOT }}
+          CLOUDFLARE_CDN_ROOT: ${{ secrets.CLOUDFLARE_CDN_ROOT }}
+        run: ./.github/scripts/prepare-publish-artifacts.ps1
 
-      -
-        if: ${{ matrix.website == 'CurseForge_Modrinth' && inputs.type == 'Release' }}
-        name: "[CurseForge & Modrinth] Publish"
+      - name: Prepare build artifacts
+        if: ${{ !(inputs.publish || inputs.release) }}
+        run: ./.github/scripts/prepare-build-artifacts.ps1
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CustomSkinLoader-${{ inputs.type }}-${{ github.run_number }}
+          path: build/publish/*
+
+      - name: Write pre-release body
+        if: ${{ inputs.publish && inputs['prerelease-tag'] != '' }}
+        env:
+          BUILD_TYPE: ${{ inputs.type }}
+        run: ./.github/scripts/write-prerelease-body.ps1
+
+      - name: Delete previous pre-release assets
+        if: ${{ inputs.publish && inputs['prerelease-tag'] != '' }}
+        uses: 8Mi-Tech/delete-release-assets-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ inputs['prerelease-tag'] }}
+          deleteOnlyFromDrafts: false
+
+      - name: Move pre-release tag
+        if: ${{ inputs.publish && inputs['prerelease-tag'] != '' }}
+        uses: richardsimko/update-tag@v1
+        with:
+          tag_name: ${{ inputs['prerelease-tag'] }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish GitHub pre-release
+        if: ${{ inputs.publish && inputs['prerelease-tag'] != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ inputs['prerelease-name'] }}
+          tag_name: ${{ inputs['prerelease-tag'] }}
+          prerelease: true
+          make_latest: false
+          body_path: build/publish/release-notes.md
+          overwrite_files: true
+          files: |
+            build/publish/*.jar
+            build/publish/*.json
+
+      - name: Publish GitHub release assets
+        if: ${{ inputs.release }}
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          overwrite_files: true
+          files: |
+            build/publish/*.jar
+            build/publish/*.json
+
+      - name: Publish to CurseForge and Modrinth
+        if: ${{ inputs.release }}
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: idMHQ4n2
@@ -220,19 +154,20 @@ jobs:
           curseforge-id: 286924
           curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
 
-          name: CustomSkinLoader_${{ steps.cslenv.outputs.edition }}_${{ steps.cslenv.outputs.version }}
-          version: ${{ steps.cslenv.outputs.version }}-${{ steps.cslenv.outputs.edition }}
+          name: ${{ steps.publish-artifacts.outputs.mc_publish_name }}
+          version: ${{ steps.publish-artifacts.outputs.mc_publish_version }}
           version-type: release
-          loaders: ${{ steps.cslenv.outputs.modloader }}
+          loaders: |
+            ${{ steps.publish-artifacts.outputs.loaders }}
           game-versions: |
-            ${{ steps.cslenv.outputs.minecraft_vers }}
+            ${{ steps.publish-artifacts.outputs.game_versions }}
           game-version-filter: releases
           java: |
-            ${{ steps.cslenv.outputs.java_vers }}
+            ${{ steps.publish-artifacts.outputs.java_versions }}
 
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
 
           files: |
-            build/libs/${{ steps.cslenv.outputs.filename }}
+            build/publish/*.jar

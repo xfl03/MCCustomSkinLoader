@@ -1,131 +1,168 @@
 # CustomSkinLoader
+
 [![Version](https://img.shields.io/github/v/release/xfl03/MCCustomSkinLoader?label=&logo=V&labelColor=E1F5FE&color=5D87BF&style=for-the-badge)](https://github.com/xfl03/MCCustomSkinLoader/tags)
 [![CurseForge](https://cf.way2muchnoise.eu/short_CustomSkinLoader.svg?badge_style=for_the_badge)](https://www.curseforge.com/minecraft/mc-mods/customskinloader)
 [![Modrinth](https://img.shields.io/modrinth/dt/idMHQ4n2?label=&logo=Modrinth&labelColor=white&color=00AF5C&style=for-the-badge)](https://modrinth.com/mod/customskinloader)
-[![License](https://img.shields.io/github/license/xfl03/MCCustomSkinLoader?label=&logo=c&style=for-the-badge&color=A8B9CC&labelColor=455A64)](https://github.com/xfl03/MCCustomSkinLoader/blob/14-develop/LICENSE)
+[![License](https://img.shields.io/github/license/xfl03/MCCustomSkinLoader?label=&logo=c&style=for-the-badge&color=A8B9CC&labelColor=455A64)](https://github.com/xfl03/MCCustomSkinLoader/blob/master/LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/xfl03/MCCustomSkinLoader/beta.yml?style=for-the-badge&label=&logo=Gradle&labelColor=388E3C)](https://github.com/xfl03/MCCustomSkinLoader/actions)
 [![Star](https://img.shields.io/github/stars/xfl03/MCCustomSkinLoader?label=&logo=GitHub&labelColor=black&color=FAFAFA&style=for-the-badge)](https://github.com/xfl03/MCCustomSkinLoader/stargazers)
 
 [![Minecraft Version](https://img.shields.io/badge/Minecraft-1.21%20|%201.20%20|%201.19%20|%201.18%20|%201.17%20|%201.16%20|%201.15%20|%201.14%20|%201.13%20|%201.12%20|%201.11%20|%201.10%20|%201.9%20|%201.8-green?style=for-the-badge&labelColor=388E3C&color=8BC34A)](https://github.com/xfl03/MCCustomSkinLoader)
 
-## What's this?  
-Custom Skin Loader mod for Minecraft.  
-It's a mod which can load skins and capes from any online source or from your local.
-  
-## Download  
+## What's this?
+
+CustomSkinLoader is a Minecraft mod that loads skins, capes, and elytra textures from online skin APIs or local files.
+
+This branch is the Universal generation of MCCustomSkinLoader. It replaces the old edition-specific jars with one bootstrap artifact. The bootstrap jar prepares a runtime `CustomSkinLoader-Common.jar`, remaps it for the active Minecraft mapping namespace, and applies the required loader-specific class patches at runtime.
+
+## Download
+
 ### Release Build
+
+- [GitHub Releases](https://github.com/xfl03/MCCustomSkinLoader/releases)
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/customskinloader)
 - [Modrinth](https://modrinth.com/mod/customskinloader)
 
 ### Develop Build
-- [GitHub Action](https://github.com/xfl03/MCCustomSkinLoader/actions)
+
+- [GitHub Actions](https://github.com/xfl03/MCCustomSkinLoader/actions)
 - [33 Kit（Chinese/中文）](https://3-3.dev/csl-download)
 
 ## Contact Us
+
 - [Telegram @customskinloader](https://t.me/customskinloader)
 - [QQ Group（Chinese/中文） 651287593](https://jq.qq.com/?_wv=1027&k=vF16R5tg)
 
-## Feature  
-### Support Plenty of Skin Load API and Customizable Skin Load List  
-Supported skin loading APIs:
-- [MojangAPI](http://wiki.vg/Mojang_API)
-- [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)  
-- CustomSkinAPIPlus (Test Only)  
-- [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
-- [ElyByAPI](https://docs.ely.by/en/api.html) 
-- Legacy  
+## Supported Loaders
 
-Supported special skin sites:
-- **ANY SITE** implements skin loading API above
+- Forge Legacy and Forge ModLauncher
+- NeoForge
+- Fabric
+- Quilt-compatible Fabric Loader environments
+
+## Feature
+
+### Universal Runtime
+
+One user-facing jar is used across supported loaders. The generated installable artifact is:
+
+```text
+Bootstrap/build/libs/CustomSkinLoader_Universal-<version>.jar
+```
+
+`Common/build/libs/Common-<version>.jar` is the nested runtime payload and should not be installed directly.
+
+### Support Plenty of Skin Load APIs and Customizable Skin Load List
+
+Supported skin loading APIs:
+
+- [MojangAPI](https://minecraft.wiki/w/Mojang_API)
+- [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)
+- CustomSkinAPIPlus
+- [UniSkinAPI](https://github.com/RecursiveG/UniSkinServer/tree/master/doc)
+- [ElyByAPI](https://docs.ely.by/en/api.html)
+- Legacy
+
+Supported special skin sites and profiles:
+
 - [Glitchless](https://games.glitchless.ru/games/minecraft/)
 - [MinecraftCapes](https://minecraftcapes.net/)
-- [Wynntils](https://wynntils.com/)
+- [OptiFineCape](https://optifine.net/home)
+- [Cloaks+](https://cloaksplus.com/)
+- [Cosmetica](https://cosmetica.cc/)
+- [Wynntils](https://wynntils.com/) compatible profile support
 
-You can use this feature to customize your skin load list so as to load your skins from any skin server you want.  
-If you are the owner of skin server, you can use CustomSkinLoader to load skins from your server if one of the APIs has been actualized by your server.  
-  
-### HD Skins Support  
-Even though you don't have OptiFine and MCPatcher, CustomSkinLoader can still load and render HD skins.  
-You can easily to get a better view of skins.  
-  
-### Skull Support  
-Fixed skull loading bug, you can apply any skin to your skull now.  
-Dynamic skull supported.  
-  
-### Profile Cache  
-- Decrease the frenquency of using the network.  
-- Meanwhile, you can still load profiles when network is unavailable.(*)  
+You can customize the skin load list and load textures from any compatible skin server. Skin server owners can also use ExtraList files to help users add their server.
 
-*Only when it is opened in configratulation.  
-  
-### Local Skin  
-Load skins without a skin server.  
-Furthermore, by using this function you can preview your skins in game and even change the default skin and model.  
-You can load local skins by using any API (excluding MojangAPI).  
-*While using default configratulation, just put your skins into `.minecraft/CustomSkinLoader/LocalSkin/(skin|cape)s/{USERNAME}.png`.  
-   
-### Extra List  
-A json file generated by skin servers which supports this feature.  
-To add a server to your load list, users just need to put the file into `.minecraft/CustomSkinLoader/ExtraList` .  
-  
-### Transparent Skin Support  
-The problem of incorrectly rendering textures has been fixed.  
-  
-### Spectator Menu Fixed  
-By using this mod, you can see correct avatar of players in Spectator Menu rather than steve and alex.  
-  
-## Default Load List  
+### HD Skins and Capes Support
+
+CustomSkinLoader can load and process HD skins and capes. OptiFine cape textures are converted to the standard cape format when needed.
+
+### Profile Cache
+
+- Decreases repeated network requests.
+- Allows cached profiles to load when the network is unavailable.
+
+### Local Skin
+
+Load skins without a skin server. With the default Legacy paths, place textures under:
+
+```text
+.minecraft/CustomSkinLoader/LocalSkin/skins/<USERNAME>.png
+.minecraft/CustomSkinLoader/LocalSkin/capes/<USERNAME>.png
+.minecraft/CustomSkinLoader/LocalSkin/elytras/<USERNAME>.png
+```
+
+### Extra List
+
+Skin servers can provide ExtraList JSON files. Users can put them into `.minecraft/CustomSkinLoader/ExtraList` to add servers to the load list.
+
+### Transparent Texture Support
+
+The render patches are designed to keep skin and cape transparency correct on supported versions.
+
+## Build
+
+The project should compile on Windows, Linux, and macOS with a suitable Java 25 installation.
+
+Windows:
+
+```powershell
+.\gradlew.bat clean build --stacktrace
+```
+
+Linux/macOS:
+
+```bash
+./gradlew clean build --stacktrace
+```
+
+GitHub Actions intentionally runs on Windows with PowerShell, but local project builds are not Windows-only.
+
+## Default Load List
+
 - [Mojang](https://minecraft.wiki/w/Mojang_API) (MojangAPI)
-- [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)  
+- [LittleSkin](https://littleskin.cn/) (CustomSkinAPI)
 - [BlessingSkin](http://skin.prinzeugen.net/) (CustomSkinAPI)
-- [ElyBy](http://docs.ely.by/) (ElyByAPI)
-- SkinMe (UniSkinAPI)
+- [ElyBy](https://docs.ely.by/en/api.html) (ElyByAPI)
 - [TLauncher](https://tlauncher.org/) (ElyByAPI)
-- [Glitchless](https://games.glitchless.ru/games/minecraft/)
+- [Glitchless](https://games.glitchless.ru/games/minecraft/) (ElyBy-compatible profile)
 - LocalSkin (Legacy)
 - [MinecraftCapes](https://minecraftcapes.net/)
 - [OptiFineCape](https://optifine.net/home)
-- [Wynntils](https://wynntils.com/)
 - [Cloaks+](https://cloaksplus.com/)
-- [LabyMod](https://www.labymod.net/en)
 - [Cosmetica](https://cosmetica.cc/)
 
-If you want to apply to add other skin server to default list, please go to [issue](https://github.com/JLChnToZ/MCCustomSkinLoader/issues).  
-  
-## To Skin Server Owner  
-CustomSkinLoader is designed for loading from any server, which makes the mod complex.  
-It's not a good idea to refer to CustomSkinLoader's source code to develop your own skin mod.  
-It's recommended to use CustomSkinLoader for your server directly.  
-Furthermore, you can add your server to 'Default Load List'.  
-You can also use 'ExtraList' which makes it easier for users to add your server into load list.  
+If you want to add another skin server to the default list, please open an [issue](https://github.com/xfl03/MCCustomSkinLoader/issues).
+
+## To Skin Server Owner
+
+CustomSkinLoader is designed for loading textures from many server implementations. It is usually better to support one of CustomSkinLoader's APIs than to copy this mod's internal implementation. If you maintain a skin server, you can provide an ExtraList file or request inclusion in the default load list.
 
 ## Development and Contribution
-See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## Copyright & LICENSE  
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Copyright & LICENSE
+
 ### Major Contributor
-- 2013-2014 Jeremy Lam([JLChnToZ](https://github.com/JLChnToZ))
-- 2014-2024 Alexander Xia([xfl03](https://github.com/xfl03))
-- 2020-2024 [ZekerZhayard](https://github.com/ZekerZhayard)
 
-### Binary File  
-You could not modify binary file.  
-Feel free to use and share this mod and unmodified file in anyway like modpack.  
-When using in modpack, you must put 'CustomSkinLoader' in mod list.   
-You could not repost this mod to any website without permission.  
-You could not earn money with this mod excluding modpack.  
+- 2013-2014 Jeremy Lam ([JLChnToZ](https://github.com/JLChnToZ))
+- 2014-2024 Alexander Xia ([xfl03](https://github.com/xfl03))
+- 2020-2026 [ZekerZhayard](https://github.com/ZekerZhayard)
 
-### Source Code  
-#### Package 'customskinloader'  
-Including some codes from 
+### Binary File
+
+You may use and share the unmodified official binary in modpacks. When used in a modpack, CustomSkinLoader must be listed in the mod list. Do not repost the mod to other websites without permission.
+
+### Source Code
+
+The source code is licensed under GPL-3.0-only. See [LICENSE](LICENSE).
+
+Package `customskinloader` includes code or ideas from:
+
 - [AsteriskTeam/TabIconHackForge](https://gitee.com/AsteriskTeam/TabIconHackForge) (GPLv3)
-- [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)  
-- [NekoCaffeine/Alchemy](https://github.com/NekoCaffeine/Alchemy) (GPLv3)  
+- [RecursiveG/UniSkinMod](https://github.com/RecursiveG/UniSkinMod) (GPLv3)
+- [NekoCaffeine/Alchemy](https://github.com/NekoCaffeine/Alchemy) (GPLv3)
 
-```
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-```
-GPLv3: http://www.gnu.org/licenses/gpl.html  
-  
-You should change the name of the package to avoid others' misunderstanding.  
+If you redistribute a modified build, change the package name and clearly mark the build as modified to avoid confusion with official CustomSkinLoader releases.

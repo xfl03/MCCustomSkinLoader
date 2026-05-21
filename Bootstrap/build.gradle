@@ -1,0 +1,48 @@
+
+def bootstrapCoreProject = project(':Bootstrap:Core')
+def commonJarTask = project(':Common').tasks.named('jar')
+
+subprojects {
+    dependencies {
+        compileOnly project(':Dummy:Bootstrap')
+        if (project != bootstrapCoreProject) compileOnly bootstrapCoreProject
+    }
+}
+
+jar {
+    archiveBaseName = rootProject.ext.releaseArchiveBaseName
+    archiveVersion = rootProject.ext.modFullVersion
+
+    manifest {
+        attributes(
+            "Automatic-Module-Name"   : "customskinloader.bootstrap",
+            "Specification-Title"     : "CustomSkinLoader",
+            "Specification-Vendor"    : "xfl03",
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : "CustomSkinLoader",
+            "Implementation-Version"  : rootProject.ext.modFullVersion,
+            "Implementation-Vendor"   : "xfl03",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "FMLCorePlugin"           : "customskinloader.bootstrap.forge.v1.LoadingPlugin"
+        )
+    }
+
+    // Build child module outputs before bundling them into the Bootstrap artifact.
+    dependsOn subprojects.collect { bundledProject ->
+        bundledProject.tasks.named('classes')
+    }
+    dependsOn commonJarTask
+
+    // Package all leaf child module outputs into the Bootstrap jar.
+    from({
+        subprojects.collect { bundledProject ->
+            bundledProject.sourceSets.main.output
+        }
+    })
+
+    into('META-INF/jar-jar') {
+        // Bundle the runtime payload with Bridge so Bridge owns releasing the Universal jar.
+        from(commonJarTask.flatMap { it.archiveFile })
+        rename { 'CustomSkinLoader-Common.jar' }
+    }
+}

@@ -1,36 +1,40 @@
-# Java
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-# VSCode
-.vscode/
-
-# eclipse
-bin/
-*/.classpath
-.classpath
-*/.project
-.project
-.settings/
-*.launch
-
-# gradle
-.gradle/
+.gradle
 build/
-logs/
-run/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+.kotlin
 
-# IDEA
-.idea/
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
 *.ipr
-*.iws
 out/
+!**/src/main/**/out/
+!**/src/test/**/out/
 
-#mac OS
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
 .DS_Store

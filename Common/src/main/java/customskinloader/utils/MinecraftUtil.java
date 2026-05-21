@@ -21,15 +21,15 @@ import net.minecraft.client.resources.SkinManager;
  */
 public class MinecraftUtil {
     public static File getMinecraftDataDir() {
-        return Minecraft.getMinecraft().gameDir;
+        return Minecraft.getInstance().gameDirectory;
     }
 
     public static TextureManager getTextureManager() {
-        return Minecraft.getMinecraft().getTextureManager();
+        return Minecraft.getInstance().getTextureManager();
     }
 
     public static SkinManager getSkinManager() {
-        return Minecraft.getMinecraft().getSkinManager();
+        return Minecraft.getInstance().getSkinManager();
     }
     private static String minecraftMainVersion = null;
 
@@ -69,10 +69,10 @@ public class MinecraftUtil {
 
     // (domain|ip)(:port)
     public static String getServerAddress() {
-        ServerData data = Minecraft.getMinecraft().getCurrentServerData();
+        ServerData data = Minecraft.getInstance().getCurrentServer();
         if (data == null)//Single Player
             return null;
-        return data.serverIP;
+        return data.ip;
     }
 
     // ip:port
@@ -85,6 +85,6 @@ public class MinecraftUtil {
     }
 
     public static String getCredential(GameProfile profile) {
-        return profile == null ? null : String.format("%s-%s", TextureUtil.AuthlibField.GAME_PROFILE_NAME.get(profile), TextureUtil.AuthlibField.GAME_PROFILE_ID.get(profile));
+        return profile == null ? null : profile.toString();
     }
 }

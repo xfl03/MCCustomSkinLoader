@@ -1,5 +1,27 @@
-// This subproject is only to provide dependency for other subprojects.
 
 dependencies {
-    implementation project(':Dummy')
+    compileOnly project(':Dummy:Common')
+}
+
+sourceSets {
+    java21 {
+        java.srcDir('src/main/java21')
+        compileClasspath += sourceSets.main.output
+    }
+}
+
+tasks.named(sourceSets.java21.compileJavaTaskName, JavaCompile) {
+    dependsOn tasks.named('compileJava')
+}
+
+jar {
+    dependsOn tasks.named(sourceSets.java21.classesTaskName)
+
+    manifest {
+        attributes('Multi-Release': 'true')
+    }
+
+    into('META-INF/versions/21') {
+        from(sourceSets.java21.output)
+    }
 }

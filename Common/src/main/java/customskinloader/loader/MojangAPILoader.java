@@ -88,7 +88,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         }
         PropertyMap propertyMap = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(fillProfile(ssp.sessionRoot, newProfile));
         if (propertyMap != null) {
-            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = GameProfileLoader.getTextures(Iterables.getFirst(propertyMap.get("textures"), null));
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = GameProfileLoader.getTextures(propertyMap);
             if (!map.isEmpty()) {
                 return ModelManager0.toUserProfile(map);
             }

@@ -1,157 +1,103 @@
-# Development and Contribution
+# Contributing to CustomSkinLoader Universal
 
-## Building
-1. Run `./gradlew setupDecompWorkspace clean build` command.
-1. The built jars are all in `${rootprojectDir}/build/libs` folder.
+Thanks for helping improve CustomSkinLoader. This branch is the Universal generation: one installable Bootstrap jar carries the shared Common runtime, remaps it for the active Minecraft mapping namespace, and applies loader-specific patches at launch time. A successful Java compile is useful, but changes that touch runtime loading, mappings, or transformers also need in-game verification.
 
-*NOTICE: The jar file with specific Minecraft version is for the vanilla edition without Forge and Fabric. The json files are launcher profiles which only work when building with our CI server.*
+## Requirements
 
-## Running and Testing
-For now, CustomSkinLoader is unable to run under self development environment, so it needs to add to another development environment as a library.  
-There are the available versions in different environments below:
+- Git.
+- A Java 25 JDK. Set `JAVA_HOME` if Java 25 is not the default `java` on your `PATH`.
+- The Gradle wrapper from this repository.
+- Local Minecraft test instances for the loaders and versions affected by your change.
 
-|                         |                                                          Forge                                                          |                                                            Fabric                                                            |
-|:-----------------------:|:-----------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|
-|   Runtime Environment   |                       forge-1.8-11.14.0.1237 ~ 1.13.2-25.0.22<br/> forge-1.13.2-25.0.42 ~ latest                        |           fabric-loader-0.4.3+build.134 ~ latest<br/> Minecraft 18w43b ~ latest<br/> *fabric-api is not required*            |
-| Development Environment | ForgeGradle-2.1-SNAPSHOT ~ latest<br/> forge-1.8-11.14.3.1503 ~ 1.12.2-14.23.5.2860<br/> forge-1.13.2-25.0.198 ~ latest | fabric-loom-(?) ~ latest<br/> fabric-loader-0.12.0 ~ latest<br/> Minecraft 18w49a ~ latest<br/> *fabric-api is not required* |
+The build uses Java 25 tooling, while project sources are compiled for Java 8 compatibility unless a module explicitly provides multi-release sources such as `Common/src/main/java21`.
 
-### Preliminary steps for testing local builds
-1. Create a new empty minecraft development environment.
-1. Add below contents to `build.gradle`:
-   ```gradle
-   repositories {
-       maven {
-           url = "file:/${projectDir}/local-repo"
-       }
-   }
-   ```
-1. Create these folders in the new project directory, then copy the built jar and source jar into it:
-   ```
-   Forge 1.8    ~ 1.16.5:                            ./local-repo/mods/CustomSkinLoader_ForgeV1/${version}
-   Forge 1.17.1 ~ 1.20.4 / NeoForge 1.20.1:          ./local-repo/mods/CustomSkinLoader_ForgeV2/${version}
-   Forge 1.20.6 ~ latest / NeoForge 1.20.2 ~ latest: ./local-repo/mods/CustomSkinLoader_ForgeV3/${version}
-   Fabric:                                           ./local-repo/mods/CustomSkinLoader_Fabric/${version}
-   ```
-   *`${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually*
-1. Create a pom file in the same folder:
-   - Forge 1.8 ~ 1.16.5: `CustomSkinLoader_ForgeV1-${version}.pom`
-   ```xml
-   <?xml version="1.0" encoding="UTF-8"?>
-   <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-       <modelVersion>4.0.0</modelVersion>
-       <groupId>mods</groupId>
-       <artifactId>CustomSkinLoader_ForgeV1</artifactId>
-       <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
-       <version>${version}</version>
-   </project>
-   ```
-   - Forge 1.17.1 ~ 1.20.4 / NeoForge 1.20.1: `CustomSkinLoader_ForgeV2-${version}.pom`
-   ```xml
-   <?xml version="1.0" encoding="UTF-8"?>
-   <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-       <modelVersion>4.0.0</modelVersion>
-       <groupId>mods</groupId>
-       <artifactId>CustomSkinLoader_ForgeV2</artifactId>
-       <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
-       <version>${version}</version>
-   </project>
-   ```
-   - Forge 1.20.6 ~ latest / NeoForge 1.20.2 ~ latest: `CustomSkinLoader_ForgeV3-${version}.pom`
-   ```xml
-   <?xml version="1.0" encoding="UTF-8"?>
-   <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-       <modelVersion>4.0.0</modelVersion>
-       <groupId>mods</groupId>
-       <artifactId>CustomSkinLoader_ForgeV3</artifactId>
-       <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
-       <version>${version}</version>
-   </project>
-   ```
-   - Fabric: `CustomSkinLoader_Fabric-${version}.pom`
-   ```xml
-   <?xml version="1.0" encoding="UTF-8"?>
-   <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-       <modelVersion>4.0.0</modelVersion>
-       <groupId>mods</groupId>
-       <artifactId>CustomSkinLoader_Fabric</artifactId>
-       <!-- `${version}` should be repalced with something like `15.0-SNAPSHOT-00` manually -->
-       <version>${version}</version>
-   </project>
-   ```
+## Build
 
-### For ForgeGradle 2.x ( forge-1.8-11.14.3.1503 ~ forge-1.12.2-14.23.5.2847 )
-1. Add below contents to `build.gradle`:
-   ```gradle
-   dependencies {
-       deobfCompile "mods:CustomSkinLoader_ForgeLegacy:15.0-SNAPSHOT-00"
-   }
+Use the wrapper instead of a system Gradle installation.
 
-   minecraft {
-       clientRunArgs += ["--tweakClass", "customskinloader.forge.ForgeDevTweaker", "--username", "<Your username>"]
-   }
-   ```
-1. Run `./gradlew setupDecompWorkspace` command.
-1. Then you can debug the mod in IDE or through `./gradlew runClient` command.
+Windows:
 
-### For ForgeGradle 3.x ~ latest ( forge-1.12.2-14.23.5.2851 ~ latest )
-1. Add below contents to `build.gradle`:
-   ```gradle
-   dependencies {
-       implementation fg.deobf("mods:CustomSkinLoader_ForgeLegacy:15.0-SNAPSHOT-00") // Only required for MinecraftForge 1.8 ~ 1.16.5
-       implementation fg.deobf("mods:CustomSkinLoader_ForgeActive:15.0-SNAPSHOT-00") // Only required for MinecraftForge 1.17.1 ~ latest
-   }
+```powershell
+.\gradlew.bat clean build --stacktrace
+```
 
-   minecraft {
-       runs {
-           client {
-               args += ["--username", "<Your username>"]
-               args += ["--tweakClass", "customskinloader.forge.ForgeDevTweaker"] // Only required for MinecraftForge 1.12.2
-           }
-       }
-   }
-   ```
-1. Setup the development environment and run the game as usual.
+Linux/macOS:
 
-### For fabric-loom ( fabric-loader-0.12.0 ~ latest )
-1. Add below contents to `build.gradle`:
-   ```gradle
-   dependencies {
-       modImplementation "mods:CustomSkinLoader_Fabric:15.0-SNAPSHOT-00"
-   }
+```bash
+./gradlew clean build --stacktrace
+```
 
-   loom.runs.client.programArgs "--username", "<Your username>"
-   ```
-1. Setup the development environment and run the game as usual.
+The user-facing mod artifact is:
 
-## Depend on release builds
-1. Check the latest version in https://littlesk.in/csl-latest .
-1. Add below contents to `build.gradle`:
-   ```gradle
-   // Before Gradle 5.x
-   repositories {
-       ivy {
-           url = "https://csl.littleservice.cn/"
-           layout "pattern", {
-               artifact "[organisation]/[artifact]-[revision](-[classifier])(.[ext])"
-           }
-       }
-   }
-   
-   // After Gradle 6.x
-   repositories {
-       ivy {
-           url = "https://csl.littleservice.cn/"
-           metadataSources {
-               artifact()
-           }
-           patternLayout {
-               artifact "[organisation]/[artifact]-[revision](-[classifier])(.[ext])"
-           }
-       }
-   }
-   ```
-1. Follow the same steps in **Running and Testing**.
+```text
+Bootstrap/build/libs/CustomSkinLoader_Universal-<version>.jar
+```
 
-## Developing
-- CustomSkinLoader is based on forge-1.12.2-14.23.5.2768 currently, including Fabric edition. We use custom reobfuscation mappings such as [Fabric.tsrg](Fabric/Fabric.tsrg) and [mixin.tsrg](Fabric/mixin.tsrg) to generate different editions jar and Mixin reference jsons.
-- Do not add other required mods.
+`Common/build/libs/Common-<version>.jar` is bundled into the Universal jar as `META-INF/jar-jar/CustomSkinLoader-Common.jar`. Do not publish or ask users to install the Common jar directly.
+
+## Project Layout
+
+- `Common`: shared CustomSkinLoader runtime, configuration, skin API loaders, cache, logging, and texture utilities.
+- `Common/src/main/java21`: Java 21+ multi-release overrides for runtime behavior that benefits from newer JVM APIs.
+- `Bootstrap`: assembles the installable Universal jar.
+- `Bootstrap/Core`: runtime installer, remapper, mapping reader, transformer registry, and shared patch logic.
+- `Bootstrap/FabricV1`: Fabric and Quilt-compatible bootstrap integration.
+- `Bootstrap/ForgeV1`: legacy Forge coremod bootstrap.
+- `Bootstrap/ForgeV2`: Forge ModLauncher bootstrap.
+- `Bootstrap/NeoForgeV1` and `Bootstrap/NeoForgeV2`: NeoForge discovery and transformation bootstrap.
+- `Dummy/Bootstrap` and `Dummy/Common`: compile-time stubs for Minecraft and loader APIs. Keep these minimal; they are not runtime implementations.
+- `buildSrc`: local Gradle plugin code, including manifest library resolution from launcher metadata.
+- `.github/workflows` and `.github/scripts`: CI, release, metadata, and publishing automation.
+
+## Development Guidelines
+
+- Keep changes scoped to the loader, mapping range, API loader, or Common behavior being modified.
+- Preserve compatibility across the supported Minecraft and loader matrix unless the change is intentionally narrowing support.
+- Prefer small, explicit compatibility branches over broad reflection or version checks when the affected API surface is known.
+- Treat `Bootstrap/Core/src/main/resources/customskinloader/mapping.xml` and transformer patches as runtime-critical code. Document why a mapping range or target class changed.
+- Do not edit generated Gradle output under `build/`, `.gradle/`, IDE metadata, or files generated by a local Minecraft test run.
+- Keep `Dummy` classes limited to the members needed for compilation. Runtime behavior belongs in `Common` or `Bootstrap`, not in stubs.
+- Update `README.md`, issue templates, or release metadata when a user-visible feature, supported loader, supported version, or install path changes.
+- Follow the existing Java style in nearby files. The codebase intentionally avoids adding large abstractions where a focused compatibility patch is clearer.
+
+## Testing Checklist
+
+Before opening a pull request, run the relevant parts of this checklist:
+
+1. Run `.\gradlew.bat clean build --stacktrace` on Windows, or `./gradlew clean build --stacktrace` on Linux/macOS.
+2. Install only `Bootstrap/build/libs/CustomSkinLoader_Universal-<version>.jar` into a clean Minecraft instance.
+3. If you changed `Common`, confirm the runtime payload is regenerated under `.minecraft/CustomSkinLoader/Core/CustomSkinLoader-Common.jar`.
+4. If you changed `Bootstrap`, mappings, service descriptors, or transformer patches, test at least one Forge or NeoForge instance and one Fabric or Quilt-compatible instance.
+5. If you changed a version range or mapping entry, test the oldest and newest Minecraft versions covered by that range.
+6. Check `.minecraft/CustomSkinLoader/CustomSkinLoader.log` for loader, remapper, transformer, and skin loading errors.
+7. For skin API, cache, or network changes, test a normal online profile and a cache/local-profile fallback path when possible.
+
+There is currently no standalone test suite that replaces in-game compatibility testing.
+
+## Pull Requests
+
+Please include:
+
+- A short summary of the behavior change.
+- The Minecraft versions and loaders you tested.
+- Any relevant `CustomSkinLoader.log` snippets for bootstrap, remapping, or skin loading issues.
+- Screenshots or reproduction steps for visible texture/rendering fixes.
+- Notes about compatibility risk when changing mappings, ASM patches, service descriptors, or build packaging.
+
+Keep pull requests focused. If a cleanup is unrelated to the bug or feature, send it separately so compatibility regressions are easier to review.
+
+## CI and Publishing
+
+Pull requests run the shared GitHub Actions build on `windows-latest` with PowerShell and Java 25. This is a CI choice; local builds should remain portable across Windows, Linux, and macOS.
+
+Publishing jobs generate the Universal jar plus metadata files from `build.properties`. Beta builds publish moving beta metadata, release builds publish release metadata and upload to distribution platforms. Object-storage upload is optional and is skipped when the required secrets are not configured.
+
+To generate publish metadata locally without uploading, first build the project, then run:
+
+```powershell
+.\.github\scripts\publish-artifacts.ps1 -Channel Beta -LatestJsonName latest-beta.json -DetailJsonName detail-beta.json -SkipObjectStorage
+```
+
+## License
+
+By contributing, you agree that your contribution will be distributed under the repository license. Source code is licensed under GPL-3.0-only; see `LICENSE`.

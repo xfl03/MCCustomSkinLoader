@@ -1,51 +1,33 @@
 package customskinloader.fake.itf;
 
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Optional;
 
-import customskinloader.fake.FakeMinecraftProfileTexture;
-import customskinloader.fake.texture.FakeNativeImage;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.Resource;
 
 public class FakeInterfaceManager {
     public static InputStream IResource_getInputStream(Object resource) {
         return ((IFakeIResource.V2) resource).open();
     }
 
-    public static Optional<IResource> IResourceManager_getResource(Object resourceManager, Object location) {
-        if (resourceManager instanceof IFakeIResourceManager.V2) {
-            return ((IFakeIResourceManager.V2) resourceManager).getResource((IFakeResourceLocation) location);
+    public static Optional<Resource> IResourceManager_getResource(Object resourceManager, Object location) {
+        return ((IFakeIResourceManager.V2) resourceManager).getResource((Identifier) location);
+    }
+
+    public static int NativeImage_getPixel(Object image, int x, int y) {
+        if (image instanceof IFakeNativeImage) {
+            return ((IFakeNativeImage) image).getPixel(x, y);
         }
-        return ((IFakeIResourceManager.V1) resourceManager).getResource((ResourceLocation) location);
+        return ((BufferedImage) image).getRGB(x, y);
     }
 
-    public static IResourceManager Minecraft_getResourceManager(Object minecraft) {
-        return (IResourceManager) ((IFakeMinecraft) minecraft).func_195551_G();
-    }
-
-    public static int NativeImage_getPixel(Object nativeImage, int x, int y) {
-        return ((IFakeNativeImage) nativeImage).getPixel(x, y);
-    }
-
-    public static void NativeImage_setPixel(Object nativeImage, int x, int y, int color) {
-        ((IFakeNativeImage) nativeImage).setPixel(x, y, color);
-    }
-
-    public static FakeNativeImage NativeImage_getFakeImage(Object nativeImage) {
-        return ((IFakeNativeImage) nativeImage).getFakeImage();
-    }
-
-    public static void NativeImage_setFakeImage(Object nativeImage, Object fakeImage) {
-        ((IFakeNativeImage) nativeImage).setFakeImage((FakeNativeImage) fakeImage);
-    }
-
-    public static FakeMinecraftProfileTexture ResourceLocation_getTexture(Object location) {
-        return ((IFakeResourceLocation) location).getTexture();
-    }
-
-    public static void ResourceLocation_setTexture(Object location, FakeMinecraftProfileTexture texture) {
-        ((IFakeResourceLocation) location).setTexture(texture);
+    public static void NativeImage_setPixel(Object image, int x, int y, int color) {
+        if (image instanceof IFakeNativeImage) {
+            ((IFakeNativeImage) image).setPixel(x, y, color);
+        } else {
+            ((BufferedImage) image).setRGB(x, y, color);
+        }
     }
 }

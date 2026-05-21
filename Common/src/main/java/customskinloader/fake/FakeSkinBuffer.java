@@ -6,17 +6,15 @@ import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import customskinloader.CustomSkinLoader;
-import customskinloader.fake.itf.FakeInterfaceManager;
+import customskinloader.fake.itf.FakeHttpTextureProcessor;
 import customskinloader.fake.texture.FakeBufferedImage;
 import customskinloader.fake.texture.FakeImage;
 import customskinloader.fake.texture.FakeNativeImage;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.renderer.texture.SkinTextureDownloader;
+import net.minecraft.client.renderer.texture.HttpTexture;
 
-public class FakeSkinBuffer implements IImageBuffer {
+public class FakeSkinBuffer implements FakeHttpTextureProcessor {
     FakeImage image = null;
 
     /**
@@ -29,9 +27,7 @@ public class FakeSkinBuffer implements IImageBuffer {
 
         FakeImage img = parseUserSkin0(new FakeNativeImage(image));
         if (img instanceof FakeNativeImage) {
-            image = ((FakeNativeImage) img).getImage();
-            FakeInterfaceManager.NativeImage_setFakeImage(image, img);
-            return image;
+            return ((FakeNativeImage) img).getImage();
         }
 
         CustomSkinLoader.logger.warning("Failed to parseUserSkin(downloadAndRegisterSkin).");
@@ -40,11 +36,11 @@ public class FakeSkinBuffer implements IImageBuffer {
 
     /**
      * 19w38a ~ 24w45a
-     * Invoked from {@link ThreadDownloadImageData#loadTexture(InputStream)}
+     * Invoked from {@link HttpTexture#loadTexture(InputStream)}
      */
     public static NativeImage processLegacySkin(NativeImage image, Runnable processTask, Function<NativeImage, NativeImage> processLegacySkin) {
-        if (processTask instanceof IImageBuffer) {
-            return ((IImageBuffer) processTask).func_195786_a(image);
+        if (processTask instanceof FakeHttpTextureProcessor) {
+            return ((FakeHttpTextureProcessor) processTask).process(image);
         } else if (processLegacySkin != null) {
             return processLegacySkin.apply(image);
         } else {
@@ -53,7 +49,8 @@ public class FakeSkinBuffer implements IImageBuffer {
     }
 
     //parseUserSkin for 1.13+
-    public NativeImage func_195786_a(NativeImage image) {
+    @Override
+    public NativeImage process(NativeImage image) {
         if (image == null)
             return null;
 
@@ -66,7 +63,8 @@ public class FakeSkinBuffer implements IImageBuffer {
     }
 
     //parseUserSkin for 1.12.2-
-    public BufferedImage parseUserSkin(BufferedImage image) {
+    @Override
+    public BufferedImage process(BufferedImage image) {
         if (image == null)
             return null;
 
@@ -125,7 +123,6 @@ public class FakeSkinBuffer implements IImageBuffer {
         setAreaDueToConfig(image, 16 * ratio, 48 * ratio, 32 * ratio, 64 * ratio);//Left Leg - 1
         setAreaTransparent(image, 0 * ratio, 48 * ratio, 16 * ratio, 64 * ratio);//Left Leg - 2
 
-        image.setRatio(ratio);
         return image;
     }
 
@@ -146,7 +143,7 @@ public class FakeSkinBuffer implements IImageBuffer {
     public static String judgeType0(FakeImage image) {
         if (image == null)
             return "default";
-        int ratio = image.getRatio();
+        int ratio = image.getWidth() / 64;
         int bgColor = image.getRGBA(63 * ratio, 20 * ratio);
         /*
          * If background is transparent, all the pixels in ((54, 20), (55, 31)) areas is transparent,
@@ -211,7 +208,8 @@ public class FakeSkinBuffer implements IImageBuffer {
             setAreaOpaque(image, x0, y0, x1, y1);
     }
 
-    public void skinAvailable() {
+    @Override
+    public void onTextureDownloaded() {
         //A callback when skin loaded, nothing to do
     }
 
