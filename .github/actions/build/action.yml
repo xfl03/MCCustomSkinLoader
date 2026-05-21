@@ -1,0 +1,35 @@
+# Composite action: checkout, setup JDK, build with Gradle, upload artifact
+name: Build
+description: Build project with Gradle and upload artifact
+
+inputs:
+  is-snapshot:
+    description: Whether this is a snapshot build
+    required: false
+    default: 'true'
+  artifact-name:
+    description: Artifact name for upload
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '25'
+        cache: gradle
+
+    - name: Build with Gradle
+      shell: pwsh
+      env:
+        IS_SNAPSHOT: ${{ inputs.is-snapshot }}
+      run: ./gradlew clean build --info --stacktrace
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: Bootstrap/build/libs/
+        if-no-files-found: error
