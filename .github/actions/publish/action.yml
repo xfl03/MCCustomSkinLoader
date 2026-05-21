@@ -13,42 +13,18 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-      with:
-        clean: false  # preserve artifact files already downloaded before this action
-
-    # Upload jars to R2 (S3-compatible, mods/ prefix)
-    - uses: michaelliao/sync-s3-compatible-action@v1
-      with:
-        SYNC_DIR: ${{ inputs.artifact-dir }}
-        BUCKET_URL: ${{ env.R2_BASE_URL }}
-        BUCKET_NAME: ${{ env.R2_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ env.R2_SECRET_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ env.R2_SECRET_KEY }}
-        TARGET_PATH: mods/
-
-    # Upload jars to COS (qcloud mode, mods/ prefix)
-    - uses: michaelliao/sync-s3-compatible-action@v1
-      with:
-        SYNC_TYPE: qcloud
-        SYNC_DIR: ${{ inputs.artifact-dir }}
-        BUCKET_NAME: ${{ env.COS_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ env.COS_SECRET_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ env.COS_SECRET_KEY }}
-        BUCKET_REGION: ap-shanghai
-        TARGET_PATH: mods/
-
     # Generate JSON metadata, upload to R2/COS root, and output CDN URLs
     - name: Generate and upload JSON metadata
-      id: publish-json
+      id: publish-files
       shell: pwsh
-      run: .github/scripts/Publish-Json.ps1 -ArtifactDir '${{ inputs.artifact-dir }}' -Type '${{ inputs.type }}'
+      run: ./.github/scripts/Publish-Files.ps1 -ArtifactDir '${{ inputs.artifact-dir }}' -Type '${{ inputs.type }}'
 
     # Refresh Tencent Cloud CDN cache for the JSON files
     - name: Refresh CDN
-      uses: tencentcloud/cdn-refresh-action@v1
+      uses: linrongda/tencent-cdn-action@v2
       with:
-        urls: ${{ steps.publish-json.outputs.cdn-urls }}
         secret-id: ${{ env.COS_SECRET_ID }}
         secret-key: ${{ env.COS_SECRET_KEY }}
+        action: purgeUrls
+        paths: ${{ steps.publish-files.outputs.cdn-urls }}
       continue-on-error: true

@@ -5,11 +5,6 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# ---- Validate required env vars ----
-foreach ($var in @('R2_SECRET_ID', 'R2_SECRET_KEY', 'R2_BUCKET', 'R2_BASE_URL')) {
-    if (-not $env:$var) { throw "Missing required env: $var" }
-}
-
 $suffix = if ($Type -eq "beta") { "-beta" } else { "" }
 
 # ---- Find the built jar ----
@@ -34,7 +29,7 @@ if ($isSnapshot) {
 $mcVersions = ((Get-Content "gradle.properties" | Select-String "^minecraft_major_versions=") -replace "^.*=", "").Trim()
 $mcVersionList = $mcVersions -split "," | ForEach-Object { $_.Trim() }
 
-$baseUrl = $env:R2_BASE_URL.TrimEnd('/')
+$baseUrl = "_BASE_URL_"
 
 # ---- Generate latest(-beta).json ----
 $latestJson = @{
@@ -42,32 +37,42 @@ $latestJson = @{
     downloads   = @{ Universal = "$baseUrl/$jarKey" }
     launchermeta = @{}
 } | ConvertTo-Json -Depth 10
-Set-Content -Path "$ArtifactDir/latest$suffix.json" -Value $latestJson -NoNewline
 
 # ---- Generate detail(-beta).json ----
 $details = [ordered]@{}
 foreach ($mcVer in $mcVersionList) {
-    $details[$mcVer] = @{ Universal = "$baseUrl/$jarKey" }
+    $details[$mcVer] = @{
+        Fabric   = "$baseUrl/$jarKey"
+        Forge    = "$baseUrl/$jarKey"
+        NeoForge = "$baseUrl/$jarKey"
+        Quilt    = "$baseUrl/$jarKey"
+    }
 }
 $detailJson = @{
     version   = $shortVersion
     timestamp = [System.DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     details   = $details
 } | ConvertTo-Json -Depth 10
-Set-Content -Path "$ArtifactDir/detail$suffix.json" -Value $detailJson -NoNewline
 
-# ---- Upload JSON files to R2 ----
+# ---- Upload files to R2 ----
 $env:AWS_ACCESS_KEY_ID = $env:R2_SECRET_ID
 $env:AWS_SECRET_ACCESS_KEY = $env:R2_SECRET_KEY
 $env:AWS_DEFAULT_REGION = "auto"
 
+aws s3 cp "$ArtifactDir/$jarFilename" "s3://$env:R2_BUCKET/$jarKey" --endpoint-url $($env:R2_BASE_URL.TrimEnd('/'))
+$latestJson -replace $baseUrl, "https://csl.3-3.dev" | Set-Content -Path "$ArtifactDir/latest$suffix.json" -NoNewline
+$detailJson -replace $baseUrl, "https://csl.3-3.dev" | Set-Content -Path "$ArtifactDir/detail$suffix.json" -NoNewline
 aws s3 cp "$ArtifactDir/latest$suffix.json" "s3://$env:R2_BUCKET/latest$suffix.json" --endpoint-url $($env:R2_BASE_URL.TrimEnd('/'))
 aws s3 cp "$ArtifactDir/detail$suffix.json" "s3://$env:R2_BUCKET/detail$suffix.json" --endpoint-url $($env:R2_BASE_URL.TrimEnd('/'))
 
-# ---- Upload JSON files to COS ----
+# ---- Upload files to COS ----
+$cdnBase = "https://csl.littleservice.cn"
 try {
     pip install coscmd -q --disable-pip-version-check
     coscmd config -a $env:COS_SECRET_ID -s $env:COS_SECRET_KEY -b $env:COS_BUCKET -r ap-shanghai
+    coscmd upload "$ArtifactDir/$jarFilename" "$jarKey"
+    $latestJson -replace $baseUrl, $cdnBase | Set-Content -Path "$ArtifactDir/latest$suffix.json" -NoNewline
+    $detailJson -replace $baseUrl, $cdnBase | Set-Content -Path "$ArtifactDir/detail$suffix.json" -NoNewline
     coscmd upload "$ArtifactDir/latest$suffix.json" "latest$suffix.json"
     coscmd upload "$ArtifactDir/detail$suffix.json" "detail$suffix.json"
 } catch {
@@ -75,7 +80,6 @@ try {
 }
 
 # ---- Output CDN URLs for subsequent refresh step ----
-$cdnBase = "https://csl.littleservice.cn"
 "cdn-urls<<EOF" | Out-File $env:GITHUB_OUTPUT -Append
 "${cdnBase}/latest${suffix}.json" | Out-File $env:GITHUB_OUTPUT -Append
 "${cdnBase}/detail${suffix}.json" | Out-File $env:GITHUB_OUTPUT -Append

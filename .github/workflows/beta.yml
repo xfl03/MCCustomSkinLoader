@@ -11,6 +11,8 @@ jobs:
     name: Build
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v6
+
       - uses: ./.github/actions/build
         with:
           artifact-name: CustomSkinLoader-Beta-${{ github.run_number }}
@@ -30,7 +32,9 @@ jobs:
       COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
       COS_BUCKET: ${{ secrets.COS_BUCKET }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+
+      - uses: actions/download-artifact@v8
         with:
           name: CustomSkinLoader-Beta-${{ github.run_number }}
           path: artifact
@@ -58,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: GitHub PreRelease
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: CI-Build
           name: CustomSkinLoader CI-Build

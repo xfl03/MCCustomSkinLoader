@@ -9,6 +9,8 @@ jobs:
     name: Build
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v6
+
       - uses: ./.github/actions/build
         with:
           artifact-name: CustomSkinLoader-PR-${{ github.run_number }}

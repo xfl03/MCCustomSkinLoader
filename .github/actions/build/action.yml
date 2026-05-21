@@ -1,4 +1,4 @@
-# Composite action: checkout, setup JDK, build with Gradle, upload artifact
+# Composite action: setup JDK, build with Gradle, upload artifact
 name: Build
 description: Build project with Gradle and upload artifact
 
@@ -14,9 +14,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-
-    - uses: actions/setup-java@v4
+    - uses: actions/setup-java@v5
       with:
         distribution: temurin
         java-version: '25'
@@ -28,7 +26,7 @@ runs:
         IS_SNAPSHOT: ${{ inputs.is-snapshot }}
       run: ./gradlew clean build --info --stacktrace
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{ inputs.artifact-name }}
         path: Bootstrap/build/libs/
