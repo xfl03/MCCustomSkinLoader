@@ -39,7 +39,7 @@ public final class InterfacePatch extends PatchSupport {
             modified |= this.requireModified("native-image.interface", this.addInterface(context.getCurrentClassNode(), FAKE_NATIVE_IMAGE));
         }
         if (context.isTarget(IDENTIFIER)) {
-            modified |= this.requireModified("resource-location.patch", this.makeMethodPublicNonFinal(context.findMethod(IDENTIFIER, "<init>", "(" + objectDesc(STRING) + objectDesc(STRING) + ")V")));
+            modified |= this.requireModified("identifier.patch", this.makeMethodPublicNonFinal(context.findMethod(IDENTIFIER, "<init>", "(" + objectDesc(STRING) + objectDesc(STRING) + ")V")));
         }
 
         return modified;

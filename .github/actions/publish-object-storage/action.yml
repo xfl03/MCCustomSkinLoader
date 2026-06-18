@@ -1,0 +1,56 @@
+name: Publish to Object Storage
+description: >-
+  Upload build artifacts to an S3-compatible object store (AWS S3, Cloudflare
+  R2, MinIO, etc.). Requires the AWS CLI to be pre-installed on the runner.
+
+inputs:
+  artifact-path:
+    description: Path to the directory containing build artifacts.
+    required: true
+  endpoint-url:
+    description: S3-compatible endpoint URL.
+    required: true
+  bucket:
+    description: S3 bucket name.
+    required: true
+  access-key-id:
+    description: S3-compatible access key ID.
+    required: true
+  secret-access-key:
+    description: S3-compatible secret access key.
+    required: true
+  region:
+    description: AWS region (use 'auto' for Cloudflare R2).
+    required: false
+    default: 'auto'
+  target-path:
+    description: Key prefix in the bucket (e.g., 'mods').
+    required: false
+    default: ''
+  files:
+    description: Glob pattern for files to upload.
+    required: false
+    default: '*'
+
+runs:
+  using: composite
+  steps:
+    - name: Validate artifact path
+      shell: pwsh
+      run: |
+        $path = "${{ inputs.artifact-path }}"
+        if (-not (Test-Path -LiteralPath $path)) {
+          throw "Artifact path not found: $path"
+        }
+
+    - name: Upload to object storage
+      shell: pwsh
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.secret-access-key }}
+        AWS_DEFAULT_REGION: ${{ inputs.region }}
+      run: |
+        $ErrorActionPreference = "Stop"
+        Get-ChildItem -Path "${{ inputs.artifact-path }}" -Filter "${{ inputs.files }}" | ForEach-Object {
+          aws s3 cp "$_.FullName" "s3://${{ inputs.bucket }}/${{ inputs.target-path }}$($_.Name)" --endpoint-url "${{ inputs.endpoint-url }}"
+        }

@@ -5,8 +5,8 @@ import net.minecraftforge.fml.loading.moddiscovery.ModsFolderLocator;
 
 import customskinloader.bootstrap.util.ModLocatorUtils;
 
-public final class BridgeModLocator extends ModsFolderLocator {
-    public BridgeModLocator() {
+public final class CommonModLocator extends ModsFolderLocator {
+    public CommonModLocator() {
         ModLocatorUtils.initialize(this, ModsFolderLocator.class, FMLPaths.GAMEDIR.get(), "srg");
     }
 

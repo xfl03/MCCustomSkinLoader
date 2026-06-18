@@ -1,16 +1,14 @@
 package customskinloader.loader.jsonapi;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-
 import com.google.gson.annotations.SerializedName;
 import customskinloader.loader.JsonAPILoader;
 import customskinloader.loader.MojangAPILoader;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
 import customskinloader.profile.UserProfile;
-import customskinloader.utils.TextureUtil;
-
-import java.util.List;
 
 public class MinecraftCapesAPI implements JsonAPILoader.IJsonAPI {
 

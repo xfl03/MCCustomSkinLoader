@@ -2,6 +2,7 @@ package customskinloader.bootstrap.fabric.v1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,7 @@ final class TransformerBootstrap {
     private static final Logger LOGGER = BootstrapLogger.LOGGER;
     private static final TransformerBootstrapSupport SUPPORT = new TransformerBootstrapSupport(TransformerBootstrap.class, "intermediary");
     private static final Object LOCK = new Object();
-    private static final List<PendingMixinTarget> PENDING_MIXIN_TARGETS = new ArrayList<PendingMixinTarget>();
+    private static final List<PendingMixinTarget> PENDING_MIXIN_TARGETS = new ArrayList<>();
     private static final String DUMMY_MIXIN = "customskinloader.bootstrap.fabric.v1.mixin.DummyMixin";
 
     private TransformerBootstrap() {
@@ -45,7 +46,7 @@ final class TransformerBootstrap {
 
     private static void releaseRuntimeArtifacts() {
         try {
-            java.nio.file.Path commonJar = CommonJarInstaller.releaseCommonJar(FabricLoader.getInstance().getGameDir(), "intermediary");
+            Path commonJar = CommonJarInstaller.releaseCommonJar(FabricLoader.getInstance().getGameDir(), "intermediary");
             FabricLauncherBase.getLauncher().addToClassPath(commonJar, "customskinloader.");
             LOGGER.info("Added CustomSkinLoader Common jar to Fabric class path: " + BootstrapLogger.formatPath(commonJar));
         } catch (Exception exception) {
@@ -135,7 +136,7 @@ final class TransformerBootstrap {
         targetClassNames.add(targetInternalName);
 
         Map<String, List<Object>> mixinMapping = (Map<String, List<Object>>) getField(mixinConfig, "mixinMapping");
-        List<Object> mappedMixins = mixinMapping.computeIfAbsent(targetBinaryName, k -> new ArrayList<Object>());
+        List<Object> mappedMixins = mixinMapping.computeIfAbsent(targetBinaryName, k -> new ArrayList<>());
         if (!mappedMixins.contains(mixinInfo)) {
             mappedMixins.add(mixinInfo);
         }

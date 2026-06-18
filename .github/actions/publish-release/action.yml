@@ -1,0 +1,56 @@
+name: Publish to GitHub Release
+description: Upload build artifacts to a GitHub Release. Requires contents:write permission at the workflow level.
+
+inputs:
+  artifact-path:
+    description: Path to the directory containing build artifacts.
+    required: true
+  tag-name:
+    description: Git tag for the release.
+    required: true
+  token:
+    description: GitHub token with contents:write permission.
+    required: true
+  files:
+    description: Glob pattern(s) for files to upload (passed to gh release create).
+    required: false
+    default: '*'
+  notes-file:
+    description: Path to file containing release body text.
+    required: false
+  prerelease:
+    description: Mark as a pre-release (true/false).
+    required: false
+    default: 'false'
+  generate-notes:
+    description: Auto-generate release notes from merged commits (true/false).
+    required: false
+    default: 'false'
+  replace:
+    description: Delete existing release with the same tag before creating (true/false).
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Validate artifact path
+      shell: pwsh
+      run: |
+        $path = "${{ inputs.artifact-path }}"
+        if (-not (Test-Path -LiteralPath $path)) {
+          throw "Artifact path not found: $path"
+        }
+
+    - name: Create GitHub Release
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        $ErrorActionPreference = "Stop"
+        $tag = '${{ inputs.tag-name }}'
+        if('${{ inputs.replace }}' -eq 'true') { gh release delete "$tag" --yes --cleanup-tag }
+  
+        gh release create "$tag" '${{ inputs.artifact-path }}/${{ inputs.files }}' --title "CustomSkinLoader $tag" `
+          $(if('${{ inputs.prerelease }}' -eq 'true') { '--prerelease' }) `
+          $(if('${{ inputs.notes-file }}') { '--notes-file'; '${{ inputs.notes-file }}' } elseif ('${{ inputs.generate-notes }}' -eq 'true') { '--generate-notes' })

@@ -142,8 +142,8 @@ public class HttpRequestUtil {
                 CustomSkinLoader.logger.debug("Encoded URL: " + url);
             }
             HttpURLConnection c = (HttpURLConnection) (new URL(url)).openConnection();
-            c.setReadTimeout(1000 * 5);
-            c.setConnectTimeout(1000 * 5);
+            c.setReadTimeout(1000 * 10);
+            c.setConnectTimeout(1000 * 10);
             c.setDoInput(true);
             c.setUseCaches(false);
             c.setInstanceFollowRedirects(true);
@@ -202,8 +202,11 @@ public class HttpRequestUtil {
             }
 
             //Load Content
-            InputStream is = "gzip".equals(c.getContentEncoding()) ? new GZIPInputStream(c.getInputStream()) : c.getInputStream();
-            byte[] bytes = IOUtils.toByteArray(is);
+            byte[] bytes;
+            try (InputStream is = "gzip".equals(c.getContentEncoding()) ? new GZIPInputStream(c.getInputStream()) : c.getInputStream()) {
+                bytes = IOUtils.toByteArray(is);
+            }
+
             if (request.checkPNG && (bytes.length <= 4 || bytes[1] != (byte) 'P' || bytes[2] != (byte) 'N' || bytes[3] != (byte) 'G')) {
                 CustomSkinLoader.logger.debug("Failed to request (Not Standard PNG)");
                 responce.success = false;

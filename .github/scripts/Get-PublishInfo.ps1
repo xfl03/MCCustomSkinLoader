@@ -1,29 +1,68 @@
-param()
+param(
+    [string]$ArtifactDir = '',
+    [string]$Type = ''
+)
 
 $ErrorActionPreference = "Stop"
 
-$props = Get-Content "gradle.properties"
+# ---- Output build.info.json to GITHUB_OUTPUT ----
+$info = Get-Content "build.info.json" -Raw | ConvertFrom-Json
 
-function Get-Prop($key) {
-    ($props | Select-String "^$key=") -replace "^.*=", "" | ForEach-Object { $_.Trim() }
+$info.PSObject.Properties | ForEach-Object {
+    $name = $_.Name
+    $value = $_.Value
+    if ($value -is [array]) {
+        "$name<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        $value | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    } else {
+        "$name=$value" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    }
 }
 
-function Set-MultilineOutput($name, $value) {
-    "$name<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-    $value | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-    "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+# ---- Generate metadata JSONs ----
+if (-not $ArtifactDir) { return }
+if (-not (Test-Path -LiteralPath $ArtifactDir)) { throw "ArtifactDir not found: $ArtifactDir" }
+
+$jar = Get-ChildItem -Path $ArtifactDir -Filter "*.jar" | Where-Object { $_.Name -notlike "*-sources.jar" } | Select-Object -First 1
+if (-not $jar) { throw "No jar found in $ArtifactDir" }
+$JarFilename = $jar.Name
+
+$version = $info.mod_version
+$isSnapshot = ($Type -ne "release")
+$shortVersion = if ($isSnapshot) { "$version-s$env:GITHUB_RUN_NUMBER" } else { $version }
+
+"short_version=$shortVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+$mcVersionList = $info.game_versions | ForEach-Object {
+    $parts = $_ -split '\.'
+    "$($parts[0]).$($parts[1])"
+} | Sort-Object -Unique | Sort-Object { 
+    $v = $_ -split '\.'
+    [int]$v[0] * 100000 + [int]$v[1]
 }
 
-$loaders = Get-Prop "loaders"
-$gameVersions = Get-Prop "game_versions"
-$java = Get-Prop "java"
-$version = Get-Prop "mod_version"
+$suffix = if ($isSnapshot) { "-beta" } else { "" }
+$jarKey = "mods/$JarFilename"
+$baseUrl = "https://csl.3-3.dev"
 
-$loadersList = $loaders -split "," | ForEach-Object { $_.Trim() }
-$gameVersionsList = $gameVersions -split "," | ForEach-Object { $_.Trim() }
-$javaList = $java -split "," | ForEach-Object { $_.Trim() }
+@{
+    version     = $shortVersion
+    downloads   = @{ Universal = "$baseUrl/$jarKey" }
+    launchermeta = @{}
+} | ConvertTo-Json -Depth 10 | Set-Content -Path "$ArtifactDir/latest$suffix.json" -NoNewline
 
-Set-MultilineOutput "loaders" $loadersList
-Set-MultilineOutput "game-versions" $gameVersionsList
-Set-MultilineOutput "java" $javaList
-"short-version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+$details = [ordered]@{}
+foreach ($mcVer in $mcVersionList) {
+    $details[$mcVer] = @{
+        Fabric   = "$baseUrl/$jarKey"
+        Forge    = "$baseUrl/$jarKey"
+        NeoForge = "$baseUrl/$jarKey"
+        Quilt    = "$baseUrl/$jarKey"
+    }
+}
+@{
+    version   = $shortVersion
+    timestamp = [System.DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+    details   = $details
+} | ConvertTo-Json -Depth 10 | Set-Content -Path "$ArtifactDir/detail$suffix.json" -NoNewline
