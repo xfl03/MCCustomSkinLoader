@@ -26,10 +26,6 @@ inputs:
     description: Auto-generate release notes from merged commits (true/false).
     required: false
     default: 'false'
-  replace:
-    description: Delete existing release with the same tag before creating (true/false).
-    required: false
-    default: 'false'
 
 runs:
   using: composite
@@ -49,8 +45,7 @@ runs:
       run: |
         $ErrorActionPreference = "Stop"
         $tag = '${{ inputs.tag-name }}'
-        if('${{ inputs.replace }}' -eq 'true') { gh release delete "$tag" --yes --cleanup-tag }
-  
+        gh release delete "$tag" --yes --cleanup-tag
         gh release create "$tag" '${{ inputs.artifact-path }}/${{ inputs.files }}' --title "CustomSkinLoader $tag" `
           $(if('${{ inputs.prerelease }}' -eq 'true') { '--prerelease' }) `
           $(if('${{ inputs.notes-file }}') { '--notes-file'; '${{ inputs.notes-file }}' } elseif ('${{ inputs.generate-notes }}' -eq 'true') { '--generate-notes' })

@@ -52,5 +52,5 @@ runs:
       run: |
         $ErrorActionPreference = "Stop"
         Get-ChildItem -Path "${{ inputs.artifact-path }}" -Filter "${{ inputs.files }}" | ForEach-Object {
-          aws s3 cp "$_.FullName" "s3://${{ inputs.bucket }}/${{ inputs.target-path }}$($_.Name)" --endpoint-url "${{ inputs.endpoint-url }}"
+          aws s3 cp "$($_.FullName)" "s3://${{ inputs.bucket }}/${{ inputs.target-path }}$($_.Name)" --endpoint-url "${{ inputs.endpoint-url }}"
         }

@@ -46,7 +46,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: '*.jar'
           prerelease: 'true'
-          replace: 'true'
           notes-file: ci-build-body.md
 
   publish-object-storage:
