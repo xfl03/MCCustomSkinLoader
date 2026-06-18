@@ -47,7 +47,7 @@ public class CustomSkinAPIPlus extends CustomSkinAPI {
 
     @Override
     public String getName() {
-        return "CustomSKinAPIPlus";
+        return "CustomSkinAPIPlus";
     }
 
     public static class CustomSkinAPIPlusPayload{

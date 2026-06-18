@@ -73,18 +73,9 @@ public class ProfileCache {
             return;
         saveLocalProfile(username,profile);
     }
-    public void putLoader(String username, Function<UserProfile, ?> loader) {
-        this.profileLoaders.putIfAbsent(username, new ConcurrentLinkedDeque<>());
-        this.profileLoaders.get(username).offerLast(loader);
-    }
     
     private CachedProfile getCachedProfile(String username){
-        CachedProfile cp=cachedProfiles.get(username.toLowerCase());
-        if(cp!=null)
-            return cp;
-        cp=new CachedProfile();
-        cachedProfiles.put(username.toLowerCase(), cp);
-        return cp;
+        return cachedProfiles.computeIfAbsent(username.toLowerCase(), k -> new CachedProfile());
     }
     private UserProfile loadLocalProfile(String username){
         File localProfile=new File(PROFILE_CACHE_DIR,username.toLowerCase()+".json");

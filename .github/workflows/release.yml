@@ -10,28 +10,25 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
+    outputs:
+      mod_name: ${{ steps.build.outputs.mod_name }}
+      edition: ${{ steps.build.outputs.edition }}
+      short_version: ${{ steps.build.outputs.short_version }}
+      loaders: ${{ steps.build.outputs.loaders }}
+      game_versions: ${{ steps.build.outputs.game_versions }}
+      java: ${{ steps.build.outputs.java }}
     steps:
       - uses: actions/checkout@v6
 
       - uses: ./.github/actions/build
+        id: build
         with:
-          is-snapshot: 'false'
           artifact-name: CustomSkinLoader-Release-${{ github.run_number }}
 
-  publish:
-    name: Publish
+  publish-release:
+    name: Publish to GitHub Release
     needs: build
     runs-on: windows-latest
-    environment: Build
-    env:
-      IS_SNAPSHOT: 'false'
-      R2_SECRET_ID: ${{ secrets.R2_SECRET_ID }}
-      R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
-      R2_BUCKET: ${{ secrets.R2_BUCKET }}
-      R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
-      COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
-      COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
-      COS_BUCKET: ${{ secrets.COS_BUCKET }}
     steps:
       - uses: actions/checkout@v6
 
@@ -40,15 +37,60 @@ jobs:
           name: CustomSkinLoader-Release-${{ github.run_number }}
           path: artifact
 
-      - uses: ./.github/actions/publish
+      - uses: ./.github/actions/publish-release
         with:
-          artifact-dir: artifact
-          type: release
+          artifact-path: artifact
+          tag-name: ${{ github.event.release.tag_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: '*.jar'
+          generate-notes: 'true'
 
-      - name: Get publish info from gradle.properties
-        id: info
-        shell: pwsh
-        run: ./.github/scripts/Get-PublishInfo.ps1
+  publish-object-storage:
+    name: Publish to Object Storage
+    needs: build
+    runs-on: windows-latest
+    environment: Build
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: CustomSkinLoader-Release-${{ github.run_number }}
+          path: artifact
+
+      - name: Upload jar to R2
+        uses: ./.github/actions/publish-object-storage
+        with:
+          artifact-path: artifact
+          endpoint-url: ${{ secrets.R2_BASE_URL }}
+          bucket: ${{ secrets.R2_BUCKET }}
+          access-key-id: ${{ secrets.R2_SECRET_ID }}
+          secret-access-key: ${{ secrets.R2_SECRET_KEY }}
+          target-path: mods/
+          files: '*.jar'
+
+      - name: Upload JSONs to R2
+        uses: ./.github/actions/publish-object-storage
+        with:
+          artifact-path: artifact
+          endpoint-url: ${{ secrets.R2_BASE_URL }}
+          bucket: ${{ secrets.R2_BUCKET }}
+          access-key-id: ${{ secrets.R2_SECRET_ID }}
+          secret-access-key: ${{ secrets.R2_SECRET_KEY }}
+          files: '*.json'
+
+  publish-mod-sites:
+    name: Publish to Mod Sites
+    needs: build
+    runs-on: windows-latest
+    environment: Build
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: CustomSkinLoader-Release-${{ github.run_number }}
+          path: artifact
 
       - uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -58,25 +100,18 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 286924
           curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
-          name: CustomSkinLoader_Universal_${{ steps.info.outputs.short-version }}
-          version: ${{ steps.info.outputs.short-version }}-Universal
+          name: ${{ needs.build.outputs.mod_name }}_${{ needs.build.outputs.edition }}_${{ needs.build.outputs.short_version }}
+          version: ${{ needs.build.outputs.short_version }}-${{ needs.build.outputs.edition }}
           version-type: release
           loaders: |
-            ${{ steps.info.outputs.loaders }}
+            ${{ needs.build.outputs.loaders }}
           game-versions: |
-            ${{ steps.info.outputs.game-versions }}
+            ${{ needs.build.outputs.game_versions }}
           game-version-filter: releases
           java: |
-            ${{ steps.info.outputs.java }}
+            ${{ needs.build.outputs.java }}
           retry-attempts: 2
           retry-delay: 10000
           fail-mode: fail
           files: |
             artifact/*.jar
-
-      - name: GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          files: artifact/*.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

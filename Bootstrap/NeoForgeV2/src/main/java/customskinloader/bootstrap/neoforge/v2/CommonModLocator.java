@@ -4,8 +4,8 @@ import customskinloader.bootstrap.util.ModLocatorUtils;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.fml.loading.moddiscovery.locators.ModsFolderLocator;
 
-public final class BridgeModLocator extends ModsFolderLocator {
-    public BridgeModLocator() {
+public final class CommonModLocator extends ModsFolderLocator {
+    public CommonModLocator() {
         ModLocatorUtils.initialize(this, ModsFolderLocator.class, FMLPaths.GAMEDIR.get(), "official");
     }
 

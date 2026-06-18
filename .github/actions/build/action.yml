@@ -3,13 +3,29 @@ name: Build
 description: Build project with Gradle and upload artifact
 
 inputs:
-  is-snapshot:
-    description: Whether this is a snapshot build
-    required: false
-    default: 'true'
   artifact-name:
     description: Artifact name for upload
     required: true
+
+outputs:
+  mod_name:
+    description: Display name of the mod
+    value: ${{ steps.info.outputs.mod_name }}
+  edition:
+    description: Target mod loader edition
+    value: ${{ steps.info.outputs.edition }}
+  short_version:
+    description: Shortened version identifier
+    value: ${{ steps.info.outputs.short_version }}
+  loaders:
+    description: List of supported mod loaders
+    value: ${{ steps.info.outputs.loaders }}
+  game_versions:
+    description: List of compatible Minecraft game versions
+    value: ${{ steps.info.outputs.game_versions }}
+  java:
+    description: List of compatible Java versions
+    value: ${{ steps.info.outputs.java }}
 
 runs:
   using: composite
@@ -22,9 +38,13 @@ runs:
 
     - name: Build with Gradle
       shell: pwsh
-      env:
-        IS_SNAPSHOT: ${{ inputs.is-snapshot }}
-      run: ./gradlew clean build --info --stacktrace
+      run: ./gradlew clean build --info --stacktrace -Pbuild_type=${{ github.event_name }}
+
+    - name: Generate metadata JSONs
+      if: github.event_name != 'pull_request'
+      shell: pwsh
+      id: info
+      run: ./.github/scripts/Get-PublishInfo.ps1 -ArtifactDir 'Bootstrap/build/libs' -Type '${{ github.event_name }}'
 
     - uses: actions/upload-artifact@v7
       with:

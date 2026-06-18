@@ -74,12 +74,12 @@ final class TransformerBootstrap {
 
         // NeoForge
         public cpw.mods.modlauncher.api.TargetType getTargetType() {
-            return  cpw.mods.modlauncher.api.TargetType.CLASS;
+            return cpw.mods.modlauncher.api.TargetType.CLASS;
         }
 
         @Override
         public String[] labels() {
-            return new String[]{"customskinloader:" + this.targetClassName.replace('/', '.')};
+            return new String[] {"customskinloader:" + this.targetClassName.replace('/', '.')};
         }
     }
 }

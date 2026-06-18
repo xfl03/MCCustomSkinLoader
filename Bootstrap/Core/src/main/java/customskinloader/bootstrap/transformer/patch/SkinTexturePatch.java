@@ -88,11 +88,11 @@ public final class SkinTexturePatch extends PatchSupport {
     private boolean replaceSkinTextureDownloaderProcessLegacySkin(ClassTransformationContext context) {
         boolean modified = false;
         // 24w46a ~ 25w37a (1.21.4 ~ 1.21.8)
-        modified |= this.applyIfMatches("[769,772],[0x400000DE,0x4000010C]", "skin-texture-downloader.process-legacy-skin.string", () -> replaceSkinTextureDownloaderProcessLegacySkin(
+        modified |= this.applyIfMatches("[769,772],[0x400000DE,0x4000010C]", "skin-texture-downloader.process-legacy-skin.v1", () -> replaceSkinTextureDownloaderProcessLegacySkin(
             context, context.findMethod(SKIN_TEXTURE_DOWNLOADER, "lambda$downloadAndRegisterSkin$0", "(" + objectDesc(PATH) + objectDesc(STRING) + "Z)" + objectDesc(NATIVE_IMAGE))
         ));
         // 1.21.9-pre1+ (1.21.9+)
-        modified |= this.applyIfMatches("[773,800],[804,0x40000000],[0x4000010D,]", "skin-texture-downloader.process-legacy-skin.downloaded-texture", () -> replaceSkinTextureDownloaderProcessLegacySkin(
+        modified |= this.applyIfMatches("[773,800],[804,0x40000000],[0x4000010D,]", "skin-texture-downloader.process-legacy-skin.v2", () -> replaceSkinTextureDownloaderProcessLegacySkin(
             context, context.findMethod(SKIN_TEXTURE_DOWNLOADER, "lambda$downloadAndRegisterSkin$0", "(" + objectDesc(PATH) + objectDesc(CLIENT_ASSET_DOWNLOADED_TEXTURE) + "Z)" + objectDesc(NATIVE_IMAGE))
         ));
         return modified;

@@ -1,27 +1,15 @@
+import groovy.json.JsonSlurper
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.attributes.java.TargetJvmVersion
 
-def requireBuildProperty = { String propertyName ->
-    def propertyValue = rootProject.findProperty(propertyName)?.toString()?.trim()
-    if (!propertyValue) {
-        throw new GradleException("Missing ${propertyName} in gradle.properties")
-    }
-    propertyValue
-}
+def info = new JsonSlurper().parse(file("build.info.json"))
 
-def isTruthy = { String value ->
-    if (value == null) {
-        return true
-    }
-
-    value.trim().toLowerCase(Locale.ROOT) == 'true'
-}
-
-def releaseName = requireBuildProperty('mod_name')
-def releaseGroup = requireBuildProperty('mod_group')
-def releaseVersion = requireBuildProperty('mod_version')
+def releaseGroup = info['mod_group']
+def releaseName = info['mod_name']
+def releaseVersion = info['mod_version']
+def releaseEdition = info['edition']
+def releaseIsSnapshot = build_type != 'release'
 def releaseBuildNumber = System.getenv('GITHUB_RUN_NUMBER')?.trim() ?: '0'
-def releaseIsSnapshot = isTruthy(System.getenv('IS_SNAPSHOT'))
 def releaseFullVersion = (releaseIsSnapshot ? "${releaseVersion}-SNAPSHOT-${releaseBuildNumber}" : releaseVersion).toString()
 
 group = releaseGroup
@@ -32,7 +20,7 @@ ext {
     modVersion = releaseVersion
     modBuildNumber = releaseBuildNumber
     modFullVersion = releaseFullVersion
-    releaseArchiveBaseName = "${releaseName}_Universal".toString()
+    releaseArchiveBaseName = "${releaseName}_${releaseEdition}".toString()
 }
 
 def macroValues = {
