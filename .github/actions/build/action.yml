@@ -38,7 +38,9 @@ runs:
 
     - name: Build with Gradle
       shell: pwsh
-      run: ./gradlew clean build --info --stacktrace -Pbuild_type=${{ github.event_name }}
+      run: |
+        ./gradlew clean build --info --stacktrace -Pbuild_type=${{ github.event_name }}
+        ./gradlew --stop
 
     - name: Generate metadata JSONs
       if: github.event_name != 'pull_request'
