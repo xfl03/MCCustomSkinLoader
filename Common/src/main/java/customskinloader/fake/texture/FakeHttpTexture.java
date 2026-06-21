@@ -51,14 +51,14 @@ public class FakeHttpTexture {
     }
 
     public static class V2 extends SimpleTexture {
-        private static final String DOMAIN = "customskinloader:";
+        private static final String DOMAIN = "customskinloader";
 
         private FakeCapeBuffer buffer;
         private FakeNativeImage image;
 
         public static Function<NativeImage, CompletableFuture<?>> createTexture(Function<NativeImage, CompletableFuture<?>> function, Identifier location, boolean isSkin) {
             return isSkin ? _image -> {
-                if (location.toString().startsWith(DOMAIN)) {
+                if (location.toString().startsWith(DOMAIN + ":")) {
                     return CompletableFuture.completedFuture(new AbstractMap.SimpleEntry<>(_image, function.apply(_image)));
                 }
                 return function.apply(_image);

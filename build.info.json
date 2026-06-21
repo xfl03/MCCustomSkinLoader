@@ -1,7 +1,7 @@
 {
     "mod_group": "customskinloader",
     "mod_name": "CustomSkinLoader",
-    "mod_version": "15.0",
+    "mod_version": "15.0.1",
     "edition": "Universal",
 
     "loaders": [

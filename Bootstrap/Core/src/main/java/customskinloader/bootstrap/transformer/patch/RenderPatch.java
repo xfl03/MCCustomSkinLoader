@@ -97,27 +97,27 @@ public final class RenderPatch extends PatchSupport {
         modified |= this.applyIfMatches("[556,560]", "cape-layer.render.v1", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(CAPE_LAYER, "render", "(" + objectDesc(POSE_STACK) + objectDesc(MULTI_BUFFER_SOURCE) + "I" + objectDesc(ABSTRACT_CLIENT_PLAYER) + "FFFFFFF)V"),
             RENDER_TYPE
-        ));
+        ), false);
         // 19w45a ~ 1.21.1 (1.15 ~ 1.21.1)
         modified |= this.applyIfMatches("[561,767],[801,803],[0x40000001,0x400000CC]", "cape-layer.render.v2", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(CAPE_LAYER, "render", "(" + objectDesc(POSE_STACK) + objectDesc(MULTI_BUFFER_SOURCE) + "I" + objectDesc(ABSTRACT_CLIENT_PLAYER) + "FFFFFF)V"),
             RENDER_TYPE
-        ));
+        ), false);
         // 24w33a ~ 1.21.8 (1.21.2 ~ 1.21.8)
         modified |= this.applyIfMatches("[768,772],[0x400000CD,0x40000103]", "cape-layer.render.v3", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(CAPE_LAYER, "render", "(" + objectDesc(POSE_STACK) + objectDesc(MULTI_BUFFER_SOURCE) + "I" + objectDesc(PLAYER_RENDER_STATE) + "FF)V"),
             RENDER_TYPE
-        ));
+        ), false);
         // 25w31a ~ 25w42a (1.21.9 ~ 1.21.10)
         modified |= this.applyIfMatches("773,[0x40000104,0x40000112]", "cape-layer.submit.v1", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(CAPE_LAYER, "submit", "(" + objectDesc(POSE_STACK) + objectDesc(SUBMIT_NODE_COLLECTOR) + "I" + objectDesc(AVATAR_RENDER_STATE) + "FF)V"),
             RENDER_TYPE
-        ));
+        ), false);
         // 25w43a+ (1.21.11+)
         modified |= this.applyIfMatches("[774,800],[804,0x40000000],[0x40000113,]", "cape-layer.submit.v2", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(CAPE_LAYER, "submit", "(" + objectDesc(POSE_STACK) + objectDesc(SUBMIT_NODE_COLLECTOR) + "I" + objectDesc(AVATAR_RENDER_STATE) + "FF)V"),
             RENDER_TYPES
-        ));
+        ), false);
         return modified;
     }
 
@@ -127,12 +127,12 @@ public final class RenderPatch extends PatchSupport {
         modified |= this.applyIfMatches("[556,560]", "player-renderer.render-hand.v1", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(PLAYER_RENDERER, "renderHand", "(" + objectDesc(POSE_STACK) + objectDesc(MULTI_BUFFER_SOURCE) + objectDesc(ABSTRACT_CLIENT_PLAYER) + objectDesc(MODEL_PART) + objectDesc(MODEL_PART) + ")V"),
             RENDER_TYPE
-        ));
+        ), false);
         // 19w45a ~ 1.21.1 (1.15 ~ 1.21.1)
         modified |= this.applyIfMatches("[561,767],[801,803],[0x40000001,0x400000CC]", "player-renderer.render-hand.v2", () -> replaceEntitySolidWithTranslucent(
             context, context.findMethod(PLAYER_RENDERER, "renderHand", "(" + objectDesc(POSE_STACK) + objectDesc(MULTI_BUFFER_SOURCE) + "I" + objectDesc(ABSTRACT_CLIENT_PLAYER) + objectDesc(MODEL_PART) + objectDesc(MODEL_PART) + ")V"),
             RENDER_TYPE
-        ));
+        ), false);
         return modified;
     }
 
@@ -157,7 +157,9 @@ public final class RenderPatch extends PatchSupport {
                 continue;
             }
 
-            methodNode.instructions.set(instruction, new MethodInsnNode(INVOKESTATIC, remappedOwner, replacementName, remappedDesc, false));
+            methodNode.instructions.insertBefore(instruction, new InsnNode(DUP));
+            methodNode.instructions.insert(instruction, new MethodInsnNode(INVOKESTATIC, remappedOwner, replacementName, remappedDesc, false));
+            methodNode.instructions.insert(instruction, new InsnNode(POP));
             modified = true;
         }
 

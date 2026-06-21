@@ -199,11 +199,15 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
     }
 
     protected boolean applyIfMatches(String range, String label, BooleanSupplier operation) {
+        return applyIfMatches(range, label, operation, true);
+    }
+
+    protected boolean applyIfMatches(String range, String label, BooleanSupplier operation, boolean required) {
         if (!this.matches(range)) {
             return false;
         }
 
-        return this.requireModified(label, operation.getAsBoolean());
+        return this.requireModified(label, operation.getAsBoolean(), required);
     }
 
     protected boolean requireModified(String label, boolean modified) {
@@ -222,7 +226,7 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
             throw new IllegalStateException(message);
         }
 
-        if (!required && Boolean.getBoolean(IGNORE_PATCH_FAILURE_PROPERTY)) {
+        if (!required || Boolean.getBoolean(IGNORE_PATCH_FAILURE_PROPERTY)) {
             LOGGER.warn(message);
             return false;
         }
