@@ -1,6 +1,7 @@
 
 dependencies {
     compileOnly project(':Dummy:Common')
+    testImplementation 'junit:junit:4.13.2'
 }
 
 sourceSets {

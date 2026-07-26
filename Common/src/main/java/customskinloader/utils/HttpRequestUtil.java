@@ -97,7 +97,8 @@ public class HttpRequestUtil {
                 CustomSkinLoader.logger.debug("Try to read cache '" + request.cacheFile + "'.");
                 return loadFromCache(request, new HttpResponce());
             }
-            CustomSkinLoader.logger.debug("Try to request '" + request.url + (request.userAgent == null ? "'." : "' with user agent '" + request.userAgent + "'."));
+            String userAgent = UserAgentUtil.expandUserAgent(request.userAgent);
+            CustomSkinLoader.logger.debug("Try to request '" + request.url + "' with user agent '" + userAgent + "'.");
             //Check Cache
             if (StringUtils.isNotEmpty(request.payload) || CustomSkinLoader.config.forceDisableCache) {
                 request.cacheTime = -1;//No Cache
@@ -156,9 +157,7 @@ public class HttpRequestUtil {
                 c.setRequestProperty("If-None-Match", cacheInfo.etag);
             }
             c.setRequestProperty("Accept-Encoding", "gzip");
-            if (request.userAgent != null) {
-                c.setRequestProperty("User-Agent", request.userAgent);
-            }
+            c.setRequestProperty("User-Agent", userAgent);
             if (StringUtils.isNotEmpty(request.payload)) {
                 CustomSkinLoader.logger.info("Payload: " + request.payload);
                 c.setRequestMethod("POST");
