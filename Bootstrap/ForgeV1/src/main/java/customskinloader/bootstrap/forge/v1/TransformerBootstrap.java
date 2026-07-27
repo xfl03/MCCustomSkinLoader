@@ -6,10 +6,12 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import customskinloader.bootstrap.BootstrapLogger;
+import customskinloader.bootstrap.ModLoaderInfo;
 import customskinloader.bootstrap.installer.CommonJarInstaller;
 import customskinloader.bootstrap.transformer.ClassTransformationReport;
 import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraftforge.common.ForgeVersion;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -24,6 +26,7 @@ final class TransformerBootstrap {
         try {
             Path runtimeDirectory = resolveRuntimeDirectory(data);
             LOGGER.info("Initializing CustomSkinLoader Bootstrap for Forge v1 in " + BootstrapLogger.formatPath(runtimeDirectory));
+            ModLoaderInfo.publish("Forge", ForgeVersion.getVersion());
             Path commonJar = CommonJarInstaller.releaseCommonJar(runtimeDirectory, "srg");
             resolveLaunchClassLoader(data).addURL(commonJar.toUri().toURL());
             LOGGER.info("Added CustomSkinLoader Common jar to LaunchClassLoader: " + BootstrapLogger.formatPath(commonJar));

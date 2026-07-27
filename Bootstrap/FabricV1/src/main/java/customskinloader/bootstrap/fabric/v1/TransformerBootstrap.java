@@ -7,13 +7,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import customskinloader.bootstrap.BootstrapLogger;
+import customskinloader.bootstrap.ModLoaderInfo;
 import customskinloader.bootstrap.installer.CommonJarInstaller;
 import customskinloader.bootstrap.transformer.ClassTransformationReport;
 import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
@@ -35,6 +38,7 @@ final class TransformerBootstrap {
 
     public static void initialize() {
         LOGGER.info("Initializing CustomSkinLoader Bootstrap for Fabric");
+        publishModLoaderInfo();
         releaseRuntimeArtifacts();
         int targetCount = 0;
         for (String targetClassName : SUPPORT.collectTargetClassNames()) {
@@ -42,6 +46,23 @@ final class TransformerBootstrap {
             targetCount++;
         }
         LOGGER.info("Initialized CustomSkinLoader Bootstrap for Fabric with " + targetCount + " reflected Mixin target(s)");
+    }
+
+    private static void publishModLoaderInfo() {
+        FabricLoader loader = FabricLoader.getInstance();
+        Optional<ModContainer> quiltLoader = loader.getModContainer("quilt_loader");
+        if (quiltLoader.isPresent()) {
+            ModLoaderInfo.publish("Quilt", getVersion(quiltLoader.get()));
+            return;
+        }
+
+        ModContainer fabricLoader = loader.getModContainer("fabricloader")
+            .orElseThrow(() -> new IllegalStateException("Fabric Loader did not expose its own mod metadata"));
+        ModLoaderInfo.publish("Fabric", getVersion(fabricLoader));
+    }
+
+    private static String getVersion(ModContainer container) {
+        return container.getMetadata().getVersion().getFriendlyString();
     }
 
     private static void releaseRuntimeArtifacts() {
