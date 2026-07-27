@@ -1,5 +1,6 @@
 package customskinloader.utils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Optional;
@@ -130,7 +131,11 @@ public final class UserAgentUtil {
 
         Object loader = invokeStatic(fabricLoader, "getInstance");
         String version = findModVersion(invoke(loader, "getModContainer", String.class, "fabricloader"));
-        return new LoaderInfo("Fabric", firstNonEmpty(version, getImplementationVersion(fabricLoader)));
+        return new LoaderInfo("Fabric", firstNonEmpty(
+                version,
+                readStaticString("net.fabricmc.loader.impl.FabricLoaderImpl", "VERSION"),
+                getImplementationVersion(fabricLoader)
+        ));
     }
 
     private static LoaderInfo detectModListLoader(String name, String modListClassName, String modId) {
@@ -230,6 +235,27 @@ public final class UserAgentUtil {
     private static String getImplementationVersion(Class<?> type) {
         Package loaderPackage = type.getPackage();
         return loaderPackage == null ? null : loaderPackage.getImplementationVersion();
+    }
+
+    private static String readStaticString(String className, String fieldName) {
+        return readStaticString(findClass(className), fieldName);
+    }
+
+    static String readStaticString(Class<?> type, String fieldName) {
+        if (type == null) {
+            return null;
+        }
+
+        try {
+            Field field = type.getField(fieldName);
+            if (!Modifier.isStatic(field.getModifiers())) {
+                return null;
+            }
+            Object value = field.get(null);
+            return value == null ? null : value.toString();
+        } catch (ReflectiveOperationException | LinkageError ignored) {
+            return null;
+        }
     }
 
     private static String firstNonEmpty(String... values) {
