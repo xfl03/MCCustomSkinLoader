@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import customskinloader.bootstrap.BootstrapLogger;
@@ -16,7 +15,6 @@ import customskinloader.bootstrap.installer.CommonJarInstaller;
 import customskinloader.bootstrap.transformer.ClassTransformationReport;
 import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
@@ -49,20 +47,7 @@ final class TransformerBootstrap {
     }
 
     private static void publishModLoaderInfo() {
-        FabricLoader loader = FabricLoader.getInstance();
-        Optional<ModContainer> quiltLoader = loader.getModContainer("quilt_loader");
-        if (quiltLoader.isPresent()) {
-            ModLoaderInfo.publish("Quilt", getVersion(quiltLoader.get()));
-            return;
-        }
-
-        ModContainer fabricLoader = loader.getModContainer("fabricloader")
-            .orElseThrow(() -> new IllegalStateException("Fabric Loader did not expose its own mod metadata"));
-        ModLoaderInfo.publish("Fabric", getVersion(fabricLoader));
-    }
-
-    private static String getVersion(ModContainer container) {
-        return container.getMetadata().getVersion().getFriendlyString();
+        ModLoaderInfo.publish("Fabric", FabricLoader.getInstance().getModContainer("fabricloader").map(m -> m.getMetadata().getVersion().getFriendlyString()).orElse("unknown"));
     }
 
     private static void releaseRuntimeArtifacts() {

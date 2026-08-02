@@ -11,7 +11,7 @@ import customskinloader.bootstrap.installer.CommonJarInstaller;
 import customskinloader.bootstrap.transformer.ClassTransformationReport;
 import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
 import net.minecraft.launchwrapper.LaunchClassLoader;
-import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -24,9 +24,11 @@ final class TransformerBootstrap {
 
     public static void injectData(Map<String, Object> data) {
         try {
+            Object[] version = FMLInjectionData.data();
+            ModLoaderInfo.publish("Forge", version[0] + "." + version[1] + "." + version[2] + "." + version[3]);
+
             Path runtimeDirectory = resolveRuntimeDirectory(data);
             LOGGER.info("Initializing CustomSkinLoader Bootstrap for Forge v1 in " + BootstrapLogger.formatPath(runtimeDirectory));
-            ModLoaderInfo.publish("Forge", ForgeVersion.getVersion());
             Path commonJar = CommonJarInstaller.releaseCommonJar(runtimeDirectory, "srg");
             resolveLaunchClassLoader(data).addURL(commonJar.toUri().toURL());
             LOGGER.info("Added CustomSkinLoader Common jar to LaunchClassLoader: " + BootstrapLogger.formatPath(commonJar));

@@ -1,14 +1,12 @@
 package customskinloader.bootstrap.neoforge.v2;
 
-import customskinloader.bootstrap.ModLoaderInfo;
 import customskinloader.bootstrap.util.ModLocatorUtils;
-import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.fml.loading.moddiscovery.locators.ModsFolderLocator;
 
+// NeoForge 20.6.14+
 public final class CommonModLocator extends ModsFolderLocator {
     public CommonModLocator() {
-        ModLoaderInfo.publish("NeoForge", FMLLoader.getCurrent().getVersionInfo().neoForgeVersion());
         ModLocatorUtils.initialize(this, ModsFolderLocator.class, FMLPaths.GAMEDIR.get(), "official");
     }
 
