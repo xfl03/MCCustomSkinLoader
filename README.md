@@ -28,7 +28,7 @@ It's a mod which can load skins and capes from any online source or from your lo
 ## Feature  
 ### Support Plenty of Skin Load API and Customizable Skin Load List  
 Supported skin loading APIs:
-- GameProfile
+- GameProfile (use textures from the provided GameProfile)
 - [MojangAPI](http://wiki.vg/Mojang_API)
 - [CustomSkinAPI](https://github.com/xfl03/CustomSkinLoaderAPI/tree/master/CustomSkinAPI)  
 - CustomSkinAPIPlus (Test Only)  
