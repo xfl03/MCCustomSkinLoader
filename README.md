@@ -69,7 +69,6 @@ Supported special skin sites and profiles:
 - [MinecraftCapes](https://minecraftcapes.net/)
 - [OptiFineCape](https://optifine.net/home)
 - [Cloaks+](https://cloaksplus.com/)
-- [Cosmetica](https://cosmetica.cc/)
 - [Wynntils](https://wynntils.com/) compatible profile support
 
 You can customize the skin load list and load textures from any compatible skin server. Skin server owners can also use ExtraList files to help users add their server.
@@ -131,7 +130,6 @@ GitHub Actions intentionally runs on Windows with PowerShell, but local project 
 - [MinecraftCapes](https://minecraftcapes.net/)
 - [OptiFineCape](https://optifine.net/home)
 - [Cloaks+](https://cloaksplus.com/)
-- [Cosmetica](https://cosmetica.cc/)
 
 If you want to add another skin server to the default list, please open an [issue](https://github.com/xfl03/MCCustomSkinLoader/issues).
 
