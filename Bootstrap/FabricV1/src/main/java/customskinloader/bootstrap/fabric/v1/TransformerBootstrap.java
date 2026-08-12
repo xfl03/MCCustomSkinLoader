@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import customskinloader.bootstrap.BootstrapLogger;
+import customskinloader.bootstrap.ModLoaderInfo;
 import customskinloader.bootstrap.installer.CommonJarInstaller;
 import customskinloader.bootstrap.transformer.ClassTransformationReport;
 import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
@@ -35,6 +36,7 @@ final class TransformerBootstrap {
 
     public static void initialize() {
         LOGGER.info("Initializing CustomSkinLoader Bootstrap for Fabric");
+        publishModLoaderInfo();
         releaseRuntimeArtifacts();
         int targetCount = 0;
         for (String targetClassName : SUPPORT.collectTargetClassNames()) {
@@ -42,6 +44,10 @@ final class TransformerBootstrap {
             targetCount++;
         }
         LOGGER.info("Initialized CustomSkinLoader Bootstrap for Fabric with " + targetCount + " reflected Mixin target(s)");
+    }
+
+    private static void publishModLoaderInfo() {
+        ModLoaderInfo.publish("Fabric", FabricLoader.getInstance().getModContainer("fabricloader").map(m -> m.getMetadata().getVersion().getFriendlyString()).orElse("unknown"));
     }
 
     private static void releaseRuntimeArtifacts() {

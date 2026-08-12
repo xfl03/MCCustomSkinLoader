@@ -24,6 +24,7 @@ public final class TransformationService implements ITransformationService {
     @Override
     public void initialize(IEnvironment environment) {
         LOGGER.info("Initializing CustomSkinLoader Bootstrap transformation service");
+        TransformerBootstrap.publishModLoaderInfo();
         try {
             List<Path> extraLocators = ModDirTransformerDiscoverer.getExtraLocators();
             Path servicePath = Paths.get(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).toAbsolutePath().normalize();

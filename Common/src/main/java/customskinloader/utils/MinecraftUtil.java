@@ -12,8 +12,6 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.SkinManager;
 
 /**
  * @author Alexander Xia
@@ -24,13 +22,6 @@ public class MinecraftUtil {
         return Minecraft.getInstance().gameDirectory;
     }
 
-    public static TextureManager getTextureManager() {
-        return Minecraft.getInstance().getTextureManager();
-    }
-
-    public static SkinManager getSkinManager() {
-        return Minecraft.getInstance().getSkinManager();
-    }
     private static String minecraftMainVersion = null;
 
     public static String getMinecraftMainVersion() {
@@ -65,6 +56,17 @@ public class MinecraftUtil {
 
         //No version can be found
         return "unknown";
+    }
+
+    private static final String MOD_LOADER_NAME_PROPERTY = "customskinloader.modLoader.name";
+    private static final String MOD_LOADER_VERSION_PROPERTY = "customskinloader.modLoader.version";
+
+    public static String getLoaderName() {
+        return System.getProperty(MOD_LOADER_NAME_PROPERTY, "unknown");
+    }
+
+    public static String getLoaderVersion() {
+        return System.getProperty(MOD_LOADER_VERSION_PROPERTY, "unknown");
     }
 
     // (domain|ip)(:port)

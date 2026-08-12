@@ -6,10 +6,12 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import customskinloader.bootstrap.BootstrapLogger;
+import customskinloader.bootstrap.ModLoaderInfo;
 import customskinloader.bootstrap.installer.CommonJarInstaller;
 import customskinloader.bootstrap.transformer.ClassTransformationReport;
 import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -22,6 +24,9 @@ final class TransformerBootstrap {
 
     public static void injectData(Map<String, Object> data) {
         try {
+            Object[] version = FMLInjectionData.data();
+            ModLoaderInfo.publish("Forge", version[0] + "." + version[1] + "." + version[2] + "." + version[3]);
+
             Path runtimeDirectory = resolveRuntimeDirectory(data);
             LOGGER.info("Initializing CustomSkinLoader Bootstrap for Forge v1 in " + BootstrapLogger.formatPath(runtimeDirectory));
             Path commonJar = CommonJarInstaller.releaseCommonJar(runtimeDirectory, "srg");

@@ -9,6 +9,7 @@ public final class CommonModLocator extends ModsFolderLocator {
         ModLocatorUtils.initialize(this, ModsFolderLocator.class, FMLPaths.GAMEDIR.get(), "official");
     }
 
+    @Override
     public String name() {
         return ModLocatorUtils.LOCATOR_NAME;
     }
