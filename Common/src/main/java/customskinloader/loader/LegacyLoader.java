@@ -28,7 +28,6 @@ public class LegacyLoader implements ICustomSkinLoaderPlugin, ProfileLoader.IPro
         return Lists.newArrayList(new LocalSkin(this),
                 getCapeProfile(this, "OptiFine", "https://optifine.net/capes/{USERNAME}.png", 810),
                 getCapeProfile(this, "CloakPlus", "http://161.35.130.99/capes/{USERNAME}.png", 840)
-                //getCapeProfile(this, "LabyMod", "https://dl.labymod.net/capes/{STANDARD_UUID}", 850)
                 );
     }
 
