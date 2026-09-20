@@ -7,40 +7,41 @@ import java.util.List;
 import org.objectweb.asm.tree.ClassNode;
 
 public final class ClassTransformationReport {
-    private final ClassTransformationContext context;
-    private final List<String> appliedTransformerNames;
+    private final String internalClassName;
+    private final ClassNode transformedClassNode;
+    private final byte[] originalBytecode;
+    private final List<String> appliedRuleNames;
     private volatile byte[] transformedBytecode;
 
-    public ClassTransformationReport(ClassTransformationContext context, List<String> appliedTransformerNames) {
-        this.context = context;
-        this.appliedTransformerNames = Collections.unmodifiableList(new ArrayList<>(appliedTransformerNames));
-    }
-
-    public ClassTransformationContext getContext() {
-        return this.context;
+    ClassTransformationReport(String internalClassName, ClassNode transformedClassNode, byte[] originalBytecode, List<String> appliedRuleNames) {
+        this.internalClassName = internalClassName;
+        this.transformedClassNode = transformedClassNode;
+        this.originalBytecode = originalBytecode;
+        this.appliedRuleNames = Collections.unmodifiableList(new ArrayList<>(appliedRuleNames));
     }
 
     public byte[] getTransformedBytecode() {
-        if (this.transformedBytecode == null) {
-            if (this.getTransformedClassNode() == null) {
-                throw new IllegalStateException("Transformed bytecode is not available without a transformed ClassNode");
-            }
-
-            this.transformedBytecode = TransformerBootstrapSupport.toByteArray(this.getTransformedClassNode());
+        if (!this.isModified() && this.originalBytecode != null) {
+            return this.originalBytecode.clone();
         }
-
+        if (this.transformedBytecode == null) {
+            if (this.transformedClassNode == null) {
+                throw new IllegalStateException("Transformed bytecode is not available without a ClassNode");
+            }
+            this.transformedBytecode = TransformerBootstrapSupport.toByteArray(this.transformedClassNode);
+        }
         return this.transformedBytecode.clone();
     }
 
     public ClassNode getTransformedClassNode() {
-        return this.context.getCurrentClassNode();
+        return this.transformedClassNode;
     }
 
-    public List<String> getAppliedTransformerNames() {
-        return this.appliedTransformerNames;
+    public List<String> getAppliedRuleNames() {
+        return this.appliedRuleNames;
     }
 
     public boolean isModified() {
-        return !this.appliedTransformerNames.isEmpty();
+        return !this.appliedRuleNames.isEmpty();
     }
 }

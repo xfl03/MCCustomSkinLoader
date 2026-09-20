@@ -1,9 +1,7 @@
 package customskinloader.bootstrap.forge.v2;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,16 +19,13 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 
-final class TransformerBootstrap {
+final class TransformerBootstrap implements ITransformer<ClassNode> {
     private static final Logger LOGGER = BootstrapLogger.LOGGER;
     private static final TransformerBootstrapSupport SUPPORT = new TransformerBootstrapSupport(TransformerBootstrap.class,
         // official: neoforge 1.20.2-20.2.3 ~ 1.21.3-21.3.97
         // srg: forge *, neoforge 1.21.4-21.4.0 ~ 1.21.9-21.9.13
         Launcher.INSTANCE.environment().findLaunchHandler("forgeclient")
             .map(handle -> handle.getClass().getName().startsWith("net.neoforged.")).orElse(false) ? "official" : "srg");
-
-    private TransformerBootstrap() {
-    }
 
     public static void publishModLoaderInfo() {
         try {
@@ -57,61 +52,44 @@ final class TransformerBootstrap {
         }
     }
 
-    public static List<ITransformer> buildTransformers() {
-        List<ITransformer> transformers = new ArrayList<>();
-        for (String targetClassName : SUPPORT.collectTargetClassNames()) {
-            transformers.add(new ModLauncherClassTransformer(targetClassName));
-            LOGGER.debug("Created ModLauncher transformer for " + targetClassName);
-        }
+    private final Set<ITransformer.Target> targets;
 
-        return Collections.unmodifiableList(transformers);
+    TransformerBootstrap() {
+        Set<ITransformer.Target> transformerTargets = new LinkedHashSet<>();
+        for (String targetClassName : SUPPORT.getTargetClassNames()) {
+            transformerTargets.add(ITransformer.Target.targetClass(targetClassName));
+        }
+        this.targets = Collections.unmodifiableSet(transformerTargets);
+        LOGGER.info("Created one ModLauncher transformer for " + this.targets.size() + " target class(es)");
     }
 
-    private static ClassNode transformClassNode(String internalClassName, ClassNode inputClassNode) {
-        ClassTransformationReport report = SUPPORT.transformClassNode(internalClassName, inputClassNode);
-        if (!report.isModified() || report.getTransformedClassNode() == null) {
-            return inputClassNode;
+    @Override
+    public ClassNode transform(ClassNode input, ITransformerVotingContext context) {
+        String internalClassName = context.getClassName().replace('.', '/');
+        ClassTransformationReport report = SUPPORT.transform(internalClassName, input);
+        if (report.isModified()) {
+            LOGGER.info("Transformed ModLauncher target " + internalClassName + " with " + report.getAppliedRuleNames());
         }
-
-        LOGGER.info("Transformed ModLauncher target " + internalClassName + " with " + report.getAppliedTransformerNames());
         return report.getTransformedClassNode();
     }
 
-    private static final class ModLauncherClassTransformer implements ITransformer<ClassNode> {
-        private final String targetClassName;
-        private final Set<ITransformer.Target> targets;
+    @Override
+    public TransformerVoteResult castVote(ITransformerVotingContext context) {
+        return TransformerVoteResult.YES;
+    }
 
-        private ModLauncherClassTransformer(String targetClassName) {
-            this.targetClassName = targetClassName;
+    @Override
+    public Set<ITransformer.Target> targets() {
+        return this.targets;
+    }
 
-            Set<ITransformer.Target> transformerTargets = new LinkedHashSet<>();
-            transformerTargets.add(ITransformer.Target.targetClass(targetClassName));
-            this.targets = Collections.unmodifiableSet(transformerTargets);
-        }
+    // NeoForge
+    public cpw.mods.modlauncher.api.TargetType getTargetType() {
+        return cpw.mods.modlauncher.api.TargetType.CLASS;
+    }
 
-        @Override
-        public ClassNode transform(ClassNode input, ITransformerVotingContext context) {
-            return transformClassNode(this.targetClassName, input);
-        }
-
-        @Override
-        public TransformerVoteResult castVote(ITransformerVotingContext context) {
-            return TransformerVoteResult.YES;
-        }
-
-        @Override
-        public Set<ITransformer.Target> targets() {
-            return this.targets;
-        }
-
-        // NeoForge
-        public cpw.mods.modlauncher.api.TargetType getTargetType() {
-            return cpw.mods.modlauncher.api.TargetType.CLASS;
-        }
-
-        @Override
-        public String[] labels() {
-            return new String[] {"customskinloader:" + this.targetClassName.replace('/', '.')};
-        }
+    @Override
+    public String[] labels() {
+        return new String[] {"customskinloader:bootstrap"};
     }
 }
