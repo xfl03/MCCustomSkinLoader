@@ -1,5 +1,7 @@
 name: Pull Request
 on:
+  push:
+    branches: [ci/minecraft-smoke]
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [15-develop]
@@ -14,3 +16,31 @@ jobs:
       - uses: ./.github/actions/build
         with:
           artifact-name: CustomSkinLoader-PR-${{ github.run_number }}
+
+  smoke:
+    name: Minecraft Smoke Test
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      LIBGL_ALWAYS_SOFTWARE: 'true'
+    steps:
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: CustomSkinLoader-PR-${{ github.run_number }}
+          path: run/mods
+
+      - uses: headlesshq/mc-runtime-test@4.5.1
+        with:
+          mc: '26.2'
+          modloader: neoforge
+          regex: '.*neoforge.*'
+          java: '25'
+          mc-runtime-test: neoforge
+          dummy-assets: 'false'
+          headlessmc-command: '--jvm "-Djava.awt.headless=true -DMcRuntimeGameTest=false"'
