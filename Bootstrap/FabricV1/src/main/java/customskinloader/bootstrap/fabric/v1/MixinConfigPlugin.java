@@ -40,11 +40,11 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-        TransformerBootstrap.transformTargetClass(targetClassName, targetClass);
+
     }
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
+        TransformerBootstrap.transformTargetClass(targetClassName, targetClass);
     }
 }

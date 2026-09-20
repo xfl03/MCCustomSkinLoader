@@ -27,8 +27,8 @@ final class TransformerBootstrap implements ClassProcessor {
     }
 
     @Override
-    public Set<ProcessorName> runsBefore() {
-        return Collections.singleton(ClassProcessorIds.MIXIN);
+    public Set<ProcessorName> runsAfter() {
+        return Collections.singleton(ClassProcessorIds.SIMPLE_PROCESSORS_GROUP);
     }
 
     @Override
@@ -53,6 +53,6 @@ final class TransformerBootstrap implements ClassProcessor {
 
     @Override
     public OrderingHint orderingHint() {
-        return OrderingHint.EARLY;
+        return OrderingHint.LATE;
     }
 }
