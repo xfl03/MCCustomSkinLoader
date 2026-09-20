@@ -51,5 +51,4 @@ jobs:
         with:
           name: CustomSkinLoader-Smoke-Log-${{ github.run_number }}
           path: run/CustomSkinLoader/CustomSkinLoader.log
-          retention-days: 7
-          if-no-files-found: warn
+          if-no-files-found: error
