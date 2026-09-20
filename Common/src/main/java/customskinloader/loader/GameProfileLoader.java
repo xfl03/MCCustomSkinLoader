@@ -14,7 +14,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
-import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import com.mojang.util.UUIDTypeAdapter;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
@@ -101,10 +100,14 @@ public class GameProfileLoader implements ICustomSkinLoaderPlugin, ProfileLoader
         if (result == null) {
             return Maps.newHashMap();
         }
-        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures = TextureUtil.AuthlibField.MINECRAFT_TEXTURES_PAYLOAD_TEXTURES.get(result);
+        Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures = result.textures;
         if (textures == null) {
             return Maps.newHashMap();
         }
         return textures;
+    }
+
+    private static final class MinecraftTexturesPayload {
+        private Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures;
     }
 }

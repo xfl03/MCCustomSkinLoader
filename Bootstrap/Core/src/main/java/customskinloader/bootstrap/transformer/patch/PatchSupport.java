@@ -100,6 +100,7 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
     protected static final String MINECRAFT_PROFILE_TEXTURE = "com/mojang/authlib/minecraft/MinecraftProfileTexture";
     protected static final String MINECRAFT_PROFILE_TEXTURE_TYPE = "com/mojang/authlib/minecraft/MinecraftProfileTexture$Type";
     protected static final String MINECRAFT_SESSION_SERVICE = "com/mojang/authlib/minecraft/MinecraftSessionService";
+    protected static final String SESSION_SERVICE = "com/mojang/authlib/minecraft/SessionService";
     protected static final String MINECRAFT_PROFILE_TEXTURES = "com/mojang/authlib/minecraft/MinecraftProfileTextures";
     protected static final String GAME_PROFILE = "com/mojang/authlib/GameProfile";
     protected static final String PROPERTY = "com/mojang/authlib/properties/Property";

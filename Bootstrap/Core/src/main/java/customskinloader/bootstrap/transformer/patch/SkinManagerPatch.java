@@ -413,7 +413,7 @@ public final class SkinManagerPatch extends PatchSupport {
                 continue;
             }
 
-            methodNode.instructions.set(instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "getUserProfile", "(" + objectDesc(MINECRAFT_SESSION_SERVICE) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
+            methodNode.instructions.set(instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "getUserProfile", "(" + objectDesc(OBJECT) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
             modified = true;
         }
         return modified;
@@ -489,7 +489,7 @@ public final class SkinManagerPatch extends PatchSupport {
                 continue;
             }
 
-            methodNode.instructions.set(instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadSkinFromCache", "(" + objectDesc(MINECRAFT_SESSION_SERVICE) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
+            methodNode.instructions.set(instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadSkinFromCache", "(" + objectDesc(OBJECT) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
             modified = true;
         }
         return modified;
@@ -497,7 +497,7 @@ public final class SkinManagerPatch extends PatchSupport {
 
     private boolean replaceUnpackTexturesWithFakeSkinCache(ClassTransformationContext context, MethodNode methodNode) {
         boolean modified = false;
-        String desc = context.remapMethodDescriptor("(" + objectDesc(MINECRAFT_SESSION_SERVICE) + objectDesc(PROPERTY) + objectDesc(SKIN_MANAGER_CACHE_KEY) + ")" + objectDesc(OBJECT));
+        String desc = context.remapMethodDescriptor("(" + objectDesc(OBJECT) + objectDesc(PROPERTY) + objectDesc(SKIN_MANAGER_CACHE_KEY) + ")" + objectDesc(OBJECT));
         String returnType = context.remapClassName(MINECRAFT_PROFILE_TEXTURES);
 
         for (AbstractInsnNode instruction : methodNode.instructions.toArray()) {
@@ -506,7 +506,7 @@ public final class SkinManagerPatch extends PatchSupport {
             }
 
             MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
-            if (!MINECRAFT_SESSION_SERVICE.equals(methodInsnNode.owner) || !"unpackTextures".equals(methodInsnNode.name) || !("(" + objectDesc(PROPERTY) + ")" + objectDesc(MINECRAFT_PROFILE_TEXTURES)).equals(methodInsnNode.desc)) {
+            if ((!MINECRAFT_SESSION_SERVICE.equals(methodInsnNode.owner) && !SESSION_SERVICE.equals(methodInsnNode.owner)) || !"unpackTextures".equals(methodInsnNode.name) || !("(" + objectDesc(PROPERTY) + ")" + objectDesc(MINECRAFT_PROFILE_TEXTURES)).equals(methodInsnNode.desc)) {
                 continue;
             }
 

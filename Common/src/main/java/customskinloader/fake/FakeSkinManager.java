@@ -12,7 +12,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.SignatureState;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTextures;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import com.mojang.blaze3d.platform.NativeImage;
 import customskinloader.CustomSkinLoader;
@@ -27,7 +26,7 @@ import net.minecraft.server.Services;
 public class FakeSkinManager {
     /**
      * 1.20.1-
-     * Invoked from {@link SkinManager(TextureManager, File, MinecraftSessionService)}
+     * Invoked from SkinManager(TextureManager, File, MinecraftSessionService)
      */
     public static void setSkinCacheDir(File skinCacheDirectory) {
         HttpTextureUtil.defaultCacheDir = skinCacheDirectory;
@@ -35,10 +34,10 @@ public class FakeSkinManager {
 
     /**
      * 23w31a ~ 23w45a
-     * Invoked from {@link SkinManager(TextureManager, Path, MinecraftSessionService, Executor)}
+     * Invoked from SkinManager(TextureManager, Path, MinecraftSessionService, Executor)
      *
      * 23w46a ~ 25w33a
-     * Invoked from {@link SkinManager(Path, MinecraftSessionService, Executor)}
+     * Invoked from SkinManager(Path, MinecraftSessionService, Executor)
      *
      * 25w34a+
      * Invoked from {@link SkinManager(Path, Services, Executor)}
@@ -67,7 +66,7 @@ public class FakeSkinManager {
      * 1.20.1-
      * Invoked from {@link SkinManager#lambda$registerSkins$4(GameProfile, boolean, SkinManager$SkinTextureCallback)}
      */
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getUserProfile(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getUserProfile(Object sessionService, GameProfile profile, boolean requireSecure) {
         return ModelManager0.fromUserProfile(CustomSkinLoader.loadProfile(profile));
     }
 
@@ -81,24 +80,28 @@ public class FakeSkinManager {
 
     /**
      * 23w31a ~ 23w41a
-     * Invoked from {@link SkinManager$1#lambda$load$0(MinecraftSessionService, GameProfile)}
+     * Invoked from SkinManager$1.lambda$load$0(MinecraftSessionService, GameProfile)
      */
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(Object sessionService, GameProfile profile, boolean requireSecure) {
         return getUserProfile(sessionService, profile, requireSecure);
     }
 
     /**
      * 23w42a ~ 25w33a
-     * Invoked from {@link SkinManager$1#lambda$load$0(SkinManager$CacheKey, MinecraftSessionService)}
+     * Invoked from SkinManager$1.lambda$load$0(SkinManager$CacheKey, MinecraftSessionService)
      *
      * 25w34a+
      * Invoked from {@link SkinManager$1#lambda$load$0(SkinManager$CacheKey, Services)}
      */
-    public static Object loadSkinFromCache(MinecraftSessionService sessionService, Property property, SkinManager$CacheKey cacheKey) {
+    public static Object loadSkinFromCache(Object sessionService, Property property, SkinManager$CacheKey cacheKey) {
         if (cacheKey instanceof FakeCacheKey) {
             return FakeCacheKey.createMinecraftProfileTextures(loadSkinFromCache(sessionService, ((FakeCacheKey) cacheKey).profile(), false));
         }
-        return sessionService.unpackTextures(property);
+        try {
+            return sessionService.getClass().getMethod("unpackTextures", Property.class).invoke(sessionService, property);
+        } catch (ReflectiveOperationException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     public static class BaseBuffer implements FakeHttpTextureProcessor {

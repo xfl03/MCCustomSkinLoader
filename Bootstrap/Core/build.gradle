@@ -3,4 +3,8 @@ dependencies {
     implementation 'org.ow2.asm:asm:9.9.1'
     implementation 'org.ow2.asm:asm-commons:9.9.1'
     implementation 'org.ow2.asm:asm-tree:9.9.1'
+    testImplementation 'junit:junit:4.13.2'
+    testRuntimeOnly 'com.google.code.gson:gson:2.14.0'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-api:2.26.0'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.26.0'
 }
