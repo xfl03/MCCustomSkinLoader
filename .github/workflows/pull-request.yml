@@ -17,8 +17,8 @@ jobs:
         with:
           artifact-name: CustomSkinLoader-PR-${{ github.run_number }}
 
-  smoke:
-    name: Compatibility (${{ matrix.minecraft }}, ${{ matrix.modloader }}, Java ${{ matrix.java }})
+  compatibility:
+    name: Compatibility Test (${{ matrix.minecraft }}, ${{ matrix.modloader }}, Java ${{ matrix.java }})
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -38,7 +38,7 @@ jobs:
           - { minecraft: '1.21.1', modloader: neoforge, java: '21' }
           - { minecraft: '1.21.3', modloader: fabric, java: '21' }
           - { minecraft: '1.21.4', modloader: neoforge, java: '21' }
-          - { minecraft: '1.21.9', modloader: neoforge, java: '21' }
+          - { minecraft: '1.21.10', modloader: neoforge, java: '21' }
           - { minecraft: '1.21.11', modloader: forge, java: '21' }
           - { minecraft: '1.21.11', modloader: fabric, java: '21' }
           - { minecraft: '26.1.2', modloader: fabric, java: '25' }
