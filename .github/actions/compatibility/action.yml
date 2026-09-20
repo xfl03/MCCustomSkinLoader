@@ -1,0 +1,49 @@
+name: Compatibility Test
+description: Enter a Minecraft world with a build artifact and require a CSL log (Linux runner).
+
+inputs:
+  artifact-name:
+    description: Build artifact containing the Universal jar
+    required: true
+  minecraft:
+    description: Minecraft version
+    required: true
+  modloader:
+    description: Loader to install (forge, fabric, neoforge)
+    required: true
+  java:
+    description: Java version for the game
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: ${{ inputs.java }}
+
+    - uses: actions/download-artifact@v8
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: run/mods
+
+    - uses: headlesshq/mc-runtime-test@4.5.1
+      env:
+        LIBGL_ALWAYS_SOFTWARE: 'true'
+      with:
+        mc: ${{ inputs.minecraft }}
+        modloader: ${{ inputs.modloader }}
+        regex: .*${{ inputs.modloader }}.*
+        java: ${{ inputs.java }}
+        mc-runtime-test: ${{ inputs.modloader == 'forge' && 'lexforge' || inputs.modloader }}
+        dummy-assets: 'false'
+        headlessmc-command: '--jvm "-Djava.awt.headless=true -DMcRuntimeGameTest=false"'
+
+    - name: Upload CSL log
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: CSL-Log-${{ inputs.minecraft }}-${{ inputs.modloader }}-Java${{ inputs.java }}-${{ github.job }}-${{ github.run_number }}
+        path: run/CustomSkinLoader/CustomSkinLoader.log
+        if-no-files-found: error

@@ -18,37 +18,38 @@ jobs:
           artifact-name: CustomSkinLoader-PR-${{ github.run_number }}
 
   smoke:
-    name: Minecraft Smoke Test
+    name: Compatibility (${{ matrix.minecraft }}, ${{ matrix.modloader }}, Java ${{ matrix.java }})
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      LIBGL_ALWAYS_SOFTWARE: 'true'
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - { minecraft: '1.8.9', modloader: forge, java: '8' }
+          - { minecraft: '1.12.2', modloader: forge, java: '8' }
+          - { minecraft: '1.16.5', modloader: forge, java: '8' }
+          - { minecraft: '1.17.1', modloader: fabric, java: '16' }
+          - { minecraft: '1.20.1', modloader: forge, java: '17' }
+          - { minecraft: '1.20.1', modloader: fabric, java: '17' }
+          - { minecraft: '1.20.2', modloader: neoforge, java: '17' }
+          - { minecraft: '1.20.6', modloader: neoforge, java: '21' }
+          - { minecraft: '1.21.1', modloader: neoforge, java: '21' }
+          - { minecraft: '1.21.3', modloader: fabric, java: '21' }
+          - { minecraft: '1.21.4', modloader: neoforge, java: '21' }
+          - { minecraft: '1.21.9', modloader: neoforge, java: '21' }
+          - { minecraft: '1.21.11', modloader: forge, java: '21' }
+          - { minecraft: '1.21.11', modloader: fabric, java: '21' }
+          - { minecraft: '26.1.2', modloader: fabric, java: '25' }
+          - { minecraft: '26.2', modloader: neoforge, java: '25' }
+          - { minecraft: '26.2', modloader: fabric, java: '25' }
     steps:
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '25'
+      - uses: actions/checkout@v6
 
-      - uses: actions/download-artifact@v8
+      - uses: ./.github/actions/compatibility
         with:
-          name: CustomSkinLoader-PR-${{ github.run_number }}
-          path: run/mods
-
-      - uses: headlesshq/mc-runtime-test@4.5.1
-        with:
-          mc: '26.2'
-          modloader: neoforge
-          regex: '.*neoforge.*'
-          java: '25'
-          mc-runtime-test: neoforge
-          dummy-assets: 'false'
-          headlessmc-command: '--jvm "-Djava.awt.headless=true -DMcRuntimeGameTest=false"'
-
-      - name: Upload CSL log
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: CustomSkinLoader-Smoke-Log-${{ github.run_number }}
-          path: run/CustomSkinLoader/CustomSkinLoader.log
-          if-no-files-found: error
+          artifact-name: CustomSkinLoader-PR-${{ github.run_number }}
+          minecraft: ${{ matrix.minecraft }}
+          modloader: ${{ matrix.modloader }}
+          java: ${{ matrix.java }}
