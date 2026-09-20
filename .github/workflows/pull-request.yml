@@ -44,3 +44,12 @@ jobs:
           mc-runtime-test: neoforge
           dummy-assets: 'false'
           headlessmc-command: '--jvm "-Djava.awt.headless=true -DMcRuntimeGameTest=false"'
+
+      - name: Upload CSL log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: CustomSkinLoader-Smoke-Log-${{ github.run_number }}
+          path: run/CustomSkinLoader/CustomSkinLoader.log
+          retention-days: 7
+          if-no-files-found: warn
