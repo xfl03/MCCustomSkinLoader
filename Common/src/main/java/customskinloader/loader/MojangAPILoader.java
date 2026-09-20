@@ -6,12 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.PropertyMap;
-import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import customskinloader.CustomSkinLoader;
 import customskinloader.config.SkinSiteProfile;
 import customskinloader.plugin.ICustomSkinLoaderPlugin;
@@ -86,7 +84,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
             CustomSkinLoader.logger.info("Profile not found.(" + username + "'s profile not found.)");
             return null;
         }
-        PropertyMap propertyMap = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_PROPERTIES.get(fillProfile(ssp.sessionRoot, newProfile));
+        PropertyMap propertyMap = fillProfile(ssp.sessionRoot, newProfile).properties;
         if (propertyMap != null) {
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = GameProfileLoader.getTextures(propertyMap);
             if (!map.isEmpty()) {
@@ -116,7 +114,7 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
             return null;
         }
 
-        UUID id = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(profiles[0]);
+        UUID id = profiles[0].id;
         if (id == null) {
             return null;
         }
@@ -135,14 +133,14 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
         if (profile == null) {
             return null;
         }
-        UUID id = TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(profile);
+        UUID id = profile.id;
         return standard ? id.toString() : TextureUtil.fromUUID(id);
     }
 
     //UUID -> Profile
     public static MinecraftProfilePropertiesResponse fillProfile(String sessionRoot, MinecraftProfilePropertiesResponse profile) {
         //Doc (https://minecraft.wiki/w/Mojang_API#Query_player's_skin_and_cape)
-        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/" + TextureUtil.fromUUID(TextureUtil.AuthlibField.MINECRAFT_PROFILE_PROPERTIES_RESPONSE_ID.get(profile))).setCacheTime(90));
+        HttpRequestUtil.HttpResponce responce = HttpRequestUtil.makeHttpRequest(new HttpRequestUtil.HttpRequest(sessionRoot + "session/minecraft/profile/" + TextureUtil.fromUUID(profile.id)).setCacheTime(90));
         if (StringUtils.isEmpty(responce.content)) {
             return profile;
         }
@@ -178,5 +176,10 @@ public class MojangAPILoader implements ICustomSkinLoaderPlugin, ProfileLoader.I
 
     public static String getMojangSessionRoot() {
         return MOJANG_SESSION_ROOT.replace("{DO_NOT_MODIFY}", "");
+    }
+
+    public static class MinecraftProfilePropertiesResponse {
+        public UUID id;
+        public PropertyMap properties;
     }
 }
