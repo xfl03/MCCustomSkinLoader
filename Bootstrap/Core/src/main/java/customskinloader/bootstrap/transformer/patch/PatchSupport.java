@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import customskinloader.bootstrap.BootstrapLogger;
+import customskinloader.bootstrap.transformer.ClassTransformationContext;
 import customskinloader.bootstrap.transformer.TransformationRule;
 import customskinloader.bootstrap.transformer.TransformationRuleProvider;
 import org.objectweb.asm.Opcodes;
@@ -207,12 +209,13 @@ abstract class PatchSupport implements TransformationRuleProvider, Opcodes {
         return current;
     }
 
-    protected void replaceInstructionSafely(MethodNode methodNode, AbstractInsnNode original, AbstractInsnNode replacement) {
-        this.replaceInstructionSafely(methodNode, new InsnNode(ICONST_1), IFNE, original, replacement);
+    protected void replaceInstructionSafely(ClassTransformationContext context, MethodNode methodNode, AbstractInsnNode original, AbstractInsnNode replacement) {
+        this.replaceInstructionSafely(context, methodNode, new InsnNode(ICONST_1), IFNE, original, replacement);
     }
 
-    protected void replaceInstructionSafely(MethodNode methodNode, AbstractInsnNode condition, int jumpOpcode, AbstractInsnNode original, AbstractInsnNode replacement) {
-        LabelNode label0 = new LabelNode(), label1 = new LabelNode();
+    protected void replaceInstructionSafely(ClassTransformationContext context, MethodNode methodNode, AbstractInsnNode condition, int jumpOpcode, AbstractInsnNode original, AbstractInsnNode replacement) {
+        LabelNode label0 = new LabelNode();
+        LabelNode label1 = new LabelNode();
 
         InsnList before = new InsnList();
         before.add(condition);
@@ -220,15 +223,29 @@ abstract class PatchSupport implements TransformationRuleProvider, Opcodes {
         before.add(new LdcInsnNode("Modified by CustomSkinLoader."));
         before.add(new InsnNode(POP));
 
+        methodNode.instructions.insertBefore(original, before);
+
+        // The original instruction is kept as dead code so later Mixin / coremod transformations
+        // can still locate it. Both branch targets therefore need a real stack map frame: the
+        // replacement starts with the state the original instruction would have seen, and the
+        // merge point continues with the state the original instruction would have produced.
+        FrameCapture frames = FrameCapture.capture(context.getInternalClassName(), methodNode, original);
+        if (frames == null) {
+            BootstrapLogger.LOGGER.debug("Could not derive stack map frames for " + methodNode.name + methodNode.desc + "; the inserted branch targets carry no frame");
+        }
+
         InsnList after = new InsnList();
         after.add(new JumpInsnNode(GOTO, label1));
         after.add(label0);
-        after.add(new FrameNode(F_SAME, 0, null, 0, null));
+        if (frames != null) {
+            after.add(new FrameNode(F_NEW, frames.localsBefore.length, frames.localsBefore, frames.stackBefore.length, frames.stackBefore));
+        }
         after.add(replacement);
         after.add(label1);
-        after.add(new FrameNode(F_SAME, 0, null, 0, null));
+        if (frames != null) {
+            after.add(new FrameNode(F_NEW, frames.localsAfter.length, frames.localsAfter, frames.stackAfter.length, frames.stackAfter));
+        }
 
-        methodNode.instructions.insertBefore(original, before);
         methodNode.instructions.insert(original, after);
     }
 }

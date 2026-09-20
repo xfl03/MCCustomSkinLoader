@@ -44,7 +44,7 @@ public final class SkinTexturePatch extends PatchSupport {
                 load.instructions.insertBefore(instruction, new VarInsnNode(ALOAD, 0));
                 load.instructions.insertBefore(instruction, new FieldInsnNode(GETFIELD, owner, processTaskField, objectDesc(RUNNABLE)));
                 MethodInsnNode processLegacySkin = new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_BUFFER, "processLegacySkin", replacementDesc, false);
-                this.replaceInstructionSafely(load, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_BUFFER, "shouldProcessLegacySkin", conditionDesc, false), IFNE, instruction, processLegacySkin);
+                this.replaceInstructionSafely(context, load, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_BUFFER, "shouldProcessLegacySkin", conditionDesc, false), IFNE, instruction, processLegacySkin);
 
                 InsnList injection = new InsnList();
                 if (methodInsnNode.getOpcode() == INVOKESTATIC) {
@@ -120,7 +120,7 @@ public final class SkinTexturePatch extends PatchSupport {
 
             MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
             if (methodInsnNode.getOpcode() == INVOKESTATIC && owner.equals(methodInsnNode.owner) && originalName.equals(methodInsnNode.name) && originalDesc.equals(methodInsnNode.desc)) {
-                this.replaceInstructionSafely(methodNode, instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_BUFFER, "processLegacySkin", originalDesc, false));
+                this.replaceInstructionSafely(context, methodNode, instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_BUFFER, "processLegacySkin", originalDesc, false));
                 modified = true;
             }
         }

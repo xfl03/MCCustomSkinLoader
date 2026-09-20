@@ -7,6 +7,7 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.InvokeDynamicInsnNode;
@@ -67,17 +68,17 @@ public final class SkinManagerPatch extends PatchSupport {
         // 19w37a- (1.14.4-)
         this.rule("skin-manager.register-skins.v1", SKIN_MANAGER, "[,553]", context ->
             this.replaceExecutorProfileLoadAtInvocation(
-                context.findMethod(SKIN_MANAGER, "registerSkins", "(" + objectDesc(GAME_PROFILE) + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + "Z)V"),
+                context, context.findMethod(SKIN_MANAGER, "registerSkins", "(" + objectDesc(GAME_PROFILE) + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + "Z)V"),
                 EXECUTOR_SERVICE, "submit", "(" + objectDesc(RUNNABLE) + ")" + objectDesc(FUTURE)));
         // 19w38a ~ 1.18-exp7 (1.15 ~ 1.17.1)
         this.rule("skin-manager.register-skins.v2", SKIN_MANAGER, "[554,756],[801,803],[0x40000001,0x4000002F]+[2205,2831]", context ->
             this.replaceExecutorProfileLoadAtInvocation(
-                context.findMethod(SKIN_MANAGER, "registerSkins", "(" + objectDesc(GAME_PROFILE) + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + "Z)V"),
+                context, context.findMethod(SKIN_MANAGER, "registerSkins", "(" + objectDesc(GAME_PROFILE) + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + "Z)V"),
                 EXECUTOR, "execute", "(" + objectDesc(RUNNABLE) + ")V"));
         // 21w37a ~ 1.20.1 (1.18 ~ 1.20.1)
         this.rule("skin-manager.register-skins.v3", SKIN_MANAGER, "[757,763],[0x40000029,0x4000008E]+[2834,3465]", context ->
             this.replaceExecutorProfileLoadAtInvocation(
-                context.findMethod(SKIN_MANAGER, "registerSkins", "(" + objectDesc(GAME_PROFILE) + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + "Z)V"),
+                context, context.findMethod(SKIN_MANAGER, "registerSkins", "(" + objectDesc(GAME_PROFILE) + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + "Z)V"),
                 EXECUTOR_SERVICE, "execute", "(" + objectDesc(RUNNABLE) + ")V"));
 
         this.rule("skin-manager.get-insecure-skin-information", SKIN_MANAGER, "[,763],[801,803],[0x40000001,0x4000008E]", context -> {
@@ -89,13 +90,14 @@ public final class SkinManagerPatch extends PatchSupport {
             injection.add(new VarInsnNode(ALOAD, 1));
             injection.add(new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadSkinFromCache", "(" + objectDesc(GAME_PROFILE) + ")" + objectDesc(MAP), false));
             injection.add(new InsnNode(ARETURN));
+            injection.add(new FrameNode(F_SAME, 0, null, 0, null));
             methodNode.instructions.insert(injection);
             return true;
         });
 
         // 1.13.2 ~ 1.20.1
         this.rule("skin-manager.lambda-register-skins-4", SKIN_MANAGER, "[404,763],[801,803],[0x40000001,0x4000008E]", context ->
-            this.replaceGetTexturesWithFakeUserProfile(context.findMethod(SKIN_MANAGER, "lambda$registerSkins$4",
+            this.replaceGetTexturesWithFakeUserProfile(context, context.findMethod(SKIN_MANAGER, "lambda$registerSkins$4",
                 "(" + objectDesc(GAME_PROFILE) + "Z" + objectDesc(SKIN_MANAGER_SKIN_TEXTURE_CALLBACK) + ")V")));
 
         // 23w42a ~ 25w33a (1.20.3 ~ 1.21.8)
@@ -141,7 +143,7 @@ public final class SkinManagerPatch extends PatchSupport {
                 MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
                 if (MINECRAFT_SESSION_SERVICE.equals(methodInsnNode.owner) && "getTextures".equals(methodInsnNode.name)
                     && ("(" + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP)).equals(methodInsnNode.desc)) {
-                    this.replaceInstructionSafely(methodNode, instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadSkinFromCache", "(" + objectDesc(OBJECT) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
+                    this.replaceInstructionSafely(context, methodNode, instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadSkinFromCache", "(" + objectDesc(OBJECT) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
                     modified = true;
                 }
             }
@@ -162,7 +164,7 @@ public final class SkinManagerPatch extends PatchSupport {
 
         // 1.12.2-
         this.rule("skin-manager-3.get-user-profile", SKIN_MANAGER_3, "[,340]", context ->
-            this.replaceGetTexturesWithFakeUserProfile(context.findMethod(SKIN_MANAGER_3, "run", "()V")));
+            this.replaceGetTexturesWithFakeUserProfile(context, context.findMethod(SKIN_MANAGER_3, "run", "()V")));
 
         // 23w31a+ (1.20.2+)
         this.rule("skin-manager-cache-key.access", SKIN_MANAGER_CACHE_KEY, "[764,800],[804,0x40000000],[0x40000090,]", context -> {
@@ -316,7 +318,7 @@ public final class SkinManagerPatch extends PatchSupport {
         return false;
     }
 
-    private boolean replaceExecutorProfileLoadAtInvocation(MethodNode methodNode, String owner, String name, String desc) {
+    private boolean replaceExecutorProfileLoadAtInvocation(ClassTransformationContext context, MethodNode methodNode, String owner, String name, String desc) {
         if (methodNode == null) {
             return false;
         }
@@ -332,7 +334,7 @@ public final class SkinManagerPatch extends PatchSupport {
                 continue;
             }
 
-            this.replaceInstructionSafely(methodNode, instruction, methodInsnNode = new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadProfileTextures", "(" + objectDesc(OBJECT) + objectDesc(RUNNABLE) + ")V", false));
+            this.replaceInstructionSafely(context, methodNode, instruction, methodInsnNode = new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "loadProfileTextures", "(" + objectDesc(OBJECT) + objectDesc(RUNNABLE) + ")V", false));
             if (!desc.endsWith("V")) {
                 methodNode.instructions.insert(methodInsnNode, new InsnNode(ACONST_NULL));
             }
@@ -342,7 +344,7 @@ public final class SkinManagerPatch extends PatchSupport {
         return modified;
     }
 
-    private boolean replaceGetTexturesWithFakeUserProfile(MethodNode methodNode) {
+    private boolean replaceGetTexturesWithFakeUserProfile(ClassTransformationContext context, MethodNode methodNode) {
         if (methodNode == null) {
             return false;
         }
@@ -358,7 +360,7 @@ public final class SkinManagerPatch extends PatchSupport {
                 continue;
             }
 
-            this.replaceInstructionSafely(methodNode, instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "getUserProfile", "(" + objectDesc(OBJECT) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
+            this.replaceInstructionSafely(context, methodNode, instruction, new MethodInsnNode(INVOKESTATIC, FAKE_SKIN_MANAGER, "getUserProfile", "(" + objectDesc(OBJECT) + objectDesc(GAME_PROFILE) + "Z)" + objectDesc(MAP), false));
             modified = true;
         }
         return modified;
@@ -384,14 +386,20 @@ public final class SkinManagerPatch extends PatchSupport {
                 continue;
             }
 
+            AbstractInsnNode newNode = this.findPreviousTypeInstruction(methodInsnNode, NEW, owner);
+            AbstractInsnNode dupNode = this.nextRealInstruction(newNode);
+            if (newNode == null || dupNode == null || dupNode.getOpcode() != DUP) {
+                continue;
+            }
+
+            methodNode.instructions.remove(newNode);
+            methodNode.instructions.remove(dupNode);
+
             InsnList replacement = new InsnList();
-            replacement.add(new InsnNode(DUP2_X2));
-            replacement.add(new InsnNode(POP2));
-            replacement.add(new InsnNode(POP2));
             replacement.add(new VarInsnNode(ALOAD, 1));
-            MethodInsnNode createFakeCacheKey = new MethodInsnNode(INVOKESTATIC, FAKE_CACHE_KEY, "createFakeCacheKey", replacementDesc, false);
-            this.replaceInstructionSafely(methodNode, methodInsnNode, createFakeCacheKey);
-            methodNode.instructions.insertBefore(createFakeCacheKey, replacement);
+            replacement.add(new MethodInsnNode(INVOKESTATIC, FAKE_CACHE_KEY, "createFakeCacheKey", replacementDesc, false));
+            methodNode.instructions.insertBefore(methodInsnNode, replacement);
+            methodNode.instructions.remove(methodInsnNode);
             modified = true;
         }
 

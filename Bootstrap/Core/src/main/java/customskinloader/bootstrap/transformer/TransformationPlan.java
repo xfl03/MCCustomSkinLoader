@@ -120,7 +120,9 @@ public final class TransformationPlan {
         }
 
         ClassNode classNode = new ClassNode();
-        new ClassReader(classBytecode).accept(classNode, 0);
+        // Expanded frames are required to derive the stack map frames of inserted branch targets
+        // without loading any class (see FrameCapture). The writer compresses them again.
+        new ClassReader(classBytecode).accept(classNode, ClassReader.EXPAND_FRAMES);
         return this.transform(internalClassName, classNode, classBytecode, rules);
     }
 

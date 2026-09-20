@@ -88,7 +88,7 @@ public final class RenderPatch extends PatchSupport {
 
             MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
             if (remappedOwner.equals(methodInsnNode.owner) && remappedName.equals(methodInsnNode.name) && "()Z".equals(methodInsnNode.desc)) {
-                this.replaceInstructionSafely(methodNode, instruction, new MethodInsnNode(INVOKESTATIC, OBJECTS, "nonNull", "(" + objectDesc(OBJECT) + ")Z"));
+                this.replaceInstructionSafely(context, methodNode, instruction, new MethodInsnNode(INVOKESTATIC, OBJECTS, "nonNull", "(" + objectDesc(OBJECT) + ")Z"));
                 modified = true;
             }
         }
@@ -113,7 +113,7 @@ public final class RenderPatch extends PatchSupport {
 
             MethodInsnNode methodInsnNode = (MethodInsnNode) instruction;
             if (remappedOwner.equals(methodInsnNode.owner) && originalName.equals(methodInsnNode.name) && remappedDesc.equals(methodInsnNode.desc)) {
-                this.replaceInstructionSafely(methodNode, instruction, new MethodInsnNode(INVOKESTATIC, remappedOwner, replacementName, remappedDesc, false));
+                this.replaceInstructionSafely(context, methodNode, instruction, new MethodInsnNode(INVOKESTATIC, remappedOwner, replacementName, remappedDesc, false));
                 modified = true;
             }
         }
