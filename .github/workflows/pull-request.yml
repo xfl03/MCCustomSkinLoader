@@ -6,6 +6,10 @@ on:
     types: [opened, synchronize, reopened]
     branches: [15-develop]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build
@@ -27,22 +31,18 @@ jobs:
       max-parallel: 4
       matrix:
         include:
-          - { minecraft: '1.8.9', modloader: forge, java: '8' }
           - { minecraft: '1.12.2', modloader: forge, java: '8' }
           - { minecraft: '1.16.5', modloader: forge, java: '8' }
-          - { minecraft: '1.17.1', modloader: fabric, java: '16' }
-          - { minecraft: '1.20.1', modloader: forge, java: '17' }
-          - { minecraft: '1.20.1', modloader: fabric, java: '17' }
-          - { minecraft: '1.20.2', modloader: neoforge, java: '17' }
-          - { minecraft: '1.20.6', modloader: neoforge, java: '21' }
+          - { minecraft: '1.16.5', modloader: fabric, java: '8' }
+          - { minecraft: '1.18.2', modloader: forge, java: '17' }
+          - { minecraft: '1.20.2', modloader: forge, java: '17' }
+          - { minecraft: '1.20.2', modloader: fabric, java: '17' }
+          - { minecraft: '1.20.4', modloader: forge, java: '17' }
           - { minecraft: '1.21.1', modloader: neoforge, java: '21' }
-          - { minecraft: '1.21.3', modloader: fabric, java: '21' }
-          - { minecraft: '1.21.4', modloader: neoforge, java: '21' }
+          - { minecraft: '1.21.4', modloader: fabric, java: '21' }
           - { minecraft: '1.21.10', modloader: neoforge, java: '21' }
-          - { minecraft: '1.21.11', modloader: forge, java: '21' }
           - { minecraft: '1.21.11', modloader: fabric, java: '21' }
           - { minecraft: '26.1.2', modloader: fabric, java: '25' }
-          - { minecraft: '26.2', modloader: neoforge, java: '25' }
           - { minecraft: '26.2', modloader: fabric, java: '25' }
     steps:
       - uses: actions/checkout@v6

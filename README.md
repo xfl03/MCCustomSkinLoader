@@ -146,7 +146,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ### Major Contributor
 
 - 2013-2014 Jeremy Lam ([JLChnToZ](https://github.com/JLChnToZ))
-- 2014-2024 Alexander Xia ([xfl03](https://github.com/xfl03))
+- 2014-2026 [xfl03](https://github.com/xfl03)
 - 2020-2026 [ZekerZhayard](https://github.com/ZekerZhayard)
 
 ### Binary File
