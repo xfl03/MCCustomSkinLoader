@@ -38,14 +38,16 @@ public class FakeSkinBuffer implements FakeHttpTextureProcessor {
      * 19w38a ~ 24w45a
      * Invoked from {@link HttpTexture#loadTexture(InputStream)}
      */
-    public static NativeImage processLegacySkin(NativeImage image, Runnable processTask, Function<NativeImage, NativeImage> processLegacySkin) {
-        if (processTask instanceof FakeHttpTextureProcessor) {
-            return ((FakeHttpTextureProcessor) processTask).process(image);
-        } else if (processLegacySkin != null) {
-            return processLegacySkin.apply(image);
-        } else {
-            return image;
-        }
+    public static boolean shouldProcessLegacySkin(Runnable processTask) {
+        return processTask instanceof FakeHttpTextureProcessor;
+    }
+
+    /**
+     * 19w38a ~ 24w45a
+     * Invoked from {@link HttpTexture#loadTexture(InputStream)}
+     */
+    public static NativeImage processLegacySkin(NativeImage image, Runnable processTask) {
+        return ((FakeHttpTextureProcessor) processTask).process(image);
     }
 
     //parseUserSkin for 1.13+

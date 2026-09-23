@@ -2,31 +2,31 @@ package customskinloader.bootstrap.transformer.patch;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BooleanSupplier;
 
 import customskinloader.bootstrap.BootstrapLogger;
-import customskinloader.bootstrap.mapping.VersionMetadataReader;
-import customskinloader.bootstrap.transformer.TargetedClassTransformer;
-import customskinloader.bootstrap.util.RangeMatcher;
-import org.apache.logging.log4j.Logger;
+import customskinloader.bootstrap.transformer.ClassTransformationContext;
+import customskinloader.bootstrap.transformer.TransformationRule;
+import customskinloader.bootstrap.transformer.TransformationRuleProvider;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
-abstract class PatchSupport extends TargetedClassTransformer implements Opcodes {
-    private static final String IGNORE_PATCH_FAILURE_PROPERTY = "customskinloader.ignorePatchFailure";
-    private static final Logger LOGGER = BootstrapLogger.LOGGER;
+abstract class PatchSupport implements TransformationRuleProvider, Opcodes {
 
     protected static final String BOOLEAN = "java/lang/Boolean";
     protected static final String OBJECT = "java/lang/Object";
+    protected static final String RUNNABLE = "java/lang/Runnable";
     protected static final String STRING = "java/lang/String";
     protected static final String CALL_SITE = "java/lang/invoke/CallSite";
     protected static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
@@ -36,8 +36,8 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
     protected static final String FILE = "java/io/File";
     protected static final String INPUT_STREAM = "java/io/InputStream";
     protected static final String PATH = "java/nio/file/Path";
-    protected static final String RUNNABLE = "java/lang/Runnable";
     protected static final String MAP = "java/util/Map";
+    protected static final String OBJECTS = "java/util/Objects";
     protected static final String UUID = "java/util/UUID";
     protected static final String COMPLETABLE_FUTURE = "java/util/concurrent/CompletableFuture";
     protected static final String EXECUTOR = "java/util/concurrent/Executor";
@@ -101,6 +101,7 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
     protected static final String MINECRAFT_PROFILE_TEXTURE_TYPE = "com/mojang/authlib/minecraft/MinecraftProfileTexture$Type";
     protected static final String MINECRAFT_SESSION_SERVICE = "com/mojang/authlib/minecraft/MinecraftSessionService";
     protected static final String MINECRAFT_PROFILE_TEXTURES = "com/mojang/authlib/minecraft/MinecraftProfileTextures";
+    protected static final String SESSION_SERVICE = "com/mojang/authlib/minecraft/SessionService";
     protected static final String GAME_PROFILE = "com/mojang/authlib/GameProfile";
     protected static final String PROPERTY = "com/mojang/authlib/properties/Property";
 
@@ -108,39 +109,26 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
         return "L" + internalName + ";";
     }
 
-    private final int protocolVersion;
-    private final int worldVersion;
+    private final String groupName;
+    private final int priority;
+    private final List<TransformationRule> rules = new ArrayList<>();
 
-    protected PatchSupport(String name, int priority, Map<String, String> targetClassNames) {
-        this(name, priority, VersionMetadataReader.PROTOCOL_VERSION, VersionMetadataReader.WORLD_VERSION, targetClassNames);
+    protected PatchSupport(String groupName, int priority) {
+        this.groupName = groupName;
+        this.priority = priority;
     }
 
-    private PatchSupport(String name, int priority, int protocolVersion, int worldVersion, Map<String, String> targetClassNames) {
-        super(name, priority, filterTargetClassNames(targetClassNames, protocolVersion, worldVersion));
-        this.protocolVersion = protocolVersion;
-        this.worldVersion = worldVersion;
+    protected final void rule(String name, String targetClassName, String versionExpression, TransformationRule.Operation operation) {
+        this.rules.add(new TransformationRule(this.groupName, name, this.priority, this.rules.size(), targetClassName, versionExpression, true, operation));
     }
 
-    protected static Map<String, String> targets(String... targetClassNameProtocolRanges) {
-        if (targetClassNameProtocolRanges.length % 2 != 0) {
-            throw new IllegalArgumentException("Target class names must be paired with protocol ranges");
-        }
-
-        Map<String, String> targets = new LinkedHashMap<>();
-        for (int index = 0; index < targetClassNameProtocolRanges.length; index += 2) {
-            targets.put(targetClassNameProtocolRanges[index], targetClassNameProtocolRanges[index + 1]);
-        }
-        return Collections.unmodifiableMap(targets);
+    protected final void optionalRule(String name, String targetClassName, String versionExpression, TransformationRule.Operation operation) {
+        this.rules.add(new TransformationRule(this.groupName, name, this.priority, this.rules.size(), targetClassName, versionExpression, false, operation));
     }
 
-    private static String[] filterTargetClassNames(Map<String, String> targetClassNames, int protocolVersion, int worldVersion) {
-        List<String> filteredTargetClassNames = new ArrayList<>();
-        for (Map.Entry<String, String> entry : targetClassNames.entrySet()) {
-            if (RangeMatcher.matches(entry.getValue(), protocolVersion, worldVersion)) {
-                filteredTargetClassNames.add(entry.getKey());
-            }
-        }
-        return filteredTargetClassNames.toArray(new String[0]);
+    @Override
+    public final List<TransformationRule> getTransformationRules() {
+        return Collections.unmodifiableList(new ArrayList<>(this.rules));
     }
 
     protected boolean addInterface(ClassNode classNode, String interfaceName) {
@@ -194,46 +182,6 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
         return (access & ~(ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL)) | ACC_PUBLIC;
     }
 
-    protected boolean matches(String range) {
-        return RangeMatcher.matches(range, this.protocolVersion, this.worldVersion);
-    }
-
-    protected boolean applyIfMatches(String range, String label, BooleanSupplier operation) {
-        return applyIfMatches(range, label, operation, true);
-    }
-
-    protected boolean applyIfMatches(String range, String label, BooleanSupplier operation, boolean required) {
-        if (!this.matches(range)) {
-            return false;
-        }
-
-        return this.requireModified(label, operation.getAsBoolean(), required);
-    }
-
-    protected boolean requireModified(String label, boolean modified) {
-        return this.requireModified(label, modified, true);
-    }
-
-    protected boolean requireModified(String label, boolean modified, boolean required) {
-        if (modified) {
-            return true;
-        }
-
-        String message = "Patch '" + this.getName() + ":" + label + "' matched protocol " + this.protocolVersion
-            + " but did not modify any bytecode. If you want to force CustomSkinLoader to ignore this patch failure, add -D"
-            + IGNORE_PATCH_FAILURE_PROPERTY + "=true to the JVM arguments.";
-        if ("false".equalsIgnoreCase(System.getProperty(IGNORE_PATCH_FAILURE_PROPERTY))) {
-            throw new IllegalStateException(message);
-        }
-
-        if (!required || Boolean.getBoolean(IGNORE_PATCH_FAILURE_PROPERTY)) {
-            LOGGER.warn(message);
-            return false;
-        }
-
-        throw new IllegalStateException(message);
-    }
-
     protected InsnList clone(InsnList source) {
         InsnList copy = new InsnList();
         for (AbstractInsnNode abstractInsnNode : source) {
@@ -261,7 +209,43 @@ abstract class PatchSupport extends TargetedClassTransformer implements Opcodes 
         return current;
     }
 
-    protected static void methodNodeSet(MethodNode methodNode, AbstractInsnNode oldInstruction, AbstractInsnNode newInstruction) {
-        methodNode.instructions.set(oldInstruction, newInstruction);
+    protected void replaceInstructionSafely(ClassTransformationContext context, MethodNode methodNode, AbstractInsnNode original, AbstractInsnNode replacement) {
+        this.replaceInstructionSafely(context, methodNode, new InsnNode(ICONST_1), IFNE, original, replacement);
+    }
+
+    protected void replaceInstructionSafely(ClassTransformationContext context, MethodNode methodNode, AbstractInsnNode condition, int jumpOpcode, AbstractInsnNode original, AbstractInsnNode replacement) {
+        LabelNode label0 = new LabelNode();
+        LabelNode label1 = new LabelNode();
+
+        InsnList before = new InsnList();
+        before.add(condition);
+        before.add(new JumpInsnNode(jumpOpcode, label0));
+        before.add(new LdcInsnNode("Modified by CustomSkinLoader."));
+        before.add(new InsnNode(POP));
+
+        methodNode.instructions.insertBefore(original, before);
+
+        // The original instruction is kept as dead code so later Mixin / coremod transformations
+        // can still locate it. Both branch targets therefore need a real stack map frame: the
+        // replacement starts with the state the original instruction would have seen, and the
+        // merge point continues with the state the original instruction would have produced.
+        FrameCapture frames = FrameCapture.capture(context.getInternalClassName(), methodNode, original);
+        if (frames == null) {
+            BootstrapLogger.LOGGER.debug("Could not derive stack map frames for " + methodNode.name + methodNode.desc + "; the inserted branch targets carry no frame");
+        }
+
+        InsnList after = new InsnList();
+        after.add(new JumpInsnNode(GOTO, label1));
+        after.add(label0);
+        if (frames != null) {
+            after.add(new FrameNode(F_NEW, frames.localsBefore.length, frames.localsBefore, frames.stackBefore.length, frames.stackBefore));
+        }
+        after.add(replacement);
+        after.add(label1);
+        if (frames != null) {
+            after.add(new FrameNode(F_NEW, frames.localsAfter.length, frames.localsAfter, frames.stackAfter.length, frames.stackAfter));
+        }
+
+        methodNode.instructions.insert(original, after);
     }
 }
