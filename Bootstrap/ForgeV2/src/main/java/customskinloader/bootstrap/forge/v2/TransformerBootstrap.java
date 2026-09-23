@@ -65,7 +65,7 @@ final class TransformerBootstrap implements ITransformer<ClassNode> {
 
     @Override
     public ClassNode transform(ClassNode input, ITransformerVotingContext context) {
-        String internalClassName = context.getClassName().replace('.', '/');
+        String internalClassName = input.name;
         ClassTransformationReport report = SUPPORT.transform(internalClassName, input);
         if (report.isModified()) {
             LOGGER.info("Transformed ModLauncher target " + internalClassName + " with " + report.getAppliedRuleNames());

@@ -74,8 +74,6 @@ final class TransformerBootstrap {
             Method addMixinMethod = ReflectionUtils.findMethod(ClassInfo.class, "addMixin", mixinInfoClass);
 
             for (String targetClassName : SUPPORT.getTargetClassNames()) {
-                //applyMixinTarget(mixinConfig, DUMMY_MIXIN, targetClassName);
-
                 boolean applied = false;
                 for (Object mixinInfo : (List<?>) mixinsField.get(mixinConfig)) {
                     String currentMixinName = ((IMixinInfo) mixinInfo).getClassName();
