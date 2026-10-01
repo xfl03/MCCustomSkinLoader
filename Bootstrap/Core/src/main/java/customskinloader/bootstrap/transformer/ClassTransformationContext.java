@@ -68,10 +68,6 @@ public final class ClassTransformationContext {
         return this.mappings.unmapMethodDescriptor(targetDescriptor);
     }
 
-    public boolean isTarget(String canonicalName) {
-        return this.getInternalClassName().equals(this.remapClassName(canonicalName));
-    }
-
     public MethodNode findMethod(String owner, String name, String desc) {
         String mappedDesc = this.remapMethodDescriptor(desc);
         String mappedName = "<init>".equals(name) ? name : this.remapMethodName(owner, name, desc);

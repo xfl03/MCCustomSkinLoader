@@ -15,6 +15,6 @@ public final class ClassProcessorProviderImpl implements ClassProcessorProvider 
         // Always register the bridge processor so late transformer registrations can still be observed.
         LOGGER.info("Registering CustomSkinLoader Bootstrap NeoForge class processor");
         ModLoaderInfo.publish("NeoForge", FMLLoader.getCurrent().getVersionInfo().neoForgeVersion());
-        collector.add(TransformerBootstrap.createProcessor());
+        collector.add(new TransformerBootstrap());
     }
 }

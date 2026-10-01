@@ -9,8 +9,11 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public final class MixinConfigPlugin implements IMixinConfigPlugin {
+    private String mixinPackage;
+
     @Override
     public void onLoad(String mixinPackage) {
+        this.mixinPackage = mixinPackage + ".";
         TransformerBootstrap.initialize();
     }
 
@@ -27,7 +30,7 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
         // This is the last stable point before postInitialise/validation, so reflected target injection is still visible downstream.
-        TransformerBootstrap.applyPendingMixinTargets(this);
+        TransformerBootstrap.applyMixinTargets(this.mixinPackage);
     }
 
     @Override
@@ -37,11 +40,11 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
+        TransformerBootstrap.transformTargetClass(targetClassName, targetClass);
     }
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-        TransformerBootstrap.transformTargetClass(targetClassName, targetClass);
+
     }
 }

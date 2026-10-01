@@ -1,18 +1,9 @@
 package customskinloader.fake;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.function.Supplier;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.SignatureState;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTextures;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import com.mojang.blaze3d.platform.NativeImage;
 import customskinloader.CustomSkinLoader;
@@ -23,6 +14,14 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.resources.SkinManager$CacheKey;
 import net.minecraft.server.Services;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.function.Supplier;
 
 public class FakeSkinManager {
     /**
@@ -51,7 +50,7 @@ public class FakeSkinManager {
      * 1.20.1-
      * Invoked from {@link SkinManager#registerSkins(GameProfile, SkinManager$SkinTextureCallback, boolean)}
      */
-    public static void loadProfileTextures(Runnable runnable) {
+    public static void loadProfileTextures(Object executor, Runnable runnable) {
         CustomSkinLoader.loadProfileTextures(runnable);
     }
 
@@ -67,7 +66,7 @@ public class FakeSkinManager {
      * 1.20.1-
      * Invoked from {@link SkinManager#lambda$registerSkins$4(GameProfile, boolean, SkinManager$SkinTextureCallback)}
      */
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getUserProfile(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> getUserProfile(Object sessionService, GameProfile profile, boolean requireSecure) {
         return ModelManager0.fromUserProfile(CustomSkinLoader.loadProfile(profile));
     }
 
@@ -83,7 +82,7 @@ public class FakeSkinManager {
      * 23w31a ~ 23w41a
      * Invoked from {@link SkinManager$1#lambda$load$0(MinecraftSessionService, GameProfile)}
      */
-    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(MinecraftSessionService sessionService, GameProfile profile, boolean requireSecure) {
+    public static Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache(Object sessionService, GameProfile profile, boolean requireSecure) {
         return getUserProfile(sessionService, profile, requireSecure);
     }
 
@@ -94,11 +93,11 @@ public class FakeSkinManager {
      * 25w34a+
      * Invoked from {@link SkinManager$1#lambda$load$0(SkinManager$CacheKey, Services)}
      */
-    public static Object loadSkinFromCache(MinecraftSessionService sessionService, Property property, SkinManager$CacheKey cacheKey) {
+    public static Object loadSkinFromCache(Object textures, SkinManager$CacheKey cacheKey) {
         if (cacheKey instanceof FakeCacheKey) {
-            return FakeCacheKey.createMinecraftProfileTextures(loadSkinFromCache(sessionService, ((FakeCacheKey) cacheKey).profile(), false));
+            return FakeCacheKey.createMinecraftProfileTextures(loadSkinFromCache(null, ((FakeCacheKey) cacheKey).profile(), false));
         }
-        return sessionService.unpackTextures(property);
+        return textures;
     }
 
     public static class BaseBuffer implements FakeHttpTextureProcessor {
@@ -173,7 +172,7 @@ public class FakeSkinManager {
          * Invoked from {@link SkinManager#get(GameProfile)}
          */
         public static SkinManager$CacheKey createFakeCacheKey(UUID uuid, Property property, GameProfile profile) {
-            return new FakeCacheKey(uuid, property == null ? new Property(null, null) : property, profile);
+            return new FakeCacheKey(uuid, property == null ? new Property("", "") : property, profile);
         }
 
         public static Object createMinecraftProfileTextures(Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> textures) {

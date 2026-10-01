@@ -13,7 +13,6 @@ import customskinloader.bootstrap.transformer.TransformerBootstrapSupport;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import org.apache.logging.log4j.Logger;
-import org.objectweb.asm.tree.ClassNode;
 
 final class TransformerBootstrap {
     private static final Logger LOGGER = BootstrapLogger.LOGGER;
@@ -39,16 +38,9 @@ final class TransformerBootstrap {
     }
 
     public static byte[] transform(String className, byte[] classBytecode) {
-        SUPPORT.ensureTransformersLoaded();
-
-        if (!SUPPORT.hasApplicableTransformers(className)) {
-            return classBytecode;
-        }
-
-        ClassNode classNode = TransformerBootstrapSupport.toClassNode(classBytecode);
-        ClassTransformationReport report = SUPPORT.transformClassNode(className, classNode);
+        ClassTransformationReport report = SUPPORT.transform(className, classBytecode);
         if (report.isModified()) {
-            LOGGER.info("Transformed Forge v1 target " + className + " with " + report.getAppliedTransformerNames());
+            LOGGER.info("Transformed Forge v1 target " + className + " with " + report.getAppliedRuleNames());
         }
         return report.isModified() ? report.getTransformedBytecode() : classBytecode;
     }

@@ -18,7 +18,7 @@ jobs:
       game_versions: ${{ steps.build.outputs.game_versions }}
       java: ${{ steps.build.outputs.java }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/build
         id: build
@@ -30,7 +30,7 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/download-artifact@v8
         with:
@@ -51,7 +51,7 @@ jobs:
     runs-on: windows-latest
     environment: Build
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/download-artifact@v8
         with:
@@ -85,14 +85,14 @@ jobs:
     runs-on: windows-latest
     environment: Build
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/download-artifact@v8
         with:
           name: CustomSkinLoader-Release-${{ github.run_number }}
           path: artifact
 
-      - uses: Kir-Antipov/mc-publish@v3.3
+      - uses: Kir-Antipov/mc-publish@v3
         with:
           modrinth-id: idMHQ4n2
           modrinth-featured: true
@@ -107,6 +107,7 @@ jobs:
             ${{ needs.build.outputs.loaders }}
           game-versions: |
             ${{ needs.build.outputs.game_versions }}
+          environment: client
           game-version-filter: releases
           java: |
             ${{ needs.build.outputs.java }}
