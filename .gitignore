@@ -6,6 +6,10 @@ build/
 !.github/actions/build
 .kotlin
 
+Test/gradle
+Test/gradlew
+Test/gradlew.bat
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

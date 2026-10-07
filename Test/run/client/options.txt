@@ -1,0 +1,2 @@
+fullscreen:true
+onboardAccessibility:false

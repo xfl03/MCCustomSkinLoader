@@ -231,7 +231,7 @@ final class BytecodeRemapper extends Remapper {
             try (InputStream classInputStream = inputStream) {
                 return this.readClassInheritance(new ClassReader(classInputStream), true);
             }
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             return null;
         }
     }

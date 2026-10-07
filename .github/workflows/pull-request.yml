@@ -14,3 +14,10 @@ jobs:
       - uses: ./.github/actions/build
         with:
           artifact-name: CustomSkinLoader-PR-${{ github.run_number }}
+
+  test:
+    name: Test
+    needs: build
+    uses: ./.github/workflows/test.yml
+    with:
+      artifact-name: CustomSkinLoader-PR-${{ github.run_number }}
