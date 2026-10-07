@@ -27,7 +27,7 @@ jobs:
 
       - name: Build test installer
         shell: pwsh
-        run: ./Test/gradlew.bat -p Test build --console=plain
+        run: ./gradlew.bat -p Test build --info --stacktrace
 
       - name: Upload test installer
         uses: actions/upload-artifact@v7
