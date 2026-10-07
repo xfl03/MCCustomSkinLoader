@@ -143,7 +143,8 @@
     </class>
     <class name="net/minecraft/client/gui/GuiGraphicsExtractor" />
     <class name="net/minecraft/client/gui/components/PlayerTabOverlay">
-        <name type="srg" version="[,754]">net/minecraft/client/gui/GuiPlayerTabOverlay</name> <!-- 1.16.5- -->
+        <name type="srg" version="[,404]">net/minecraft/client/gui/GuiPlayerTabOverlay</name> <!-- 1.13.2- -->
+        <name type="srg" version="[485,754]">net/minecraft/client/gui/overlay/PlayerTabOverlayGui</name> <!-- 1.14.2 ~ 1.16.5 -->
         <name type="intermediary" version="[441,774],[801,803],[0x40000001,0x4000011E]">net/minecraft/class_355</name> <!-- 18w43b ~ 1.21.11 (1.14 ~ 1.21.11) -->
         <method name="extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V" />
         <method name="render(ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V">

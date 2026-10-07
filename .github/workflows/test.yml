@@ -1,0 +1,112 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: Name of the artifact uploaded by the build action
+        required: true
+        type: string
+
+jobs:
+  prepare:
+    name: Prepare Test Matrix
+    runs-on: windows-latest
+    timeout-minutes: 30
+    outputs:
+      matrix: ${{ steps.prepare.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Build test installer
+        shell: pwsh
+        run: ./Test/gradlew.bat -p Test build --console=plain
+
+      - name: Upload test installer
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-installer
+          path: Test/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Prepare test matrix
+        id: prepare
+        shell: pwsh
+        run: ./.github/scripts/Prepare-TestMatrix.ps1
+
+  test:
+    name: Test ${{ matrix.version }}
+    needs: prepare
+    runs-on: windows-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: Test/run/client/mods
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: test-installer
+          path: Test/run/client
+
+      - name: Prepare test environment
+        id: setup
+        shell: pwsh
+        env:
+          INSTALLERS: ${{ toJSON(matrix.loaders) }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          Get-ChildItem Test/run/client/mods -File -Exclude *.jar | Remove-Item
+          ./.github/scripts/Prepare-TestVersion.ps1 -MinecraftVersion '${{ matrix.version }}' -MinecraftJsonUrl '${{ matrix.json_url }}' -MinecraftJsonSha1 '${{ matrix.json_sha1 }}'
+
+      - name: Run test
+        shell: pwsh
+        env:
+          ALSOFT_DRIVERS: 'null'
+          GALLIUM_DRIVER: llvmpipe
+          LIBGL_ALWAYS_SOFTWARE: 1
+          LP_NUM_THREADS: 1
+        run: ./.github/scripts/Run-TestJob.ps1 -MinecraftVersion '${{ matrix.version }}' -Clients '${{ steps.setup.outputs.clients }}'
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-diagnostics-${{ matrix.version }}
+          path: |
+            installer-logs
+            Test/run/*/crash-reports
+            Test/run/*/logs
+            Test/run/*/hs_err*
+            Test/run/client/CustomSkinLoader/CustomSkinLoader.log
+            Test/run/client/screenshots
+          if-no-files-found: ignore
+
+  merge-diagnostics:
+    name: Merge Diagnostics
+    if: ${{ always() }}
+    needs: test
+    runs-on: windows-latest
+
+    steps:
+      - name: Merge diagnostics artifacts
+        uses: actions/upload-artifact/merge@v7
+        with:
+          name: all-test-diagnostics
+          pattern: test-diagnostics-*
+          separate-directories: true
+          delete-merged: true

@@ -21,11 +21,7 @@ $info.PSObject.Properties | ForEach-Object {
 }
 
 # ---- Generate metadata JSONs ----
-if (-not $ArtifactDir) { return }
-if (-not (Test-Path -LiteralPath $ArtifactDir)) { throw "ArtifactDir not found: $ArtifactDir" }
-
 $jar = Get-ChildItem -Path $ArtifactDir -Filter "*.jar" | Where-Object { $_.Name -notlike "*-sources.jar" } | Select-Object -First 1
-if (-not $jar) { throw "No jar found in $ArtifactDir" }
 $JarFilename = $jar.Name
 
 $version = $info.mod_version

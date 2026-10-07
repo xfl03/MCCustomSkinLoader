@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group = 'customskinloader.test'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm:9.9.1'
+    implementation 'org.ow2.asm:asm-commons:9.9.1'
+    implementation 'org.ow2.asm:asm-tree:9.9.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+jar {
+    manifest {
+        attributes(['Premain-Class' : 'customskinloader.test.agent.PreMain'])
+    }
+}

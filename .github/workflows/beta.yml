@@ -17,6 +17,13 @@ jobs:
         with:
           artifact-name: CustomSkinLoader-Beta-${{ github.run_number }}
 
+  test:
+    name: Test
+    needs: build
+    uses: ./.github/workflows/test.yml
+    with:
+      artifact-name: CustomSkinLoader-Beta-${{ github.run_number }}
+
   publish-release:
     name: Publish to GitHub Release
     needs: build

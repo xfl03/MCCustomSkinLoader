@@ -1,0 +1,79 @@
+{
+  "version": "15.1",
+  "buildNumber": 0,
+  "loadlist": [
+    {
+      "name": "LocalSkin",
+      "type": "Legacy",
+      "checkPNG": false,
+      "skin": "LocalSkin/skins/{USERNAME}.png",
+      "model": "auto",
+      "cape": "LocalSkin/capes/{USERNAME}.png",
+      "elytra": "LocalSkin/elytras/{USERNAME}.png"
+    },
+    {
+      "name": "GameProfile",
+      "type": "GameProfile"
+    },
+    {
+      "name": "Mojang",
+      "type": "MojangAPI",
+      "apiRoot": "https://api.mojang.com/",
+      "sessionRoot": "https://sessionserver.mojang.com/"
+    },
+    {
+      "name": "LittleSkin",
+      "type": "CustomSkinAPI",
+      "root": "https://littleskin.cn/csl/"
+    },
+    {
+      "name": "BlessingSkin",
+      "type": "CustomSkinAPI",
+      "root": "https://skin.prinzeugen.net/"
+    },
+    {
+      "name": "ElyBy",
+      "type": "ElyByAPI",
+      "root": "http://skinsystem.ely.by/textures/"
+    },
+    {
+      "name": "TLauncher",
+      "type": "ElyByAPI",
+      "root": "https://auth.tlauncher.org/skin/profile/texture/login/"
+    },
+    {
+      "name": "GlitchlessGames",
+      "type": "ElyByAPI",
+      "root": "https://games.glitchless.ru/api/minecraft/users/profiles/textures/?nickname\u003d"
+    },
+    {
+      "name": "MinecraftCapes",
+      "type": "MinecraftCapesAPI",
+      "root": "https://api.minecraftcapes.net/profile/"
+    },
+    {
+      "name": "OptiFine",
+      "type": "Legacy",
+      "checkPNG": false,
+      "model": "auto",
+      "cape": "https://optifine.net/capes/{USERNAME}.png"
+    },
+    {
+      "name": "CloakPlus",
+      "type": "Legacy",
+      "checkPNG": false,
+      "model": "auto",
+      "cape": "http://161.35.130.99/capes/{USERNAME}.png"
+    }
+  ],
+  "enableTransparentSkin": true,
+  "forceLoadAllTextures": true,
+  "enableCape": true,
+  "threadPoolSize": 16,
+  "enableLogStdOut": true,
+  "cacheExpiry": 30,
+  "forceUpdateSkull": false,
+  "enableLocalProfileCache": false,
+  "enableCacheAutoClean": false,
+  "forceDisableCache": false
+}

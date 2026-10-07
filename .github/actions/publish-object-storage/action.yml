@@ -35,14 +35,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Validate artifact path
-      shell: pwsh
-      run: |
-        $path = "${{ inputs.artifact-path }}"
-        if (-not (Test-Path -LiteralPath $path)) {
-          throw "Artifact path not found: $path"
-        }
-
     - name: Upload to object storage
       shell: pwsh
       env:
